@@ -1,0 +1,16 @@
+{
+  "name": "@lands/flow2spec",
+  "version": "1.0.7",
+  "description": "文档前置 + OpenSpec 变更工作流：init 时安装 OpenSpec 并写入 .cursor 模板",
+  "main": "./cli.js",
+  "bin": {
+    "flow2spec": "./cli.js"
+  },
+  "scripts": {
+    "test": "node cli.js --help"
+  },
+  "keywords": ["flow2spec", "cursor", "openspec", "doc-gen"],
+  "author": "兰大神",
+  "license": "ISC",
+  "engines": { "node": ">=16" }
+}
