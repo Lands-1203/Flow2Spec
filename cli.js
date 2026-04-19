@@ -1,22 +1,37 @@
 #!/usr/bin/env node
 
 const runInit = require("./lib/init");
+const { AGENTS } = require("./lib/agents");
 
 const args = process.argv.slice(2);
 const sub = args[0];
+
+const agentList = Object.entries(AGENTS)
+  .map(([id, { label }]) => `${id}（${label}）`)
+  .join("，");
 
 const help = `
 Flow2Spec - 文档前置 + OpenSpec 变更工作流
 
 用法:
-  flow2spec init    在当前项目初始化：安装 OpenSpec（若未安装）、将模板写入 .cursor/
+  flow2spec init [agent ...]    在当前项目初始化：安装 OpenSpec（若未安装）、将模板写入所选 AI 工具配置目录
+  flow2spec --help              显示本说明
+
+agent（可多个，空格分隔；省略时默认为 cursor）：
+  ${agentList}
+
+示例:
+  flow2spec init                  # 仅写入 .cursor/（Cursor）
+  flow2spec init claude           # 仅写入 .claude/
+  flow2spec init cursor claude    # 同时写入 .cursor/ 与 .claude/
 
 init 会:
   1. 若未检测到 OpenSpec，自动执行 npm install -g @fission-ai/openspec@latest
-  2. 将 templates/ 下内容复制到项目 .cursor/（commands、rules、skills、docs）
-  3. 之后可在 Cursor 中使用斜杠命令与 OpenSpec 工作流
+  2. 将 templates/ 下内容复制到各所选 agent 的配置根目录下的 commands、rules、skills、template（及预建 stock-docs/、req-docs/）
+  3. 将 openspec/ 复制到配置根的父目录（仅一份，与各 agent 无关）
+  4. 斜杠命令为 Cursor 特性；写入 .claude/.codex 时主要为统一存放规则、技能与模版，供对应工具按各自方式加载
 
-更多说明见 README.md 或 docs/使用说明.md
+更多说明见 README.md 或 docs/Flow2Spec使用说明.md
 `;
 
 if (sub === "--help" || sub === "-h" || !sub) {
@@ -25,17 +40,19 @@ if (sub === "--help" || sub === "-h" || !sub) {
 }
 
 if (sub === "init") {
-  runInit(process.cwd())
-    .then(() => {
+  const agentArgs = args.slice(1);
+  runInit(process.cwd(), agentArgs)
+    .then((ids) => {
+      const lines = ids.map((id) => {
+        const { root, label } = AGENTS[id];
+        return `  - ${root}/：（${label}）commands、rules、skills、template、stock-docs、req-docs（预建）`;
+      });
       console.log(`
 ✓ Flow2Spec init 完成
-  - .cursor/commands/：文档与工作流命令（generateProjectContext、spec2context-md、pdf4code-md、opsx-* 等）
-  - .cursor/rules/：实现技术方案规则（implement-tech-design.mdc，可按业务自行改造）
-  - .cursor/skills/：OpenSpec 相关 Skills
-  - .cursor/docs/：终稿模版
+${lines.join("\n")}
   - openspec/：OpenSpec 配置（如 config.yaml），供 openspec CLI 使用
 
-在 Cursor 中输入 / 即可使用。建议阅读 README 或 docs/使用说明.md。
+在 Cursor 中可在项目内使用 / 斜杠命令（配置根为 .cursor 时）。建议阅读 README 或 docs/Flow2Spec使用说明.md。
 `);
     })
     .catch((e) => {

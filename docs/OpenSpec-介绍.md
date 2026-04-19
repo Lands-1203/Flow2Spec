@@ -49,7 +49,7 @@
 ## 三、目录与文件结构
 
 ```
-项目根/
+配置根父目录/
 ├── openspec/
 │   ├── config.yaml          # 全局配置（schema、可选 context/rules）
 │   └── changes/
@@ -121,7 +121,7 @@
 
 ## 六、初始化与 CLI
 
-- **首次使用**：在项目根执行  
+- **首次使用**：在**配置根父目录**执行  
   `openspec init`  
   会生成 `openspec/config.yaml` 等，之后才能用 `openspec status`、`openspec new` 等。
 

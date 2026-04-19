@@ -1,0 +1,14 @@
+---
+description: 区分 配置根/stock-docs（存量上下文、生成 Rules/Skills）与 配置根/req-docs（需求与技术方案、按代码实现）；禁止混用路径与链出目标
+globs:
+  - "**/stock-docs/**/*.md"
+  - "**/req-docs/**/*.md"
+alwaysApply: false
+---
+
+# stock-docs 与 req-docs
+
+- **`配置根/stock-docs/`**：PDF/初稿/终稿/架构说明等**存量源文档**；`/generateProjectContext`、spec2context-md、genStructureDoc 的落盘（除 PDF→初稿等另有说明外）优先在此。Rule/Skill/docs-index 链出文档用 `../stock-docs/`、`../../stock-docs/`、`stock-docs/<文件名>.md`；`sourceDoc` 为 `<配置根>/stock-docs/<文件名>.md`。
+- **`req-docs/`**（**配置根**下，如 `.cursor/req-docs/`）：需求澄清、**后端技术方案**、pdf4code-md 输出的「按方案实现」MD；`implement-tech-design` 的 globs 为 `**/req-docs/**/*.md`。
+
+完整约定与链接表见仓库 **`docs/README-目录与路径约定.md`**（包内说明；用户项目无此目录时以 init 写入的命令与规则为准）。

@@ -135,7 +135,7 @@
 **不能完全替代，且职责不同，不重复。**
 
 
-| 维度          | 主规范（openspec/specs）                                      | 全局 Rules / Skills（.cursor/rules、.cursor/skills）       |
+| 维度          | 主规范（openspec/specs）                                      | 全局 Rules / Skills（`rules/`、`skills/`；Cursor 下即 `.cursor/rules`、`.cursor/skills`）       |
 | ----------- | -------------------------------------------------------- | ----------------------------------------------------- |
 | **定位**      | 项目**能力契约**：约定「系统应如何表现」（Requirement + Scenario，可当测试/验收依据） | Cursor **按需上下文**：约定「实现时怎么用、项目约定是什么、示例在哪」              |
 | **内容形态**    | 每条 capability 一份 spec，写 SHALL/MUST、WHEN/THEN             | Rules 按**路径（globs）加载约束；Skills 按问题/触发词**加载知识、步骤、方法表、示例 |
