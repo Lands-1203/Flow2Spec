@@ -36,7 +36,7 @@
 
 | 项目          | 说明                                                                                                                                                                                                                                                   |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **用法**      | `npx @lands/flow2spec init` 或 `flow2spec init [cursor \| claude \| codex ...]`（全局安装后）；省略 agent 时默认为 **cursor**（写入 **`.cursor/`**）。完整列表与示例见 **`flow2spec --help`**。                                                          |
+| **用法**      | `npx @ctrip/flow2spec init` 或 `flow2spec init [cursor \| claude \| codex ...]`（全局安装后）；省略 agent 时默认为 **cursor**（写入 **`.cursor/`**）。完整列表与示例见 **`flow2spec --help`**。                                                          |
 | **创建/写入** | 对每个所选 agent：在配置根下创建 `stock-docs/`、`req-docs/`、`template/`、`rules/`、`skills/`、`commands/` 并复制模板；**openspec/** 复制到**配置根父目录**。详见 [Flow2Spec使用说明 - init 做了什么](./Flow2Spec使用说明.md#一init-做了什么)。 |
 | **结果**      | 配置根为 **`.cursor/`** 时，在 Cursor 中输入 `/` 可使用斜杠命令；可与 OpenSpec CLI 配合使用 **openspec/**。                                                                                                                                                              |
 

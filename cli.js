@@ -11,10 +11,10 @@ const agentList = Object.entries(AGENTS)
   .join("，");
 
 const help = `
-Flow2Spec - 文档前置 + OpenSpec 变更工作流
+Flow2Spec - 文档前置工作流（AI 配置模板）
 
 用法:
-  flow2spec init [agent ...]    在当前项目初始化：安装 OpenSpec（若未安装）、将模板写入所选 AI 工具配置目录
+  flow2spec init [agent ...]    在当前项目初始化：将模板写入所选 AI 工具配置目录
   flow2spec --help              显示本说明
 
 agent（可多个，空格分隔；省略时默认为 cursor）：
@@ -26,10 +26,8 @@ agent（可多个，空格分隔；省略时默认为 cursor）：
   flow2spec init cursor claude    # 同时写入 .cursor/ 与 .claude/
 
 init 会:
-  1. 若未检测到 OpenSpec，自动执行 npm install -g @fission-ai/openspec@latest
-  2. 将 templates/ 下内容复制到各所选 agent 的配置根目录下的 commands、rules、skills、template（及预建 stock-docs/、req-docs/）
-  3. 将 openspec/ 复制到配置根的父目录（仅一份，与各 agent 无关）
-  4. 斜杠命令为 Cursor 特性；写入 .claude/.codex 时主要为统一存放规则、技能与模版，供对应工具按各自方式加载
+  1. 将 templates/ 下内容复制到各所选 agent 的配置根目录下的 commands、rules、skills、template（及预建 stock-docs/、req-docs/）
+  2. 斜杠命令为 Cursor 特性；写入 .claude/.codex 时主要为统一存放规则、技能与模版，供对应工具按各自方式加载
 
 更多说明见 README.md 或 docs/Flow2Spec使用说明.md
 `;
@@ -50,7 +48,6 @@ if (sub === "init") {
       console.log(`
 ✓ Flow2Spec init 完成
 ${lines.join("\n")}
-  - openspec/：OpenSpec 配置（如 config.yaml），供 openspec CLI 使用
 
 在 Cursor 中可在项目内使用 / 斜杠命令（配置根为 .cursor 时）。建议阅读 README 或 docs/Flow2Spec使用说明.md。
 `);

@@ -1,7 +1,7 @@
 {
-  "name": "@lands/flow2spec",
-  "version": "2.0.1",
-  "description": "文档前置 + OpenSpec 变更工作流：init 时安装 OpenSpec 并写入 .cursor 模板",
+  "name": "@ctrip/flow2spec",
+  "version": "2.1.0",
+  "description": "文档前置工作流：init 时将 AI 配置模板写入 .cursor / .claude 等；已经移除openspec相关功能",
   "main": "./cli.js",
   "bin": {
     "flow2spec": "./cli.js"
@@ -12,8 +12,8 @@
   "keywords": [
     "flow2spec",
     "cursor",
-    "openspec",
-    "doc-gen"
+    "Project Knowledge Base",
+    "claude"
   ],
   "author": "兰大神",
   "license": "ISC",

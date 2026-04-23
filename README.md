@@ -8,12 +8,12 @@
 
 ```bash
 # 在目标代码仓库（配置根的父目录）执行（默认仅写入 .cursor/）
-npx @lands/flow2spec init
+npx @ctrip/flow2spec init
 # 指定 AI 工具配置目录（可多选）
-npx @lands/flow2spec init claude
-npx @lands/flow2spec init cursor claude codex
+npx @ctrip/flow2spec init claude
+npx @ctrip/flow2spec init cursor claude codex
 # 或全局安装后
-npm install -g @lands/flow2spec
+npm install -g @ctrip/flow2spec
 flow2spec init
 ```
 
