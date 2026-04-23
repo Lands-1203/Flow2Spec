@@ -1,5 +1,5 @@
 {
-  "name": "@ctrip/flow2spec",
+  "name": "@lands/flow2spec",
   "version": "2.1.0",
   "description": "文档前置工作流：init 时将 AI 配置模板写入 .cursor / .claude 等；已经移除openspec相关功能",
   "main": "./cli.js",

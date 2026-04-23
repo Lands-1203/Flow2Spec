@@ -8,12 +8,12 @@
 
 ```bash
 # 在目标代码仓库（配置根的父目录）执行（默认仅写入 .cursor/）
-npx @ctrip/flow2spec init
+npx @lands/flow2spec init
 # 指定 AI 工具配置目录（可多选）
-npx @ctrip/flow2spec init claude
-npx @ctrip/flow2spec init cursor claude codex
+npx @lands/flow2spec init claude
+npx @lands/flow2spec init cursor claude codex
 # 或全局安装后
-npm install -g @ctrip/flow2spec
+npm install -g @lands/flow2spec
 flow2spec init
 ```
 
@@ -31,7 +31,7 @@ flow2spec init
 |------|------|
 | **文档与上下文** | 技术方案/需求 → 规范格式 → Rules、Skills、索引（**gen-architecture-doc**、**spec2context-md**、**generate-project-context** 等技能） |
 | **PDF 转 MD** | **pdf4code-md**：PDF 转 Markdown 并保存到 **配置根 `req-docs/`**，便于按方案实现代码 |
-| **全局工作流** | **global-sync**：技术方案→功能概述→提交到全局 Rules/Skills；**global-fix** / **global-feat**：修正与新增能力时的文档与规则同步 |
+| **全局工作流** | **global-sync**：可写明 Agent 已实现能力或零输入；零输入时由 Agent 推断用户与项目关心的能力，**先大纲确认**再写入知识库以注入上下文；**global-fix** / **global-feat**：修正与新增能力时的文档与规则同步 |
 | **按技术方案实现** | 对话中提供技术方案路径（如 **`.cursor/req-docs/xxx.md`**），AI 按 `implement-tech-design.mdc` 执行；[规则可自改](./docs/Flow2Spec使用说明.md#五implement-tech-designmdc-可自行改造) |
 
 **推荐顺序**：上下文生成（gen-architecture-doc → spec2context-md → generate-project-context）→ 提问与实现（可选 pdf4code-md → 在对话中提供 **`req-docs/`** 技术方案路径并按 **implement-tech-design** 实现）→ 实现后（global-fix / global-feat / global-sync）。[按使用顺序查找](./docs/README-命令说明.md#按使用顺序查找)。

@@ -21,7 +21,7 @@
 
 ## 一、init 做了什么
 
-在**配置根父目录**执行 **`flow2spec init [agent ...]`**（未全局安装时可使用 `npx @ctrip/flow2spec init`）。**agent** 可省略，省略时默认为 **`cursor`**（写入 **`.cursor/`**）。可选 **`claude`**、**`codex`** 等，空格分隔多个时会**分别**写入多套目录（如 `.cursor/` 与 `.claude/` 各一份相同模板结构）。详见 **`flow2spec --help`**。
+在**配置根父目录**执行 **`flow2spec init [agent ...]`**（未全局安装时可使用 `npx @lands/flow2spec init`）。**agent** 可省略，省略时默认为 **`cursor`**（写入 **`.cursor/`**）。可选 **`claude`**、**`codex`** 等，空格分隔多个时会**分别**写入多套目录（如 `.cursor/` 与 `.claude/` 各一份相同模板结构）。详见 **`flow2spec --help`**。
 
 1. **模板写入「配置根」**（来自 Flow2Spec 的 `templates/`）：对每个所选 agent，在**配置根父目录**下创建对应目录（如 **`.cursor/`**、**`.claude/`**、**`.codex/`**），并写入下列子路径（结构相同）：
 
@@ -72,7 +72,7 @@
 | 1 | **按技术方案实现**（对话 + **implement-tech-design**） | 提供 **`req-docs/xxx.md`**（或 `.cursor/req-docs/...`）并说明按方案实现；AI 按 **`rules/implement-tech-design.mdc`** 读文档、列任务、提问缺项、实现代码 |
 | 2 | **`global-fix`** | **实现后**用户指出规则错误时：修正代码并同步更新文档与全局 Rules/Skills |
 | — | **`global-feat`** | **新增能力**时：补全实现与文档，或已实现则仅补文档与规则 |
-| 3 | **`global-sync`** | 技术方案 → 功能概述 → 提交到全局 Rules/Skills（可选） |
+| 3 | **`global-sync`** | 可指定已实现能力或零输入推断关心能力 → **大纲确认** → 写入知识库并注入上下文（可选） |
 | — | **`global-merge-context`** | **merge/rebase 后**仍存在冲突标记时：上下文类（索引、规则、技能、说明文档）自动合并；实现与配置类仅列差异待确认 |
 
 完成「上下文生成」1～3 后，再按「提问与实现环节」实现代码；**global-fix** 在实现后、用户指出某处违反规则时使用；**global-feat** 在新增能力时使用；**global-sync** 可按需执行。**global-merge-context** 在合并分支后出现 `<<<<<<<` 等冲突时使用，与上述无固定先后。更细的按使用顺序查找见 [README-命令说明](./README-命令说明.md#按使用顺序查找)。
@@ -93,7 +93,7 @@
 - 将需求/模块/领域说明放到 **`stock-docs/`**（Cursor 下即 `.cursor/stock-docs/`）。
 - 使用 **`spec2context-md`** 将 PDF 或杂乱 MD 转为《终稿模版》规范格式：PDF 先出**初稿**（`<方案名>_初稿.md`），再执行一次出**终稿**（`<方案名>_终稿.md`）；MD 直接出终稿。
 - 使用 **`generate-project-context`** 并传入 `stock-docs/<方案名>_终稿.md`（如 `.cursor/stock-docs/...`）根据终稿生成 Rules、Skills、索引（Rules、Skills 命名不带 `_终稿`，见上文「文档产物阶段」）。
-- 使用 **`global-sync`**：**一条命令**完成「技术方案 → 功能概述 → **提交到全局 Rules/Skills**」。传入**技术方案路径**（如 **`.cursor/req-docs/xxx技术方案.md`**）即可。适用于**全局型/公共型**设计的沉淀到 Cursor 上下文。
+- 使用 **`global-sync`**：可把**用户指定的「Agent 已实现的能力」**写入计划，也可**不输入任何内容**由 Agent 根据**当前上下文**推断**用户与项目关心的能力**；再汇总用户描述、Agent 描述与项目侧信息，**先输出更新大纲并经确认**，再写入 **`rules/`**、**`skills/`**、**`docs-index.md`**、**`main.mdc`** 等以**注入可加载上下文**。可附带文档路径或 `@` 文件作为素材。
 - **merge / rebase 后**：若 **docs-index.md**、**main.mdc**、专题 **rules/skills** 或 **`stock-docs/`** 下说明出现 Git 冲突标记（Cursor 下路径多在 `.cursor/`），可按 **global-merge-context** 技能自动合并「上下文类」文件，实现与配置类冲突则只列差异待你确认。详见 [README-命令说明 §3.3](./README-命令说明.md#33-global-merge-context)。
 
 ### 技术方案 → 代码（实现用文档在配置根 req-docs/）
@@ -106,7 +106,7 @@
 
 | 技能 | 何时用 |
 |------|--------|
-| **`global-sync`** | 技术方案→概述→提交到全局 Rules/Skills（可选） |
+| **`global-sync`** | 可指定已实现能力或零输入推断关心能力 → 大纲确认 → 写入知识库并注入上下文（可选） |
 | **`global-fix`** | 实现后用户指出某处违反规则时，修正代码并同步更新相关文档与全局 Rules/Skills |
 | **`global-feat`** | 新增能力时：补全实现与文档，或已实现则仅补文档与规则 |
 | **`global-merge-context`** | merge/rebase 后：自动处理 **docs-index、rules、skills、说明类 MD** 等冲突；源码与对外配置等**不擅自合并**，只对比并等用户确认 |
@@ -143,7 +143,7 @@
 | `pdf4code-md` | `.cursor/skills/pdf4code-md/SKILL.md` | PDF → `req-docs/` MD |
 | `requirement-clarify` | `.cursor/skills/requirement-clarify/SKILL.md` | 需求澄清 |
 | `gen-backend-tech-doc` | `.cursor/skills/gen-backend-tech-doc/SKILL.md` | 后端技术方案 |
-| `global-sync` | `.cursor/skills/global-sync/SKILL.md` | 方案 → 全局 Rules/Skills |
+| `global-sync` | `.cursor/skills/global-sync/SKILL.md` | 指定已实现能力或零输入推断 → 知识库（先大纲确认）→ 注入上下文 |
 | `global-fix`、`global-feat`、`global-merge-context` | `.cursor/skills/global-fix/SKILL.md` 等 | 全局维护与合并冲突 |
 
 ---
