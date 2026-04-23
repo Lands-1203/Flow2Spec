@@ -16,7 +16,7 @@
 
 **「配置根」**：`flow2spec init [agent ...]` 写入的 AI 工具配置目录。默认 **Cursor** 为 **`.cursor/`**；可选 **`.claude/`**、**`.codex/`** 等（可多选，各自一套相同子结构）。下文表格以 **`.cursor/`** 为例；若你的配置根为 `.claude/`，将路径中的 `.cursor` 替换为 `.claude` 即可。
 
-**配置根**下为 **stock-docs/**、**req-docs/**、**rules/**、**skills/**、**commands/**、**template/** 及 **docs-index.md**；**仅** **`openspec/`** 位于**配置根父目录**（与 `.cursor/`、`.claude/` 等并列）。下表**左列**为逻辑位置，**中列**为 Cursor（配置根 `.cursor/`）时的完整路径示例；使用 **`.claude/`** 等时把中列的 `.cursor` 换成对应目录名即可。
+**配置根**下为 **stock-docs/**、**req-docs/**、**rules/**、**skills/**、**commands/**、**template/** 及 **docs-index.md**。下表**左列**为逻辑位置，**中列**为 Cursor（配置根 `.cursor/`）时的完整路径示例；使用 **`.claude/`** 等时把中列的 `.cursor` 换成对应目录名即可。
 
 | 逻辑位置（相对配置根或配置根父目录） | Cursor 下路径示例 | 说明 |
 | ------------------------ | ----------------- | ---- |
@@ -27,9 +27,8 @@
 | `template/` | `.cursor/template/` | 《终稿模版》《后端技术模版》等 |
 | **docs-index.md**（与 `stock-docs/` 同级） | `.cursor/docs-index.md` | 需求/文档索引表 |
 | `req-docs/` | `.cursor/req-docs/` | **需要实现成代码的文档**（技术方案等）；对话中 **`.cursor/req-docs/xxx.md`** + implement-tech-design |
-| `openspec/`（配置根父目录） | `openspec/` | OpenSpec 配置与变更（**仅一份**，与各配置根并列） |
 
-**flow2spec init 会创建**：对每个所选 agent，创建 **配置根** 及 **`stock-docs/`**、**`req-docs/`**、**`template/`**、**`rules/`**、**`skills/`**、**`commands/`** 子目录，并写入模板；同时将 **openspec/** 复制到**配置根父目录**。
+**flow2spec init 会创建**：对每个所选 agent，创建 **配置根** 及 **`stock-docs/`**、**`req-docs/`**、**`template/`**、**`rules/`**、**`skills/`**、**`commands/`** 子目录，并写入模板。
 
 **从旧版升级**：若仍使用旧名 **`docs/`**（配置根下），可改名为 **`stock-docs/`**。若曾把 **`req-docs/` 误放在配置根父目录**（与 `.cursor` 同级而非其下），请**整体迁入**当前所用配置根下（如 `.cursor/req-docs/`），再执行 `flow2spec init` 可确保目录存在（已存在则保留其中文件）。
 
@@ -113,7 +112,7 @@
 
 ## 6. 小结
 
-- **配置根**下：`stock-docs/`、**`req-docs/`**、`rules/`、`skills/`、`commands/`、`template/`，索引文件 **docs-index.md**（如 `.cursor/docs-index.md`）。**配置根父目录**：**仅** `openspec/`（OpenSpec 变更与配置，仅一份）。
+- **配置根**下：`stock-docs/`、**`req-docs/`**、`rules/`、`skills/`、`commands/`、`template/`，索引文件 **docs-index.md**（如 `.cursor/docs-index.md`）。
 - **文档产物阶段**：原稿 → 初稿（`_初稿.md`）→ 终稿（`_终稿.md`）；spec2context-md 的最终输出为终稿；generateProjectContext 用终稿生成 Rules、Skills，但 Rules、Skills 命名不带 `_终稿`。
 - 文档链接按**写入位置**使用不同相对路径：Rule 用 `../stock-docs/`，Skill 用 `../../stock-docs/`，docs-index 用 `stock-docs/`；**sourceDoc** 与显示路径用 **实际配置根** + `/stock-docs/<文件名>.md`（见 §2）。
 - 版本管理用 **sourceDoc** + **generatedAt**，便于索源与按文档更新产物。

@@ -12,7 +12,7 @@
 | [一、init 做了什么](#一init-做了什么) | 执行 init 后写入哪些目录与命令 |
 | [二、文档目录约定](#二文档目录约定重要) | 配置根（如 `.cursor/`）下 **`stock-docs/`** 与 **`req-docs/`** 的分工；完整结构见 [目录与路径约定](./README-目录与路径约定.md) |
 | [三、推荐执行顺序](#三推荐执行顺序) | 上下文生成 → 提问与实现 → 实现后；[按顺序查命令](./README-命令说明.md#按使用顺序查找) |
-| [四、典型流程](#四典型流程) | 架构说明、文档→上下文、技术方案→代码、OpenSpec、全局工作流 |
+| [四、典型流程](#四典型流程) | 架构说明、文档→上下文、技术方案→代码、全局工作流 |
 | [五、implement-tech-design 可改造](#五implement-tech-designmdc-可自行改造) | 如何按项目定制「按技术方案实现」规则 |
 | [六、斜杠命令中英文](#六斜杠命令中英文) | 英文命令与中文 name 对应表 |
 | [七、速查与相关文档](#七速查与相关文档) | 想做的事→命令 见 [命令说明 §7](./README-命令说明.md#7-快速参考按阶段)；常见问题与延伸阅读 |
@@ -23,23 +23,20 @@
 
 在**配置根父目录**执行 **`flow2spec init [agent ...]`**（未全局安装时可使用 `npx @ctrip/flow2spec init`）。**agent** 可省略，省略时默认为 **`cursor`**（写入 **`.cursor/`**）。可选 **`claude`**、**`codex`** 等，空格分隔多个时会**分别**写入多套目录（如 `.cursor/` 与 `.claude/` 各一份相同模板结构）。详见 **`flow2spec --help`**。
 
-1. **OpenSpec**：若本机未安装，会自动执行 `npm install -g @fission-ai/openspec@latest`。
-2. **模板写入「配置根」**（来自 Flow2Spec 的 `templates/`）：对每个所选 agent，在**配置根父目录**下创建对应目录（如 **`.cursor/`**、**`.claude/`**、**`.codex/`**），并写入下列子路径（结构相同）：
+1. **模板写入「配置根」**（来自 Flow2Spec 的 `templates/`）：对每个所选 agent，在**配置根父目录**下创建对应目录（如 **`.cursor/`**、**`.claude/`**、**`.codex/`**），并写入下列子路径（结构相同）：
 
    | 子目录 | 内容 |
    |--------|------|
-   | **commands/** | 斜杠命令定义（Markdown）：文档类（generateProjectContext、deleteProjectContext、spec2context-md、pdf4code-md、**genStructureDoc**）；**OpenSpec 类**（opsx-new、opsx-ff、opsx-apply、opsx-archive、opsx-continue、opsx-explore、opsx-onboard、opsx-sync、opsx-verify、opsx-bulk-archive 等）；**全局工作流**（**global-sync**、**global-fix**（/修正实现规则）、**global-feat**（/新增能力）、**global-merge-context**（/合并上下文冲突）） |
+   | **commands/** | 斜杠命令定义（Markdown）：文档类（generateProjectContext、deleteProjectContext、spec2context-md、pdf4code-md、**genStructureDoc** 等）；**全局工作流**（**global-sync**、**global-fix**（/修正实现规则）、**global-feat**（/新增能力）、**global-merge-context**（/合并上下文冲突）） |
    | **rules/** | 如 **implement-tech-design.mdc**（按技术方案实现代码的通用规则） |
-   | **skills/** | OpenSpec 相关 Skills |
+   | **skills/** | 与文档、上下文、工作流相关的 Skills |
    | **template/** | 终稿模版、后端技术模版等 |
    | **stock-docs/** | 预建空目录；你用来生成 Rules/Skills 的**存量源文档**（终稿、架构说明等）也放此处 |
    | **req-docs/** | 预建空目录；**需求澄清、技术方案、PDF 转实现用 MD** 等放在此处（如 `.cursor/req-docs/`） |
 
    **说明**：**斜杠命令**为 **Cursor** 的交互能力；写入 **`.claude/`**、**`.codex/`** 时主要为在统一目录结构下存放规则、技能与模版，供对应工具按各自方式加载。
 
-3. **openspec/**：复制到**配置根父目录**的 OpenSpec 配置（如 `config.yaml`），供 `openspec` CLI 使用（**仅一份**，与各 agent 目录无关）。
-
-**覆盖策略**：对已存在的模板文件为**覆盖写入**（刷新 `commands/`、`rules/`、`skills/`、`template/` 等）；**openspec/** 目录若已存在会**整体覆盖**。请勿依赖「跳过已存在文件」来保留本地对模板的手工修改——如需定制，建议在业务仓库中改备份或使用自有分支管理。
+**覆盖策略**：对已存在的模板文件为**覆盖写入**（刷新 `commands/`、`rules/`、`skills/`、`template/` 等）。请勿依赖「跳过已存在文件」来保留本地对模板的手工修改——如需定制，建议在业务仓库中改备份或使用自有分支管理。
 
 ---
 
@@ -69,19 +66,17 @@
 
 ### 提问与实现环节
 
-若技术方案仅为 **PDF**，可先执行 **`/pdf4code-md <PDF路径>`** 转成 Markdown 并保存到 **`req-docs/`**（如 `.cursor/req-docs/`），再进入下列步骤。
+若技术方案仅为 **PDF**，可先执行 **`/pdf4code-md <PDF路径>`** 转成 Markdown 并保存到 **`req-docs/`**（如 `.cursor/req-docs/`），再在对话中提供该 MD 路径并说明按技术方案实现代码。
 
-| 顺序 | 命令 | 作用 |
-|------|------|------|
-| 1 | **/opsx-new** | **提问**并新建变更，按 artifact 填写 proposal 等 |
-| 2 | **/opsx-continue** | **继续**根据提案生成剩余产物（specs、design、tasks） |
-| 3 | **/opsx-apply** | **根据规划**（tasks）生成代码 |
-| 4 | **/global-fix**（/修正实现规则） | **实现后**用户指出规则错误时：修正代码并同步更新文档与全局 Rules/Skills |
+| 顺序 | 步骤 / 命令 | 作用 |
+|------|-------------|------|
+| 1 | **按技术方案实现**（对话 + **implement-tech-design**） | 提供 **`req-docs/xxx.md`**（或 `.cursor/req-docs/...`）并说明按方案实现；AI 按 **`rules/implement-tech-design.mdc`** 读文档、列任务、提问缺项、实现代码 |
+| 2 | **/global-fix**（/修正实现规则） | **实现后**用户指出规则错误时：修正代码并同步更新文档与全局 Rules/Skills |
 | — | **/global-feat**（/新增能力） | **新增能力**时：补全实现与文档，或已实现则仅补文档与规则 |
-| 5 | **/global-sync** | 生成全局 Skills、Rules 并**归档**（可选） |
+| 3 | **/global-sync** | 技术方案 → 功能概述 → 提交到全局 Rules/Skills（可选） |
 | — | **/global-merge-context**（/合并上下文冲突） | **merge/rebase 后**仍存在冲突标记时：上下文类（索引、规则、技能、说明文档）自动合并；实现与配置类仅列差异待确认 |
 
-完成「上下文生成」1～3 后，再按「提问与实现环节」1～5 进行变更留档与代码实现；**global-fix** 在实现后、用户指出某处违反规则时使用；**global-feat** 在新增能力时使用；**global-sync** 可按需执行。**global-merge-context** 在合并分支后出现 `<<<<<<<` 等冲突时使用，与上述无固定先后。更细的按使用顺序查找见 [README-命令说明](./README-命令说明.md#按使用顺序查找)。
+完成「上下文生成」1～3 后，再按「提问与实现环节」实现代码；**global-fix** 在实现后、用户指出某处违反规则时使用；**global-feat** 在新增能力时使用；**global-sync** 可按需执行。**global-merge-context** 在合并分支后出现 `<<<<<<<` 等冲突时使用，与上述无固定先后。更细的按使用顺序查找见 [README-命令说明](./README-命令说明.md#按使用顺序查找)。
 
 ---
 
@@ -99,7 +94,7 @@
 - 将需求/模块/领域说明放到 **`stock-docs/`**（Cursor 下即 `.cursor/stock-docs/`）。
 - 使用 **`/spec2context-md`** 将 PDF 或杂乱 MD 转为《终稿模版》规范格式：PDF 先出**初稿**（`<方案名>_初稿.md`），再执行一次出**终稿**（`<方案名>_终稿.md`）；MD 直接出终稿。
 - 使用 **`/generateProjectContext`** 并传入 `stock-docs/<方案名>_终稿.md`（如 `.cursor/stock-docs/...`）根据终稿生成 Rules、Skills、索引（Rules、Skills 命名不带 `_终稿`，见上文「文档产物阶段」）。
-- 使用 **`/global-sync`**：**一条命令**完成「技术方案 → 功能概述 → **提交到全局 Rules/Skills** → 同步规范到 openspec/specs」。可传**技术方案路径**（如 **`.cursor/req-docs/xxx技术方案.md`**）或**变更名**（如 `add-auth`）；传变更名时会从该变更的 design.md / specs / proposal 取技术方案来源，提交到全局后对该变更执行 **opsx-sync**。适用于**全局型/公共型**设计的沉淀。
+- 使用 **`/global-sync`**：**一条命令**完成「技术方案 → 功能概述 → **提交到全局 Rules/Skills**」。传入**技术方案路径**（如 **`.cursor/req-docs/xxx技术方案.md`**）即可。适用于**全局型/公共型**设计的沉淀到 Cursor 上下文。
 - **merge / rebase 后**：若 **docs-index.md**、**main.mdc**、专题 **rules/skills** 或 **`stock-docs/`** 下说明出现 Git 冲突标记（Cursor 下路径多在 `.cursor/`），可用 **`/global-merge-context`**（或 **`/合并上下文冲突`**）按命令约定自动合并「上下文类」文件，实现与配置类冲突则只列差异待你确认。详见 [README-命令说明 §3.3](./README-命令说明.md#33-global-merge-context)。
 
 ### 技术方案 → 代码（实现用文档在配置根 req-docs/）
@@ -108,27 +103,16 @@
 - AI 会按 **`rules/implement-tech-design.mdc`**（Cursor 下 `.cursor/rules/implement-tech-design.mdc`）执行：读文档、列任务、提问缺项、按顺序实现、输出待完成列表与平台配置提醒。
 - **手头只有 PDF 时**：可先执行 **`/pdf4code-md <PDF路径>`** 将 PDF 转成 Markdown 并保存到 **`req-docs/<方案名>.md`**（可补全流程说明），再在对话中提供该 MD 路径；或直接提供 PDF 路径，规则会先按 pdf4code-md 转 MD 再继续。
 
-### OpenSpec 变更（留档与追溯）
-
-- **`/opsx-new <变更名>`**：新建一次变更，按 artifact 顺序填写。
-- **`/opsx-ff <变更名>`**：快进建齐 proposal / design / spec / tasks。
-- **`/opsx-apply`**：按 tasks 实现。
-- **`/opsx-archive`**：归档该变更。
-
-**全局工作流**（不归纳到 OpenSpec）：
+### 全局工作流
 
 | 命令 | 何时用 |
 |------|--------|
-| **/global-sync** | 方案→概述→提交到全局 Rules/Skills→同步规范（可选） |
+| **/global-sync** | 技术方案→概述→提交到全局 Rules/Skills（可选） |
 | **/global-fix**（/修正实现规则） | 实现后用户指出某处违反规则时，修正代码并同步更新相关文档与全局 Rules/Skills |
 | **/global-feat**（/新增能力） | 新增能力时：补全实现与文档，或已实现则仅补文档与规则 |
 | **/global-merge-context**（/合并上下文冲突） | merge/rebase 后：自动处理 **docs-index、rules、skills、说明类 MD** 等冲突；源码与对外配置等**不擅自合并**，只对比并等用户确认 |
 
 详见 [README-命令说明](./README-命令说明.md)（含 [§3.3 global-merge-context](./README-命令说明.md#33-global-merge-context)）。
-
-**产物的书写语言**：使用 `/opsx-new`、`/opsx-continue`、`/opsx-ff` 创建 proposal、design、specs、tasks 时，**正文语言与项目一致**。若技术方案、需求文档、用户对话或已有 artifact 以**中文**为主，则上述产物**全部用中文**书写（含 Requirement 描述、Scenario 的 WHEN/THEN、任务列表、决策与风险等）；若以英文为主则用英文。这样在中文项目下不会出现整份英文 spec，便于团队阅读与维护。
-
-可与「按技术方案实现」结合：使用 **/opsx-new** 新建变更时，在描述中带上**技术方案路径**（如 **`.cursor/req-docs/xxx技术方案.md`**），proposal/design 会基于该方案填写。
 
 ---
 
@@ -159,22 +143,12 @@
 | `/pdf4code-md` | `/PDF转MD` |
 | `/spec2context-md` | `/转成概述模板` |
 | `/genStructureDoc` | `/生成项目架构说明` |
-| `/global-sync` | `/全局同步`（方案→概述→全局 Rules/Skills→同步规范） |
+| `/global-sync` | `/全局同步`（方案→概述→全局 Rules/Skills） |
 | `/generateProjectContext` | `/生成项目上下文` |
 | `/deleteProjectContext` | `/删除项目上下文` |
-| `/opsx-new` | `/新建变更` |
-| `/opsx-ff` | `/快进变更` |
-| `/opsx-apply` | `/应用变更` |
-| `/opsx-archive` | `/归档变更` |
 | `/global-fix` | `/修正实现规则` |
 | `/global-feat` | `/新增能力` |
 | `/global-merge-context` | `/合并上下文冲突` |
-| `/opsx-continue` | `/继续变更` |
-| `/opsx-explore` | `/探索模式` |
-| `/opsx-onboard` | `/接入引导` |
-| `/opsx-sync` | `/同步规范` |
-| `/opsx-verify` | `/校验变更` |
-| `/opsx-bulk-archive` | `/批量归档` |
 
 ---
 
@@ -187,7 +161,6 @@
 
 ### 常见问题
 
-- **init 时报 OpenSpec 安装失败**：可手动执行 `npm install -g @fission-ai/openspec@latest`。
 - **希望「实现技术方案」更贴合业务**：直接编辑 **`rules/implement-tech-design.mdc`**（Cursor 下 `.cursor/rules/...`），按 [五、implement-tech-design 可改造](#五implement-tech-designmdc-可自行改造) 改造即可。
 - **斜杠命令找不到**：确认已在**配置根父目录**执行过 `flow2spec init`（且配置根为 `.cursor/`），且 Cursor 已识别到 **`.cursor/commands/`** 下的模板。
 - **想按使用顺序查命令**：打开 [README-命令说明](./README-命令说明.md)，看开头的「按使用顺序查找」表。
@@ -198,6 +171,4 @@
 |------|------|
 | [README-命令说明](./README-命令说明.md) | 各命令入参、输出、**按使用顺序查找** |
 | [README-体系与原理](./README-体系与原理.md) | 文档与上下文的架构、main 与 docs-index 区别 |
-| [README-目录与路径约定](./README-目录与路径约定.md) | **`stock-docs/`** / **`req-docs/`** / `openspec/` 结构、文档产物阶段 |
-| [OpenSpec-介绍](./OpenSpec-介绍.md) | OpenSpec 概念、变更与 artifact、工作流 |
-| [OpenSpec常见问题](./OpenSpec常见问题.md) | OpenSpec 常见问题 |
+| [README-目录与路径约定](./README-目录与路径约定.md) | **`stock-docs/`** / **`req-docs/`** 结构、文档产物阶段 |

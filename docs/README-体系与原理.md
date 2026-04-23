@@ -128,5 +128,5 @@
 | 文档 | 说明 |
 |------|------|
 | [README-命令说明](./README-命令说明.md) | 各命令入参、输出、按使用顺序查找 |
-| [README-目录与路径约定](./README-目录与路径约定.md) | **`stock-docs/`** / **`req-docs/`** / `openspec/` 结构、文档产物阶段 |
+| [README-目录与路径约定](./README-目录与路径约定.md) | **`stock-docs/`** / **`req-docs/`** 结构、文档产物阶段 |
 | [Flow2Spec使用说明](./Flow2Spec使用说明.md) | init 详解、推荐顺序、斜杠命令中英文、常见问题 |
