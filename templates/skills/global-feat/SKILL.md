@@ -1,8 +1,6 @@
 ---
-name: /新增能力
-id: global-feat
-category: 工作流
-description: 新增能力时补全实现与文档；已实现则仅基于实现与规则补充文档
+name: global-feat
+description: 新增能力时补全实现与文档；已实现则仅基于实现与规则补充文档；触发：global-feat、新增能力
 ---
 > **「配置根」**：当前 agent 对应的 AI 工具配置目录（`flow2spec init` 写入，常见 **`.cursor/`**、**`.claude/`**、**`.codex/`**）。下文 **`配置根/...`** 指该目录下的相对路径。
 

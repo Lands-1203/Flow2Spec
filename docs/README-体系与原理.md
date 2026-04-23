@@ -37,10 +37,10 @@
 ```
 文档（`stock-docs/*.md`；Cursor 下即 `.cursor/stock-docs/*.md`）
         │
-        ├── /genStructureDoc ──► 架构说明初稿（推荐顺序第 1 步）
-        ├── /spec2context-md ──► 规范格式 MD（初稿/终稿）
+        ├── **gen-architecture-doc** 技能 ──► 架构说明初稿（推荐顺序第 1 步）
+        ├── **spec2context-md** 技能 ──► 规范格式 MD（初稿/终稿）
         │
-        └── /generateProjectContext
+        └── **generate-project-context** 技能
                     │
                     ├── main.mdc（唯一 alwaysApply：项目总概述 + 模块一览 + 公共能力入口）
                     ├── 专题 Rules（`rules/*-context.mdc`，globs 限定路径）
@@ -103,7 +103,7 @@
 |----------|------|
 | 从产物找文档 | 看 Rule/Skill 的 **sourceDoc** |
 | 从文档找产物 | 看 **docs-index** 中该文档行的 Rules、Skills 列 |
-| 更新某文档的产物 | 改文档后，对同一路径再执行 `/generateProjectContext` + `stock-docs/xxx.md`，会覆盖该文档对应的全部 Rules、Skills，并更新 docs-index 该行与 main 的相关部分 |
+| 更新某文档的产物 | 改文档后，对同一路径再执行 **generate-project-context** 技能 + `stock-docs/xxx.md`，会覆盖该文档对应的全部 Rules、Skills，并更新 docs-index 该行与 main 的相关部分 |
 
 ---
 
@@ -129,4 +129,4 @@
 |------|------|
 | [README-命令说明](./README-命令说明.md) | 各命令入参、输出、按使用顺序查找 |
 | [README-目录与路径约定](./README-目录与路径约定.md) | **`stock-docs/`** / **`req-docs/`** 结构、文档产物阶段 |
-| [Flow2Spec使用说明](./Flow2Spec使用说明.md) | init 详解、推荐顺序、斜杠命令中英文、常见问题 |
+| [Flow2Spec使用说明](./Flow2Spec使用说明.md) | init 详解、推荐顺序、技能与工作流、常见问题 |

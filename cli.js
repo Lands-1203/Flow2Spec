@@ -26,8 +26,8 @@ agent（可多个，空格分隔；省略时默认为 cursor）：
   flow2spec init cursor claude    # 同时写入 .cursor/ 与 .claude/
 
 init 会:
-  1. 将 templates/ 下内容复制到各所选 agent 的配置根目录下的 commands、rules、skills、template（及预建 stock-docs/、req-docs/）
-  2. 斜杠命令为 Cursor 特性；写入 .claude/.codex 时主要为统一存放规则、技能与模版，供对应工具按各自方式加载
+  1. 将 templates/ 下内容复制到各所选 agent 的配置根目录下的 rules、skills、template（及预建 stock-docs/、req-docs/）
+  2. 工作流说明位于 skills 各子目录的 SKILL.md；写入 .claude/.codex 时主要为统一存放规则、技能与模版，供对应工具按各自方式加载
 
 更多说明见 README.md 或 docs/Flow2Spec使用说明.md
 `;
@@ -43,13 +43,13 @@ if (sub === "init") {
     .then((ids) => {
       const lines = ids.map((id) => {
         const { root, label } = AGENTS[id];
-        return `  - ${root}/：（${label}）commands、rules、skills、template、stock-docs、req-docs（预建）`;
+        return `  - ${root}/：（${label}）rules、skills、template、stock-docs、req-docs（预建）`;
       });
       console.log(`
 ✓ Flow2Spec init 完成
 ${lines.join("\n")}
 
-在 Cursor 中可在项目内使用 / 斜杠命令（配置根为 .cursor 时）。建议阅读 README 或 docs/Flow2Spec使用说明.md。
+在 Cursor 中可通过 Agent Skills 加载 `skills/` 下工作流（配置根为 .cursor 时）。建议阅读 README 或 docs/Flow2Spec使用说明.md。
 `);
     })
     .catch((e) => {
