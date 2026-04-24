@@ -1,6 +1,6 @@
 {
   "name": "@double-codeing/flow2spec",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "flow2spec init：落盘 .cursor/.claude/.codex 等配置根的 rules、skills、stock-docs/req-docs，文档驱动、f2s 可写回知识库工作流。",
   "homepage": "https://github.com/Lands-1203/Flow2Spec#readme",
   "repository": {
