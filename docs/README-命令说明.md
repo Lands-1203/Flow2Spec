@@ -5,6 +5,7 @@
 - 目录结构：[README-目录与路径约定](./README-目录与路径约定.md)
 - init 概要：[Flow2Spec使用说明 · 一](./Flow2Spec使用说明.md#一init-做了什么)
 - 架构：[README-体系与原理](./README-体系与原理.md)
+- 使用案例：[Flow2Spec-使用案例-模拟对话](./Flow2Spec-使用案例-模拟对话.md)
 
 ---
 
@@ -123,4 +124,4 @@ init → 配置根（rules / skills / template / stock-docs / req-docs）
 | 实现后     | 会话或现状写库           | **f2s-kb-sync**                                          |
 | 合并冲突   | 索引与规则等             | **f2s-kb-merge**                                         |
 
-**相关文档**：[Flow2Spec使用说明](./Flow2Spec使用说明.md) | [README-目录与路径约定](./README-目录与路径约定.md) | [README-体系与原理](./README-体系与原理.md)
+**相关文档**：[Flow2Spec使用说明](./Flow2Spec使用说明.md) | [Flow2Spec-使用案例-模拟对话](./Flow2Spec-使用案例-模拟对话.md) | [README-目录与路径约定](./README-目录与路径约定.md) | [README-体系与原理](./README-体系与原理.md)

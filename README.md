@@ -6,7 +6,7 @@ Flow2Spec 把**配置根里的知识库**（`rules/`、`skills/`、`docs-index.m
 
 **渐进式读取带来的开发体验**：**`main.mdc`**（唯一 **alwaysApply**）先给总览与入口；**`docs-index.md`** 虽不进自动上下文，但 **`main` 生成时会写入「先打开 docs-index 再按表找 Rule/Skill」的必读约定`**，从而先索引、再专题规则/技能、再 **`stock-docs/`** 长文、**必要时才下钻业务代码**；上下文**层层加深**而非整仓硬塞，**更省 token、更少噪声**，回答更贴已写进知识库的约定与模块边界。
 
-在**配置根的父目录**执行 **`flow2spec init`** 写入所选 AI 工具目录（默认 **`.cursor/`**，亦可 **`.claude/`**、**`.codex/`** 等）。命令与顺序见 [README-命令说明](./docs/README-命令说明.md#按使用顺序查找)，目录分工见 [目录与路径约定](./docs/README-目录与路径约定.md)。
+在**配置根的父目录**执行 **`flow2spec init`** 写入所选 AI 工具目录（默认 **`.cursor/`**，亦可 **`.claude/`**、**`.codex/`** 等）。命令与顺序见 [README-命令说明](./docs/README-命令说明.md#按使用顺序查找)，目录分工见 [目录与路径约定](./docs/README-目录与路径约定.md)，对话示例见 [Flow2Spec-使用案例-模拟对话](./docs/Flow2Spec-使用案例-模拟对话.md)。
 
 ---
 
@@ -40,7 +40,7 @@ flow2spec init
 | **纠错与扩展** | **f2s-kb-feat**、**f2s-kb-fix**（任意时机） |
 | **实现后写库** | **f2s-kb-sync**（会话/现状 → 大纲确认后写库） |
 
-更细的入参、输出与顺序：[README-命令说明](./docs/README-命令说明.md) · 使用手册：[Flow2Spec使用说明](./docs/Flow2Spec使用说明.md)。
+更细的入参、输出与顺序：[README-命令说明](./docs/README-命令说明.md) · 使用手册：[Flow2Spec使用说明](./docs/Flow2Spec使用说明.md) · 使用案例：[Flow2Spec-使用案例-模拟对话](./docs/Flow2Spec-使用案例-模拟对话.md)。
 
 ---
 
@@ -75,6 +75,7 @@ flow2spec init
 | 文档 | 说明 |
 |------|------|
 | [**Flow2Spec使用说明**](./docs/Flow2Spec使用说明.md) | **使用手册**：init、目录约定、推荐顺序、典型流程、技能与工作流、常见问题 |
+| [**Flow2Spec-使用案例-模拟对话**](./docs/Flow2Spec-使用案例-模拟对话.md) | **对话版式与场景**：真实输入、命令解释、渐进读取与 **f2s-*** 示例 |
 | [README-命令说明](./docs/README-命令说明.md) | 各命令入参/输出、**按使用顺序查找**、快速参考 |
 | [README-目录与路径约定](./docs/README-目录与路径约定.md) | **配置根**下 `stock-docs/`、`req-docs/` 等结构、路径与链接约定、文档产物阶段 |
 | [README-体系与原理](./docs/README-体系与原理.md) | 架构、设计原则、main 与 docs-index 区别 |

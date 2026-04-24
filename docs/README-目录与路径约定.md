@@ -2,6 +2,8 @@
 
 **配置根**：`flow2spec init` 写入的目录（默认 **`.cursor/`**，亦可 **`.claude/`**、**`.codex/`**）。下文以 **`.cursor/`** 为例，其它 agent 将 `.cursor` 换成对应目录名即可。
 
+**文档**：[Flow2Spec使用说明](./Flow2Spec使用说明.md) · [README-命令说明](./README-命令说明.md) · [README-体系与原理](./README-体系与原理.md) · [Flow2Spec-使用案例-模拟对话](./Flow2Spec-使用案例-模拟对话.md)
+
 | 路径（逻辑） | 示例（Cursor） | 说明 |
 |--------------|----------------|------|
 | **stock-docs/** | `.cursor/stock-docs/` | 存量源文档（终稿/初稿/架构等）→ **f2s-ctx-build** |
@@ -62,4 +64,4 @@ Rules/Skills **文件名不带 `_终稿`**。
 - **stock-docs** = 上下文源；**req-docs** = 实现用方案。  
 - 链接层级见 §2；产物阶段见 §3；版本字段见 §4。
 
-**相关文档**：[Flow2Spec使用说明](./Flow2Spec使用说明.md) | [README-命令说明](./README-命令说明.md) | [README-体系与原理](./README-体系与原理.md)
+**相关文档**：[Flow2Spec使用说明](./Flow2Spec使用说明.md) | [Flow2Spec-使用案例-模拟对话](./Flow2Spec-使用案例-模拟对话.md) | [README-命令说明](./README-命令说明.md) | [README-体系与原理](./README-体系与原理.md)

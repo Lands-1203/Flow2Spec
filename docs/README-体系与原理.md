@@ -4,6 +4,8 @@ Flow2Spec 如何把**长文档**变成 **main + 专题 Rules + 专题 Skills + d
 
 **一句话**：**stock-docs** 里文档经 **f2s-ctx-build** 落成 **main（总览）**、**globs 规则**、**description 技能** 与 **docs-index（文档↔产物表）**；实现代码用 **req-docs** + **implement-tech-design**。
 
+**文档**：[Flow2Spec使用说明](./Flow2Spec使用说明.md) · [README-命令说明](./README-命令说明.md) · [README-目录与路径约定](./README-目录与路径约定.md) · [Flow2Spec-使用案例-模拟对话](./Flow2Spec-使用案例-模拟对话.md)
+
 ---
 
 ## 1. 目标与价值
@@ -15,21 +17,16 @@ Flow2Spec 如何把**长文档**变成 **main + 专题 Rules + 专题 Skills + d
 
 ## 2. 整体架构
 
-```
-stock-docs/*.md
-  → f2s-doc-arch（初稿）→ f2s-doc-final（终稿）→ f2s-ctx-build
-        → main.mdc（唯一 alwaysApply）
-        → rules/*-context.mdc（globs）
-        → skills/<主题>/SKILL.md（description）
-        → docs-index.md
-```
+**上游（把材料写进 `stock-docs/`，并得到可给 ctx-build 的终稿）**——常见顺序是：**f2s-doc-arch** 出 **`_初稿.md`** → **f2s-doc-final** 出 **`_终稿.md`**（你也可自写终稿再跳过前两步）。材料始终在 **`stock-docs/`**。
+
+**下游（一次 f2s-ctx-build）**——入参通常是 **`stock-docs/…_终稿.md`**（或 URL 等，见 [命令说明 §2.3](./README-命令说明.md#23-f2s-ctx-build)）。**同一次执行会一并写出 / 更新下面几类文件**；它们是**并列产物**，不是「先跑完 main 再跑 rules」的串行流水线。
 
 | 产物 | 作用 |
 |------|------|
-| **main.mdc** | 总地图：结构、模块一览、公共入口 |
-| **专题 Rules** | 必须/禁止/约定；按 **globs** 命中文件时加载 |
-| **专题 Skills** | 概念、流程、示例；按 **description** 匹配问题 |
-| **docs-index** | 表格式：文档路径、Rules、Skills、摘要（**非** alwaysApply，须按需读；**main 正文应要求先查 docs-index 再下钻**，见 f2s-ctx-build 生成约定） |
+| **main.mdc** | 唯一 **alwaysApply**；总地图、模块一览、公共入口（正文应约定先读 **docs-index** 再下钻） |
+| **专题 Rules**（`rules/*-context.mdc`） | 必须/禁止/约定；按 **globs** 命中文件时加载 |
+| **专题 Skills**（`skills/` 下各主题的 **SKILL.md**） | 概念、流程、示例；按 **description** 匹配问题 |
+| **docs-index.md** | 表格式：文档路径、Rules、Skills、摘要（**非** alwaysApply，须按需读） |
 
 **req-docs**：技术方案等，走 **implement-tech-design**，不替代 stock-docs 链出规则。
 
@@ -74,4 +71,5 @@ stock-docs/*.md
 
 - **路径与链接**：[README-目录与路径约定](./README-目录与路径约定.md)  
 - **命令与速查**：[README-命令说明](./README-命令说明.md)  
-- **操作手册**：[Flow2Spec使用说明](./Flow2Spec使用说明.md)
+- **操作手册**：[Flow2Spec使用说明](./Flow2Spec使用说明.md)  
+- **使用案例（对话版式）**：[Flow2Spec-使用案例-模拟对话](./Flow2Spec-使用案例-模拟对话.md)

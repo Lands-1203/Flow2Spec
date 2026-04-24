@@ -2,6 +2,8 @@
 
 使用手册：**init → 目录约定 → 推荐顺序 → 典型流程 → 技能标识 → 常见问题**。概览与快速开始见仓库 [README.md](../README.md)。
 
+**文档**：[README-命令说明](./README-命令说明.md) · [README-目录与路径约定](./README-目录与路径约定.md) · [README-体系与原理](./README-体系与原理.md) · [Flow2Spec-使用案例-模拟对话](./Flow2Spec-使用案例-模拟对话.md)
+
 | 章节 | 内容 |
 |------|------|
 | [一、init](#一init-做了什么) | 写入目录与模板 |
@@ -11,6 +13,7 @@
 | [五、改造 implement-tech-design](#五implement-tech-designmdc-可自行改造) | 按项目改「按方案实现」规则 |
 | [六、技能标识](#六技能与工作流标识) | `skills/<name>/SKILL.md` 速览 |
 | [七、延伸](#七速查与相关文档) | 速查与 FAQ |
+| [使用案例（另文）](./Flow2Spec-使用案例-模拟对话.md) | 真实输入、命令解释、场景与速查 |
 
 ---
 
