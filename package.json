@@ -1,6 +1,6 @@
 {
   "name": "@lands/flow2spec",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "flow2spec init：落盘 .cursor/.claude/.codex 等配置根的 rules、skills、stock-docs/req-docs，文档驱动、f2s 可写回知识库工作流。",
   "main": "./cli.js",
   "bin": {
@@ -40,7 +40,10 @@
     "context-engineering",
     "f2s"
   ],
-  "author": "兰大神,七七是只猫",
+  "author": "兰大神 <550947002@qq.com>",
+  "contributors": [
+    "七七是只猫 <292761894@qq.com>"
+  ],
   "license": "ISC",
   "engines": {
     "node": ">=16"
