@@ -1,170 +1,114 @@
 # Flow2Spec 使用说明
 
-本文档是 **Flow2Spec 的使用手册**：面向已安装或准备使用 Flow2Spec 的读者，说明 init 后日常如何使用、目录与产物约定、推荐顺序、典型流程、**skills** 工作流标识与常见问题。  
-**项目概览与快速开始** 见仓库根目录 [README.md](../README.md)。
-
----
-
-## 文档结构一览
+使用手册：**init → 目录约定 → 推荐顺序 → 典型流程 → 技能标识 → 常见问题**。概览与快速开始见仓库 [README.md](../README.md)。
 
 | 章节 | 内容 |
 |------|------|
-| [一、init 做了什么](#一init-做了什么) | 执行 init 后写入哪些目录与模板 |
-| [二、文档目录约定](#二文档目录约定重要) | 配置根（如 `.cursor/`）下 **`stock-docs/`** 与 **`req-docs/`** 的分工；完整结构见 [目录与路径约定](./README-目录与路径约定.md) |
-| [三、推荐执行顺序](#三推荐执行顺序) | 上下文生成 → 提问与实现 → 实现后；[按顺序查找](./README-命令说明.md#按使用顺序查找) |
-| [四、典型流程](#四典型流程) | 架构说明、文档→上下文、技术方案→代码、全局工作流 |
-| [五、implement-tech-design 可改造](#五implement-tech-designmdc-可自行改造) | 如何按项目定制「按技术方案实现」规则 |
-| [六、技能与工作流标识](#六技能与工作流标识) | 各 SKILL 目录名与用途速览 |
-| [七、速查与相关文档](#七速查与相关文档) | 想做的事→技能 见 [命令说明 §7](./README-命令说明.md#7-快速参考按阶段)；常见问题与延伸阅读 |
+| [一、init](#一init-做了什么) | 写入目录与模板 |
+| [二、目录约定](#二文档目录约定) | `stock-docs/` vs `req-docs/`；完整结构见 [目录与路径约定](./README-目录与路径约定.md) |
+| [三、推荐顺序](#三推荐执行顺序) | 链到 [命令说明 · 按使用顺序查找](./README-命令说明.md#按使用顺序查找) |
+| [四、典型流程](#四典型流程) | 架构 / 上下文 / 按方案实现 / 全局技能 |
+| [五、改造 implement-tech-design](#五implement-tech-designmdc-可自行改造) | 按项目改「按方案实现」规则 |
+| [六、技能标识](#六技能与工作流标识) | `skills/<name>/SKILL.md` 速览 |
+| [七、延伸](#七速查与相关文档) | 速查与 FAQ |
 
 ---
 
 ## 一、init 做了什么
 
-在**配置根父目录**执行 **`flow2spec init [agent ...]`**（未全局安装时可使用 `npx @double-codeing/flow2spec init`）。**agent** 可省略，省略时默认为 **`cursor`**（写入 **`.cursor/`**）。可选 **`claude`**、**`codex`** 等，空格分隔多个时会**分别**写入多套目录（如 `.cursor/` 与 `.claude/` 各一份相同模板结构）。详见 **`flow2spec --help`**。
+在**配置根父目录**执行 **`flow2spec init [agent ...]`**（未全局安装可用 **`npx @double-codeing/flow2spec init`**）。`agent` 省略时默认 **`cursor`** → **`.cursor/`**；可多个：`cursor claude codex`，各写一套相同结构。详见 **`flow2spec --help`**。
 
-1. **模板写入「配置根」**（来自 Flow2Spec 的 `templates/`）：对每个所选 agent，在**配置根父目录**下创建对应目录（如 **`.cursor/`**、**`.claude/`**、**`.codex/`**），并写入下列子路径（结构相同）：
+对每个所选配置根：**覆盖写入** `templates/` 中的 `rules/`、`skills/`、`template/`，并预建 **`stock-docs/`**、**`req-docs/`**。Cursor 下 Agent 按场景加载 **`skills/<标识>/SKILL.md`**。
 
-   | 子目录 | 内容 |
-   |--------|------|
-   | **skills/** | **Agent Skills**（`skills/<标识>/SKILL.md`）：含 **f2s-doc-arch**、**f2s-doc-final**、**f2s-ctx-build**、**f2s-ctx-rm**、**f2s-doc-pdf**、**f2s-req-clarify**、**f2s-req-backend**、**f2s-kb-sync**、**f2s-kb-fix**、**f2s-kb-feat**、**f2s-kb-merge**、**stock-docs-vs-req-docs** 等工作流说明 |
-   | **rules/** | 如 **implement-tech-design.mdc**（按技术方案实现代码的通用规则） |
-   | **template/** | 终稿模版、后端技术模版等 |
-   | **stock-docs/** | 预建空目录；你用来生成 Rules/Skills 的**存量源文档**（终稿、架构说明等）也放此处 |
-   | **req-docs/** | 预建空目录；**需求澄清、技术方案、PDF 转实现用 MD** 等放在此处（如 `.cursor/req-docs/`） |
+| 子目录 | 用途 |
+|--------|------|
+| **skills/** | f2s-* 工作流 + **stock-docs-vs-req-docs** |
+| **rules/** | 如 **implement-tech-design.mdc** |
+| **template/** | 终稿模版、后端技术模版 |
+| **stock-docs/** | 生成 Rules/Skills 的**存量源文档** |
+| **req-docs/** | 需求澄清、技术方案、**按方案实现**用 MD |
 
-   **说明**：在 **Cursor** 中由 Agent 按需加载 **Skills**（`SKILL.md` 的 `description` 便于匹配）；写入 **`.claude/`**、**`.codex/`** 时主要为在统一目录结构下存放规则、技能与模版，供对应工具按各自方式加载。
-
-**覆盖策略**：对已存在的模板文件为**覆盖写入**（刷新 `rules/`、`skills/`、`template/` 等）。请勿依赖「跳过已存在文件」来保留本地对模板的手工修改——如需定制，建议在业务仓库中改备份或使用自有分支管理。
+**注意**：再次 init 会覆盖模板；本地对模板的长期修改请用分支或备份。
 
 ---
 
-## 二、文档目录约定（重要）
+## 二、文档目录约定
 
-下文 **「配置根」** 表示 `flow2spec init` 所选工具对应目录（Cursor 默认 **`.cursor/`**，亦可 **`.claude/`**、**`.codex/`** 等）。**`stock-docs/`** 与 **`req-docs/`** 均在配置根下，是**两个并列子目录**，职责不同。
+**配置根**：如 `.cursor/`、`.claude/`。
 
 | 目录 | 用途 |
 |------|------|
-| **`stock-docs/`**（如 `.cursor/stock-docs/`） | 放**用于生成 Rules、Skills、索引**的**存量源文档**（终稿、架构说明、从 PDF 整理的领域说明等）。执行 **f2s-ctx-build** 技能时传入 **`stock-docs/xxx.md`**（Cursor 下多为 `.cursor/stock-docs/xxx.md`）。 |
-| **`req-docs/`**（如 `.cursor/req-docs/`） | 放**需要实现成代码的文档**（如技术方案、接口设计、表设计）。在对话中提供 **`.cursor/req-docs/xxx.md`**（或 **`req-docs/xxx.md`**，相对配置根）并说明「按该技术方案实现代码」时，AI 按 implement-tech-design 规则执行。 |
+| **stock-docs/** | 终稿、架构说明等 → **f2s-ctx-build** 入参 |
+| **req-docs/** | 技术方案等 → 对话提供路径 + **implement-tech-design** 写代码 |
 
-- 技术方案（含 PDF 转出的 MD）建议放在 **`req-docs/`**；仅用于给 AI 做上下文、不直接落代码的文档放在 **`stock-docs/`**（如 `.cursor/stock-docs/`）。
-- 完整目录结构、文档路径与链接约定、**文档产物阶段**（原稿→初稿→终稿）见 [README-目录与路径约定](./README-目录与路径约定.md)。
+细则、链接写法、原稿/初稿/终稿：[README-目录与路径约定](./README-目录与路径约定.md)。
 
 ---
 
 ## 三、推荐执行顺序
 
-### 上下文生成
+**需求（可选）**：f2s-req-clarify → f2s-req-backend  
 
-| 顺序 | 技能 | 作用 |
-|------|------|------|
-| 1 | **`f2s-doc-arch`** | 生成项目架构说明**初稿** |
-| 2 | **`f2s-doc-final`** | 将初稿转为《终稿模版》规范格式，得到**终稿** |
-| 3 | **`f2s-ctx-build`** | 根据终稿生成 **Rules、Skills、文档索引**（项目上下文） |
+**上下文**：f2s-doc-arch → f2s-doc-final → f2s-ctx-build  
 
-### 提问与实现环节
+**实现**：可选 f2s-doc-pdf → **req-docs/** 下 MD + 说明「按方案实现」→ **implement-tech-design**  
 
-若技术方案仅为 **PDF**，可先按 **f2s-doc-pdf** 技能处理（用户提供 PDF 路径），将 Markdown 保存到 **`req-docs/`**（如 `.cursor/req-docs/`），再在对话中提供该 MD 路径并说明按技术方案实现代码。
+**知识库维护**：任意时机 **f2s-kb-fix** / **f2s-kb-feat**；**实现后**（或收尾）沉淀写库 → **f2s-kb-sync**；合并冲突 → **f2s-kb-merge**  
 
-| 顺序 | 步骤 / 技能 | 作用 |
-|------|-------------|------|
-| 1 | **按技术方案实现**（对话 + **implement-tech-design**） | 提供 **`req-docs/xxx.md`**（或 `.cursor/req-docs/...`）并说明按方案实现；AI 按 **`rules/implement-tech-design.mdc`** 读文档、列任务、提问缺项、实现代码 |
-| 2 | **`f2s-kb-fix`** | **实现后**用户指出规则错误时：修正代码并同步更新文档与全局 Rules/Skills |
-| — | **`f2s-kb-feat`** | **新增能力**时：补全实现与文档，或已实现则仅补文档与规则 |
-| 3 | **`f2s-kb-sync`** | 可指定已实现能力或零输入推断关心能力 → **大纲确认** → 写入知识库并注入上下文（可选） |
-| — | **`f2s-kb-merge`** | **merge/rebase 后**仍存在冲突标记时：上下文类（索引、规则、技能、说明文档）自动合并；实现与配置类仅列差异待确认 |
-
-完成「上下文生成」1～3 后，再按「提问与实现环节」实现代码；**f2s-kb-fix** 在实现后、用户指出某处违反规则时使用；**f2s-kb-feat** 在新增能力时使用；**f2s-kb-sync** 可按需执行。**f2s-kb-merge** 在合并分支后出现 `<<<<<<<` 等冲突时使用，与上述无固定先后。更细的按使用顺序查找见 [README-命令说明](./README-命令说明.md#按使用顺序查找)。
+完整表与入参/输出：[README-命令说明 · 按使用顺序查找](./README-命令说明.md#按使用顺序查找)。
 
 ---
 
 ## 四、典型流程
 
-### 生成项目架构说明（初稿）
+**架构初稿**：**f2s-doc-arch**（说明或文档路径；无参扫描需用户确认）→ 可选 **f2s-doc-final** → **f2s-ctx-build**。
 
-- 使用 **`f2s-doc-arch`** 技能：根据**用户说明**（纯文字）、**已有文档路径**（如 README、设计 doc），或在不提供时**扫描代码**（不推荐），生成**项目架构说明初稿**。
-- **入参**：可选。第一参数 = 一段说明文字 或 文档路径；第二参数 = 输出路径（默认 `stock-docs/<项目名>架构说明_初稿.md`，Cursor 下多为 `.cursor/stock-docs/...`）。
-- **特点**：无固定格式，以描述清楚为准；用户说明较宽泛时会引导补充代码路径、模块划分、入口等；不推荐无输入直接扫描，若确需则先提醒再执行。
-- 生成初稿后，可再执行 **f2s-doc-final** 技能转为规范格式终稿，并配合 **f2s-ctx-build** 技能生成 Rules、Skills。
+**文档 → 上下文**：材料放 **stock-docs/**；PDF/杂乱 MD 用 **f2s-doc-final**（PDF 常先初稿再终稿）；终稿路径交给 **f2s-ctx-build**。会话沉淀、大纲确认写库：**f2s-kb-sync**。冲突标记：**f2s-kb-merge**（见 [命令说明 §3.3](./README-命令说明.md#33-f2s-kb-merge)）。
 
-### 文档 → 上下文（生成 Rules/Skills）
+**技术方案 → 代码**：提供 **req-docs/xxx.md**（或 PDF，规则会先走 **f2s-doc-pdf**），说明按方案实现；行为见 **rules/implement-tech-design.mdc**。
 
-- 将需求/模块/领域说明放到 **`stock-docs/`**（Cursor 下即 `.cursor/stock-docs/`）。
-- 使用 **`f2s-doc-final`** 将 PDF 或杂乱 MD 转为《终稿模版》规范格式：PDF 先出**初稿**（`<方案名>_初稿.md`），再执行一次出**终稿**（`<方案名>_终稿.md`）；MD 直接出终稿。
-- 使用 **`f2s-ctx-build`** 并传入 `stock-docs/<方案名>_终稿.md`（如 `.cursor/stock-docs/...`）根据终稿生成 Rules、Skills、索引（Rules、Skills 命名不带 `_终稿`，见上文「文档产物阶段」）。
-- 使用 **`f2s-kb-sync`**：可把**用户指定的「Agent 已实现的能力」**写入计划，也可**不输入任何内容**由 Agent 根据**当前上下文**推断**用户与项目关心的能力**；再汇总用户描述、Agent 描述与项目侧信息，**先输出更新大纲并经确认**，再写入 **`rules/`**、**`skills/`**、**`docs-index.md`**、**`main.mdc`** 等以**注入可加载上下文**。可附带文档路径或 `@` 文件作为素材。
-- **merge / rebase 后**：若 **docs-index.md**、**main.mdc**、专题 **rules/skills** 或 **`stock-docs/`** 下说明出现 Git 冲突标记（Cursor 下路径多在 `.cursor/`），可按 **f2s-kb-merge** 技能自动合并「上下文类」文件，实现与配置类冲突则只列差异待你确认。详见 [README-命令说明 §3.3](./README-命令说明.md#33-f2s-kb-merge)。
-
-### 技术方案 → 代码（实现用文档在配置根 req-docs/）
-
-- 在对话中**提供技术方案文档路径**（通常为 **`.cursor/req-docs/xxx.md`** 或 **`req-docs/xxx.md`**（相对配置根），或 PDF 路径），并说明「按该技术方案实现代码」。
-- AI 会按 **`rules/implement-tech-design.mdc`**（Cursor 下 `.cursor/rules/implement-tech-design.mdc`）执行：读文档、列任务、提问缺项、按顺序实现、输出待完成列表与平台配置提醒。
-- **手头只有 PDF 时**：可先按 **f2s-doc-pdf** 技能将 PDF 转成 Markdown 并保存到 **`req-docs/<方案名>.md`**（可补全流程说明），再在对话中提供该 MD 路径；或直接提供 PDF 路径，规则会先按 **f2s-doc-pdf** 技能转 MD 再继续。
-
-### 全局工作流
-
-| 技能 | 何时用 |
-|------|--------|
-| **`f2s-kb-sync`** | 可指定已实现能力或零输入推断关心能力 → 大纲确认 → 写入知识库并注入上下文（可选） |
-| **`f2s-kb-fix`** | 实现后用户指出某处违反规则时，修正代码并同步更新相关文档与全局 Rules/Skills |
-| **`f2s-kb-feat`** | 新增能力时：补全实现与文档，或已实现则仅补文档与规则 |
-| **`f2s-kb-merge`** | merge/rebase 后：自动处理 **docs-index、rules、skills、说明类 MD** 等冲突；源码与对外配置等**不擅自合并**，只对比并等用户确认 |
-
-详见 [README-命令说明](./README-命令说明.md)（含 [§3.3 f2s-kb-merge](./README-命令说明.md#33-f2s-kb-merge)）。
+**全局**：**f2s-kb-feat** / **f2s-kb-fix**（任意时机）；**f2s-kb-sync**（典型在实现后，大纲确认后写库）。
 
 ---
 
 ## 五、implement-tech-design.mdc 可自行改造
 
-**`rules/implement-tech-design.mdc`**（Cursor 下路径为 `.cursor/rules/implement-tech-design.mdc`）是通用模板，约定的是「读文档 → 列任务 → 实现前提问 → 按顺序实现 → 待完成列表与提醒」的整体流程。
-
-**你可以按自己项目的技术栈与业务对该文件做改造**，例如：
-
-- **目录与约定**：把「项目约定的配置注册处」「接口/路由目录」「MQ 定义处」「错误码定义处」等改成你们项目真实路径与命名（如 `src/config/`、`src/api/`、`src/mq/` 等）。
-- **步骤与检查项**：增加或删减步骤（如代码规范检查、内部 Code Review、发布流程提醒）。
-- **术语与示例**：把示例中的表名、接口名、错误码换成你们业务相关示例，便于 AI 与成员理解。
-- **触发条件**：调整 frontmatter 里的 `globs`，使规则在你们放「要实现成代码」的文档路径下自动加载（默认含 `**/req-docs/**/*.md`；技术方案应在 **`req-docs/`**，见 [二、文档目录约定](#二文档目录约定重要)）。
-
-改造后文件保留在项目 **`rules/`** 下即可（Cursor 下多为 `.cursor/rules/`）。注意：当前 **`flow2spec init` 对模板为覆盖写入**，再次 init 会用包内模板刷新 `rules/`、`skills/`、`template/` 等；定制规则请在业务仓库用分支或备份管理，或避免对 init 下发的文件做长期手工修改。
+路径：**`rules/implement-tech-design.mdc`**。可按项目改目录约定、步骤、**globs**（默认含 `**/req-docs/**/*.md`）。再次 **init** 会覆盖 `rules/` 等模板，定制请用分支或备份。
 
 ---
 
 ## 六、技能与工作流标识
 
-工作流写在 **`skills/<标识>/SKILL.md`**。Agent 主要依据各文件 **YAML frontmatter** 中的 **`name`** 与 **`description`**（触发场景）匹配；可按项目需要编辑 `description` 以增加触发词。
+工作流在 **`skills/<标识>/SKILL.md`**；Agent 依 **frontmatter** 的 `name`、`description` 匹配。
 
-| `name`（与目录一致） | 路径示例（配置根 `.cursor/`） | 用途摘要 |
-|----------------------|------------------------------|----------|
-| `f2s-doc-arch` | `.cursor/skills/f2s-doc-arch/SKILL.md` | 架构说明初稿 |
-| `f2s-doc-final` | `.cursor/skills/f2s-doc-final/SKILL.md` | PDF/MD → 终稿模版 |
-| `f2s-ctx-build` | `.cursor/skills/f2s-ctx-build/SKILL.md` | 终稿 → Rules/Skills/索引 |
-| `f2s-ctx-rm` | `.cursor/skills/f2s-ctx-rm/SKILL.md` | 按文档删除上下文产物 |
-| `f2s-doc-pdf` | `.cursor/skills/f2s-doc-pdf/SKILL.md` | PDF → `req-docs/` MD |
-| `f2s-req-clarify` | `.cursor/skills/f2s-req-clarify/SKILL.md` | 需求澄清 |
-| `f2s-req-backend` | `.cursor/skills/f2s-req-backend/SKILL.md` | 后端技术方案 |
-| `f2s-kb-sync` | `.cursor/skills/f2s-kb-sync/SKILL.md` | 指定已实现能力或零输入推断 → 知识库（先大纲确认）→ 注入上下文 |
-| `f2s-kb-fix`、`f2s-kb-feat`、`f2s-kb-merge` | `.cursor/skills/f2s-kb-fix/SKILL.md` 等 | 全局维护与合并冲突 |
+| name | 用途 |
+|------|------|
+| f2s-doc-arch | 架构初稿 |
+| f2s-doc-final | PDF/MD → 终稿模版 |
+| f2s-ctx-build | 终稿 → Rules / Skills / docs-index |
+| f2s-ctx-rm | 按文档删上下文 |
+| f2s-doc-pdf | PDF → req-docs MD |
+| f2s-req-clarify / f2s-req-backend | 需求澄清 / 后端技术方案 |
+| f2s-kb-fix / f2s-kb-feat / f2s-kb-sync / f2s-kb-merge | 任意：纠错、新能力；典型实现后：写库；冲突：合并 |
+| stock-docs-vs-req-docs | 两目录分工说明 |
+
+入参与输出细节仍以各 **SKILL.md** 与 [README-命令说明](./README-命令说明.md) 为准。
 
 ---
 
 ## 七、速查与相关文档
 
-**想做的事 → 用哪个技能**（按阶段速查）：见 [README-命令说明 - 快速参考](./README-命令说明.md#7-快速参考按阶段)。  
-**按使用顺序查找**：见 [README-命令说明 - 按使用顺序查找](./README-命令说明.md#按使用顺序查找)。
+**按阶段速查**：[README-命令说明 §6](./README-命令说明.md#6-快速参考按阶段)。
 
----
+**常见问题**
 
-### 常见问题
-
-- **希望「实现技术方案」更贴合业务**：直接编辑 **`rules/implement-tech-design.mdc`**（Cursor 下 `.cursor/rules/...`），按 [五、implement-tech-design 可改造](#五implement-tech-designmdc-可自行改造) 改造即可。
-- **技能未生效**：确认已在**配置根父目录**执行过 `flow2spec init`，且 **`skills/`** 下存在对应 **`SKILL.md`**；在对话中明确提及技能名或 `description` 中的触发词。
-- **想按使用顺序查找**：打开 [README-命令说明](./README-命令说明.md)，看开头的「按使用顺序查找」表。
-
-**相关文档**
+- **按方案实现要改行为**：改 **implement-tech-design.mdc**（见上文第五节）。  
+- **技能不触发**：确认已 init；对话里点名技能名或 `description` 里的词。  
+- **顺序搞不清**：看 [README-命令说明](./README-命令说明.md) 开头总表。
 
 | 文档 | 说明 |
 |------|------|
-| [README-命令说明](./README-命令说明.md) | 各技能入参、输出、**按使用顺序查找** |
-| [README-体系与原理](./README-体系与原理.md) | 文档与上下文的架构、main 与 docs-index 区别 |
-| [README-目录与路径约定](./README-目录与路径约定.md) | **`stock-docs/`** / **`req-docs/`** 结构、文档产物阶段 |
+| [Flow2Spec-使用案例-模拟对话](./Flow2Spec-使用案例-模拟对话.md) | 真实输入 + 命令解释 + Agent 示意，全文同版式 |
+| [README-命令说明](./README-命令说明.md) | 入参、输出、顺序、§6 速查 |
+| [README-目录与路径约定](./README-目录与路径约定.md) | 路径、链接、产物阶段 |
+| [README-体系与原理](./README-体系与原理.md) | main、docs-index、拆解原则 |
