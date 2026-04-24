@@ -37,10 +37,10 @@
 ```
 文档（`stock-docs/*.md`；Cursor 下即 `.cursor/stock-docs/*.md`）
         │
-        ├── **gen-architecture-doc** 技能 ──► 架构说明初稿（推荐顺序第 1 步）
-        ├── **spec2context-md** 技能 ──► 规范格式 MD（初稿/终稿）
+        ├── **f2s-doc-arch** 技能 ──► 架构说明初稿（推荐顺序第 1 步）
+        ├── **f2s-doc-final** 技能 ──► 规范格式 MD（初稿/终稿）
         │
-        └── **generate-project-context** 技能
+        └── **f2s-ctx-build** 技能
                     │
                     ├── main.mdc（唯一 alwaysApply：项目总概述 + 模块一览 + 公共能力入口）
                     ├── 专题 Rules（`rules/*-context.mdc`，globs 限定路径）
@@ -103,13 +103,13 @@
 |----------|------|
 | 从产物找文档 | 看 Rule/Skill 的 **sourceDoc** |
 | 从文档找产物 | 看 **docs-index** 中该文档行的 Rules、Skills 列 |
-| 更新某文档的产物 | 改文档后，对同一路径再执行 **generate-project-context** 技能 + `stock-docs/xxx.md`，会覆盖该文档对应的全部 Rules、Skills，并更新 docs-index 该行与 main 的相关部分 |
+| 更新某文档的产物 | 改文档后，对同一路径再执行 **f2s-ctx-build** 技能 + `stock-docs/xxx.md`，会覆盖该文档对应的全部 Rules、Skills，并更新 docs-index 该行与 main 的相关部分 |
 
 ---
 
 ## 6. Flow2Spec 推荐执行顺序（概要）
 
-**上下文生成** → **提问与实现** → **实现后**（global-fix / global-feat / global-sync）；**合并分支后**若**配置根**下索引、规则、技能等出现冲突标记（Cursor 下多在 `.cursor/`），可用 **global-merge-context** 与实现侧冲突分流处理（见 [命令说明 §3.3](./README-命令说明.md#33-global-merge-context)）。日常在 Cursor 中时 AI 自动加载 main，按路径加载 Rule、按提问匹配 Skill。  
+**上下文生成** → **提问与实现** → **实现后**（f2s-kb-fix / f2s-kb-feat / f2s-kb-sync）；**合并分支后**若**配置根**下索引、规则、技能等出现冲突标记（Cursor 下多在 `.cursor/`），可用 **f2s-kb-merge** 与实现侧冲突分流处理（见 [命令说明 §3.3](./README-命令说明.md#33-f2s-kb-merge)）。日常在 Cursor 中时 AI 自动加载 main，按路径加载 Rule、按提问匹配 Skill。  
 按使用顺序查命令与各命令入参输出见 [README-命令说明](./README-命令说明.md)；init 与典型流程见 [Flow2Spec使用说明](./Flow2Spec使用说明.md)。
 
 ---

@@ -1,12 +1,12 @@
 ---
-name: delete-project-context
-description: 删除某 stock-docs 文档对应的 Rules、Skills 及索引中的相关描述；触发：删除项目上下文、deleteProjectContext
+name: f2s-ctx-rm
+description: 删除某 stock-docs 文档对应的 Rules、Skills 及索引中的相关描述；触发：删除项目上下文、f2s-ctx-rm
 ---
 > **「配置根」**：当前 agent 对应的 AI 工具配置目录（`flow2spec init` 写入，常见 **`.cursor/`**、**`.claude/`**、**`.codex/`**）。下文 **`配置根/...`** 指该目录下的相对路径。
 
 # 删除文档对应的项目上下文（Rules、Skills、docs-index、main 中的相关描述）
 
-用户在对话中提供**一个参数**：与 **generate-project-context** 技能索源一致，为 **`配置根/stock-docs/`** 下某文档的**本地路径**（如 `配置根/stock-docs/技术方案设计.md`）或**文档路径/文件名中可匹配的片段**（如 `技术方案设计.md`）。请按以下步骤执行，**直接删除**匹配到的产物并更新索引与 main。
+用户在对话中提供**一个参数**：与 **f2s-ctx-build** 技能索源一致，为 **`配置根/stock-docs/`** 下某文档的**本地路径**（如 `配置根/stock-docs/技术方案设计.md`）或**文档路径/文件名中可匹配的片段**（如 `技术方案设计.md`）。请按以下步骤执行，**直接删除**匹配到的产物并更新索引与 main。
 
 ---
 

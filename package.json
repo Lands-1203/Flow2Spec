@@ -1,21 +1,46 @@
 {
   "name": "@lands/flow2spec",
   "version": "2.1.0",
-  "description": "文档前置工作流：init 时将 AI 配置模板写入 .cursor / .claude 等；已经移除openspec相关功能",
+  "description": "flow2spec init：落盘 .cursor/.claude/.codex 等配置根的 rules、skills、stock-docs/req-docs，文档驱动、f2s 可写回知识库工作流。",
   "main": "./cli.js",
   "bin": {
     "flow2spec": "./cli.js"
   },
+  "files": [
+    "cli.js",
+    "lib",
+    "templates",
+    "README.md",
+    "docs"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
-    "test": "node cli.js --help"
+    "test": "node cli.js --help",
+    "prepublishOnly": "node cli.js --help",
+    "pack:check": "npm pack --dry-run"
   },
   "keywords": [
     "flow2spec",
     "cursor",
-    "Project Knowledge Base",
-    "claude"
+    "cursor-rules",
+    "agent-skills",
+    "claude",
+    "codex",
+    "ai-workflow",
+    "project-context",
+    "knowledge-base",
+    "documentation",
+    "rules",
+    "skills",
+    "stock-docs",
+    "req-docs",
+    "context-engineering",
+    "f2s"
   ],
-  "author": "兰大神",
+  "author": "兰大神,七七是只猫",
   "license": "ISC",
   "engines": {
     "node": ">=16"

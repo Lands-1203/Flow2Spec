@@ -1,5 +1,5 @@
 ---
-name: gen-backend-tech-doc
+name: f2s-req-backend
 description: 根据澄清后的需求基于项目知识库/Skills/Rules 生成后端技术文档；触发：生成后端技术文档、后端技术方案
 ---
 > **「配置根」**：当前 agent 对应的 AI 工具配置目录（`flow2spec init` 写入，常见 **`.cursor/`**、**`.claude/`**、**`.codex/`**）。下文 **`配置根/...`** 指该目录下的相对路径。

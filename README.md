@@ -1,6 +1,12 @@
 # Flow2Spec
 
-**文档前置工作流**：在**配置根的父目录**（含 `.cursor/` 等 AI 配置目录的代码仓库根）执行 `flow2spec init`，将模板写入所选 **AI 配置根**（默认 Cursor 的 `.cursor/`，亦可 `.claude/`、`.codex/` 等）。先做文档与上下文，再按技术方案实现与全局工作流维护规则。
+Flow2Spec 把**配置根里的知识库**（`rules/`、`skills/`、`docs-index.md`、`stock-docs/` 等）与**业务代码**串成一条**可日复一日的闭环**：先落盘可加载的约定与索引 → 日常提问与实现都**优先就着知识库走** → 代码与约定演进后再用 **f2s-kb-feat** / **f2s-kb-sync** / **f2s-kb-fix** 等**写回**规则与技能，下一轮对话立刻继承，少在聊天与零散文档里重复对齐口径。
+
+**闭环为什么省事**：能力拆成一组 **f2s-*** 技能（`skills/<标识>/SKILL.md`），按「当前在闭环的哪一环」选用即可；init 一次把目录与模版备好，后续主要是**对话里触发技能 + 确认大纲/路径**，不必自己拼一套文档治理流程。
+
+**渐进式读取带来的开发体验**：**`main.mdc`**（唯一 **alwaysApply**）先给总览与入口；**`docs-index.md`** 虽不进自动上下文，但 **`main` 生成时会写入「先打开 docs-index 再按表找 Rule/Skill」的必读约定`**，从而先索引、再专题规则/技能、再 **`stock-docs/`** 长文、**必要时才下钻业务代码**；上下文**层层加深**而非整仓硬塞，**更省 token、更少噪声**，回答更贴已写进知识库的约定与模块边界。
+
+在**配置根的父目录**执行 **`flow2spec init`** 写入所选 AI 工具目录（默认 **`.cursor/`**，亦可 **`.claude/`**、**`.codex/`** 等）。命令与顺序见 [README-命令说明](./docs/README-命令说明.md#按使用顺序查找)，目录分工见 [目录与路径约定](./docs/README-目录与路径约定.md)。
 
 ---
 
@@ -25,16 +31,41 @@ flow2spec init
 
 ---
 
-## 能做什么
+## 能力与入口（速览）
 
-| 类型 | 说明 |
-|------|------|
-| **文档与上下文** | 技术方案/需求 → 规范格式 → Rules、Skills、索引（**gen-architecture-doc**、**spec2context-md**、**generate-project-context** 等技能） |
-| **PDF 转 MD** | **pdf4code-md**：PDF 转 Markdown 并保存到 **配置根 `req-docs/`**，便于按方案实现代码 |
-| **全局工作流** | **global-sync**：可写明 Agent 已实现能力或零输入；零输入时由 Agent 推断用户与项目关心的能力，**先大纲确认**再写入知识库以注入上下文；**global-fix** / **global-feat**：修正与新增能力时的文档与规则同步 |
-| **按技术方案实现** | 对话中提供技术方案路径（如 **`.cursor/req-docs/xxx.md`**），AI 按 `implement-tech-design.mdc` 执行；[规则可自改](./docs/Flow2Spec使用说明.md#五implement-tech-designmdc-可自行改造) |
+| 环节 | 典型技能 / 用法 |
+|------|----------------|
+| **沉淀知识库** | **f2s-doc-arch** → **f2s-doc-final** → **f2s-ctx-build**（终稿进 `stock-docs/`，产出 Rules、Skills、索引） |
+| **按方案写代码** | **`req-docs/`** 下技术方案 MD + **`implement-tech-design`**；仅有 PDF 时可用 **f2s-doc-pdf** |
+| **实现后反哺** | **f2s-kb-feat**（新能力）、**f2s-kb-sync**（会话/已实现能力 → 大纲确认后写库）、**f2s-kb-fix**（纠错并同步规则） |
 
-**推荐顺序**：上下文生成（gen-architecture-doc → spec2context-md → generate-project-context）→ 提问与实现（可选 pdf4code-md → 在对话中提供 **`req-docs/`** 技术方案路径并按 **implement-tech-design** 实现）→ 实现后（global-fix / global-feat / global-sync）。[按使用顺序查找](./docs/README-命令说明.md#按使用顺序查找)。
+更细的入参、输出与顺序：[README-命令说明](./docs/README-命令说明.md) · 使用手册：[Flow2Spec使用说明](./docs/Flow2Spec使用说明.md)。
+
+---
+
+## 原理与流程图解
+
+下图与「闭环日常流」「渐进式读取」一一对应；技能标识以 **f2s-*** 为准，与图不一致处以 [README-命令说明](./docs/README-命令说明.md) 为准。
+
+### 命令明细（名称、作用、使用时机与频率）
+
+![命令明细图：f2s 技能一览与使用频率](./docs/images/命令明细图.png)
+
+### 日常操作与项目仓库（知识库与业务代码）
+
+![日常操作流程图：各技能与知识库、业务代码的关系](./docs/images/日常操作流程图.png)
+
+### init 与配置根结构（以 `.cursor` 为例）
+
+![原理图1：flow2spec init 与配置根内知识库、技能与模版](./docs/images/原理图1.png)
+
+### main.mdc 与 docs-index.md
+
+![原理图2：规则总入口与文档索引](./docs/images/原理图2.png)
+
+### 简述：知识库与代码闭环
+
+![简述图：生成知识库 → 基于知识库实现 → 基于实现反哺知识库](./docs/images/简述图.png)
 
 ---
 

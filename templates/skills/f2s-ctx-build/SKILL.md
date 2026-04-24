@@ -1,6 +1,6 @@
 ---
-name: generate-project-context
-description: 根据 stock-docs 文档生成 Rules、Skills 与文档索引；触发：生成项目上下文、generateProjectContext、终稿生成上下文
+name: f2s-ctx-build
+description: 根据 stock-docs 文档生成 Rules、Skills 与文档索引；触发：生成项目上下文、f2s-ctx-build、终稿生成上下文
 ---
 > **「配置根」**：当前 agent 对应的 AI 工具配置目录（`flow2spec init` 写入，常见 **`.cursor/`**、**`.claude/`**、**`.codex/`**）。下文 **`配置根/...`** 指该目录下的相对路径。
 
@@ -76,18 +76,22 @@ description: 根据 stock-docs 文档生成 Rules、Skills 与文档索引；触
 **路径提醒**：写入 Rule/Skill/docs-index 时，文档链接 href 和 sourceDoc **必须**严格按「文档路径与链接约定」表执行——Rule 仅用 `../stock-docs/<文件名>.md`，Skill 仅用 `../../stock-docs/<文件名>.md`，docs-index 仅用 `stock-docs/<文件名>.md`，sourceDoc 仅用 `配置根/stock-docs/<文件名>.md`。勿凭印象写错层级。
 
 **main.mdc 与 docs-index.md 的区别**  
-- **main.mdc**（`配置根/rules/main.mdc`）：**项目的总概述和索引**，固定命名 **main**，**唯一** alwaysApply 的 rule。给 AI 看的「体系结构 + 模块一览 + 公共能力入口」，让 AI 大致知道项目结构，需要时再去读各模块的 rule/skill。  
-- **docs-index.md**（`配置根/docs-index.md`）：**需求/文档索引**，按文档列出的表格（文档路径、Rules、Skills、简要说明），供人与 AI 查「某文档对应哪些产物」。不参与 alwaysApply，仅作索引用。
+- **main.mdc**（`配置根/rules/main.mdc`）：**项目的总概述和索引**，固定命名 **main**，**唯一** alwaysApply 的 rule。给 AI 看的「体系结构 + 模块一览 + 公共能力入口」，让 AI 大致知道项目结构，需要时再去读各模块的 rule/skill；并在正文中**强制约定**「先查 `docs-index.md` 再下钻」（见 3.0 正文第 4 点），以落实渐进式读取。  
+- **docs-index.md**（`配置根/docs-index.md`）：**需求/文档索引**，按文档列出的表格（文档路径、Rules、Skills、简要说明），供人与 AI 查「某文档对应哪些产物」。不参与 alwaysApply，**须由 main 正文显式要求 Agent 在定位文档↔产物时优先读取**，否则不会自动进入上下文。
 
 ### 3.0 main.mdc（项目总概述与索引，唯一 alwaysApply）
 
 - **路径**：`配置根/rules/main.mdc`（**固定命名**，不可改为其他文件名）
 - **frontmatter**：`description: 项目总概述与索引，体系结构、模块一览、能力入口`，`alwaysApply: true`
-- **正文结构**（简短，建议 &lt;50 行）：
+- **正文结构**（简短；含下述第 4 点为优先，总行数可略超 50 行，**不得省略第 4 点**）：
   1. **项目结构**：按当前项目实际目录与约定，用通用表述写接口与模块的划分（如对客接口、公共/功能模块等），**不要写仅本项目特有的结构名**（如某团队、某产品线专属目录名），以便本技能复用于其他项目。
   2. **模块一览**（表格）：列「模块名」「说明」「详细约定加载方式」。每行对应一个功能模块：说明该模块用途；加载方式写「打开项目约定的该模块路径时自动加载对应 rule；或查阅 配置根/stock-docs/xxx、配置根/skills/xxx」。
   3. **公共能力入口**（若有）：接口与上下文、消息队列、配置、公共工具等入口的简短描述 + 指向对应 rule，并写实现位置（按项目约定，如 ctx 注入、MQ 辅助、配置辅助、模型、公共工具等）。
-  4. 文末：**全文索引**：`配置根/docs-index.md`
+  4. **全文索引与渐进式读取（必填）**：须单独成段或小节，至少包含以下语义（可压缩措辞，不可删掉任一条）：
+     - **映射表位置**：「文档路径 ↔ Rules / Skills」的完整表在 **`配置根/docs-index.md`**（`docs-index` 非 alwaysApply，不会自动进上下文，须按需打开）。
+     - **读取顺序**：当要根据**某份 stock-docs 文档、某需求/模块名**定位应遵循的规则或应加载的技能时，**应先读取 `docs-index.md`**，在表中找到对应行，再按 **Rules**、**Skills** 列给出的路径打开 `.mdc` / `SKILL.md`；需要长文细节时再打开 **stock-docs** 链出的源文档；仍不足再下钻**业务源码**。
+     - **避免**：在未查 `docs-index.md`、未锁定相关 Rule/Skill 前，对工作区做**无范围**的大面积检索，或通读与当前问题**无关**的长文档。
+  5. 文末可再单列一行链接提示：**全文索引文件**：`配置根/docs-index.md`（与第 4 点呼应即可）。
 - **main.mdc 的更新时机**：每次执行本技能时，**可能**会更新 main.mdc，**也可能**不更新。  
   - **会更新**：若本次文档属于「功能模块」或「公共模块说明」类，需在 main 的「模块一览」或「公共能力入口」中体现，则更新 main（若 main 不存在则先创建；若已存在则只更新与本次文档相关的部分，不删已有且无关的模块行）。  
   - **不更新**：若本次文档不涉及项目总概述与索引（如单次需求说明、不纳入体系结构的文档），则**不修改** main.mdc，仅生成/更新该文档对应的专题 Rules、Skills 及 docs-index 即可。

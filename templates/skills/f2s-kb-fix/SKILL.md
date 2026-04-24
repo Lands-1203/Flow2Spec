@@ -1,6 +1,6 @@
 ---
-name: global-fix
-description: 根据用户指出的实现规则错误，修正代码并同步更新文档与全局规则；触发：global-fix、修正实现规则
+name: f2s-kb-fix
+description: 根据用户指出的实现规则错误，修正代码并同步更新文档与全局规则；触发：f2s-kb-fix、修正实现规则
 ---
 > **「配置根」**：当前 agent 对应的 AI 工具配置目录（`flow2spec init` 写入，常见 **`.cursor/`**、**`.claude/`**、**`.codex/`**）。下文 **`配置根/...`** 指该目录下的相对路径。
 

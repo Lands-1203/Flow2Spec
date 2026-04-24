@@ -1,5 +1,5 @@
 ---
-name: pdf4code-md
+name: f2s-doc-pdf
 description: 将 PDF 技术方案转为 Markdown 并保存到 req-docs，可补全流程说明；触发：PDF转MD、按方案实现前的 PDF
 ---
 

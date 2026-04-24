@@ -6,7 +6,7 @@
 
 | 目录 | 位置 | 用途 |
 |------|------|------|
-| **`stock-docs/`** | 如 `.cursor/stock-docs/` | **存量上下文源**：PDF/初稿/终稿/架构说明等，供 **generate-project-context** 技能生成 Rules、Skills、索引 |
+| **`stock-docs/`** | 如 `.cursor/stock-docs/` | **存量上下文源**：PDF/初稿/终稿/架构说明等，供 **f2s-ctx-build** 技能生成 Rules、Skills、索引 |
 | **`req-docs/`** | 如 `.cursor/req-docs/` | **需求与技术方案**：澄清需求、后端技术方案、PDF 转 MD（实现用）等，配合 `implement-tech-design` **按方案写代码** |
 
 
@@ -47,7 +47,7 @@
 | **`rules/*.mdc`**          | 链接 href 为 `**../stock-docs/<文件名>.md**`（从 rules 到同配置根下 stock-docs 的相对路径）                  |
 | **`skills/<主题>/SKILL.md`** | 链接 href 为 `**../../stock-docs/<文件名>.md**`（从 skills/xxx 到 stock-docs 的相对路径）          |
 | **`docs-index.md`**        | 链接 href 为 `**stock-docs/<文件名>.md**`（docs-index 与 `stock-docs/` 同级，故 href 不含 `../`） |
-| **frontmatter 的 sourceDoc**      | **`<配置根>/stock-docs/<文件名>.md`**（与 **generate-project-context** 技能入参一致，如 `.cursor/stock-docs/...` 或 `.claude/stock-docs/...`）                           |
+| **frontmatter 的 sourceDoc**      | **`<配置根>/stock-docs/<文件名>.md`**（与 **f2s-ctx-build** 技能入参一致，如 `.cursor/stock-docs/...` 或 `.claude/stock-docs/...`）                           |
 
 **正确示例（配置根为 `.cursor/` 时）：**
 
@@ -76,13 +76,13 @@
 | 阶段 | 含义 | 典型文件名 / 来源 |
 |------|------|-------------------|
 | **原稿** | 原始材料（如 PDF、未结构化的 MD），未放入本体系时的形态。 | 任意 PDF、`stock-docs/xxx.md`（未规范前） |
-| **初稿** | **spec2context-md** 技能从 **PDF 首次**转出、或 **gen-architecture-doc** 技能生成的架构说明，供人工检查与修改。 | `stock-docs/<方案名>_初稿.md`、`<项目名>架构说明_初稿.md` |
-| **终稿** | 初稿或任意 MD 经 **spec2context-md** 技能转为《终稿模版》规范格式后的**最终产物**，用于生成 Rules、Skills。 | `stock-docs/<方案名>_终稿.md` |
+| **初稿** | **f2s-doc-final** 技能从 **PDF 首次**转出、或 **f2s-doc-arch** 技能生成的架构说明，供人工检查与修改。 | `stock-docs/<方案名>_初稿.md`、`<项目名>架构说明_初稿.md` |
+| **终稿** | 初稿或任意 MD 经 **f2s-doc-final** 技能转为《终稿模版》规范格式后的**最终产物**，用于生成 Rules、Skills。 | `stock-docs/<方案名>_终稿.md` |
 
 **与命令的对应关系：**
 
-- **spec2context-md**：传入 PDF → 输出初稿（`_初稿.md`）；传入初稿或 MD → 输出**终稿**（`_终稿.md`）。
-- **generateProjectContext**：入参为**终稿或等价存量文档路径**（如 `stock-docs/<方案名>_终稿.md`，即 `.cursor/stock-docs/...` 或 `.claude/stock-docs/...` 等），根据该文档生成 Rules、Skills、索引。生成的 **Rules、Skills 文件名与目录名不带 `_终稿` 后缀**，保持现有约定（如 `rules/<主题>-context.mdc`、`skills/<主题>-context/SKILL.md`）。
+- **f2s-doc-final**：传入 PDF → 输出初稿（`_初稿.md`）；传入初稿或 MD → 输出**终稿**（`_终稿.md`）。
+- **f2s-ctx-build**：入参为**终稿或等价存量文档路径**（如 `stock-docs/<方案名>_终稿.md`，即 `.cursor/stock-docs/...` 或 `.claude/stock-docs/...` 等），根据该文档生成 Rules、Skills、索引。生成的 **Rules、Skills 文件名与目录名不带 `_终稿` 后缀**，保持现有约定（如 `rules/<主题>-context.mdc`、`skills/<主题>-context/SKILL.md`）。
 
 小结：**文档**可有 原稿 → 初稿（`_初稿`）→ 终稿（`_终稿`）；**Rules、Skills** 由终稿生成，命名不加 `_终稿`。
 
@@ -92,10 +92,10 @@
 
 每条 Rule、每条 Skill 的 frontmatter 中**必须**包含：
 
-- **sourceDoc**：源文档路径，格式 **`<配置根>/stock-docs/<文件名>.md`**（与 **generate-project-context** 技能入参一致，如 `.cursor/stock-docs/xxx.md`、`.claude/stock-docs/xxx.md`）
+- **sourceDoc**：源文档路径，格式 **`<配置根>/stock-docs/<文件名>.md`**（与 **f2s-ctx-build** 技能入参一致，如 `.cursor/stock-docs/xxx.md`、`.claude/stock-docs/xxx.md`）
 - **generatedAt**：本次生成时间，东八区北京时间，ISO 8601，如 `2026-01-28T20:00:00+08:00`
 
-用途：**从产物找文档**（看 Rule/Skill 的 `sourceDoc`）、**从文档找产物**（查该配置根下的 docs-index）、**更新**（改文档后对同一路径再执行 **generate-project-context** 技能）。索源与典型用法见 [README-体系与原理 - 版本管理与索源](./README-体系与原理.md#5-版本管理与索源)。
+用途：**从产物找文档**（看 Rule/Skill 的 `sourceDoc`）、**从文档找产物**（查该配置根下的 docs-index）、**更新**（改文档后对同一路径再执行 **f2s-ctx-build** 技能）。索源与典型用法见 [README-体系与原理 - 版本管理与索源](./README-体系与原理.md#5-版本管理与索源)。
 
 ---
 
@@ -103,7 +103,7 @@
 
 - **包内路径**：Flow2Spec 包内模版目录 **templates/template/**（与 `templates/skills` 等同级），包含 `终稿模版.md`、`后端技术模版.md` 等。
 - **init 注入**：`flow2spec init` 将包内 **templates/template/** 整目录复制到**每个所选配置根**下的 **`template/`**（Cursor 下即 **`.cursor/template/`**，Claude 下即 **`.claude/template/`** 等），例如 `终稿模版.md`、`后端技术模版.md` 位于 **`template/`** 内。
-- **spec2context-md**：转换时优先读取 **`template/终稿模版.md`** 作为格式规范；若不存在则使用命令内嵌的模板结构。
+- **f2s-doc-final**：转换时优先读取 **`template/终稿模版.md`** 作为格式规范；若不存在则使用命令内嵌的模板结构。
 - **生成后端技术文档**：结构范本为 **`template/后端技术模版.md`**；产出技术方案默认写入 **`req-docs/`**。
 - 团队可自行修改**当前所用配置根**下 `template/` 内文件；再次 init 会**覆盖**该目录（与 rules/skills 行为一致）。
 
@@ -112,7 +112,7 @@
 ## 6. 小结
 
 - **配置根**下：`stock-docs/`、**`req-docs/`**、`rules/`、`skills/`、`template/`，索引文件 **docs-index.md**（如 `.cursor/docs-index.md`）。
-- **文档产物阶段**：原稿 → 初稿（`_初稿.md`）→ 终稿（`_终稿.md`）；spec2context-md 的最终输出为终稿；generateProjectContext 用终稿生成 Rules、Skills，但 Rules、Skills 命名不带 `_终稿`。
+- **文档产物阶段**：原稿 → 初稿（`_初稿.md`）→ 终稿（`_终稿.md`）；f2s-doc-final 的最终输出为终稿；f2s-ctx-build 用终稿生成 Rules、Skills，但 Rules、Skills 命名不带 `_终稿`。
 - 文档链接按**写入位置**使用不同相对路径：Rule 用 `../stock-docs/`，Skill 用 `../../stock-docs/`，docs-index 用 `stock-docs/`；**sourceDoc** 与显示路径用 **实际配置根** + `/stock-docs/<文件名>.md`（见 §2）。
 - 版本管理用 **sourceDoc** + **generatedAt**，便于索源与按文档更新产物。
 
