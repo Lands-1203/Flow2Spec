@@ -21,7 +21,7 @@
 
 ## 一、init 做了什么
 
-在**配置根父目录**执行 **`flow2spec init [agent ...]`**（未全局安装时可使用 `npx @lands/flow2spec init`）。**agent** 可省略，省略时默认为 **`cursor`**（写入 **`.cursor/`**）。可选 **`claude`**、**`codex`** 等，空格分隔多个时会**分别**写入多套目录（如 `.cursor/` 与 `.claude/` 各一份相同模板结构）。详见 **`flow2spec --help`**。
+在**配置根父目录**执行 **`flow2spec init [agent ...]`**（未全局安装时可使用 `npx @double-codeing/flow2spec init`）。**agent** 可省略，省略时默认为 **`cursor`**（写入 **`.cursor/`**）。可选 **`claude`**、**`codex`** 等，空格分隔多个时会**分别**写入多套目录（如 `.cursor/` 与 `.claude/` 各一份相同模板结构）。详见 **`flow2spec --help`**。
 
 1. **模板写入「配置根」**（来自 Flow2Spec 的 `templates/`）：对每个所选 agent，在**配置根父目录**下创建对应目录（如 **`.cursor/`**、**`.claude/`**、**`.codex/`**），并写入下列子路径（结构相同）：
 
