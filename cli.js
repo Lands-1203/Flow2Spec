@@ -49,7 +49,7 @@ if (sub === "init") {
 ✓ Flow2Spec init 完成
 ${lines.join("\n")}
 
-在 Cursor 中可通过 Agent Skills 加载 `skills/` 下工作流（配置根为 .cursor 时）。建议阅读 README 或 docs/Flow2Spec使用说明.md。
+在 Cursor 中可通过 Agent Skills 加载 skills/ 目录下工作流（配置根为 .cursor 时）。建议阅读 README 或 docs/Flow2Spec使用说明.md。
 `);
     })
     .catch((e) => {
