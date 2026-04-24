@@ -17,9 +17,15 @@ Flow2Spec 如何把**长文档**变成 **main + 专题 Rules + 专题 Skills + d
 
 ## 2. 整体架构
 
-**上游（把材料写进 `stock-docs/`，并得到可给 ctx-build 的终稿）**——常见顺序是：**f2s-doc-arch** 出 **`_初稿.md`** → **f2s-doc-final** 出 **`_终稿.md`**（你也可自写终稿再跳过前两步）。材料始终在 **`stock-docs/`**。
+在**配置根**里，和 Flow2Spec 日常闭环相关的主要是**三条线**（先建立整体印象，再下看表格）：
 
-**下游（一次 f2s-ctx-build）**——入参通常是 **`stock-docs/…_终稿.md`**（或 URL 等，见 [命令说明 §2.3](./README-命令说明.md#23-f2s-ctx-build)）。**同一次执行会一并写出 / 更新下面几类文件**；它们是**并列产物**，不是「先跑完 main 再跑 rules」的串行流水线。
+| 线 | 目录 / 产物 | 在闭环里的角色 |
+|----|----------------|----------------|
+| **A. 文档源** | **`stock-docs/`** | 放终稿、初稿、架构长文等；是 **f2s-ctx-build** 的输入源 |
+| **B. 可加载知识库** | **`main.mdc`**、**`rules/`**、**`skills/`**、**`docs-index.md`** | Agent **按需**读：总览 → 索引 → 专题规则/技能 → 必要时回 **`stock-docs/`** 长文 |
+| **C. 按方案写代码** | **`req-docs/`** + **`implement-tech-design`** | 技术方案 MD 驱动改业务代码；**不**替代 A→B 那条「把长文拆进规则与技能」的链 |
+
+**阶段二：用终稿跑一次 f2s-ctx-build**——入参通常是 **`stock-docs/…_终稿.md`**（或 URL 等，见 [命令说明 §2.3](./README-命令说明.md#23-f2s-ctx-build)）。**同一次执行会一并写出 / 更新下面几类文件**；它们是**并列产物**，不是「先跑完 main 再跑 rules」的串行流水线。
 
 | 产物 | 作用 |
 |------|------|
@@ -27,8 +33,6 @@ Flow2Spec 如何把**长文档**变成 **main + 专题 Rules + 专题 Skills + d
 | **专题 Rules**（`rules/*-context.mdc`） | 必须/禁止/约定；按 **globs** 命中文件时加载 |
 | **专题 Skills**（`skills/` 下各主题的 **SKILL.md**） | 概念、流程、示例；按 **description** 匹配问题 |
 | **docs-index.md** | 表格式：文档路径、Rules、Skills、摘要（**非** alwaysApply，须按需读） |
-
-**req-docs**：技术方案等，走 **implement-tech-design**，不替代 stock-docs 链出规则。
 
 ---
 
