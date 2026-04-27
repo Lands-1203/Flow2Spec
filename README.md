@@ -14,12 +14,12 @@ Flow2Spec 把**配置根里的知识库**（`rules/`、`skills/`、`docs-index.m
 
 ```bash
 # 在目标代码仓库（配置根的父目录）执行（默认仅写入 .cursor/）
-npx @double-codeing/flow2spec init
+npx @ctrip/flow2spec init
 # 指定 AI 工具配置目录（可多选）
-npx @double-codeing/flow2spec init claude
-npx @double-codeing/flow2spec init cursor claude codex
+npx @ctrip/flow2spec init claude
+npx @ctrip/flow2spec init cursor claude codex
 # 或全局安装后
-npm install -g @double-codeing/flow2spec
+npm install -g @ctrip/flow2spec
 flow2spec init
 ```
 
@@ -35,7 +35,8 @@ flow2spec init
 
 | 环节 | 典型技能 / 用法 |
 |------|----------------|
-| **沉淀知识库** | **f2s-doc-arch** → **f2s-doc-final** → **f2s-ctx-build**（终稿进 `stock-docs/`，产出 Rules、Skills、索引） |
+| **沉淀知识库（架构说明）** | **f2s-doc-arch** → **f2s-doc-final** → **f2s-ctx-build**：架构初稿→终稿→Rules、Skills、索引（终稿在 `stock-docs/`） |
+| **沉淀知识库（已落地能力→上下文）** | **f2s-doc-add**：**工作中**某能力**已做好**，用**一批相关文件路径**把它解析进知识库（初稿→终稿→Rules/Skills/索引）；**与**「架构说明」**那条技能链不同** |
 | **按方案写代码** | **`req-docs/`** 下技术方案 MD + **`implement-tech-design`**；仅有 PDF 时可用 **f2s-doc-pdf** |
 | **纠错与扩展** | **f2s-kb-feat**、**f2s-kb-fix**（任意时机） |
 | **实现后写库** | **f2s-kb-sync**（会话/现状 → 大纲确认后写库） |

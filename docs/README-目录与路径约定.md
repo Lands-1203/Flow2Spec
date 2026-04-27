@@ -6,7 +6,7 @@
 
 | 路径（逻辑） | 示例（Cursor） | 说明 |
 |--------------|----------------|------|
-| **stock-docs/** | `.cursor/stock-docs/` | 存量源文档（终稿/初稿/架构等）→ **f2s-ctx-build** |
+| **stock-docs/** | `.cursor/stock-docs/` | 存量源文档（终稿/初稿/架构等）→ **f2s-ctx-build**；**f2s-doc-arch**（架构初稿）、**f2s-doc-add**（**工作中**已落地能力、多文件聚合进上下文）的初稿/终稿亦在此，**勿**与 **req-docs** 混用 |
 | **req-docs/** | `.cursor/req-docs/` | 技术方案、澄清文档等 → **implement-tech-design** 按方案写代码 |
 | **rules/** | `.cursor/rules/` | **main.mdc**（唯一 alwaysApply）+ 专题 `*-context.mdc` |
 | **skills/** | `.cursor/skills/` | 各 `SKILL.md` |
@@ -14,6 +14,15 @@
 | **docs-index.md** | `.cursor/docs-index.md` | 文档 ↔ Rules / Skills 索引表 |
 
 **init**：创建上表目录并复制模板。**升级**：旧名 `docs/` 可改名为 `stock-docs/`；`req-docs` 须在**配置根内**，勿与 `.cursor` 同级。
+
+### 1.1 Cursor 与 Claude Code：`rules/` 扩展名
+
+| 配置根 | 规则文件扩展名 | 路径范围（frontmatter） | 说明 |
+|--------|----------------|-------------------------|------|
+| **`.cursor/`**（Cursor） | **`.mdc`** | **`globs:`** + **`alwaysApply:`** | Cursor 约定 |
+| **`.claude/`**（Claude Code） | **`.md`** | **`paths:`**（无 `paths` 则与会话同载） | Claude Code 不识别 `.mdc`；`flow2spec init claude` 由模板自动转换 |
+
+在 **`.claude/`** 下手工维护规则时，请使用 **`.md`** 与 **`paths:`**；勿复制 Cursor 的 **`globs:`** / **`.mdc`** 以免不生效。Claude Code **不会**把 **`.mdx`** 当作项目规则加载；请勿用 **`.mdx`** 作为 `rules/` 内规则扩展名。
 
 ---
 
@@ -39,7 +48,7 @@
 | 阶段 | 含义 | 典型名 |
 |------|------|--------|
 | 原稿 | 未纳入体系前的材料 | 任意 PDF、杂乱 MD |
-| 初稿 | **f2s-doc-final**（PDF 首次）或 **f2s-doc-arch** | `*_初稿.md`、`*架构说明_初稿.md` |
+| 初稿 | **f2s-doc-final**（PDF 首次）、**f2s-doc-arch**（架构说明），或 **f2s-doc-add**（**工作中**把**已落地能力**从多文件聚合成的初稿） | `*_初稿.md`、`*架构说明_初稿.md` 等；**f2s-doc-add** 与 **f2s-doc-arch** 分工见各自 `SKILL.md` |
 | 终稿 | **f2s-doc-final** 规范输出 | `*_终稿.md` → **f2s-ctx-build** 入参 |
 
 Rules/Skills **文件名不带 `_终稿`**。

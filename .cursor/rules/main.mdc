@@ -1,0 +1,33 @@
+---
+description: 项目总概述与索引，体系结构、模块一览、能力入口
+alwaysApply: true
+---
+
+# Flow2Spec 包仓库（@ctrip/flow2spec）
+
+## 项目结构
+
+本仓库为 **npm CLI 包**：在业务仓库根执行 `flow2spec init`，将包内 **`templates/`** 复制到所选 AI **配置根**（如 `.cursor/`）。运行时无服务进程，仅 **Node 文件系统** 读写。代码侧由 **`cli.js`** 解析子命令、**`lib/`** 完成 agent 归一化与递归复制；**`templates/`** 为发布给使用方的规则与技能源；**`docs/`** 与 **`README.md`** 为人类可读的使用说明与原理图。
+
+## 模块一览
+
+| 模块名 | 说明 | 详细约定加载方式 |
+|--------|------|------------------|
+| **CLI 与 init** | `flow2spec --help`、`flow2spec init`；`lib/agents.js`、`lib/init.js` 负责 agent 列表与模板落盘。 | 编辑 `cli.js`、`lib/**` 时自动加载 **`.cursor/rules/flow2spec-package-architecture.mdc`**；或查阅 **[架构说明终稿](../stock-docs/架构说明_终稿.md)**、**`.cursor/skills/flow2spec-architecture-context/SKILL.md`**。 |
+| **模板与配置根** | `templates/` 下 `rules`、`skills`、`template` 随包发布；init 覆盖写入使用方配置根。 | 见架构说明终稿与 **stock-docs-vs-req-docs** 规则；改模板时对齐 `package.json` 的 `files`。 |
+| **按技术方案实现代码** | 在 **`req-docs/`** 下的技术方案驱动实现（消费者仓库场景）。 | 打开 **`req-docs/**/*.md`** 时加载 **`.cursor/rules/implement-tech-design.mdc`**。 |
+| **stock-docs 与 req-docs 分工** | 存量上下文源 vs 按实现演进的技术方案目录。 | 打开相关文档或按需 **@** **`.cursor/rules/stock-docs-vs-req-docs.mdc`**。 |
+
+## 公共能力入口
+
+- **初始化工作流**：使用方在目标仓库执行 `npx @ctrip/flow2spec init` 或全局 `flow2spec init [cursor|claude|codex ...]`；详见 **[架构说明终稿](../stock-docs/架构说明_终稿.md)**。
+- **f2s 技能**：本仓库 **`.cursor/skills/`** 下各 `SKILL.md` 为对话中按需加载的工作流说明；与 **`templates/skills/`** 为同源演进关系，维护时注意二者同步策略。
+- **已落地能力→上下文（与架构初稿技能分开）**：**工作中**要把**已经做好的某条能力**从多份文件解析进知识库（初稿→终稿→Rules/Skills/索引）时，使用 **`.cursor/skills/f2s-doc-add/SKILL.md`**。若仅需**项目架构说明初稿**（文字/单文档/扫描），用 **`.cursor/skills/f2s-doc-arch/SKILL.md`**，勿用 f2s-doc-add 替代。
+
+## 全文索引与渐进式读取（必填）
+
+- **映射表位置**：「文档路径 ↔ Rules / Skills」的完整表在 **`.cursor/docs-index.md`**（`docs-index` 非 alwaysApply，不会自动进入上下文，须按需打开）。
+- **读取顺序**：当要根据**某份 `stock-docs` 文档、某模块名**定位应遵循的规则或应加载的技能时，**应先读取 `.cursor/docs-index.md`**，在表中找到对应行，再按 **Rules**、**Skills** 列打开 `.mdc` / `SKILL.md`；需要长文细节时再打开 **stock-docs** 中的源文档；仍不足再下钻**业务源码**（本包则为 `cli.js`、`lib/`、`templates/` 等）。
+- **避免**：在未查 `docs-index.md`、未锁定相关 Rule/Skill 前，对工作区做**无范围**的大面积检索，或通读与当前问题**无关**的长文档。
+
+**全文索引文件**：`.cursor/docs-index.md`

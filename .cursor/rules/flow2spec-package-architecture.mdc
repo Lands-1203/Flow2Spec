@@ -1,0 +1,35 @@
+---
+description: 编辑 flow2spec 包入口与 init 逻辑时遵循：agent 约定、目录复制策略、CLI 行为与发布 files 边界
+globs:
+  - "cli.js"
+  - "lib/**"
+alwaysApply: false
+sourceDoc: .cursor/stock-docs/架构说明_终稿.md
+generatedAt: "2026-04-27T12:00:00+08:00"
+---
+
+# Flow2Spec 包运行时与 init 约定
+
+源文档：**[Flow2Spec（@ctrip/flow2spec）架构说明](../stock-docs/架构说明_终稿.md)**
+
+## 规则要点
+
+- **Node**：须满足 `package.json` → `engines.node`（>= 16）；**不得**引入未必要的运行时 `dependencies`（当前 init 仅用 `fs`/`path`）。
+- **agent**：仅允许 `cursor`、`claude`、`codex`（见 `lib/agents.js`）。`normalizeAgentIds`：**无参数 = 仅 cursor**；未知 id **必须**抛错并列出合法 key；重复 id **去重**；id 大小写不敏感，允许去掉前导 `--`。
+- **复制**：`copyTemplatesToAgentRoot` 从包内 `templates/{rules,skills,template}` 复制到配置根；**`.claude/`** 下规则经 **`lib/claudeRulesAdapter.js`** 写成 **`.md`**（`globs`→`paths`，去掉 `alwaysApply`），以符合 **Claude Code** 对 **`rules/*.md`** 的要求；**`.cursor/`** 下仍为 **`.mdc`**。**已存在文件覆盖**；写入 **`.claude/rules/`** 前会删除遗留的 **`.mdc`**。`ensureDirs` 创建 `stock-docs`、`req-docs`、`template`、`rules`、`skills`，**不删除**用户已有文档。
+- **CLI**：除 `init` 与 `--help`/无子命令外，其它子命令须视为未支持：打印帮助并以退出码 `1` 退出（与现 `cli.js` 行为一致）。
+- **发布**：`npm pack` / 发布内容以 `files` 为准；改 `lib` 或 `cli.js` 后保持 `npm test`（`cli.js --help`）可通过。
+
+## 核心概念（摘要）
+
+| 概念 | 约束摘要 |
+|------|-----------|
+| `cwd` | `process.cwd()`，即使用方业务仓库根，**非**包内路径。 |
+| `AGENTS` / `SUBDIRS` | 单一事实来源在 `lib/agents.js`；新增 agent 须同步 `cli.js` 帮助文案与 README。 |
+
+## 关键流程（摘要）
+
+1. `flow2spec init [agents...]` → `run(cwd, agentIds)` → 逐 agent `ensureDirs` + `copyTemplatesToAgentRoot`。
+2. 成功：打印各配置根路径；失败：`console.error` + `process.exit(1)`。
+
+详细 CLI 表、错误语义与维护者对接见源文档。

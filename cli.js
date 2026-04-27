@@ -26,7 +26,7 @@ agent（可多个，空格分隔；省略时默认为 cursor）：
   flow2spec init cursor claude    # 同时写入 .cursor/ 与 .claude/
 
 init 会:
-  1. 将 templates/ 下内容复制到各所选 agent 的配置根目录下的 rules、skills、template（及预建 stock-docs/、req-docs/）
+  1. 将 templates/ 下内容复制到各所选 agent 的配置根目录下的 rules、skills、template（及预建 stock-docs/、req-docs/）。Claude Code（.claude/）下规则为 .md，frontmatter 路径键为 paths（由模板 .mdc 的 globs 自动转换）；Cursor（.cursor/）下仍为 .mdc 与 globs。
   2. 工作流说明位于 skills 各子目录的 SKILL.md；写入 .claude/.codex 时主要为统一存放规则、技能与模版，供对应工具按各自方式加载
 
 更多说明见 README.md 或 docs/Flow2Spec使用说明.md
