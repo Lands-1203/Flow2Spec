@@ -7,7 +7,7 @@ generatedAt: "2026-04-27T12:00:00+08:00"
 
 # Flow2Spec 包架构与 init（技能说明）
 
-**详细文档**：[Flow2Spec（@ctrip/flow2spec）架构说明](../../stock-docs/架构说明_终稿.md)
+**详细文档**：[Flow2Spec（@double-codeing/flow2spec）架构说明](../../stock-docs/架构说明_终稿.md)
 
 ## 何时使用
 

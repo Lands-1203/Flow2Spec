@@ -14,12 +14,12 @@ Flow2Spec 把**配置根里的知识库**（`rules/`、`skills/`、`docs-index.m
 
 ```bash
 # 在目标代码仓库（配置根的父目录）执行（默认仅写入 .cursor/）
-npx @ctrip/flow2spec init
+npx @double-codeing/flow2spec init
 # 指定 AI 工具配置目录（可多选）
-npx @ctrip/flow2spec init claude
-npx @ctrip/flow2spec init cursor claude codex
+npx @double-codeing/flow2spec init claude
+npx @double-codeing/flow2spec init cursor claude codex
 # 或全局安装后
-npm install -g @ctrip/flow2spec
+npm install -g @double-codeing/flow2spec
 flow2spec init
 ```
 

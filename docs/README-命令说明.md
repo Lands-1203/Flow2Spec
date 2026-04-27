@@ -33,7 +33,7 @@
 
 | 项   | 说明                                                                                                                                      |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| 用法 | `npx @ctrip/flow2spec init` 或全局安装后 `flow2spec init [cursor \| claude \| codex ...]`；默认 **cursor**                                |
+| 用法 | `npx @double-codeing/flow2spec init` 或全局安装后 `flow2spec init [cursor \| claude \| codex ...]`；默认 **cursor**                                |
 | 写入 | 各配置根下 `stock-docs/`、`req-docs/`、`template/`、`rules/`、`skills/`（见 [Flow2Spec使用说明](./Flow2Spec使用说明.md#一init-做了什么)）。**`.claude/`** 下 **`rules/*.md`**（`globs`→`paths`）；**`.cursor/`** 下 **`rules/*.mdc`** |
 | 结果 | Agent 按场景加载 `skills/*/SKILL.md`                                                                                                      |
 

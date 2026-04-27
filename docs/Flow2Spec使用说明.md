@@ -19,7 +19,7 @@
 
 ## 一、init 做了什么
 
-在**配置根父目录**执行 **`flow2spec init [agent ...]`**（未全局安装可用 **`npx @ctrip/flow2spec init`**）。`agent` 省略时默认 **`cursor`** → **`.cursor/`**；可多个：`cursor claude codex`，各写一套相同结构。详见 **`flow2spec --help`**。
+在**配置根父目录**执行 **`flow2spec init [agent ...]`**（未全局安装可用 **`npx @double-codeing/flow2spec init`**）。`agent` 省略时默认 **`cursor`** → **`.cursor/`**；可多个：`cursor claude codex`，各写一套相同结构。详见 **`flow2spec --help`**。
 
 对每个所选配置根：**覆盖写入** `templates/` 中的 `rules/`、`skills/`、`template/`，并预建 **`stock-docs/`**、**`req-docs/`**。Cursor 下 Agent 按场景加载 **`skills/<标识>/SKILL.md`**。
 

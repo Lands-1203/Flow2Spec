@@ -4,7 +4,7 @@
 
 | 概念 | 说明 |
 |------|------|
-| flow2spec | CLI 工具兼模板分发系统，`npx @ctrip/flow2spec init` 在业务仓库写入 AI 工作流配置。包名 `@ctrip/flow2spec`，版本 2.2.0。 |
+| flow2spec | CLI 工具兼模板分发系统，`npx @double-codeing/flow2spec init` 在业务仓库写入 AI 工作流配置。包名 `@double-codeing/flow2spec`，版本 2.2.0。 |
 | 配置根 | AI 工具的配置目录，如 `.cursor/`、`.claude/`、`.codex/`；init 以此为写入目标根。 |
 | agent | flow2spec 支持的 AI 工具标识（cursor / claude / codex），对应各自的配置根。 |
 | templates/ | flow2spec 包内的模板源目录，init 时复制到业务仓库配置根。不随配置根分发；位于包的 `__dirname`。 |
@@ -54,7 +54,7 @@ flow2spec 无运行时状态机，但项目文档产物有阶段演进：
 ## 关键流程
 
 1. **初始化（一次性）**
-   入口：`npx @ctrip/flow2spec init [agent ...]` → `cli.js` → `lib/init.js`。
+   入口：`npx @double-codeing/flow2spec init [agent ...]` → `cli.js` → `lib/init.js`。
    步骤：校验 agent ID → `ensureDirs` 建五个子目录 → `copyRulesTemplates`（含格式转换）→ 复制 `skills/` → 复制 `template/`。
    结果：业务仓库配置根下写入完整工作流配置，可立即在 AI Agent 中使用。
 

@@ -6,8 +6,8 @@ generatedAt: "2026-04-27T10:00:00+08:00"
 
 # flow2spec 项目总概述
 
-`@ctrip/flow2spec` 是一个 CLI 工具兼模板分发系统（Node.js ≥ 16，纯 CommonJS，无额外依赖）。  
-在目标业务仓库执行 `npx @ctrip/flow2spec init [agent]`，将 `rules/`、`skills/`、`template/`、`stock-docs/`、`req-docs/` 写入所选 AI 工具配置根（`.cursor/`、`.claude/`、`.codex/`），形成「知识库 ↔ 实现 ↔ 知识库」的可持续闭环。
+`@double-codeing/flow2spec` 是一个 CLI 工具兼模板分发系统（Node.js ≥ 16，纯 CommonJS，无额外依赖）。  
+在目标业务仓库执行 `npx @double-codeing/flow2spec init [agent]`，将 `rules/`、`skills/`、`template/`、`stock-docs/`、`req-docs/` 写入所选 AI 工具配置根（`.cursor/`、`.claude/`、`.codex/`），形成「知识库 ↔ 实现 ↔ 知识库」的可持续闭环。
 
 ## 目录结构
 

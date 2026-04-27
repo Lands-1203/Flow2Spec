@@ -10,7 +10,7 @@ generatedAt: "2026-04-27T12:00:00+08:00"
 
 # Flow2Spec 包运行时与 init 约定
 
-源文档：**[Flow2Spec（@ctrip/flow2spec）架构说明](../stock-docs/架构说明_终稿.md)**
+源文档：**[Flow2Spec（@double-codeing/flow2spec）架构说明](../stock-docs/架构说明_终稿.md)**
 
 ## 规则要点
 

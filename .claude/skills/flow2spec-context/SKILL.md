@@ -11,7 +11,7 @@ generatedAt: "2026-04-27T10:00:00+08:00"
 
 ## 项目定位
 
-`@ctrip/flow2spec`（v2.2.0）是 CLI 工具兼模板分发系统。在业务仓库执行 `npx @ctrip/flow2spec init [agent]`，将 AI 工作流配置（rules / skills / template / stock-docs / req-docs）写入目标配置根，形成「知识库 ↔ 实现 ↔ 知识库」的可持续闭环。
+`@double-codeing/flow2spec`（v2.2.0）是 CLI 工具兼模板分发系统。在业务仓库执行 `npx @double-codeing/flow2spec init [agent]`，将 AI 工作流配置（rules / skills / template / stock-docs / req-docs）写入目标配置根，形成「知识库 ↔ 实现 ↔ 知识库」的可持续闭环。
 
 ## 核心概念
 
