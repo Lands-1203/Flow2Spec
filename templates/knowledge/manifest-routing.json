@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0",
+  "knowledgeRoot": ".Knowledge",
+  "matcherKey": "matcherId",
+  "sourceOfTruth": ".Knowledge/manifest-routing.json",
+  "fallbackTopic": "fallback-triage",
+  "topicDependencies": {
+    "implement-tech-design": [
+      "stock-docs-vs-req-docs"
+    ]
+  },
+  "topicPaths": {
+    "implement-tech-design": ".Knowledge/topics/f2s-implement-tech-design.md",
+    "stock-docs-vs-req-docs": ".Knowledge/topics/f2s-stock-docs-vs-req-docs.md",
+    "fallback-triage": ".Knowledge/topics/f2s-fallback-triage.md"
+  },
+  "taskToTopicRules": [
+    {
+      "task": "implement-from-spec",
+      "matcherId": "m-implement-from-spec",
+      "matcherPath": ".Knowledge/matchers/m-implement-from-spec.json",
+      "topics": [
+        "stock-docs-vs-req-docs",
+        "implement-tech-design"
+      ]
+    },
+    {
+      "task": "doc-routing",
+      "matcherId": "m-doc-routing",
+      "matcherPath": ".Knowledge/matchers/m-doc-routing.json",
+      "topics": [
+        "stock-docs-vs-req-docs"
+      ]
+    }
+  ]
+}

@@ -1,79 +1,118 @@
 # 体系与原理
 
-Flow2Spec 如何把**长文档**变成 **main + 专题 Rules + 专题 Skills + docs-index**，让 AI **按需加载**、控制上下文体积。**配置根**同前（默认 `.cursor/`）。
+Flow2Spec 的目标是把"业务知识沉淀"与"Agent 能力加载"拆开：
 
-**一句话**：**stock-docs** 里文档经 **f2s-ctx-build** 落成 **main（总览）**、**globs 规则**、**description 技能** 与 **docs-index（文档↔产物表）**；实现代码用 **req-docs** + **implement-tech-design**。
-
-**文档**：[Flow2Spec使用说明](./Flow2Spec使用说明.md) · [README-命令说明](./README-命令说明.md) · [README-目录与路径约定](./README-目录与路径约定.md) · [Flow2Spec-使用案例-模拟对话](./Flow2Spec-使用案例-模拟对话.md)
-
----
-
-## 1. 目标与价值
-
-- **目标**：按路径 / 按问题加载片段，避免整篇长文塞进一轮对话。  
-- **手段**：Rule 写约束（+ globs）；Skill 写知识与步骤（+ description）；**main** 总览；**docs-index** 查某文档对应哪些产物。
+- **知识层**：`.Knowledge`（文档与索引）
+- **执行层**：配置根 `rules/skills`（供各工具原生加载）
 
 ---
 
-## 2. 整体架构
+## 1. 两层结构
 
-在**配置根**里，和 Flow2Spec 日常闭环相关的主要是**三条线**（先建立整体印象，再下看表格）：
-
-| 线 | 目录 / 产物 | 在闭环里的角色 |
-|----|----------------|----------------|
-| **A. 文档源** | **`stock-docs/`** | 放终稿、初稿、架构长文等；是 **f2s-ctx-build** 的输入源 |
-| **B. 可加载知识库** | **`main.mdc`**、**`rules/`**、**`skills/`**、**`docs-index.md`** | Agent **按需**读：总览 → 索引 → 专题规则/技能 → 必要时回 **`stock-docs/`** 长文 |
-| **C. 按方案写代码** | **`req-docs/`** + **`implement-tech-design`** | 技术方案 MD 驱动改业务代码；**不**替代 A→B 那条「把长文拆进规则与技能」的链 |
-
-**阶段二：用终稿跑一次 f2s-ctx-build**——入参通常是 **`stock-docs/…_终稿.md`**（或 URL 等，见 [命令说明 §2.3](./README-命令说明.md#23-f2s-ctx-build)）。**同一次执行会一并写出 / 更新下面几类文件**；它们是**并列产物**，不是「先跑完 main 再跑 rules」的串行流水线。
-
-| 产物 | 作用 |
-|------|------|
-| **main.mdc** | 唯一 **alwaysApply**；总地图、模块一览、公共入口（正文应约定先读 **docs-index** 再下钻） |
-| **专题 Rules**（`rules/*-context.mdc`） | 必须/禁止/约定；按 **globs** 命中文件时加载 |
-| **专题 Skills**（`skills/` 下各主题的 **SKILL.md**） | 概念、流程、示例；按 **description** 匹配问题 |
-| **docs-index.md** | 表格式：文档路径、Rules、Skills、摘要（**非** alwaysApply，须按需读） |
+| 层 | 位置 | 作用 |
+| --- | --- | --- |
+| 知识层 | `.Knowledge/` | 保存业务文档、索引、路由 |
+| 执行层 | `.cursor/.claude/.codex` | 保存规则与技能入口 |
 
 ---
 
-## 3. 设计原则：拆解与分工
+## 2. 渐进式读取
 
-- **拆解**：长文档或多块独立内容 → 多条 Rule、多个 Skill，单条更短、更聚焦。  
-- **分工**：Rule = 约束与范围；Skill = 知识与操作；main = 索引不写细节；docs-index = 文档级映射。
+统一建议顺序：
 
----
+1. `.Knowledge/manifest-routing.json`
+2. `.Knowledge/matchers/<matcher>.json`（按需：由 `manifest-routing.taskToTopicRules[].matcherPath` 直链定位）
+3. `.Knowledge/index.md`
+4. 命中的 `stock-docs` / `req-docs` 文档
+5. 必要时下钻源码
 
-## 4. main.mdc 与 docs-index.md
+读取后执行 `match → expand → verify → act` 四步流水线：命中主候选后展开依赖主题、缺口检查，置信度足够时才执行；低置信度先澄清。
 
-| | **main.mdc** | **docs-index.md** |
-|---|--------------|-------------------|
-| 路径 | `rules/main.mdc` | 配置根下与 stock-docs 同级 |
-| 角色 | 项目总览、模块与公共能力入口 | 按文档列 Rules / Skills |
-| 加载 | **唯一 alwaysApply** | 不自动进上下文；由 **main** 约定阅读顺序 |
-
-**查模块/入口** → main；**查某文档生成了哪些 Rule/Skill** → docs-index。
+同时由配置根入口（Flow2Spec 包规则：`f2s-flow2spec-unified-entry.mdc` / `f2s-flow2spec-unified-entry.md`；旧版业务仓库常见为 `main.md(c)`；以及 `AGENTS.md`）约束加载行为。  
+其中 Codex 不读取 `rules/` 目录，统一通过 `.codex/AGENTS.md` + `skills/` 承载执行约束。
 
 ---
 
-## 5. 版本管理与索源
+## 3. 关键链路
 
-字段格式见 [README-目录与路径约定 §4](./README-目录与路径约定.md#4-版本管理sourcedoc-与-generatedat)。
-
-- **sourceDoc**：产物 → 源文档。  
-- **docs-index 行**：文档 → 产物列表。  
-- **更新**：改 **stock-docs** 源文后，对同路径再执行 **f2s-ctx-build**。
-
----
-
-## 6. 推荐顺序（概要）
-
-上下文链 → **req-docs** 实现 → **f2s-kb-*** 维护；冲突 **f2s-kb-merge**。详表：[README-命令说明](./README-命令说明.md#按使用顺序查找)。
+- 文档沉淀链：`f2s-doc-arch` → `f2s-doc-final` → `f2s-ctx-build`
+- 实现链：`.Knowledge/req-docs/*.md` → `implement-tech-design` → 代码
+- 维护链：`f2s-kb-fix` / `f2s-kb-feat` / `f2s-kb-sync` / `f2s-kb-merge`
+- 需求规划链：`f2s-req-plan`（规划 + 实现，始终创建任务清单）
+- 变更追踪链：`changeTracking.*` 配置 → `f2s-task` 规则（自动）→ `.task/` 任务清单 → 跨会话续作
+- 包模板/路由形态与配置根对齐：`f2s-kb-upgrade`（**勿**将单独 `flow2spec init` 等同于「知识库升级」）；旧库结构迁入 `.Knowledge`：`f2s-kb-migrate`
 
 ---
 
-## 7. 延伸阅读
+## 4. Agent 执行模型
 
-- **路径与链接**：[README-目录与路径约定](./README-目录与路径约定.md)  
-- **命令与速查**：[README-命令说明](./README-命令说明.md)  
-- **操作手册**：[Flow2Spec使用说明](./Flow2Spec使用说明.md)  
-- **使用案例（对话版式）**：[Flow2Spec-使用案例-模拟对话](./Flow2Spec-使用案例-模拟对话.md)
+Flow2Spec 通过项目根 `flow2spec.config.json` 的 `subAgent`、`switchAgentVerification` 两个字段控制执行行为。
+
+### 4.1 主/子 Agent 职责划分原则
+
+**`subAgent: false`（默认）**：全部 `f2s-*` 技能在主 agent 内顺序完成，无并行拆分。
+
+**`subAgent: true`**：达到技能正文约定的规模门槛时，允许拆分子 agent 并行处理。职责边界如下：
+
+| 角色 | 职责边界 |
+|------|----------|
+| 主 agent | 统筹规划、确定任务粒度与分配策略、汇总子 agent 输出、校验跨单元一致性、最终落盘 |
+| 子 agent | 处理指定单元（模块/文档/主题），按约定格式输出结果，不跨单元决策 |
+
+子 agent 的拆分边界由各 `f2s-*` 技能正文逐步约定（如模块数、文档数、代码行数等门槛），**当前尚未在模板层给出统一阶段表**，以技能正文为准。
+
+### 4.2 验证归属原则
+
+**默认（谁落盘谁验）**：落盘或变更后的验证在落盘侧 agent 内完成。子 agent 落盘则子 agent 自验，主 agent 落盘则主 agent 自验。
+
+**交叉验证（`switchAgentVerification: true`）**：由对方 agent 承担验证，适用于需要更高置信度的场景。启用条件必须**同时满足**：
+
+1. 配置 `switchAgentVerification: true`
+2. 当前执行的 `f2s-*` 技能正文**明确写出**该步骤依赖本项
+
+交叉验证规则：
+
+| 落盘方 | 验证方 | 前提条件 |
+|--------|--------|----------|
+| 子 agent 落盘 | 主 agent 验证 | 无额外条件 |
+| 主 agent 落盘 | 子 agent 验证 | 须 `subAgent: true` 且实际已拆出子任务；否则仍由主 agent 自验 |
+
+设计意图：交叉验证引入外部视角，降低落盘侧的自验盲区，但增加执行开销，因此设为显式 opt-in 而非默认行为。
+
+### 4.3 变更追踪（changeTracking）
+
+`changeTracking` 是独立于 `subAgent` / `switchAgentVerification` 的第三个维度，控制技能执行时是否自动创建可跨会话续作的任务清单。
+
+```json
+{
+  "changeTracking": {
+    "feat": false,
+    "fix": false,
+    "implement": false
+  }
+}
+```
+
+- 各技能子项独立控制，互不影响
+- 开启后：技能执行前自动检查 `.task/todo.json`，创建或续接任务；完成后自动归档
+- 跨会话：新会话描述相关内容，`f2s-task` 规则（`alwaysApply`）关键词匹配命中后自动加载剩余清单和对应技能上下文
+- `f2s-req-plan` 不受此配置约束，始终创建任务清单
+
+---
+
+## 5. 设计收益
+
+1. 跨工具共享同一业务知识源
+2. 不破坏 Claude/Cursor/Codex 的规则加载习惯
+3. 通过 `manifest-routing` + `matcherPath` 分片（`matchers/*.json`）控制任务路由与依赖，减少误读与全量扫描
+4. 主/子 agent 职责边界清晰，主 agent 始终持有全局视图，子 agent 专注单元处理，汇总一致性由主 agent 保证
+5. 验证归属可配置：默认落盘侧自验保持低开销，交叉验证按需启用提升关键场景置信度
+
+---
+
+## 6. 相关文档
+
+- [Flow2Spec使用说明](./Flow2Spec使用说明.md)
+- [README-命令说明](./README-命令说明.md)
+- [README-目录与路径约定](./README-目录与路径约定.md)
+- [Flow2Spec-使用案例-模拟对话](./Flow2Spec-使用案例-模拟对话.md)

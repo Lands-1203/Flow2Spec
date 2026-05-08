@@ -1,0 +1,9 @@
+{
+  "subAgent": true,
+  "switchAgentVerification": true,
+  "changeTracking": {
+    "feat": true,
+    "fix": true,
+    "implement": true
+  }
+}

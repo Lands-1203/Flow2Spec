@@ -1,134 +1,599 @@
 # 工作流与技能说明
 
-各 Skill（`skills/<标识>/SKILL.md`）的**入参、输出、行为**与**推荐使用顺序**。**「配置根」**：`flow2spec init` 写入的目录（默认 **`.cursor/`**，亦可 **`.claude/`**、**`.codex/`**）。
+## 1) 文档沉淀（stock-docs 链路）
 
-- 目录结构：[README-目录与路径约定](./README-目录与路径约定.md)
-- init 概要：[Flow2Spec使用说明 · 一](./Flow2Spec使用说明.md#一init-做了什么)
-- 架构：[README-体系与原理](./README-体系与原理.md)
-- 使用案例：[Flow2Spec-使用案例-模拟对话](./Flow2Spec-使用案例-模拟对话.md)
+### `f2s-doc-arch`
 
----
+**作用**：根据用户说明或扫描代码，生成项目架构说明初稿。无固定格式要求，描述清楚系统结构、模块关系、关键决策即可。
 
-## 按使用顺序查找
+**使用场景**：
+- 新项目需要架构文档
+- 存量项目需要补充架构说明
+- 系统重构后更新架构描述
 
-| 阶段         | 步骤 | 技能 / 命令                                              | 一句话                                                                               | 详见                                             |
-| ------------ | ---- | -------------------------------------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------ |
-| 首次         | —    | `flow2spec init [agent ...]`                             | 写入配置根模板                                                                       | [§1](#1-flow2spec-initcli)                       |
-| 需求与方案   | 1    | **f2s-req-clarify**                                      | PRD/需求反问至清楚                                                                   | [§2.0.1](#201-f2s-req-clarify)                   |
-| 需求与方案   | 2    | **f2s-req-backend**                                      | 澄清后出后端技术文档                                                                 | [§2.0.2](#202-f2s-req-backend)                   |
-| 上下文生成   | 1～3 | **f2s-doc-arch** → **f2s-doc-final** → **f2s-ctx-build** | 初稿→终稿→Rules/Skills/索引                                                          | [§2.1～2.3](#21-f2s-doc-arch-技能)               |
-| 上下文生成   | 可选 | **f2s-doc-add**                                          | **工作中**：**已做好的能力** + 多个相关文件路径→解析进上下文（`stock-docs` 初稿→终稿→同 **f2s-ctx-build** 产物） | [§2.1.1](#211-f2s-doc-add-技能)                  |
-| 上下文生成   | 配合 | **f2s-ctx-rm**                                           | 按文档删产物                                                                         | [§2.4](#24-f2s-ctx-rm-技能)                      |
-| 上下文生成   | 可选 | **f2s-doc-pdf**                                          | PDF→MD（req-docs）                                                                   | [§2.5](#25-f2s-doc-pdf-技能)                     |
-| 提问与实现   | —    | **按技术方案实现**                                       | 提供 **`req-docs/`** 下方案 MD 路径，并说明「按方案实现」                            | [§3.1](#31-按技术方案实现)                       |
-| 任意时机     | 按需 | **f2s-kb-fix** / **f2s-kb-feat**                         | 纠错 / 新能力（不限于实现后）                                                        | [§3.2](#32-f2s-kb-fix--f2s-kb-feat--f2s-kb-sync) |
-| 实现后       | 按需 | **f2s-kb-sync**                                          | 会话或现状沉淀写库（典型在实现后）                                                   | [§3.2](#32-f2s-kb-fix--f2s-kb-feat--f2s-kb-sync) |
-| merge/rebase | —    | **f2s-kb-merge**                                         | 上下文类冲突合并                                                                     | [§3.3](#33-f2s-kb-merge)                         |
+**关联关系**：
+- **前置**：无
+- **后续**：`f2s-doc-final`（规范化终稿）或直接用于 `f2s-ctx-build`
+- **输出**：`.Knowledge/stock-docs/<架构说明>_初稿.md`
 
-**汇总**：init →（可选需求链）→ arch → final → ctx-build →（可选 pdf）→ req-docs + implement-tech-design →（随时 **fix** / **feat**；实现后或收尾 **sync**）；冲突用 **f2s-kb-merge**。更细速查见 [§6](#6-快速参考按阶段)。
+**子 agent 调用**：
+- `subAgent: false`（默认）：主 agent 内扫描代码并生成
+- `subAgent: true`：默认走 **B 模式**（主产出 inventory + 扫描契约 → 子 agent 并行只读扫表 → 主合并落盘）；满足以下任一条件时升级为 **C 模式**（多轮纠偏）：多 workspace / monorepo、源路径 > 20 条、首轮子表有矛盾或空洞、多源叙述冲突严重
 
----
-
-## 1. flow2spec init（CLI）
-
-| 项   | 说明                                                                                                                                      |
-| ---- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| 用法 | `npx @double-codeing/flow2spec init` 或全局安装后 `flow2spec init [cursor \| claude \| codex ...]`；默认 **cursor**                                |
-| 写入 | 各配置根下 `stock-docs/`、`req-docs/`、`template/`、`rules/`、`skills/`（见 [Flow2Spec使用说明](./Flow2Spec使用说明.md#一init-做了什么)）。**`.claude/`** 下 **`rules/*.md`**（`globs`→`paths`）；**`.cursor/`** 下 **`rules/*.mdc`** |
-| 结果 | Agent 按场景加载 `skills/*/SKILL.md`                                                                                                      |
+**职责划分**：
+| 角色 | 职责 |
+|------|------|
+| 主 agent | 产出 inventory（入口 + 核心模块名）与扫描契约，汇总子 agent 交付，落盘 stock-docs 初稿 |
+| 子 agent（B/C 模式） | 按主手写 inventory 并行只读扫描，按统一 YAML schema 交付（`source / scope / cross_refs / pending`），不得自行裁剪范围 |
 
 ---
 
-## 2. 需求与方案、上下文生成
+### `f2s-doc-final`
 
-### 2.0 需求与方案（可选）
+**作用**：将 PDF 技术方案或初稿文档转为《终稿模版》规范格式，统一文档结构，便于后续进入知识库。
 
-**f2s-req-clarify**：入参可选（PRD/描述/路径）；反问至清晰；本阶段不输出技术方案。结束可接 **f2s-req-backend**。
+**使用场景**：
+- PDF 技术方案需要转为 Markdown
+- 初稿需要规范化以便沉淀
+- 外部文档需要纳入 Flow2Spec 管理
 
-**f2s-req-backend**：入参必填（澄清后需求或文档路径）；参考 `template/后端技术模版.md`；默认输出 **`req-docs/<方案名>_技术方案.md`**（供实现，**不**走 f2s-ctx-build）。
+**关联关系**：
+- **前置**：PDF 文档或初稿文档
+- **后续**：`f2s-ctx-build`（终稿入库）
+- **输出**：`.Knowledge/stock-docs/<文档>_终稿.md`
 
-### 2.1 f2s-doc-arch
+**子 agent 调用**：
+- `subAgent: false`（默认）：主 agent 内完成全流程
+- `subAgent: true`：PDF > 50 页或 > 5MB 时，可拆子做套模版与排版草稿；子不追问用户、不补写流程说明、不宣称终稿合规；主 agent 识别格式缺口并定稿验收
 
-**定位**：**仅**「项目/模块**架构说明初稿**」；**不是** f2s-doc-add。入参可选（说明文字或文档路径；无参=扫描代码须先确认）。输出默认 **`stock-docs/<项目名>架构说明_初稿.md`**。可接 **f2s-doc-final** → **f2s-ctx-build**。
-
-### 2.1.1 f2s-doc-add
-
-**定位**：**工作中**要把**已经做好的某条能力**（实现与说明分散在多文件）**解析进 AI 上下文**时用本技能；**多文件路径**聚合→初稿→终稿→上下文产物。**独立技能**，与 **f2s-doc-arch** 分工见 **`skills/f2s-doc-add/SKILL.md`**（含「使用时机」）。入参：**多个**本地文件路径（必填，空格/换行/`@`）；可选方案名、初稿/终稿输出路径。行为：**适度深度**读源 → **`stock-docs/<方案名>_初稿.md`** → 按 **`template/终稿模版.md`** 与 **f2s-doc-final** 思路出 **`_终稿.md`** → 按 **f2s-ctx-build** 生成/更新 **Rules、Skills、`docs-index.md`**（及按需 **`main.mdc`**）。详见 **`skills/f2s-doc-add/SKILL.md`**（在对话中加载该技能后执行）。
-
-### 2.2 f2s-doc-final
-
-入参：PDF 或 MD 路径；可选第二参数为输出路径。规范来源：`template/终稿模版.md`。PDF：先初稿 `_初稿.md`，确认后再跑初稿路径出 `_终稿.md`；MD：可直达终稿。完成后接 **f2s-ctx-build** + `stock-docs/<方案名>_终稿.md`。
-
-### 2.3 f2s-ctx-build
-
-入参：URL 或 **`stock-docs/`** 下本地路径（终稿常见）。产出：**main.mdc**（按需）、专题 **rules/\*.mdc**、**skills/**、**docs-index** 一行；URL 时另存 `stock-docs/`。同文档重复执行=**更新**同套产物。内网 URL 建议先落盘再传路径。
-
-### 2.4 f2s-ctx-rm
-
-入参：`stock-docs/` 文档路径或文件名片段。删对应 Rules、Skills、docs-index 行及 main 相关描述；**不删** stock-docs 源文件。
-
-### 2.5 f2s-doc-pdf
-
-入参：PDF 路径。转 MD，推荐 **`req-docs/<方案名>.md`**，可补流程说明。再在同对话提供该 MD 路径按方案实现。
+**职责划分**：
+| 角色 | 职责 |
+|------|------|
+| 主 agent | 识别格式缺口、对照模版与澄清文档验收定稿 |
+| 子 agent | 套模版与排版草稿，不追问用户、不写流程说明 |
 
 ---
 
-## 3. 提问与实现、实现后
+### `f2s-ctx-build`
 
-### 3.1 按技术方案实现
+**作用**：将 `stock-docs/` 中的沉淀文档（架构、终稿）同步到知识库路由系统，生成/更新主题文件、索引、manifest-routing、matchers。
 
-对话中提供 **`配置根/req-docs/xxx.md`** 并说明按方案实现；AI 执行 **`rules/implement-tech-design.mdc`**。仅 PDF 时先 **f2s-doc-pdf** 再提供生成的 MD。典型流程见 [Flow2Spec使用说明 · 四](./Flow2Spec使用说明.md#四典型流程)。
+**使用场景**：
+- 终稿文档完成后，需要让知识库"知道"这些文档
+- 新增业务领域，需要建立路由映射
+- 文档内容更新后，同步更新知识库索引
 
-### 3.2 f2s-kb-fix / f2s-kb-feat / f2s-kb-sync
+**关联关系**：
+- **前置**：`f2s-doc-arch`、`f2s-doc-final` 或直接编写的终稿
+- **后续**：无（入库完成后可直接使用）
+- **输入**：`.Knowledge/stock-docs/*.md`
+- **输出**：
+  - `.Knowledge/topics/<topic>.md`
+  - `.Knowledge/index.md`
+  - `.Knowledge/manifest-routing.json`
+  - `.Knowledge/matchers/*.json`
 
-| 技能            | 何时                                                  | 要点                                           |
-| --------------- | ----------------------------------------------------- | ---------------------------------------------- |
-| **f2s-kb-fix**  | **任意**；发现违反约定或不一致即可                    | 改代码 + 同步文档与 rules/skills               |
-| **f2s-kb-feat** | **任意**；新增或扩展能力时                            | 未实现则补实现；已实现则对齐文档与规则         |
-| **f2s-kb-sync** | **典型在实现后**或阶段收尾；需沉淀会话/现状到知识库时 | 可先列能力或零输入推断 → **大纲须确认** 再写库 |
+**子 agent 调用**：
+- `subAgent: false`（默认）：主 agent 内顺序处理各文档
+- `subAgent: true`：改动超过阈值（新增/修改主题 > 2 个 OR 新增 matcher > 1 个 OR 涉及跨主题批量引用调整）时拆子；子A 只写 topics/、子B 只写 matchers/；主 agent 单点编辑 manifest-routing.json 和 index.md，子 agent 不跨边界落盘
 
-细则见各 `skills/f2s-kb-*/SKILL.md`。
-
-### 3.3 f2s-kb-merge
-
-merge/rebase 后仍有 **`<<<<<<<` 等**时使用。与 **f2s-kb-fix**（单点纠错）不同：处理**批量合并冲突**。**可自动合并**：docs-index、main、rules、skills、说明类 MD 等，须去净冲突标记。**禁止自动合并**：业务源码、对外行为配置、依赖锁文件等，只出差异待你确认。详见 **`skills/f2s-kb-merge/SKILL.md`**。
+**职责划分**：
+| 角色 | 职责 |
+|------|------|
+| 主 agent | 单点落盘 manifest-routing.json 和 index.md，整体验收 |
+| 子 agent（topics） | 仅写 topics/ 目录下的主题文件，不触碰 manifest 和 index |
+| 子 agent（matchers） | 仅写 matchers/ 目录下的分片文件，不触碰 manifest 和 index |
 
 ---
 
-## 4. 推荐执行顺序（简）
+### `f2s-doc-add`
 
-与「按使用顺序查找」表及 [§6](#6-快速参考按阶段) 一致。
+**作用**：将已落地能力（多文件聚合）解析进知识库。适用于代码已实现但缺少文档，或已有多个文档需要统一入库的场景。
+
+**使用场景**：
+- 存量代码需要补录知识库
+- 多份相关文档需要聚合入库
+- 第三方文档批量导入
+
+**关联关系**：
+- **前置**：无（可直接触发）
+- **后续**：无（入库完成即结束）
+- **流程**：初稿 → 终稿 → topics/index/manifest
+
+**子 agent 调用**：
+- `subAgent: false`（默认）：主 agent 内顺序处理
+- `subAgent: true`：满足以下任一阈值时启用，默认走 **B 模式**（主产出 inventory → 子并行只读按 schema 填表 → 主合并落盘）；多 workspace / monorepo、首轮子表矛盾或空洞、多源叙述冲突严重时升级 **C 模式**（多轮纠偏）
+  - 阈值：输入路径 ≥ 5 条 OR 单源 > 3000 行 OR 多路径总量 > 10000 行
+
+**职责划分**：
+| 角色 | 职责 |
+|------|------|
+| 主 agent | 产出 inventory 与扫描契约，汇总子表，落盘 topics/index/manifest |
+| 子 agent（B/C 模式） | 按主手写 inventory 执行只读扫描，按 schema 交表（`source / scope / capabilities / cross_refs / pending`）；不得自行裁剪范围、不写 manifest 和 index、不宣布"已进知识库" |
+
+**交叉验证（`switchAgentVerification: true` 时）**：
+- 子 agent 落盘的 topic 文件 → 主 agent 校验路由映射完整性与关键词覆盖
+- 仅当 `subAgent: true` 且实际拆出子任务时生效；否则全部在主 agent 内验证
 
 ---
 
-## 5. 技能关系简图
+### `f2s-ctx-rm`
 
+**作用**：按 stock-docs 文档删除对应的知识主题与索引映射。仅删除知识库中的引用关系，不删除源文档本身。
+
+**使用场景**：
+- 文档已废弃，需要从知识路由中移除
+- 误入库的文档需要撤销路由映射
+- 文档合并后清理旧映射
+
+**关联关系**：
+- **前置**：已入库的 stock-docs 文档
+- **后续**：无
+- **注意**：只删路由映射，不删源文档
+
+**子 agent 调用**：
+- `subAgent: false`（默认）：主 agent 内全流程执行（单点删除拆子收益低）
+- `subAgent: true`：仅当**批量删除 ≥ 5 个主题**时才拆子执行删除与清引用；主 agent 必控范围确认与 fallbackTopic 重指；manifest-routing.json 与 index.md 恒由主落盘
+
+---
+
+### `f2s-doc-pdf`
+
+**作用**：将 PDF 技术方案转为 Markdown 格式，保存到 `req-docs/`，可补全流程说明。
+
+**使用场景**：
+- 收到 PDF 格式技术方案需要实现
+- 历史 PDF 文档需要纳入管理
+- 跨团队交付物为 PDF 时需要转换
+
+**关联关系**：
+- **前置**：PDF 文档
+- **输出**：`.Knowledge/req-docs/<方案>.md`
+- **下一步**：
+  - 1. 如果是需求实现：提供转换后的方案路径并说明"按技术方案实现"，由 `implement-tech-design` 规则驱动编码
+  - 2. 如果是转存知识库：走转换终稿流程 `f2s-doc-final` → `f2s-ctx-build`
+
+**子 agent 调用**：
+- `subAgent: false`（默认）：主 agent 内完成全流程
+- `subAgent: true`：PDF > 50 页或 > 5MB 时，可拆子做 PDF→MD 首稿落盘 req-docs；子不追问用户、不补写流程说明章节；主 agent 接手追问与流程说明补写
+
+**职责划分**：
+| 角色 | 职责 |
+|------|------|
+| 主 agent | 追问用户补充流程说明、完成 req-docs 落盘验收 |
+| 子 agent | 仅做 PDF→MD 首稿并落盘 req-docs，不向用户追问 |
+
+---
+
+## 2) 需求与方案
+
+### `f2s-req-clarify`
+
+**作用**：针对 PRD/需求文档进行反问澄清，通过多轮问答明确需求边界、非目标、关键流程，直至需求足够清晰可供技术方案编写。
+
+**使用场景**：
+- 收到 PRD 后首步骤，确保理解正确
+- 需求边界模糊、缺少验收标准时
+- 跨团队协作需求，需明确接口契约
+
+**关联关系**：
+- **前置**：无（可直接触发）
+- **后续**：`f2s-req-backend`（澄清后生成技术方案）
+- **输出**：需求澄清记录（可选保存至 `.Knowledge/req-docs/`）
+
+**子 agent 调用**：无（澄清全程依赖连续对话与用户即时反馈，不拆子 agent）
+
+---
+
+### `f2s-req-backend`
+
+**作用**：基于已澄清的需求和项目知识库，生成后端技术方案文档，包含接口设计、数据模型、流程说明、错误码等。
+
+**使用场景**：
+- `f2s-req-clarify` 完成后，基于澄清结果输出方案
+- 已有明确需求文档，直接生成技术方案
+
+**关联关系**：
+- **前置**：`f2s-req-clarify`（推荐）或明确的需求文档
+- **输出**：`.Knowledge/req-docs/<技术方案>.md`
+- **下一步**：提供技术方案路径并说明"按技术方案实现"，由 `implement-tech-design` 规则驱动编码
+
+**子 agent 调用**：
+- `subAgent: false`（默认）：主 agent 内完成方案编写
+- `subAgent: true`：主 agent 必须先从 topics/stock-docs 抽取 < 80 行项目约定摘要（含架构约定、接口风格、数据模型规范等 6 类条款）作为子强制上下文，再拆子并行写 req-docs 初稿；主 agent 做契约定稿与验收
+
+**职责划分**：
+| 角色 | 职责 |
+|------|------|
+| 主 agent | 抽取项目约定摘要、分配写作任务、对照模版做定稿验收并写入 req-docs |
+| 子 agent | 只读多源（topics / stock-docs / 澄清 req-docs / 模版），按模版写 req-docs 初稿；不自行扩展读取范围 |
+
+**交叉验证（`switchAgentVerification: true` 时）**：
+- 子 agent 落盘的接口/模型/流程文档 → 主 agent 校验跨章节一致性（接口签名与数据模型对齐、流程与异常处理覆盖）
+- 仅当 `subAgent: true` 且实际拆出子任务时生效；否则全部在主 agent 内验证
+
+---
+
+### `f2s-req-plan`
+
+**作用**：从技术方案或需求描述出发，**始终创建任务清单**，然后按清单实现代码。不依赖 `changeTracking` 配置，代表用户明确需要可追溯的任务管理。
+
+**使用场景**：
+- 有技术方案文档，需要拆解为任务清单后再实现
+- 需求描述较复杂，希望先确认清单再动手
+- 希望跨会话追踪实现进度
+
+**关联关系**：
+- **前置**：技术方案文档路径（`.Knowledge/req-docs/*.md` 或 PDF）或需求/变更描述
+- **输出**：`.task/active/<task-name>/task.md` + `context.md`；实现代码
+- **后续**：可按需调用 `f2s-kb-sync` 补充知识库
+
+**子 agent 调用**：
+- `subAgent: false`（默认）：主 agent 内完成解析、确认、实现全流程
+- `subAgent: true`：步骤 1（解析文档）可拆子并行只读；步骤 2（草稿确认）必须主 agent；步骤 4（实现代码）可按模块拆子并行；`todo.json` 恒由主 agent 写
+
+**职责划分**：
+| 角色 | 职责 |
+|------|------|
+| 主 agent | 输出草稿、用户确认、写 `todo.json`、汇总实现摘要 |
+| 子 agent（解析） | 只读文档，输出解析结果摘要，不落盘 |
+| 子 agent（实现） | 按模块实现代码，不触碰 `.task/` 和 `.Knowledge/` |
+
+---
+
+## 3) Git 提交
+
+### `f2s-git-commit`
+
+**作用**：代码写完后执行 Git 提交。自动检查变更文件、比对知识库覆盖情况，未入库的能力会提示用户处理，确认提交信息后执行 commit。
+
+**使用场景**：
+- 每次功能实现或 Bug 修复后提交代码
+- 希望在提交时得到知识库覆盖情况的提醒
+- 需要 AI 帮助生成有意义的提交信息
+
+**关联关系**：
+- **前置**：代码已写完（`implement-tech-design`、`f2s-kb-fix`、`f2s-kb-feat` 等执行后）
+- **后续**：无（commit 完成即结束，不自动 push）
+- **可衔接**：若知识库未覆盖，可先运行 `f2s-kb-sync` 或 `f2s-kb-feat` 补录后继续提交
+
+**执行流程**：
+1. `git status --short` + `git diff HEAD` 区分 staged / unstaged / untracked 三类文件；发现 merge conflict 标记立即终止
+2. 对比 `.Knowledge/topics/` 与 `stock-docs/`，判断本次变更能力是否已入库；`.Knowledge` 不存在时跳过并提示
+3. 未覆盖时提示用户选择：A) 先补录再提交 / B) 先提交稍后补录 / C) 取消
+4. 基于 `git diff` 实际内容生成提交信息草稿，等待用户确认或修改
+5. `git add <具体文件>` + `git commit`；hook 失败则提示修复，不跳过
+6. 输出 commit hash；若选 B 则附带未补录能力提醒
+
+**约束**：
+- 禁止 `git add -A` / `git add .`，只 add 已确认的变更文件
+- 禁止 `--no-verify`，hook 失败须修复后重试
+- 禁止自动 push
+- 提交信息必须经用户确认，不可静默提交
+
+**子 agent 调用**：无（全程交互确认，主 agent 内完成）
+
+---
+
+## 4) 知识库维护
+
+### `f2s-kb-fix`
+
+**作用**：根据用户指出的实现或规则错误修正代码，并**默认自动同步**知识库相关文档与索引。
+
+**使用场景**：
+- 代码实现与技术方案不符
+- 规则理解有误需要修正
+- Bug 修复后需要同步文档
+
+**变更追踪**：若 `changeTracking.fix: true`，执行前自动检查 `.task/todo.json` 并创建任务清单，完成后自动归档；跨会话可通过关键词续作（见 `f2s-task` 规则）。
+
+**关联关系**：
+- **前置**：问题发现（代码实现错误或规则偏差）
+- **后续**：无（修复并同步完成即结束）
+- **特点**：无需用户额外要求"请同步知识库"，自动完成
+
+**子 agent 调用**：
+- `subAgent: false`（默认）：主 agent 内完成修复和知识库同步
+- `subAgent: true`：代码子包（bug 修复）可外包给子 agent；文档子包（rules/skills/topics 文风类）默认主 agent 直接写，如拆则子 agent 仅输出 before/after diff 片段，不整文件重写；manifest 和 index 恒由主落盘
+
+**职责划分**：
+| 角色 | 职责 |
+|------|------|
+| 主 agent | 定位问题根因、制定修复方案、落盘文风合规内容、校验知识库一致性 |
+| 子 agent（代码） | 负责指定模块的代码 bug 修复，输出变更并报告影响范围 |
+| 子 agent（文档，可选） | 仅输出 before/after diff 片段，不整文件重写，不触碰 manifest 和 index |
+
+**交叉验证（`switchAgentVerification: true` 时）**：
+- 子 agent 落盘的代码变更 → 主 agent 校验修复正确性与知识库一致性
+- 主 agent 落盘的知识库同步 → 子 agent 复核 topic/manifest 一致性（须 `subAgent: true` 且已拆出子任务，否则主 agent 内自验）
+- 复核方与落盘方必须为不同 agent 实例
+
+---
+
+### `f2s-kb-feat`
+
+**作用**：新增能力时补全实现与知识库；若能力已实现，则仅同步知识库。
+
+**使用场景**：
+- 新功能开发
+- 存量功能需要补录知识库
+
+**变更追踪**：若 `changeTracking.feat: true`，执行前自动检查 `.task/todo.json` 并创建任务清单，完成后自动归档；跨会话可通过关键词续作（见 `f2s-task` 规则）。
+
+**关联关系**：
+- **前置**：无（可直接触发）
+- **后续**：无（实现+同步完成即结束）
+- **特点**：自动同步知识库，无需用户额外要求
+
+**子 agent 调用**：
+- `subAgent: false`（默认）：主 agent 内完成
+- `subAgent: true`：代码子包（新增实现）可外包给子 agent；文档子包（rules/skills/topics 文风类）默认主 agent 直接写，如拆则子 agent 仅输出 before/after diff 片段；manifest 和 index 恒由主落盘
+
+**职责划分**：
+| 角色 | 职责 |
+|------|------|
+| 主 agent | 确定能力边界与实现范围、落盘文风合规内容、最终校验知识库一致性 |
+| 子 agent（代码） | 负责代码实现（接口、逻辑、数据层），输出实现清单 |
+| 子 agent（文档，可选） | 仅输出 before/after diff 片段，不整文件重写，不触碰 manifest 和 index |
+
+**交叉验证（`switchAgentVerification: true` 时）**：
+- 文档子 agent 落盘的 topic → 主 agent 校验与实现代码的能力描述一致性
+- 仅当 `subAgent: true` 且实际拆出子任务时生效；否则全部在主 agent 内验证
+
+---
+
+### `f2s-kb-sync`
+
+**作用**：将会话中的已实现能力沉淀回知识库。可显式给出能力或零输入推断。
+
+**使用场景**：
+- 会话中已完成实现，需要补录知识库
+- 从代码反向沉淀知识
+- 定期知识库整理
+
+**关联关系**：
+- **前置**：无（可直接触发，或零输入推断）
+- **后续**：无
+- **特点**：先输出知识库更新大纲，用户确认后才写入
+- **与 `f2s-ctx-build` 区别**：`ctx-build` 从 `stock-docs` 驱动，`kb-sync` 从会话/代码推断
+
+**子 agent 调用**：
+- `subAgent: false`（默认）：主 agent 内完成推断和同步
+- `subAgent: true`：分步骤拆子——**步骤 1**（汇总推断）可拆子并行只读会话历史；**步骤 2**（用户确认大纲）必须在主 agent 完成；**步骤 3**（落盘同步）可拆子写 topic/matcher，但子落盘前须读近邻 2–3 个主题摘要做风格对齐；manifest 和 index 恒由主落盘
+
+**职责划分**：
+| 角色 | 职责 |
+|------|------|
+| 主 agent | 输出大纲并确认、单点落盘 manifest 和 index、最终验收 |
+| 子 agent（汇总） | 只读会话历史、推断能力点、生成结构化更新大纲片段 |
+| 子 agent（同步） | 按大纲写 topic/matcher，落盘前加载近邻主题摘要对齐风格，不触碰 manifest 和 index |
+
+**交叉验证（`switchAgentVerification: true` 时）**：
+- 同步子 agent 落盘的 topic/matcher → 主 agent 校验跨 topic 路由完整性与 `includeAny` 关键词覆盖
+- 仅当 `subAgent: true` 且实际拆出子任务时生效；否则全部在主 agent 内验证
+
+---
+
+### `f2s-kb-merge`
+
+**作用**：解决 Git 合并后的编辑器上下文冲突。可选传入冲突文件路径。
+
+**使用场景**：
+- Git merge/rebase 后出现上下文冲突
+- 多人协作导致知识库文件冲突
+- 分支合并后需要统一知识库状态
+
+**关联关系**：
+- **前置**：Git 合并产生的冲突
+- **后续**：无（冲突解决即结束）
+- **特点**：实现侧冲突仅罗列待用户确认
+
+**子 agent 调用**：
+- `subAgent: false`（默认）：主 agent 内分析与解决冲突
+- `subAgent: true`：可拆子做冲突扫描与分类对照表（`file / category / ours_summary / theirs_summary / recommendation` 五字段）；子不得自行合并文件；主 agent 按策略落盘、处理实现侧决策、完成验收
+
+**职责划分**：
+| 角色 | 职责 |
+|------|------|
+| 主 agent | 按策略落盘合并结果、处理实现侧冲突决策、验收 |
+| 子 agent | 仅做冲突扫描与分类，按五字段 schema 交付对照表，不自行合并文件 |
+
+---
+
+### `f2s-kb-migrate`
+
+**作用**：将旧版知识库（`docs-index.md` + `rules/` 模式）按主题迁移到 `.Knowledge/` 结构。
+
+**使用场景**：
+- 旧项目升级到 Flow2Spec 新版
+- 存量知识库需要结构化整理
+
+**关联关系**：
+- **前置**：旧版知识库（`docs-index.md`、`rules/`、`skills/`）
+- **后续**：`f2s-kb-upgrade`（V1 流程需先 migrate 再 upgrade）
+- **流程**：
+  1. 以 `docs-index.md` + `rules/main.md(c)` 为主索引
+  2. 全量处理业务 `rules/` 与业务 `skills/`（排除 `f2s-*` 包技能）
+  3. 全量迁移 `stock-docs`/`req-docs`
+  4. 落盘 `.Knowledge/migration-report.md`
+  5. 用户确认后删除已迁旧的文件
+
+**子 agent 调用**：
+- `subAgent: false`（默认）：主 agent 内逐主题迁移
+- `subAgent: true`：子只做搬运 + migration-report 草案片段（以 patch 形式交付）；状态文件（migration-report.md、删除执行记录）由主 agent 唯一落盘；主 agent 主导删除清单确认与删除闭环
+
+**职责划分**：
+| 角色 | 职责 |
+|------|------|
+| 主 agent | 制定迁移规划、合并迁移结果、落盘 migration-report、主导删除确认与执行闭环 |
+| 子 agent | 负责指定主题的搬运与草案片段生成（patch 形式），不写状态文件、不写删除执行记录 |
+
+**交叉验证（`switchAgentVerification: true` 时）**：
+- 子 agent 迁移落盘的主题 → 主 agent 校验迁移完整性（旧路径是否全量覆盖、主题边界是否重叠）
+- 仅当 `subAgent: true` 且实际拆出子任务时生效；否则全部在主 agent 内验证
+
+---
+
+### `f2s-kb-upgrade`
+
+**作用**：知识库模板升级。对齐 manifest-routing + matchers 分片。
+
+**使用场景**：
+- flow2spec 包版本升级后，升级项目知识库模板
+- 旧项目升级到最新结构
+
+**关联关系**：
+- **前置**：`f2s-kb-migrate`（V1 流程）或已存在的 `.Knowledge/`
+- **包含**：内部会调用 `flow2spec init` 进行结构对齐
+- **注意**：单独的 `flow2spec init` **不是**升级命令
+
+**流程差异**：
+- **V1**：先 `f2s-kb-migrate` 再代跑 `flow2spec init`
+- **V2**：代跑 `flow2spec init` 以对齐 manifest-routing + matchers 分片
+
+**子 agent 调用**：
+- `subAgent: false`（默认）：主 agent 内完成升级
+- `subAgent: true`：子 agent 仅承接 shell 命令执行（代跑 `flow2spec init`），不承担知识库正文落盘；以下步骤主 agent 不可下放：版本分流（V1/V2）、init 后重读 SKILL.md 并判断是否整技能重跑、步骤 3b index.md 融合、校验摘要输出
+
+**职责划分**：
+| 角色 | 职责 |
+|------|------|
+| 主 agent | 版本分流、init 后重读并判断重跑、步骤 3b index.md 融合、校验摘要；落盘 manifest-routing.json 和 index.md |
+| 子 agent | 仅代跑 `flow2spec init` 等 shell 命令，不落盘知识库内容 |
+
+**交叉验证**：本技能不绑定交叉校验，落盘侧自验。
+
+---
+
+## 5) 规则说明
+
+以下不是技能命令，而是通过触发词激活的规则，用于辅助指导 Agent 的行为。
+
+### `f2s-task`
+
+**触发词**：changeTracking、变更追踪、任务追踪、续作、继续上次任务
+
+**作用**：变更追踪规则（`alwaysApply`）。当对应技能的 `changeTracking.*` 为 `true` 时，在技能执行前后自动创建、逐步更新、最终归档 `.task/` 下的任务清单，支持跨会话续作。
+
+**生效范围**：
+
+| 配置项 | 对应技能 |
+|--------|---------|
+| `changeTracking.feat` | `f2s-kb-feat` |
+| `changeTracking.fix` | `f2s-kb-fix` |
+| `changeTracking.implement` | `f2s-implement-tech-design` |
+
+**跨会话续作**：新会话开始时若存在 `.task/todo.json`，自动将用户首条消息与各任务 `keywords` 匹配；命中则加载对应 `task.md` 及 `linkedSkill` 技能文件，展示剩余清单，提示是否继续；无命中则不打扰。
+
+**规则位置**：`配置根/rules/f2s-task.*`
+
+---
+
+### `stock-docs-vs-req-docs`
+
+**触发词**：stock-docs、req-docs、已落地能力、技术方案放哪、PDF 终稿
+
+**作用**：区分知识沉淀目录与需求实现目录的边界。
+
+**目录分工**：
+
+| 目录 | 用途 | 写入时机 |
+|------|------|----------|
+| `stock-docs/` | 存量沉淀（架构、终稿） | `f2s-doc-arch`、`f2s-doc-final`、`f2s-ctx-build` |
+| `req-docs/` | 需求与技术方案（驱动实现） | `f2s-req-backend`、`f2s-doc-pdf`、手动放置 |
+
+**使用场景**：
+- 不确定文档应该放哪里
+- 需要明确 stock-docs 与 req-docs 的分工
+
+---
+
+### `implement-tech-design`
+
+**触发词**：按技术方案实现、implement-tech-design、根据方案实现
+
+**作用**：根据 `req-docs/` 中的技术方案文档实现可运行代码。
+
+**变更追踪**：若 `changeTracking.implement: true`，在步骤 2.5 输出任务列表后同步写入 `.task/active/<task-name>/task.md`；步骤 5 收尾时归档任务。
+
+**使用场景**：
+- 技术方案已就绪，需要按方案编码
+- 方案变更后需要同步更新代码
+
+**关联关系**：
+- **前置**：`.Knowledge/req-docs/<技术方案>.md`（通过 `f2s-req-backend` 或手动放置）
+- **规则位置**：
+  - Cursor：`.cursor/rules/f2s-implement-tech-design.mdc`
+  - Claude：`.claude/rules/f2s-implement-tech-design.md`
+  - Codex：`.codex/AGENTS.md` + `.codex/topics/f2s-implement-tech-design.md`
+
+**执行流程**（规则强制）：
+1. 输入标准化
+2. 理解方案与上下文
+3. **输出实现任务列表**（必做，不可跳过）
+4. **实现前提问**（必做，不可跳过）
+5. 按任务列表实现
+6. **输出待完成列表与实现后提醒**（必做）
+
+**子 agent 调用**：无（规则驱动编码，主 agent 内完成全流程）
+
+---
+
+## 6) 子 Agent 配置说明
+
+通过项目根 `flow2spec.config.json` 控制（字段默认均为 `false`）。
+
+### `subAgent` 字段
+
+| 取值 | 行为 |
+|------|------|
+| `false`（默认） | 所有 `f2s-*` 技能在主 agent 内完成 |
+| `true` | 部分技能可按正文约定使用子 agent（大规模并行处理场景） |
+
+### `switchAgentVerification` 字段
+
+| 取值 | 行为 |
+|------|------|
+| `false`（默认） | 落盘侧自验：谁落盘谁验 |
+| `true` | 技能正文明确写出该步骤时，启用交叉校验：子 agent 落盘 → 主 agent 验；主 agent 落盘 → 子 agent 验（须 `subAgent: true` 且已拆出子任务） |
+
+### `changeTracking` 字段
+
+嵌套对象，各技能子项独立控制：
+
+```json
+{
+  "changeTracking": {
+    "feat": false,
+    "fix": false,
+    "implement": false
+  }
+}
 ```
-init → 配置根（rules / skills / template / stock-docs / req-docs）
 
-需求：f2s-req-clarify → f2s-req-backend → req-docs/*_技术方案.md
-上下文（架构）：f2s-doc-arch → f2s-doc-final → f2s-ctx-build → main + Rules + Skills + docs-index
-上下文（已落地能力→知识库）：f2s-doc-add →（工作中多文件解析进上下文；内含终稿与 f2s-ctx-build 等价步骤，与 f2s-doc-arch 分工不同）
-实现：（f2s-doc-pdf）→ req-docs/*.md + implement-tech-design → 代码
-随时：f2s-kb-fix | f2s-kb-feat；实现后/收尾：f2s-kb-sync；冲突 → f2s-kb-merge
-```
+| 子项 | 对应技能 | 效果 |
+|------|---------|------|
+| `feat` | `f2s-kb-feat` | 执行前创建任务清单，完成后归档，支持跨会话续作 |
+| `fix` | `f2s-kb-fix` | 同上 |
+| `implement` | `f2s-implement-tech-design` | 同上 |
+
+> `f2s-req-plan` 不受此配置约束，始终创建任务清单。旧版布尔值（`"changeTracking": true/false`）向下兼容，自动展开为三项全开/全关。
+
+完整原则与设计意图见 [README-体系与原理 § 4. Agent 执行模型](./README-体系与原理.md)。
 
 ---
 
-## 6. 快速参考（按阶段）
+## 7) 快速参考
 
-| 阶段       | 想做的事                 | 技能 / 步骤 |
-| ---------- | ------------------------ | ----------- |
-| 首次       | 初始化                   | `flow2spec init` … |
-| 上下文生成 | 架构：初稿→终稿→索引 | **f2s-doc-arch** → **f2s-doc-final** → **f2s-ctx-build** |
-|            | 已落地能力→进上下文 | **f2s-doc-add**（`skills/f2s-doc-add/SKILL.md`：**工作中**多路径聚合，**非** f2s-doc-arch） |
-|            | 删某文档上下文           | **f2s-ctx-rm** |
-|            | 更新某文档产物           | 改文档后再 **f2s-ctx-build** 同路径 |
-| 需求与方案 | 澄清 / 后端方案          | **f2s-req-clarify** / **f2s-req-backend** |
-| 提问与实现 | PDF→MD                   | **f2s-doc-pdf** → **req-docs/xx技术方案.md** |
-|            | 写代码                   | 提供 **req-docs/\*.md** + 按方案实现 |
-| 任意时机   | 纠错 / 新能力            | **f2s-kb-fix** / **f2s-kb-feat** |
-| 实现后     | 会话或现状写库           | **f2s-kb-sync** |
-| 合并冲突   | 索引与规则等             | **f2s-kb-merge** |
+典型工作场景与完整链路见 [Flow2Spec使用说明 § 三、典型工作场景](./Flow2Spec使用说明.md)。
 
-**相关文档**：[Flow2Spec使用说明](./Flow2Spec使用说明.md) | [Flow2Spec-使用案例-模拟对话](./Flow2Spec-使用案例-模拟对话.md) | [README-目录与路径约定](./README-目录与路径约定.md) | [README-体系与原理](./README-体系与原理.md)
+目录完整说明见 [README-目录与路径约定](./README-目录与路径约定.md)。
+
+---
+
+相关文档：
+- [Flow2Spec使用说明](./Flow2Spec使用说明.md)
+- [README-目录与路径约定](./README-目录与路径约定.md)
+- [README-体系与原理](./README-体系与原理.md)
+- [Flow2Spec-使用案例-模拟对话](./Flow2Spec-使用案例-模拟对话.md)
