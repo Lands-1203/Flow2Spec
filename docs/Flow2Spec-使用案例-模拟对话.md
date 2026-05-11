@@ -1,231 +1,220 @@
-# Flow2Spec 使用案例（模拟日常对话）
+# Flow2Spec 使用案例（模拟对话）
 
-**统一版式**（后文每段相同）：**你**里只放**真实会发给 AI 的内容**（常以 **`/技能名`** 或 **`技能名`** 开头，后接路径或自由简述）；紧接 **（命令解释，非用户输入）** 告诉读者这句在做什么（勿复制进对话）；再 **Agent（示意）**；必要时一行 **说明**（Skill 级注意点）。
+以下示例围绕同一个电商项目展开，贯穿从需求澄清到上线后维护的完整流程。
 
-配置根 **`.cursor/`**，仓库根已 **`flow2spec init`**。顺序总表：[README-命令说明 · 按使用顺序查找](./README-命令说明.md#按使用顺序查找)。
-
-**文档**：[Flow2Spec使用说明](./Flow2Spec使用说明.md) · [README-命令说明](./README-命令说明.md) · [README-目录与路径约定](./README-目录与路径约定.md) · [README-体系与原理](./README-体系与原理.md)
-
-| 项       | 假设                                                                                                    |
-| -------- | ------------------------------------------------------------------------------------------------------- |
-| 项目     | 后端服务「订单服务」                                                                                    |
-| 仓库布局 | 业务代码与 **`.cursor/`** 在同一仓库；**`stock-docs/`** 放终稿类材料，**`req-docs/`** 放按方案实现的 MD |
-| 你的目标 | 先落架构上下文，再按方案改代码，最后按需写回知识库                                                      |
+**前提**：项目已执行 `flow2spec init`，`flow2spec.config.json` 使用默认配置（`subAgent: false`）。`f2s-*` 技能不改动配置根 `rules/`、`skills/` 文件。
 
 ---
 
-## 场景一：架构初稿 → 终稿 → 上下文
+## 场景一：新需求 → 澄清 → 技术方案
 
 **你**
 
-> /f2s-doc-arch 先帮我出一份架构初稿，侧重订单创建、支付回调、幂等与消息投递这几块，对应文件是 xxxx、xxx。
+> /f2s-req-clarify 产品给了一份退款需求，但没说清楚部分退款和全额退款走不走同一接口，退款成功后积分是否回撤。文档在 `.Knowledge/req-docs/退款需求v1.md`。
 
-**（命令解释，非用户输入）**
+**Agent**
 
-> **「对应文件是 …」**：让 AI **优先按所列路径**读/扫再写初稿，避免无边界扫仓。**「侧重……」**可自由描述、简述或概述。`xxxx`、`xxx` 换成真实路径或目录。
-
-**Agent（示意）**
-
-> 按 **f2s-doc-arch** 结合你给的 **`xxxx`、`xxx`**，产出 **`stock-docs/订单服务架构说明_初稿.md`**（文件名以实际为准）。
-
-**说明**：**无路径、拟扫全仓**时，Skill 会先请你确认再扫。
-
----
+> 已读取需求文档，有几个点需要确认：
+>
+> 1. 部分退款与全额退款是否复用同一接口，通过 `amount` 区分，还是拆成两个端点？
+> 2. 退款成功后积分是否回撤？回撤失败是否阻断退款流程？
+> 3. 退款申请是同步到账还是异步（T+1）？
+> 4. 卖家侧是否需要审核步骤？
 
 **你**
 
-> /f2s-doc-final stock-docs/订单服务架构说明\_初稿.md
+> 1. 同一接口用 amount 区分；2. 积分回撤，失败不阻断，异步重试；3. 异步 T+1；4. 不需要审核。
 
-**（命令解释，非用户输入）**
+**Agent**
 
-> **初稿已确认**，本条触发 **f2s-doc-final**：把初稿收成 **`_终稿.md`**（路径/方案名以本轮输出为准）。
-
-**Agent（示意）**
-
-> 已生成 **`stock-docs/<方案名>_终稿.md`**（以实际文件名为准）。
-
----
+> 澄清完成。执行 `/f2s-req-backend` 输出技术方案。
 
 **你**
 
-> f2s-ctx-build stock-docs/订单服务架构说明\_终稿.md
+> /f2s-req-backend
 
-**（命令解释，非用户输入）**
+**Agent**
 
-> **「f2s-ctx-build」** + **终稿路径**：用该终稿刷新 **`main.mdc`**、专题 **`rules/*.mdc`**、**`skills/`**、**`docs-index.md`** 等（路径与上一步生成的 **`_终稿.md`** 对齐即可）。
-
-**Agent（示意）**
-
-> 已按该终稿路径更新或生成 **main / rules / skills / docs-index**。
-
----
-
-**你**（日常业务提问，不必提 main / docs-index）
-
-> 支付回调如果第三方重复推送同一条，我们这边怎么保证幂等的？会动哪些表或状态？
-
-**（命令解释，非用户输入）**
-
-> **普通业务问句**：用户**不**触发 **f2s-***；Agent 依赖已注入的 **`main.mdc`** 约定，经 **`docs-index.md`** 找到专题 **Rule/Skill**，再按需下钻 **`stock-docs/`** 终稿长文（必要时才看代码），**渐进查齐再回答**。
-
-**Agent（示意）**
-
-> （示意）按 **main** 的入口说明打开 **docs-index**，定位到支付/回调相关 rule；对照 **`stock-docs/`** 里订单与支付章节后回答：**幂等键**、**去重或落库策略**、**状态如何迁移**（具体以你们仓库终稿与代码为准）。
+> 已生成 `.Knowledge/req-docs/退款功能_技术方案.md`，包含：
+> - 接口设计：`POST /refunds`，`amount` 字段区分全额/部分
+> - 状态机：`PENDING → SUCCESS / FAILED`
+> - 积分回撤：异步队列，失败进死信，告警人工处理
+> - 错误码清单
+>
+> 下一步：说"按方案实现 `.Knowledge/req-docs/退款功能_技术方案.md`"触发编码。
 
 ---
 
-## 场景二：按方案改代码
+## 场景二：架构说明沉淀进知识库
 
 **你**
 
-> 按方案实现：`.cursor/req-docs/订单支付改造_技术方案.md` 只改 `PaymentCallbackHandler`，不要动其它模块。
+> /f2s-doc-arch 帮我出一份订单服务架构初稿，重点看创建流、支付回调、幂等与消息投递；代码在 `src/order`、`src/payment`。
 
-**（命令解释，非用户输入）**
+**Agent**
 
-> **「按方案实现」** + **`req-docs/`** 下方案 MD：触发 **`implement-tech-design`**。后面是**范围/约束**，可自由简述，不必固定话术。
-
-**Agent（示意）**
-
-> 已按 **`rules/implement-tech-design.mdc`**，以该 **`req-docs/`** 文件为准改代码。
-
----
-
-## 场景三：PDF → MD → 按方案
+> 已扫描相关目录，生成 `.Knowledge/stock-docs/订单服务架构说明_初稿.md`，包含：
+> - 模块边界与依赖关系
+> - 创建流时序
+> - 支付回调幂等机制（基于 `payment_callback_log` 表）
+> - 消息投递重试策略
+>
+> 确认无误后执行 `/f2s-doc-final` 规范化格式。
 
 **你**
 
-> /f2s-doc-pdf /Users/me/Downloads/订单流程\_v3.pdf
+> /f2s-doc-final .Knowledge/stock-docs/订单服务架构说明_初稿.md
 
-**（命令解释，非用户输入）**
+**Agent**
 
-> 把 PDF 转成 **`req-docs/`** 下 MD（具体文件名以 SKILL 与约定为准），便于再走「按方案实现」。
-
-**Agent（示意）**
-
-> 已生成 **`req-docs/订单流程_v3.md`**（示例名，以实际为准）。
-
----
+> 已生成 `.Knowledge/stock-docs/订单服务架构说明_终稿.md`，按终稿模板整理，标注了待补充项。
 
 **你**
 
-> 按方案实现：`.cursor/req-docs/订单流程_v3.md`
+> f2s-ctx-build .Knowledge/stock-docs/订单服务架构说明_终稿.md
 
-**（命令解释，非用户输入）**
+**Agent**
 
-> 与场景二相同：**方案路径** + **「按方案实现」**；上一段 PDF 已落成 MD 后接本条。
-
-**Agent（示意）**
-
-> 已按该 **`req-docs/`** MD 与 **implement-tech-design** 实现。
+> 已完成知识库同步：
+> - 新增 `.Knowledge/topics/order-service.md`
+> - 更新 `.Knowledge/manifest-routing.json`（新增路由规则）
+> - 生成 `.Knowledge/matchers/order-service.json`（关键词：订单创建、支付回调、幂等、消息投递）
+> - 更新 `.Knowledge/index.md`
+>
+> 后续与订单服务相关的任务会自动命中此主题。
 
 ---
 
-## 场景四：任意时机 · 新约定（f2s-kb-feat）
+## 场景三：按技术方案实现
 
 **你**
 
-> /f2s-kb-feat 对外 API 的 requestId 统一从 Header `X-Request-Id` 透传并打日志，请同步 rules/skills。
+> 按方案实现：`.Knowledge/req-docs/退款功能_技术方案.md`，只改 `src/refund/`，不要动支付模块。
 
-**（命令解释，非用户输入）**
+**Agent**
 
-> **f2s-kb-feat** **任意时机**可用；后面是**新能力/新约定**的自由描述，不必等「实现后」。本技能通常要求 **代码与文档/知识库一起对齐**：既改实现，也同步 **`rules/`**、**`skills/`**（及 **`stock-docs/`** 等说明类 MD、**docs-index** / **main** 中相关表述），避免「只写代码、规则仍写旧口径」。
-
-**Agent（示意）**
-
-> 已按 **f2s-kb-feat** 补实现或对齐现有代码，并同步增补或修订 **`rules/`**、**`skills/`**（及必要时 **docs-index** / **main**、相关 **`stock-docs/`** 段落）。
-
----
-
-## 场景五：实现后或收尾 · 写库（f2s-kb-sync）
-
-**你**
-
-> /f2s-kb-sync 支付失败重试队列命名、死信表字段、监控告警口径——先给知识库更新大纲，我确认后再写。
-
-**（命令解释，非用户输入）**
-
-> **f2s-kb-sync** **典型在实现后或阶段收尾**；**「先大纲」** 明确要走「大纲 → 你确认 → 再写入」流程。
-
-**Agent（示意）**
-
-> 先输出**更新大纲**；你确认后再写入 **`rules/`**、**`skills/`**、**`docs-index.md`** 等。
-
----
-
-## 场景六：任意时机 · 纠错（f2s-kb-fix）
+> 已读取方案。实现任务列表：
+>
+> 1. 新建 `RefundController`，实现 `POST /refunds`
+> 2. 新建 `RefundService`，含状态机流转逻辑
+> 3. 新建 `RefundRepository`，对应 `refund` 表
+> 4. 新建 `PointRollbackProducer`，向积分队列发送回撤消息
+> 5. 单元测试覆盖状态机流转
+>
+> 实现前确认：
+> - `refund` 表是否已存在，还是需要生成 migration？
+> - 积分队列 Topic 名称是什么？
 
 **你**
 
-> /f2s-kb-fix `OrderService` 里 `new RestTemplate()`，规则要求用注入的 Bean；请改代码并同步架构说明和对应 rule。
+> 表已存在，不用 migration；Topic 是 `point-rollback-events`。
 
-**（命令解释，非用户输入）**
+**Agent**
 
-> **f2s-kb-fix** **任意时机**；须**点明违规点**与期望；后面可自由补「还要同步哪些文档」。与 **f2s-kb-feat** 同理，通常 **代码与文档/知识库一起对齐**：修正实现的同时，把 **`rules/`**、**`skills/`** 及 **`stock-docs/`** 等说明里仍写错口径的地方一并改掉，避免修完代码、规则仍误导后续对话。
-
-**Agent（示意）**
-
-> 已按违规点修正代码，并同步 **`rules/`**、**`skills/`** 及你点名的**架构说明等文档**（及必要时 **docs-index** / **main**、相关 **`stock-docs/`** 段落），消除不一致。
+> 已完成以上 5 项，均在 `src/refund/` 内，未触碰 `src/payment/`。
+>
+> **待完成（需人工）**：
+> - `point-rollback-events` 消费端（积分服务侧）
+> - 死信监控告警规则配置
+>
+> 建议执行 `/f2s-kb-feat` 将本次新增能力同步进知识库。
 
 ---
 
-## 场景七：merge / rebase 后 · 知识库冲突（f2s-kb-merge）
+## 场景四：PDF 方案 → 实现
 
 **你**
 
-> /f2s-kb-merge `.cursor/docs-index.md` `rules/payment.mdc` 里还有冲突标记，知识库能自动合并的请处理，业务源码我已手动合完。
+> /f2s-doc-pdf /Users/me/Downloads/营销优惠券_v2.pdf
 
-**（命令解释，非用户输入）**
+**Agent**
 
-> **f2s-kb-merge** 处理 **docs-index / main / rules / skills** 等知识库侧冲突；**业务源码**一般不在此条自动合并范围内，由你说明「已手动」即可。
-
-**Agent（示意）**
-
-> 已清理所列文件中的冲突标记；未授权的业务源码保持不动。
-
----
-
-## 场景八：把某路径下的模块写进全局文档（f2s-kb-feat）
+> 已转换并保存为 `.Knowledge/req-docs/营销优惠券_v2.md`，补全了 PDF 中缺失的幂等处理流程描述和错误码说明。
 
 **你**
 
-> /f2s-kb-feat 将【路径】功能模块写入全局文档。
+> 按方案实现：`.Knowledge/req-docs/营销优惠券_v2.md`
 
-**（命令解释，非用户输入）**
+**Agent**
 
-> **【路径】**换成仓库里真实目录或包（如 `src/order/`、`com.example.billing` 所在根）。本条仍是 **f2s-kb-feat**：让 AI **读该路径下代码/结构**，把模块**职责、边界、对外接口、关键约定**沉淀到**全局可加载**的 **`rules/`**、**`skills/`**、**`stock-docs/`**（摘录或补篇）、**`docs-index.md`** / **`main.mdc`** 等，与现有实现一致；若代码缺文档或规则缺块，可**顺带补实现**再对齐。
-
-**Agent（示意）**
-
-> 已按【路径】梳理模块并写入/更新 **`stock-docs/`** 与 **`rules/`**、**`skills/`**（及 **docs-index** 等），保证后续对话能通过索引渐进找到该模块说明。
+> 已读取方案，输出实现任务列表：
+>
+> 1. 新建 `CouponController`（领券、核销、退券接口）
+> 2. 新建 `CouponService`，含库存扣减与幂等校验
+> 3. …
+>
+> 实现前确认：优惠券库存是用 Redis 还是数据库行锁？
 
 ---
 
-## 速查（真实输入范式）
+## 场景五：实现后补录知识库
 
-| 目的 | 你（示例，路径请替换） |
-| ---- | ------------------------ |
-| 日常业务问答 | 自然语言直接问（**不**带 `/f2s-*`）；Agent 按 **main → docs-index → Rule/Skill → stock-docs** 渐进查后答，见场景一末段 |
-| 架构初稿 | `/f2s-doc-arch` …侧重… **`对应文件是`** 路径1、路径2 |
-| 初稿→终稿 | `/f2s-doc-final` `stock-docs/xxx_初稿.md` |
-| 终稿→上下文 | `f2s-ctx-build` `stock-docs/xxx_终稿.md` |
-| PDF→MD | `/f2s-doc-pdf` PDF 绝对路径或项目内路径 |
-| 按方案实现 | `按方案实现：` **`req-docs/某.md`** + 自由约束简述 |
-| 新约定 | `/f2s-kb-feat` + 自由描述（通常 **代码 + rules/skills/文档** 一并补齐） |
-| 模块写入全局文档 | `/f2s-kb-feat` 将 **【路径】** 功能模块写入全局文档（**【路径】** 换真实目录/包） |
-| 写库先大纲 | `/f2s-kb-sync` + 范围 + **先给大纲确认再写** |
-| 纠错 | `/f2s-kb-fix` + 违规点 + 期望（通常 **代码 + rules/skills/文档** 一并校正） |
-| 删某文档上下文 | `f2s-ctx-rm` + `stock-docs/…`（见命令说明 §2.4） |
-| 合并知识库冲突 | `/f2s-kb-merge` + 文件/范围 + 边界说明 |
+**你**
 
-**f2s-*** 各场景在正文里都有 **（命令解释，非用户输入）** 段；**日常业务问**见场景一末段（无技能名，靠渐进读取）。
+> /f2s-kb-sync 退款功能上线了，帮我把支付失败重试队列命名、死信表字段、监控告警口径沉淀进知识库，先给大纲我确认再写。
+
+**Agent**
+
+> 知识库更新大纲（待确认）：
+>
+> **更新主题**：`order-service`（已有）
+>
+> - 新增「支付失败重试机制」：队列名 `payment-retry-queue`，最大重试 3 次，间隔 30s / 120s / 300s
+> - 新增「死信表」：表名 `payment_dead_letter`，字段 `order_id / error_code / retry_count / created_at`
+> - 新增「监控口径」：告警阈值 `retry_count >= 3`，通知渠道 DingTalk
+>
+> 确认后写入，或告诉我需要修改的地方。
+
+**你**
+
+> 确认写入。
+
+**Agent**
+
+> 已更新 `.Knowledge/topics/order-service.md`，`manifest-routing` 未变动（主题已存在）。
+
+---
+
+## 场景六：发现违规实现，修复并同步知识库
+
+**你**
+
+> /f2s-kb-fix `RefundService` 里直接 `new RestTemplate()` 了，违反 Spring Bean 注入约定。
+
+**Agent**
+
+> 已修复：`RefundService.java` 第 34 行改为构造注入，`RefundConfig` 补充 `@Bean` 声明。
+>
+> 同步知识库：`.Knowledge/stock-docs/` 中「HTTP 客户端约定」节更新，注明 `RestTemplate` 必须通过 Bean 注入，禁止直接实例化。
+
+---
+
+## 场景七：Git 合并后知识库冲突
+
+**你**
+
+> /f2s-kb-merge `.Knowledge/index.md` 和 `.Knowledge/stock-docs/订单服务架构说明_终稿.md` 合并后有冲突标记，业务代码我已手动合完。
+
+**Agent**
+
+> 已扫描两个文件的冲突标记：
+>
+> - `index.md`：2 处冲突，均为主题描述字段，取 HEAD 版本（内容较新），已自动处理。
+> - `订单服务架构说明_终稿.md`：1 处冲突，「监控告警阈值」两个分支不同（3 次 vs 5 次），需你确认。
+
+**你**
+
+> 用 3 次。
+
+**Agent**
+
+> 已按确认结果清理全部冲突标记，文件可提交。
 
 ---
 
 ## 相关文档
 
-| 文档                                                | 用途                           |
-| --------------------------------------------------- | ------------------------------ |
-| [Flow2Spec使用说明](./Flow2Spec使用说明.md)         | init、目录、推荐顺序           |
-| [README-命令说明](./README-命令说明.md)             | 各技能入参/输出、总表、§6 速查 |
-| [README-目录与路径约定](./README-目录与路径约定.md) | `stock-docs` / `req-docs`、产物 |
-| [README-体系与原理](./README-体系与原理.md)         | main、docs-index、拆解原则     |
+- [Flow2Spec使用说明](./Flow2Spec使用说明.md)
+- [README-命令说明](./README-命令说明.md)
+- [README-目录与路径约定](./README-目录与路径约定.md)
+- [README-体系与原理](./README-体系与原理.md)
