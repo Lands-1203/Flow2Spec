@@ -1,5 +1,7 @@
 # Flow2Spec Knowledge Index
 
+> **读前区分（本仓库）**：本文件与同级目录 **`.Knowledge/`** 属于 **Flow2Spec 产品开发 Git 仓库**自用：用于**追踪与记录 Flow2Spec 作为产品**的能力说明、路由样例、`stock-docs` 终稿等（人读 + 本仓 `manifest-routing`）。**随包发布、并由 `flow2spec init` 写入各业务仓的默认索引与规则骨架**来自仓库 **`templates/`** 与 **`lib/`**（源代码与模板），二者是 **交付物**，不是本 `.Knowledge/` 的另一套「正文副本」；在业务仓内工作时，以该仓根目录 `.Knowledge/` 与 `init` 落盘为准。
+
 本文件是 **人读导航**：主题说明、关联文档摘要、语义边界。  
 **机读事实源** 以 `.Knowledge/manifest-routing.json` + `taskToTopicRules[].matcherPath` 指向的 `.Knowledge/matchers/*.json` 分片为准（不再使用 `.Knowledge/manifest-matchers.json`）。
 
@@ -23,11 +25,10 @@
 | implement-tech-design | `.Knowledge/topics/f2s-implement-tech-design.md` | 按技术方案实现代码 | req：[技术方案](.Knowledge/req-docs/<技术方案>.md)（必填） |
 | stock-docs-vs-req-docs | `.Knowledge/topics/f2s-stock-docs-vs-req-docs.md` | stock-docs / req-docs 目录分工 | stock：[目录边界说明](.Knowledge/stock-docs/<目录边界说明>.md)（可选） |
 | fallback-triage | `.Knowledge/topics/f2s-fallback-triage.md` | 未命中或低置信度：分诊与澄清 | stock：[路由分诊说明](.Knowledge/stock-docs/<分诊说明>.md)（可选） |
-| f2s-task | `.Knowledge/topics/f2s-task.md` | 变更追踪 / 跨会话续作 / changeTracking 配置 | stock：[任务清单与变更追踪](stock-docs/Flow2Spec-任务清单与变更追踪.md)；执行：`rules/f2s-task.*` |
-| f2s-req-plan | `.Knowledge/topics/f2s-req-plan.md` | 从需求/技术方案规划并实现任务 | stock：[任务清单与变更追踪](stock-docs/Flow2Spec-任务清单与变更追踪.md)；执行：`skills/f2s-req-plan/SKILL.md` |
+| config-precheck | `.Knowledge/topics/f2s-config-precheck.md` | 执行 `f2s-*` 前读 `flow2spec.config.json` / 编排开关 | Codex 长文：仓库根 `.codex/topics/f2s-config-check.md`；[路由摘要](topics/f2s-config-precheck.md) |
 
 每主题保留 **1–3 条** 可点击摘要链接；全量路径对照写入 `.Knowledge/migration-report.md`（迁移场景）。  
-其中 **`implement-tech-design`**、**`stock-docs-vs-req-docs`** 在 `topics/` 内为**路由摘要**；执行长文见配置根 **`rules/f2s-*.md(c)`**；使用 Codex 时见 **`.codex/AGENTS.md`「专题长文」** 与 **`.codex/topics/f2s-*.md`**。
+其中 **`implement-tech-design`**、**`stock-docs-vs-req-docs`**、**`config-precheck`** 在 `topics/` 内为**路由摘要**；执行长文见配置根 **`rules/f2s-*.md(c)`**；使用 Codex 时见 **`.codex/AGENTS.md`**、**`.codex/topics/f2s-*.md`**（`f2s-config-check` 与 `AGENTS` 前置同源，按需打开）。
 
 ---
 

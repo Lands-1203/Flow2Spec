@@ -11,7 +11,7 @@ Flow2Spec（`@double-codeing/flow2spec`）是一个 CLI 工具包，用于在业
 - 将**业务知识文档**统一沉淀到项目根 `.Knowledge/`
 - 将**规则与技能能力**保留在各 AI 工具的配置根（`.cursor/`、`.claude/`、`.codex/`），不破坏原生加载机制
 
-版本：`3.0.3` | Node.js >= 16 | 纯 Node.js 实现，无外部运行时依赖
+版本：`3.0.1-beta.1` | Node.js >= 16 | 纯 Node.js 实现，无外部运行时依赖
 
 ---
 

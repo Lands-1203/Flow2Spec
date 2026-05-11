@@ -1,0 +1,34 @@
+---
+description: 执行任何 f2s-* 技能前强制读取 flow2spec.config.json，确定 subAgent 与 switchAgentVerification 实际值
+---
+
+# f2s 技能前置强制步骤
+
+**执行任何 `f2s-*` 技能的第一个动作，必须用 Read 工具读取项目根 `flow2spec.config.json`**，获取 `subAgent` 与 `switchAgentVerification` 的实际值，再决定后续编排方式。
+
+```
+必须执行：Read("flow2spec.config.json")  ← 技能正文任何步骤之前
+```
+
+| 读取结果 | 行为 |
+|---------|------|
+| `subAgent: true` | 按技能 SKILL.md 的 B/C 模式派子 agent 并行扫描，主 agent 合并落盘 |
+| `subAgent: false` | 全部在主 agent 内完成，不得拆子 agent |
+| `switchAgentVerification: true` | 子 agent 落盘的由主 agent 校验；主 agent 落盘的由子 agent 校验（须 subAgent=true 且已拆子任务） |
+| `switchAgentVerification: false` | 落盘侧自验，不交叉 |
+| 文件不存在 | 所有字段均视为 `false` |
+
+**Claude Code**：若已启用 `f2s-config-inject` PreToolUse hook，调用 `f2s-*` Skill 时会注入配置摘要；**文件缺失、JSON 损坏或 hook 异常时也会注入说明与默认语义**，不静默。仍建议在存疑或刚改过配置时用 `Read` 与磁盘核对。
+
+### changeTracking（变更追踪）
+
+| 字段 | 生效技能 | 行为 |
+|------|---------|------|
+| `changeTracking.feat: true` | `f2s-kb-feat` | **步骤 0 必须执行**：创建或续作 `.task/active/` 变更追踪任务 |
+| `changeTracking.feat: false` | `f2s-kb-feat` | 步骤 0 跳过，不创建 `.task/` 目录 |
+| `changeTracking.fix: true` | `f2s-kb-fix` | **步骤 0 必须执行**：创建或续作 `.task/active/` 变更追踪任务 |
+| `changeTracking.fix: false` | `f2s-kb-fix` | 步骤 0 跳过，不创建 `.task/` 目录 |
+| `changeTracking.implement: true` | `f2s-implement-tech-design` | **步骤 2.5 写入任务清单、步骤 2.6 随实现同步打钩 `task.md`、步骤 5 满足归档门禁后归档** |
+| `changeTracking.implement: false` | `f2s-implement-tech-design` | 步骤 2.5、2.6 和步骤 5 的变更追踪部分跳过 |
+
+**禁止在未读该文件的情况下进入技能正文的任何执行步骤。**

@@ -18,6 +18,18 @@
         "req-docs",
         "目录约定"
       ]
+    },
+    "m-f2s-config-precheck": {
+      "includeAny": [
+        "flow2spec.config.json",
+        "subAgent",
+        "switchAgentVerification",
+        "切换 agent 校验",
+        "技能前置",
+        "f2s-config-check",
+        "f2s-config-inject",
+        "changeTracking"
+      ]
     }
   }
 }

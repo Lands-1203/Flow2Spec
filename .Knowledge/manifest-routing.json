@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "knowledgeRoot": ".Knowledge",
   "matcherKey": "matcherId",
   "sourceOfTruth": ".Knowledge/manifest-routing.json",
@@ -13,10 +13,19 @@
     "implement-tech-design": ".Knowledge/topics/f2s-implement-tech-design.md",
     "stock-docs-vs-req-docs": ".Knowledge/topics/f2s-stock-docs-vs-req-docs.md",
     "fallback-triage": ".Knowledge/topics/f2s-fallback-triage.md",
+    "config-precheck": ".Knowledge/topics/f2s-config-precheck.md",
     "f2s-task": ".Knowledge/topics/f2s-task.md",
     "f2s-req-plan": ".Knowledge/topics/f2s-req-plan.md"
   },
   "taskToTopicRules": [
+    {
+      "task": "f2s-config-precheck",
+      "matcherId": "m-f2s-config-precheck",
+      "matcherPath": ".Knowledge/matchers/m-f2s-config-precheck.json",
+      "topics": [
+        "config-precheck"
+      ]
+    },
     {
       "task": "implement-from-spec",
       "matcherId": "m-implement-from-spec",

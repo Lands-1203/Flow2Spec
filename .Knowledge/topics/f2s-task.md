@@ -24,14 +24,20 @@
 ├── todo.json                    ← 活跃任务索引（仅主 agent 写）
 ├── active/<task-name>/
 │   ├── task.md                  ← checklist（执行步骤）
-│   └── context.md               ← 涉及文件、文档链接
-└── completed/<task-name>-YYYYMMDD/
+│   ├── context.md               ← 涉及文件、文档链接
+│   └── user-todos.md            ← 须用户执行的代办（改库、配环境等）
+└── completed/<YYYYMMDD>-<task-name>/
+    ├── task.md
+    ├── context.md
+    └── user-todos.md
 ```
+
+用户代办**必须**落在与 `task.md` 同目录的 **`user-todos.md`**，细则见配置根 **`rules/f2s-task.*`**。
 
 ## 跨会话续作
 
 新会话开始时若存在 `todo.json`，规则自动将用户首条消息与各条目 `keywords` 匹配：
-- 命中 → 展示剩余 checklist，加载 `linkedSkill` 对应技能文件作为执行上下文，提示是否继续
+- 命中 → 展示剩余 checklist，**摘要 `user-todos.md` 中未完成项（若有）**，加载 `linkedSkill` 对应技能文件作为执行上下文，提示是否继续
 - 无命中 → 不打扰，正常响应
 
 ## 下一步

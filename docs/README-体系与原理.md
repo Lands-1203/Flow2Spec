@@ -48,6 +48,8 @@ Flow2Spec 的目标是把"业务知识沉淀"与"Agent 能力加载"拆开：
 
 Flow2Spec 通过项目根 `flow2spec.config.json` 的 `subAgent`、`switchAgentVerification` 两个字段控制执行行为。
 
+**Agent 如何读到上述真值**：多端提示 + **Read** 权威，见 [Flow2Spec使用说明 § 一（唯一详表）](./Flow2Spec使用说明.md)；设计归纳见 [Flow2Spec-设计说明 § 四、5.1](./Flow2Spec-设计说明.md)。
+
 ### 4.1 主/子 Agent 职责划分原则
 
 **`subAgent: false`（默认）**：全部 `f2s-*` 技能在主 agent 内顺序完成，无并行拆分。

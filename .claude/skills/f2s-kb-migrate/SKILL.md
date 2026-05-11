@@ -29,7 +29,7 @@ description: 旧版知识库一次性迁到 `.Knowledge`：以配置根 `docs-in
 | 技能 | 解决的问题 |
 | --- | --- |
 | **本技能 `f2s-kb-migrate`** | **一次性结构搬家**：旧索引（`docs-index.md` / `index-doc.md`）、`rules/main.md(c)`、业务 `skills/`、散落 `stock-docs`/`req-docs` → **`.Knowledge`**，并处理删除清单与 `migration-report.md`。 |
-| **`f2s-kb-upgrade`** | **知识库模板升级技能（唯一「升级」口径）**：按 **`skills/f2s-kb-upgrade/SKILL.md`** 全文执行；其中代跑 **`flow2spec init`** 以对齐 **`manifest-routing` + `matchers/`** 与各 agent **`rules`/`skills`**；含 V1/V2 判定（旧项目须 **migrate 后再跑本技能**）。 |
+| **`f2s-kb-upgrade`** | **知识库模板升级技能（唯一「升级」口径）**：按 **`skills/f2s-kb-upgrade/SKILL.md`** 全文执行；其中代跑 **`flow2spec init`** 以对齐 **`manifest-routing` + `matchers/`** 与各 agent **`rules`/`skills`**；含 **V1 / 现行库（V2+）** 分流（旧项目须 **migrate 后再跑本技能**；**V2+ 含 npm v3.x 等已上 `.Knowledge` 的项目**，见 `f2s-kb-upgrade` 步骤 0）。 |
 
 - **迁移验收、删除清单确认完成后**：应提醒或代用户执行 **`f2s-kb-upgrade` 技能全文**（其中 **步骤 2** 会代跑 **`flow2spec init`**），把 Flow2Spec 包版本、路由分片与配置根产物对齐到当前包。**勿**让用户以为「单独执行 `init`」即完成知识库模板升级。
 - **已在稳定使用 `.Knowledge` 且无旧索引负担的项目**：不要重复跑本技能；日常包/模板对齐走 **`f2s-kb-upgrade`** 技能即可（不是只跑 `init`）。

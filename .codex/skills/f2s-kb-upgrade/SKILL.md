@@ -1,6 +1,6 @@
 ---
 name: f2s-kb-upgrade
-description: 知识库模板升级技能（仅指本 SKILL）：V1 先 f2s-kb-migrate 再在流程内代跑 flow2spec init；V2 则代跑 init 以对齐 manifest-routing + matchers 分片（包内 `manifest-matchers.json` 仅作 init 合并种子，不落盘 .Knowledge）。触发：f2s-kb-upgrade、一键升级迁移、旧项目升级、知识库模板升级。注意：不要把单独的 flow2spec init 称作「升级命令」。
+description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V1** 须先 f2s-kb-migrate 再在流程内代跑 flow2spec init；**现行库（流程代号 V2+，含已用 .Knowledge 的 Flow2Spec npm v3.x 等项目）** 则代跑 init 以对齐 manifest-routing + matchers 分片（包内 `manifest-matchers.json` 仅作 init 合并种子，不落盘 .Knowledge）。触发：f2s-kb-upgrade、一键升级迁移、旧项目升级、知识库模板升级。注意：不要把单独的 flow2spec init 称作「升级命令」；**V1/V2+ 为技能内分流代号，不等于 npm 包主版本号**。
 ---
 
 > 执行口径：本技能用于「代替用户跑 shell」完成 **按本 SKILL 定义的** Flow2Spec **模板与配置根对齐**；其中一步会代跑 **`flow2spec init`**，但 **`init` 不是「升级命令」**，**升级命令 / 知识库升级** 仅指 **`f2s-kb-upgrade` 本技能全流程**。
@@ -19,7 +19,7 @@ description: 知识库模板升级技能（仅指本 SKILL）：V1 先 f2s-kb-mi
 - 两字段（`subAgent` / `switchAgentVerification`）语义以统一入口为唯一事实源：**Cursor/Claude** 读配置根 `rules/f2s-flow2spec-unified-entry.*`；**Codex** 读 `.codex/topics/f2s-flow2spec-unified-entry.md`（与上同源，`flow2spec init` 镜像）。本节不复述。
 - **子 agent 职责**（仅当 `subAgent=true`）：代跑 `flow2spec init` 等 shell 命令；仅承接命令执行，不承担知识库正文落盘。
 - **主必控**（主 agent 不可下放）：
-  1. **版本分流**：V1 先走 `f2s-kb-migrate` 再进入本技能；V2 直接进入 `init` 流程。
+  1. **版本分流**：**V1** 先走 `f2s-kb-migrate` 再进入本技能；**现行库（V2+）** 直接进入 `init` 流程（含 Flow2Spec **npm v3.x** 等，只要已满足步骤 0 中「现行库」条件，均走此支，**勿**因主版本为 3 再单独设一套流程）。
   2. **`init` 后重读**：从磁盘重读 `f2s-kb-upgrade/SKILL.md`，对比标识是否变化。
   3. **整技能重跑**：SKILL 有变化时，按新版字面从头再跑一轮，直至连续两轮无变化。
   4. **步骤 3b 融合**：`.Knowledge/index.md` 的维护区保留 + 包版对齐融合由主 agent 执行。
@@ -67,6 +67,8 @@ description: 知识库模板升级技能（仅指本 SKILL）：V1 先 f2s-kb-mi
 
 ### 步骤 0：版本判定与分流（必须，先于 init）
 
+> **命名说明**：下文 **「V1」「现行库（V2+）」** 为本技能**流程分流代号**。**npm 包为 v3.x、v4.x…** 且仓库**已**是 `.Knowledge` + `manifest-routing` 形态时，仍走 **「现行库（V2+）」** 支（仅 `init` 对齐），**不要**把 npm 主版本数字当成这里的「V2」字面限制。
+
 **V1 — 旧版知识组织（须先迁移再 init）**  
 命中**任一**强信号则按 V1：
 
@@ -75,7 +77,7 @@ description: 知识库模板升级技能（仅指本 SKILL）：V1 先 f2s-kb-mi
 
 **动作**：先按 **`f2s-kb-migrate`** 全流程执行（含 `migration-report`、删除清单确认），**再**进入步骤 1–5 执行 `flow2spec init`。
 
-**V2 — 已上 `.Knowledge` + 新版路由（仅包级 / 形态对齐）**  
+**现行库（V2+）— 已上 `.Knowledge` + 新版路由（仅包级 / 形态对齐）**  
 同时满足：
 
 - 存在 **`.Knowledge/manifest-routing.json`**，且 **`topicPaths` / `taskToTopicRules`** 可用；  
@@ -212,7 +214,7 @@ description: 知识库模板升级技能（仅指本 SKILL）：V1 先 f2s-kb-mi
 
 ## 完成后自检
 
-1. 是否已做 **步骤 0**：V1 未跳过 migrate、V2 未误跑 migrate。
+1. 是否已做 **步骤 0**：V1 未跳过 migrate、**现行库（V2+）** 未误跑 migrate。
 2. 是否在 **步骤 2 的 `init` 之后**重读过 **`f2s-kb-upgrade/SKILL.md`**，并在有变化时 **整技能重跑**（见「init 与技能自更新」）。
 3. 是否已实际执行 shell 命令（而非只给建议）。
 4. 是否明确标注增量 or reset 模式。

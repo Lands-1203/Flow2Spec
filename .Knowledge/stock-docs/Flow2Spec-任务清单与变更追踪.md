@@ -1,7 +1,8 @@
 # Flow2Spec：任务清单与变更追踪（设计说明）
 
 > **定位**：说明 `.task/` 任务清单的**两种触发方式**、目录与数据约定、与配置及技能的关系。  
-> **执行细则**：变更追踪的 checklist 与禁止项以配置根 **`rules/f2s-task.*`** 为准；显式规划链路以 **`skills/f2s-req-plan/SKILL.md`** 为准。
+> **执行细则**：变更追踪的 checklist 与禁止项以配置根 **`rules/f2s-task.*`** 为准；显式规划链路以 **`skills/f2s-req-plan/SKILL.md`** 为准。  
+> **仓内分工**：本文档位于 **Flow2Spec 产品仓** `.Knowledge/stock-docs/`（记录产品设计/约定）。**`templates/`、`lib/`** 承载 **init 下发与 CLI 行为**，不替代本 stock 作为「产品知识库正文」；业务仓内的 `.task/` 与规则则由 init 从模板落盘。
 
 ---
 
@@ -31,14 +32,19 @@
 ├── todo.json                 ← 活跃任务索引；仅主 agent 写入
 ├── active/<task-name>/
 │   ├── task.md               ← checklist（步骤级 checkbox）
-│   └── context.md            ← 涉及文件、req-docs/stock-docs 链接
-└── completed/<task-name>-<YYYYMMDD>/
+│   ├── context.md            ← 涉及文件、req-docs/stock-docs 链接
+│   └── user-todos.md         ← 须用户执行的代办（执行 SQL、改配置等）
+└── completed/<YYYYMMDD>-<task-name>/
     ├── task.md
-    └── context.md
+    ├── context.md
+    └── user-todos.md
 ```
 
+- **`user-todos.md`**：与 `task.md` 同目录、固定文件名；Agent 将「仅用户可完成」的项追加写入，作为跨会话交接面；完整约定见 **`rules/f2s-task.*`**。
 - **任务名**：`snake_case`，简短描述变更内容。
-- **归档**：完成后将 `active/<task-name>/` 整体移至 `completed/<task-name>-<YYYYMMDD>/`，并从 `todo.json` 删除对应条目；若数组为空可删除 `todo.json`。
+- **归档目录名**：`completed/` 下为 **`<YYYYMMDD>-<task-name>`**（**日期 8 位在前**）；新归档一律使用本格式，旧式 `<task-name>-<YYYYMMDD>` 可保留并择机重命名。
+- **归档**：完成后将 `active/<task-name>/` 整体移至 `completed/<YYYYMMDD>-<task-name>/`，并从 `todo.json` 删除对应条目；若数组为空可删除 `todo.json`。
+- **子任务与 Git worktree**：`subAgent=true` 或并行子任务若使用 **`git worktree`**（或 IDE 等价隔离目录），须在子任务结束或主 agent 合并后 **`git worktree remove`** 并 `git worktree list` 自检，禁止长期遗留孤儿 worktree；细则见配置根 **`rules/f2s-flow2spec-unified-entry.*`**。
 
 ---
 

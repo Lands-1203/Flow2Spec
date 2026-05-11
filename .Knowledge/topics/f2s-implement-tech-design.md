@@ -17,7 +17,7 @@
 
 若 `flow2spec.config.json` 中 `changeTracking.implement: true`：
 - 步骤 2.5 输出任务列表后，同步写入 `.task/active/<task-name>/task.md`
-- 步骤 5 收尾时归档至 `.task/completed/<task-name>-<YYYYMMDD>/`，并从 `todo.json` 删除条目
+- 步骤 5 收尾时归档至 `.task/completed/<YYYYMMDD>-<task-name>/`，并从 `todo.json` 删除条目
 
 ## 下一步读什么
 

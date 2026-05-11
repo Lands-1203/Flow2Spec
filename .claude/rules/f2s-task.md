@@ -28,12 +28,16 @@ description: >
 ├── active/
 │   └── <task-name>/
 │       ├── task.md                    ← checklist（执行步骤）
-│       └── context.md                 ← 涉及文件路径、相关资料链接
+│       ├── context.md                 ← 涉及文件路径、相关资料链接
+│       └── user-todos.md              ← 须用户执行的代办（改库、配环境等），见下文
 └── completed/
-    └── <task-name>-<YYYYMMDD>/
+    └── <YYYYMMDD>-<task-name>/
         ├── task.md
-        └── context.md
+        ├── context.md
+        └── user-todos.md              ← 随任务一并归档，便于验收后逐项消项
 ```
+
+**归档目录命名**：`completed/` 下文件夹名为 **`<YYYYMMDD>-<task-name>`**（**本地日历日期 8 位在前**，`<task-name>` 与 `active/` 下一致、为 snake_case；便于按时间排序）。**新归档一律使用本格式**；仓库中已有的旧式 `<task-name>-<YYYYMMDD>` 目录可保留，择机人工重命名即可。
 
 ## todo.json 结构
 
@@ -55,7 +59,7 @@ description: >
 
 1. 检查 `.task/todo.json` 是否存在活跃任务。
 2. 将用户输入与各条目 `keywords` 匹配：
-   - 命中一个 → 加载对应 `task.md` 和 `context.md`，展示剩余清单
+   - 命中一个 → 加载对应 `task.md`、`context.md`，**若存在** `user-todos.md` 则一并加载，展示剩余清单与未消用户代办
    - 命中多个 → 列出候选，让用户选择
    - 无命中 → 确认任务名称后创建新任务
 3. 创建新任务（无命中时）：
@@ -63,16 +67,33 @@ description: >
    b. 在 `.task/active/<task-name>/` 创建文件夹
    c. 将本次工作步骤写入 `task.md`
    d. 将涉及文件路径和相关资料链接写入 `context.md`
-   e. 在 `todo.json` 新增条目（仅主 agent 写）
+   e. **创建 `user-todos.md`**（固定文件名，与 `task.md` 同目录）：见下文「`user-todos.md` 格式与写盘义务」；尚无代办时可写入占位说明
+   f. 在 `todo.json` 新增条目（仅主 agent 写）
 
 ## 执行中
 
-- 每完成一个步骤，立即更新 `task.md` 中对应 checkbox（`[ ]` → `[x]`）
+- 每完成一个步骤，**立即**用 `Edit` / `Write` 将 `task.md` 中对应 checkbox 由 `[ ]` 改为 `[x]`（与代码改动同等对待，**禁止**仅靠会话内口头宣称「已完成」代替磁盘更新）
 - 禁止批量勾选或跳步
+- **用户代办须落盘**：凡须任务责任人（用户）在本机、数据库、配置平台或流程上完成的项（例如执行 DDL/DML、填密钥、点审批、发版、补数据），**同一会话内**追加写入 `user-todos.md`（`Edit` 追加小节或列表项），**禁止**仅在对话里交代而不写入该文件；可与对话摘要并存，以磁盘文件为交接真值
+
+## 中断与会话结束（硬约束）
+
+- **长记忆以 `task.md` 的 checkbox 为真值**：下一会话通过「首个仍为 `[ ]` 的步骤」定位进度；未写盘则续作失真。
+- 本会话内每真实完成 `task.md` 所列一步：**当步**打钩，不得积压到归档前一次性勾选。
+- 若用户结束对话、工具流中断、或预计无法继续：在结束前至少打钩**已真实完成**的步骤，并在「## 备注」写明阻塞原因或「下一会话从步骤 N 继续」；**禁止**在未更新 `task.md` 的情况下直接结束（否则等同丢失进度信号）。
+- 中断前若本会话已识别出**用户代办**：**必须**写入或追加到 `user-todos.md`，避免下一会话丢失「交给用户的事」。
+- 若本会话为子任务创建过 **`git worktree`** 或等价隔离目录：结束前按 **`f2s-flow2spec-unified-entry`**「Git worktree 与子任务工作目录卫生」完成移除或写明残留路径与删除命令（必要时写入 `user-todos.md`）。
 
 ## 任务完成
 
-1. 将 `.task/active/<task-name>/` 整体移至 `.task/completed/<task-name>-<YYYYMMDD>/`
+**归档门禁（须先于移动目录自检）**：
+
+- 将目录移入 `completed/` **当且仅当** `task.md` 的「## 步骤」下，与本次交付相关的条目**全部为 `[x]`**（或用户明确取消的项已在「## 备注」说明，且对应列表项已改为 `[x]` / 已删除该项并注明取消）。
+- 若仍存在 `[ ]`：**禁止**移动 `active` → `completed/`、**禁止**从 `todo.json` 删除该条目；应先回到「执行中」补完或改清单后再归档。
+
+完成上述门禁后：
+
+1. 将 `.task/active/<task-name>/` 整体移至 `.task/completed/<YYYYMMDD>-<task-name>/`
 2. 从 `todo.json` 删除该条目
 3. 若 `todo.json` 变为空数组，删除该文件
 
@@ -82,9 +103,11 @@ description: >
 
 1. 读取全部活跃任务
 2. 将用户首条消息与各条目 `keywords` 匹配
-3. 命中则展示剩余 checklist 并提示「检测到未完成任务，是否继续？」
+3. 命中则展示剩余 checklist，**若存在 `user-todos.md` 则摘要其中仍为 `- [ ]` 的用户代办**，并提示「检测到未完成任务，是否继续？」
 4. 用户确认后：**若 `linkedSkill` 非空，先加载对应技能规则文件（配置根 `skills/<linkedSkill>/SKILL.md`）作为执行上下文**，再按 `task.md` 剩余步骤继续——技能的落盘约束、文风规则、自检清单全部生效，与首次调用一致
 5. 无命中则不打扰，正常响应
+
+**孤儿 `active/`（`todo.json` 缺失或损坏）**：若磁盘上仍存在 `.task/active/<task-name>/` 且其中 `task.md` 含未勾选步骤，应 `Read` 该 `task.md` 并提示用户是否续作；续作前宜按「任务开始」一节恢复或补写 `todo.json`（仅主 agent），避免进度仅存在于已归档目录而无法关联活跃索引。
 
 ## task.md 格式
 
@@ -112,6 +135,43 @@ description: >
 ## 相关资料
 - `.Knowledge/req-docs/payment-spec.md`
 - `.Knowledge/stock-docs/payment-arch.md`
+
+## 用户代办清单
+- 见同目录 `user-todos.md`（须用户执行的项统一写在该文件，勿仅在对话中罗列）
+```
+
+## user-todos.md 格式与写盘义务
+
+**路径**：`.task/active/<task-name>/user-todos.md`（归档后位于 `.task/completed/<YYYYMMDD>-<task-name>/user-todos.md`）。**固定文件名** `user-todos.md`，便于 Hook 与脚本引用。
+
+**用途**：汇总 **Agent 无法代劳**、必须由用户（或持权人在平台）完成的项，例如：
+
+- 在指定环境执行 SQL / 迁移脚本（可引用 `req-docs` 或仓库内 `.sql` 路径）
+- 配置中心 / 环境变量 / 密钥 / 白名单
+- 发布、审批、工单、外部系统开关
+
+**写盘义务**：
+
+1. **创建任务时**（`f2s-task`「任务开始」步骤 3.e）：创建该文件；可含简短说明 + 空列表。
+2. **执行中**：每出现一类新的用户代办，**当次**追加（推荐按日期分二级标题 `## YYYY-MM-DD`，下列 `- [ ]` 可勾选项或步骤编号）。
+3. **与 `task.md` 分工**：`task.md` 管 Agent 侧步骤 checkbox；`user-todos.md` 管用户侧待办；**勿**把「仅用户可执行」的长操作说明只写在 `task.md` 步骤正文代替本文件。
+4. **续作**：加载任务时 `Read` 本文件，向用户展示仍未勾选的 `- [ ]` 项（若有）。
+
+**示例结构**：
+
+```markdown
+# 用户代办清单
+
+> Agent 追加；用户完成后可将对应 `- [ ]` 改为 `- [x]` 或删除该行。
+
+## 2026-05-09
+
+- [ ] 在预发 MySQL 执行：`.Knowledge/req-docs/xxx.sql`（先备份）
+- [ ] 在配置中心打开功能开关 `feature.foo.enabled`
+
+## 2026-05-10
+
+- [ ] 生产发版后回写实际版本号到本文档备注
 ```
 
 ## 推荐 Hook 配置（Claude Code）
@@ -138,3 +198,4 @@ description: >
 - 禁止在所有步骤完成前将任务移至 `completed/`
 - 禁止批量勾选 checkbox（必须逐步勾选）
 - 禁止在 `changeTracking.feat` / `changeTracking.fix` / `changeTracking.implement` 均为 `false` 或字段不存在时创建 `.task/` 目录（`f2s-req-plan` 不受此约束）
+- 禁止在已使用 `.task/` 的任务中，将「须用户执行的代办」**仅**写在对话或仅写在 `task.md` 而**不**追加到 `user-todos.md`（无代办时文件可保持占位说明）

@@ -411,7 +411,7 @@
 
 **关联关系**：
 - **前置**：旧版知识库（`docs-index.md`、`rules/`、`skills/`）
-- **后续**：`f2s-kb-upgrade`（V1 流程需先 migrate 再 upgrade）
+- **后续**：`f2s-kb-upgrade`（**流程 V1** 旧库须先 migrate 再 upgrade；**现行库 V2+**（含 npm v3.x）见 upgrade 技能步骤 0）
 - **流程**：
   1. 以 `docs-index.md` + `rules/main.md(c)` 为主索引
   2. 全量处理业务 `rules/` 与业务 `skills/`（排除 `f2s-*` 包技能）
@@ -448,13 +448,13 @@
 - **包含**：内部会调用 `flow2spec init` 进行结构对齐
 - **注意**：单独的 `flow2spec init` **不是**升级命令
 
-**流程差异**：
+**流程差异**（技能内分流代号，**不等于** npm 包主版本号）：
 - **V1**：先 `f2s-kb-migrate` 再代跑 `flow2spec init`
-- **V2**：代跑 `flow2spec init` 以对齐 manifest-routing + matchers 分片
+- **现行库（V2+）**：已稳定 `.Knowledge` + `manifest-routing` 时，代跑 `flow2spec init` 以对齐 manifest-routing + matchers 分片（**含 Flow2Spec npm v3.x 等**，详见 `skills/f2s-kb-upgrade/SKILL.md` 步骤 0）
 
 **子 agent 调用**：
 - `subAgent: false`（默认）：主 agent 内完成升级
-- `subAgent: true`：子 agent 仅承接 shell 命令执行（代跑 `flow2spec init`），不承担知识库正文落盘；以下步骤主 agent 不可下放：版本分流（V1/V2）、init 后重读 SKILL.md 并判断是否整技能重跑、步骤 3b index.md 融合、校验摘要输出
+- `subAgent: true`：子 agent 仅承接 shell 命令执行（代跑 `flow2spec init`），不承担知识库正文落盘；以下步骤主 agent 不可下放：版本分流（V1 / 现行库 V2+）、init 后重读 SKILL.md 并判断是否整技能重跑、步骤 3b index.md 融合、校验摘要输出
 
 **职责划分**：
 | 角色 | 职责 |
@@ -543,6 +543,10 @@
 ## 6) 子 Agent 配置说明
 
 通过项目根 `flow2spec.config.json` 控制（字段默认均为 `false`）。
+
+### 多端如何「看到」配置（与下文字段表配合）
+
+`subAgent` 等写在 **磁盘 JSON**；各产品不保证自动打开文件，故用 **Cursor 规则 / Claude hook / Codex AGENTS 快照表 / 知识库 `config-precheck` 摘要** 多层提示，**权威仍为 Read(`flow2spec.config.json`)**（设计意图见 [Flow2Spec-设计说明 § 四、5.1](./Flow2Spec-设计说明.md)，演讲口径见 [Flow2Spec-演讲稿 Slide 13b](./Flow2Spec-演讲稿.md)）。**完整路径与表格只维护一处**：[Flow2Spec使用说明 § 一、`f2s-*` 与 `flow2spec.config.json`](./Flow2Spec使用说明.md)。
 
 ### `subAgent` 字段
 

@@ -428,6 +428,19 @@ f2s-kb-sync 三种输入方式
 
 会话上下文本身就是信息源  ·  不需要用户整理再输入
 
+#### 5.1 执行开关如何进入 Agent（多端提示）
+
+`flow2spec.config.json` 决定 **`subAgent` / `switchAgentVerification` / `changeTracking`**，但各 AI 产品**不保证**会话启动即自动打开该文件。设计上用 **多条弱约束叠加** 降低「未读配置就开跑 `f2s-*`」的概率，同时避免在 `.Knowledge` 再维护一份与 `.codex/topics/f2s-config-check.md` 逐字重复的长文：
+
+| 机制 | 设计意图 |
+| --- | --- |
+| **Cursor `f2s-config-check.mdc`** | 规则层强制「技能正文前先 Read」。 |
+| **Claude `f2s-config-inject` PreToolUse** | 在调用 **`f2s-*` Skill** 时注入解析结果；**缺文件 / 坏 JSON / hook 异常**仍输出说明与默认语义，避免静默。 |
+| **Codex `AGENTS.md` + `renderProjectConfigBlock`** | 顶部 **Read** 硬约束 + **init 快照表**（与磁盘不一致时以 Read 为准）。 |
+| **知识库 `config-precheck` 主题** | 路由命中时只提供**摘要**与链向 Codex 长文，**不**替代 Read JSON。 |
+
+**权威仍为**项目根 JSON 的 **Read** 结果；各层为提示而非第二份真值源。操作侧完整表格与路径见 **[Flow2Spec使用说明 § 一、`f2s-*` 与 `flow2spec.config.json`](./Flow2Spec使用说明.md)**；口述节奏见 **[Flow2Spec-演讲稿 Slide 13b](./Flow2Spec-演讲稿.md)**。
+
 #### 6. 技能不复述统一入口规则，只引用
 
 ```

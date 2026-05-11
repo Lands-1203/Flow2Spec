@@ -19,12 +19,14 @@
 | `.Knowledge/manifest-routing.json` | 机器可读路由骨架（task/topic/dependencies） |
 | `.Knowledge/matchers/*.json` | 关键词分片（`id/includeAny`），由 `manifest-routing.taskToTopicRules[].matcherPath` 直链指向 |
 | `.Knowledge/migration-report.md` | `f2s-kb-migrate` 落盘的迁移对照表与拟删除路径列表 |
-| `.task/` | 变更追踪任务清单目录（`active/` 进行中，`completed/` 已归档，`todo.json` 活跃任务索引）；仅当 `changeTracking.*` 为 `true` 或显式调用 `f2s-req-plan` 时创建 |
+| `.task/` | 变更追踪任务清单目录（`active/` 进行中，`completed/` 已归档且目录名为 **`<YYYYMMDD>-<task-name>`**（日期在前），`todo.json` 活跃任务索引）；仅当 `changeTracking.*` 为 `true` 或显式调用 `f2s-req-plan` 时创建 |
 | `配置根/rules/` | 规则文件（Cursor `.mdc`，Claude `.md`） |
 | `配置根/skills/` | 技能定义（`SKILL.md`） |
 | `配置根/template/` | （废弃）不再写入；历史目录可清理 |
 | `.codex/AGENTS.md` | Codex 统一入口与加载说明 |
 | `flow2spec.config.json` | 项目根配置，控制 `subAgent`、`switchAgentVerification`、`changeTracking`（嵌套对象，含 `feat` / `fix` / `implement` 三个子项） |
+
+> 多端提示与路径表见 [Flow2Spec使用说明 § 一](./Flow2Spec使用说明.md)（详表单点维护）；**权威仍为 Read(`flow2spec.config.json`)**。
 
 ---
 

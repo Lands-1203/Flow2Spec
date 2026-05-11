@@ -19,6 +19,19 @@ flow2spec init [cursor|claude|codex ...] --reset-knowledge
 
 > **`init` 与「知识库升级」是两件事**：`init` 只做结构补齐，业务语义（topics 内容、路由词条、stock-docs/req-docs）由 `f2s-doc-add`、`f2s-kb-fix`、`f2s-kb-feat`、`f2s-kb-sync`、`f2s-ctx-build` 等技能维护。跨版本升级用 `f2s-kb-upgrade`，**不要把单独 `init` 当作升级命令**。
 
+### `f2s-*` 与 `flow2spec.config.json`：多端多重提示（权威仍为磁盘 JSON）
+
+执行任意 **`f2s-*` 技能**前，需要让 Agent 拿到 **`subAgent` / `switchAgentVerification` / `changeTracking`** 等实际值。Flow2Spec 在 **不同客户端** 用 **不同机制** 强化这一点；它们彼此**补充**，**不**互相替代，**权威始终**是项目根 **`flow2spec.config.json`**（须用 **Read** 与磁盘一致后再进技能正文）。
+
+| 端 | `init` 落盘与行为 | 说明 |
+| --- | --- | --- |
+| **Cursor** | `.cursor/rules/f2s-config-check.mdc`（`alwaysApply`） | 规则要求：技能正文前先 **Read(`flow2spec.config.json`)**。 |
+| **Claude Code** | `.claude/hooks/f2s-config-inject.js` + `.claude/settings.json`（PreToolUse，`Skill` 匹配） | 在调用 **`f2s-*` Skill** 时注入配置摘要；**文件缺失、JSON 无效或 hook 未预期异常**时也会注入**说明 + 与「文件不存在」一致的默认语义**，避免静默；仍建议在存疑或刚改过配置时 **Read** 核对。 |
+| **Codex** | `.codex/AGENTS.md` 顶部强制步骤 + `{{FLOW2SPEC_PROJECT_CONFIG}}` 展开表 | **Read** 为硬要求；配置表为 **最近一次 `flow2spec init` 的快照**，与磁盘不一致时以 **Read** 为准。同目录 **`.codex/topics/f2s-config-check.md`** 与 Cursor 规则同源（含 **changeTracking** 细表），**按需**打开即可，不必与「专题长文」三条示例并列必读。 |
+| **知识库（可选）** | `.Knowledge/manifest-routing` 命中 **`config-precheck`** 时 | `.Knowledge/topics/f2s-config-precheck.md` 为**路由摘要**，链向 Codex 长文；**不**在 `.Knowledge` 再维护第二份全文，也**不**替代 Read JSON。 |
+
+字段语义与默认值规则见 [README-命令说明 § 6) 子 Agent 配置说明](./README-命令说明.md)。设计视角见 [Flow2Spec-设计说明 § 四、5.1](./Flow2Spec-设计说明.md)；口述见 [Flow2Spec-演讲稿 Slide 13b](./Flow2Spec-演讲稿.md)。
+
 ---
 
 ## 二、目录约定
@@ -99,15 +112,15 @@ f2s-kb-merge     # Git 合并后解决上下文冲突
 ### 知识库跨版本升级
 
 ```
-f2s-kb-migrate（V1 旧库）→ f2s-kb-upgrade
-f2s-kb-upgrade（V2 已有 .Knowledge）
+f2s-kb-migrate（流程 V1：旧库）→ f2s-kb-upgrade
+f2s-kb-upgrade（流程现行库 V2+：已有 .Knowledge；含 npm v3.x 等，见技能步骤 0）
 ```
 
 ---
 
 ## 四、Agent 执行配置
 
-通过项目根 `flow2spec.config.json` 控制，字段完整规则见 [README-命令说明 § 5) 子 Agent 配置说明](./README-命令说明.md)。
+通过项目根 `flow2spec.config.json` 控制，字段完整规则见 [README-命令说明 § 6) 子 Agent 配置说明](./README-命令说明.md)。**各端如何被提示读到配置、为何仍以 Read 为权威**见 **§ 一**（本 § 仅说明**何时**打开各开关）。
 
 **何时开启 `subAgent: true`**：任务规模较大时（多模块并行实现、批量文档入库、大规模迁移）。开启后各技能按自身规模门槛决定是否实际拆分，未达门槛的仍在主 agent 内完成。
 

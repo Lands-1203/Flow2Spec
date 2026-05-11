@@ -45,6 +45,10 @@ init 会:
   3. 默认仅补齐 .Knowledge 缺失模板，并对路由清单做包级/结构增量对齐（manifest-routing + matcherPath 分片；关键词仅写在 matchers/*.json）；不替代 f2s-* 对业务文档与路由内容的写入。
      传 --reset-knowledge 时才会强制用模板覆盖 .Knowledge 中模板承载部分。
   4. 在各 agent 配置根写入 rules、skills（Claude 规则自动转 .md；Codex 生成 AGENTS.md 汇总）。
+     Claude 额外写入 .claude/hooks/f2s-config-inject.js 与 .claude/settings.json（PreToolUse hook），
+     在调用 f2s-* Skill 时注入配置摘要；配置缺失、JSON 无效或 hook 异常时也会注入默认语义说明，避免静默。
+     Cursor 额外写入 f2s-config-check.mdc（alwaysApply），强制在技能首步读取配置文件。
+     Codex 的 AGENTS.md 顶部包含强制前置步骤说明。
   5. 每次 init 将包内 templates/knowledge/index.md 复制到 .Knowledge/template/index.template.md，供 f2s-kb-upgrade 技能与 .Knowledge/index.md 对照；不自动改写 index.md。（「知识库升级」指 f2s-kb-upgrade 技能，init 本身不是升级命令。）
   6. 规则与技能在各 agent 配置根加载；其他模版类文件在 .Knowledge/template/ 等目录。
 
@@ -250,11 +254,17 @@ if (sub === "init") {
     .then(({ configValues, chosenAgents }) =>
       runInit(cwd, chosenAgents, { overwriteKnowledge, configValues }),
     )
-    .then(({ ids, knowledgeResult, routingUpgrade, indexSnapshot, projectConfig }) => {
+    .then(({ ids, knowledgeResult, routingUpgrade, indexSnapshot, projectConfig, claudeHooksResult }) => {
       const lines = ids.map((id) => {
         const { root, label } = AGENTS[id];
         if (id === "codex")
           return `  - ${root}/：（${label}）AGENTS.md、skills/`;
+        if (id === "claude") {
+          const hookLine = claudeHooksResult?.settingsChanged
+            ? "rules/、skills/、hooks/f2s-config-inject.js、settings.json（已写入 f2s PreToolUse hook）"
+            : "rules/、skills/（settings.json 中 f2s hook 已存在，跳过）";
+          return `  - ${root}/：（${label}）${hookLine}`;
+        }
         return `  - ${root}/：（${label}）rules/、skills/`;
       });
       const knowledgeLine = overwriteKnowledge

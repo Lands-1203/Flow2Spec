@@ -86,6 +86,11 @@ alwaysApply: false
 
 若 `changeTracking.implement: true`，在输出任务列表后，按 `f2s-task` 规则将本清单写入 `.task/active/<task-name>/task.md`。
 
+### 步骤 2.6：变更追踪与 `task.md` / `user-todos.md` 同步（仅当 `changeTracking.implement: true`）
+
+- 每完成实现任务列表中一项对应工作，**同一会话内**用 `Edit` 更新 `.task/active/<task-name>/task.md` 中对应 `[ ]`→`[x]`，禁止积压到收尾、禁止口头完成代替写盘（见 `f2s-task`「执行中」「中断与会话结束」）。
+- 执行过程中每出现**须用户执行**的项（改库、配环境等），**同会话内**追加到 `.task/active/<task-name>/user-todos.md`（见 `f2s-task`「user-todos.md」）。
+
 ### 步骤 3：实现前提问（必做，不可跳过）
 
 进入编码前，必须一次性列出未明确项并请用户确认。常见问题：
@@ -115,7 +120,8 @@ alwaysApply: false
 1. **待完成列表（必须）**：列出所有待用户或平台补齐项；
 2. **实现后提醒清单（必须）**：按实际涉及内容提醒配置、依赖、数据、发布、权限、调度等；
 3. **验证建议（建议）**：给出最小可执行验证步骤（本地、测试环境或回归路径）。
-4. 若 `changeTracking.implement: true`：将 `.task/active/<task-name>/` 归档至 `.task/completed/<task-name>-<YYYYMMDD>/`，并从 `todo.json` 删除对应条目。
+4. **用户代办落盘（仅当 `changeTracking.implement: true`）**：将步骤 5 第 1–2 点中**须用户亲自执行**的条目（改库脚本、配置、审批等）**同步追加**到 `.task/active/<task-name>/user-todos.md`（若尚无该文件则先创建，见 `f2s-task`）；禁止仅出现在对话或方案尾部的列表而不写入该文件。
+5. 若 `changeTracking.implement: true`：**先确认** `task.md`「步骤」已全部 `[x]`（或备注已记录取消项），满足 `f2s-task` 归档门禁后，再将 `.task/active/<task-name>/` 移至 `.task/completed/<YYYYMMDD>-<task-name>/`，并从 `todo.json` 删除对应条目；禁止在仍有 `[ ]` 时归档。
 
 ---
 
@@ -131,7 +137,8 @@ alwaysApply: false
 
 - PDF 必须先转 MD，再进入实现流程；
 - 不得跳过步骤 2.5（任务列表）与步骤 3（实现前提问）直接编码；
-- 输出中必须包含待完成列表与实现后提醒清单；
+- 若 `changeTracking.implement: true`：不得跳过步骤 2.6（随实现进度写回 `task.md` checkbox，并追加 `user-todos.md`）；归档须满足 `f2s-task` 归档门禁；
+- 输出中必须包含待完成列表与实现后提醒清单；若 `changeTracking.implement: true`，其中用户侧项须同步写入 `user-todos.md`；
 - 内容保持通用，不预设“仅后端”场景，按方案实际范围裁剪实现对象。
 
 完成时可用一句话总结：已基于《xxx》技术方案完成本轮实现并给出待完成与验证建议，请按清单补齐平台与环境侧配置后验收。
