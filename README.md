@@ -109,4 +109,11 @@ npm install -g @double-codeing/flow2spec@latest
 - [README-体系与原理](./docs/README-体系与原理.md)
 - [Flow2Spec-使用案例-模拟对话](./docs/Flow2Spec-使用案例-模拟对话.md)
 - [Flow2Spec-设计说明](./docs/Flow2Spec-设计说明.md)
-- [Flow2Spec-演讲稿](./docs/Flow2Spec-演讲稿.md)
+
+---
+
+## 在线演示
+
+组内分享用的 13 页 HTML PPT（脱敏版）：**https://lands-1203.github.io/Flow2Spec/**
+
+← → 翻页，`T` 切换主题，`S` 打开演讲者模式。源文件在 [presentations/flow2spec-intro-public/](./presentations/flow2spec-intro-public/)。
