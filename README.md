@@ -117,3 +117,10 @@ npm install -g @double-codeing/flow2spec@latest
 组内分享用的 13 页 HTML PPT（脱敏版）：**https://lands-1203.github.io/Flow2Spec/**
 
 ← → 翻页，`T` 切换主题，`S` 打开演讲者模式。源文件在 [presentations/flow2spec-intro-public/](./presentations/flow2spec-intro-public/)。
+
+本地预览源文件需先安装 [html-ppt](https://github.com/lewislulu/html-ppt-skill) skill（PPT 所用的主题、动画、键盘运行时）：
+
+```bash
+npx skills add https://github.com/lewislulu/html-ppt-skill
+open presentations/flow2spec-intro-public/index.html
+```
