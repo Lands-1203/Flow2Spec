@@ -1,90 +1,114 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Flow2Spec · 让 AI 一直知道你在做什么</title>
-<link rel="stylesheet" href="../../.claude/skills/html-ppt/assets/fonts.css">
-<link rel="stylesheet" href="../../.claude/skills/html-ppt/assets/base.css">
-<link rel="stylesheet" href="../../.claude/skills/html-ppt/assets/animations/animations.css">
-<link rel="stylesheet" href="style.css">
-</head>
-<body class="tpl-flow2spec-intro">
-<div class="deck">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flow2Spec · 让 AI 一直知道你在做什么</title>
+    <link
+      rel="stylesheet"
+      href="../../.claude/skills/html-ppt/assets/fonts.css" />
+    <link
+      rel="stylesheet"
+      href="../../.claude/skills/html-ppt/assets/base.css" />
+    <link
+      rel="stylesheet"
+      href="../../.claude/skills/html-ppt/assets/animations/animations.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="tpl-flow2spec-intro">
+    <div class="deck">
+      <!-- ======= Slide 1 · 开场（情绪页） ======= -->
+      <section class="slide is-active">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-glow-purple"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
 
-  <!-- ======= Slide 1 · 开场（情绪页） ======= -->
-  <section class="slide is-active">
-    <div class="fx-grid"></div>
-    <div class="fx-glow-cyan"></div>
-    <div class="fx-glow-magenta"></div>
-    <div class="fx-glow-purple"></div>
-    <div class="fx-vignette"></div>
-    <div class="fx-scanlines"></div>
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>~/flow2spec · zsh · 01:00:00</div>
+        </div>
 
-    <div class="fx-chrome">
-      <div class="dots"><span></span><span></span><span></span></div>
-      <div>~/flow2spec · zsh · 01:00:00</div>
-    </div>
+        <div class="fx-cover">
+          <p class="fx-prompt" data-anim="fade-up">whoami</p>
+          <h1
+            class="fx-hero"
+            data-anim="fade-up"
+            style="animation-delay: 0.15s">
+            你的 <span class="c2">AI</span><br />
+            <span class="c1">失忆</span>了吗<span class="fx-cursor"></span>
+          </h1>
+          <p class="fx-sub" data-anim="fade-up" style="animation-delay: 0.35s">
+            <span class="brand">Flow2Spec</span> · 让 AI 一直知道你在做什么
+          </p>
+          <div
+            class="fx-meta"
+            data-anim="fade-up"
+            style="animation-delay: 0.55s">
+            兰涛<span>·</span>2026.05<span>·</span>前端组
+          </div>
+        </div>
 
-    <div class="fx-cover">
-      <p class="fx-prompt" data-anim="fade-up">whoami</p>
-      <h1 class="fx-hero" data-anim="fade-up" style="animation-delay:.15s">
-        你的 <span class="c2">AI</span><br>
-        <span class="c1">失忆</span>了吗<span class="fx-cursor"></span>
-      </h1>
-      <p class="fx-sub" data-anim="fade-up" style="animation-delay:.35s">
-        <span class="brand">Flow2Spec</span> · 让 AI 一直知道你在做什么
-      </p>
-      <div class="fx-meta" data-anim="fade-up" style="animation-delay:.55s">
-        兰涛<span>·</span>2026.05<span>·</span>前端组
-      </div>
-    </div>
+        <div class="fx-footer">
+          <span class="brand">flow2spec-intro</span>
+          <span class="page">01 / 13</span>
+        </div>
+        <div class="notes">
+          开场只讲一句：每一次新会话，AI 都在失忆。我们用 30
+          分钟聊一套让它不再失忆的办法。
+        </div>
+      </section>
 
-    <div class="fx-footer">
-      <span class="brand">flow2spec-intro</span>
-      <span class="page">01 / 13</span>
-    </div>
-    <div class="notes">开场只讲一句：每一次新会话，AI 都在失忆。我们用 30 分钟聊一套让它不再失忆的办法。</div>
-  </section>
+      <!-- ======= Slide 2 · Before / After 对话 ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
 
-  <!-- ======= Slide 2 · Before / After 对话 ======= -->
-  <section class="slide">
-    <div class="fx-grid"></div>
-    <div class="fx-glow-cyan"></div>
-    <div class="fx-glow-magenta"></div>
-    <div class="fx-vignette"></div>
-    <div class="fx-scanlines"></div>
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>session · diff · product-review / batch-rescore</div>
+        </div>
 
-    <div class="fx-chrome">
-      <div class="dots"><span></span><span></span><span></span></div>
-      <div>session · diff · product-review / batch-rescore</div>
-    </div>
+        <p class="fx-prompt" data-anim="fade-up">compare before-after</p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          同一句需求，<span class="accent">两段对话</span>
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          真实场景：某大型互联网公司业务后端 trn-fe-ops-commerce-api · 796 文件
+          / 4.7 MB · 416 个接口
+        </p>
 
-    <p class="fx-prompt" data-anim="fade-up">compare before-after</p>
-    <h2 class="fx-h1" data-anim="fade-up" style="animation-delay:.1s">
-      同一句需求，<span class="accent">两段对话</span>
-    </h2>
-    <p class="fx-lede" data-anim="fade-up" style="animation-delay:.2s">
-      真实场景：某大型互联网公司业务后端 trn-fe-ops-commerce-api · 796 文件 / 4.7 MB · 416 个接口
-    </p>
-
-    <div class="fx-compare">
-
-      <div class="fx-panel bad" data-anim="fade-up" style="animation-delay:.35s">
-        <div class="fx-panel-title"><span class="dot"></span>没有 Flow2Spec</div>
-<pre><span class="user">&gt; 改一下评价模板文案库的批量重评分</span>
+        <div class="fx-compare">
+          <div
+            class="fx-panel bad"
+            data-anim="fade-up"
+            style="animation-delay: 0.35s">
+            <div class="fx-panel-title">
+              <span class="dot"></span>没有 Flow2Spec
+            </div>
+            <pre><span class="user">&gt; 改一下评价模板文案库的批量重评分</span>
 
 <span class="ai">AI: 这个模块的表在哪？</span>
 <span class="ai">AI: batchReScore 是同步还是异步？</span>
 <span class="ai">AI: 有没有锁？幂等键是什么？</span>
 <span class="ai">AI: 返回格式是什么？错误码是多少？</span>
 <span class="ai">AI: <span class="k">（翻遍 416 个接口、796 份文件、4.7 MB 源码…）</span></span></pre>
-        <div class="fx-panel-foot">反复介绍 · 反复翻代码 · 反复踩坑</div>
-      </div>
+            <div class="fx-panel-foot">反复介绍 · 反复翻代码 · 反复踩坑</div>
+          </div>
 
-      <div class="fx-panel good" data-anim="fade-up" style="animation-delay:.5s">
-        <div class="fx-panel-title"><span class="dot"></span>有 Flow2Spec</div>
-<pre><span class="user">&gt; 改一下评价模板文案库的批量重评分</span>
+          <div
+            class="fx-panel good"
+            data-anim="fade-up"
+            style="animation-delay: 0.5s">
+            <div class="fx-panel-title">
+              <span class="dot"></span>有 Flow2Spec
+            </div>
+            <pre><span class="user">&gt; 改一下评价模板文案库的批量重评分</span>
 
 <span class="ai"><span class="p">[matcher 命中]</span> m-product-review-template-library</span>
 <span class="ai"><span class="p">[加载依赖]</span> 4 个 topic · 约 300 行</span>
@@ -93,802 +117,1408 @@
 <span class="ai">     <span class="a">:batch-rescore:lock</span>（TTL 10 分钟）</span>
 <span class="ai">     单次最多 <span class="g">100 条</span> · 错误码 <span class="g">101</span></span>
 <span class="ai">AI: 开始改，预计 3 处文件。</span></pre>
-        <div class="fx-panel-foot">4.7 MB → 300 行 · 秒级定位到硬约束</div>
-      </div>
-
-    </div>
-
-    <div class="fx-footer">
-      <span class="brand">flow2spec-intro</span>
-      <span class="page">02 / 13</span>
-    </div>
-    <div class="notes">这是全场最关键的一页。同样的一句话，差别不是 AI 变聪明了，是它拿到的上下文变精准了。右边终端里那些长长的 Redis key、100 条、错误码 101，全都是真实的约束，不是演示。</div>
-  </section>
-
-  <!-- ======= Slide 3 · 规模级数字 ======= -->
-  <section class="slide">
-    <div class="fx-grid"></div>
-    <div class="fx-glow-cyan"></div>
-    <div class="fx-glow-magenta"></div>
-    <div class="fx-glow-purple"></div>
-    <div class="fx-vignette"></div>
-    <div class="fx-scanlines"></div>
-
-    <div class="fx-chrome">
-      <div class="dots"><span></span><span></span><span></span></div>
-      <div>stats · trn-fe-ops-commerce-api · 2026-05-13</div>
-    </div>
-
-    <p class="fx-prompt" data-anim="fade-up">du -sh . && cat .Knowledge/manifest-routing.json</p>
-    <h2 class="fx-h1" data-anim="fade-up" style="animation-delay:.1s">
-      这不是概念 · 是<span class="accent">日常</span>
-    </h2>
-    <p class="fx-lede" data-anim="fade-up" style="animation-delay:.2s">
-      在一个已经深度使用 Flow2Spec 的真实生产仓库里，这些数字每天都在生长。
-    </p>
-
-    <div class="fx-kpis">
-
-      <div class="fx-kpi" data-anim="fade-up" style="animation-delay:.3s">
-        <div>
-          <div class="lbl">对外接口数</div>
-          <div class="num">416</div>
+            <div class="fx-panel-foot">4.7 MB → 300 行 · 秒级定位到硬约束</div>
+          </div>
         </div>
-        <div class="desc">serverless.yml 注册函数 · 传统做法需要 AI 通读全仓</div>
-      </div>
 
-      <div class="fx-kpi" data-anim="fade-up" style="animation-delay:.42s">
-        <div>
-          <div class="lbl">src 文件 / 体积 / 行数</div>
-          <div class="num">796 · 4.7 MB · 10 万行</div>
+        <div class="fx-footer">
+          <span class="brand">flow2spec-intro</span>
+          <span class="page">02 / 13</span>
         </div>
-        <div class="desc">Flow2Spec 每次只加载 ≈ 300 行命中 topic · 噪声切掉 99%</div>
-      </div>
-
-      <div class="fx-kpi" data-anim="fade-up" style="animation-delay:.54s">
-        <div>
-          <div class="lbl">topic / matcher / 文档</div>
-          <div class="num">12 / 11 / 28</div>
+        <div class="notes">
+          这是全场最关键的一页。同样的一句话，差别不是 AI
+          变聪明了，是它拿到的上下文变精准了。右边终端里那些长长的 Redis
+          key、100 条、错误码 101，全都是真实的约束，不是演示。
         </div>
-        <div class="desc">主题分片 · 关键词分片 · 存量与需求文档双轨沉淀</div>
-      </div>
+      </section>
 
-      <div class="fx-kpi" data-anim="fade-up" style="animation-delay:.66s">
-        <div>
-          <div class="lbl">接口 / 端 / 任务清单</div>
-          <div class="num">17 / 3 / 14</div>
+      <!-- ======= Slide 3 · 规模级数字 ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-glow-purple"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>stats · trn-fe-ops-commerce-api · 2026-05-13</div>
         </div>
-        <div class="desc">断续 4 天 · 跨 <span style="color:var(--fx-cyan)">B 端 · C 端 · 接口端</span> 三仓库 · 评价模板库 / 标签 / 文章改造 / AI 审核 / agent 评分体系 / 前端自定义评分</div>
-      </div>
 
-    </div>
+        <p class="fx-prompt" data-anim="fade-up">
+          du -sh . && cat .Knowledge/manifest-routing.json
+        </p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          这不是概念 · 是<span class="accent">日常</span>
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          在一个已经深度使用 Flow2Spec 的真实生产仓库里，这些数字每天都在生长。
+        </p>
 
-    <div class="fx-footer">
-      <span class="brand">某大型互联网公司业务后端 · trn-fe-ops-commerce-api · 2026-05-09 ~ 05-13</span>
-      <span class="page">03 / 13</span>
-    </div>
-    <div class="notes">这套在一个 796 文件、4.7 MB、10 万行、416 个对外接口的真实真实生产仓库跑了几个月。最近这几天（5.9 ~ 5.13）断断续续产出 17 个接口、14 条归档任务清单，跨 B 端、C 端、接口端三个仓库——需求包括评价模板库 + 标签 + 文章改造 + AI 审核 + agent 评分体系 + 前端自定义 agent 评分能力。这种跨端跨项目的需求节奏，没有知识库我一个人扛不下来。</div>
-  </section>
+        <div class="fx-kpis">
+          <div class="fx-kpi" data-anim="fade-up" style="animation-delay: 0.3s">
+            <div>
+              <div class="lbl">对外接口数</div>
+              <div class="num">416</div>
+            </div>
+            <div class="desc">
+              serverless.yml 注册函数 · 传统做法需要 AI 通读全仓
+            </div>
+          </div>
 
-  <!-- ======= Slide 4 · 为什么不是 X · Y · Z ======= -->
-  <section class="slide is-compact">
-    <div class="fx-grid"></div>
-    <div class="fx-glow-cyan"></div>
-    <div class="fx-glow-magenta"></div>
-    <div class="fx-vignette"></div>
-    <div class="fx-scanlines"></div>
+          <div
+            class="fx-kpi"
+            data-anim="fade-up"
+            style="animation-delay: 0.42s">
+            <div>
+              <div class="lbl">src 文件 / 体积 / 行数</div>
+              <div class="num">796 · 4.7 MB · 10 万行</div>
+            </div>
+            <div class="desc">
+              Flow2Spec 每次只加载 ≈ 300 行命中 topic · 噪声切掉 99%
+            </div>
+          </div>
 
-    <div class="fx-chrome">
-      <div class="dots"><span></span><span></span><span></span></div>
-      <div>why not · openspec · superpowers · rag-kb · ohmyclaude · spec-kit</div>
-    </div>
+          <div
+            class="fx-kpi"
+            data-anim="fade-up"
+            style="animation-delay: 0.54s">
+            <div>
+              <div class="lbl">topic / matcher / 文档</div>
+              <div class="num">12 / 11 / 28</div>
+            </div>
+            <div class="desc">
+              主题分片 · 关键词分片 · 存量与需求文档双轨沉淀
+            </div>
+          </div>
 
-    <p class="fx-prompt" data-anim="fade-up">diff market.md</p>
-    <h2 class="fx-h1" data-anim="fade-up" style="animation-delay:.1s">
-      不强行比 · <span class="accent">让你自己打分</span>
-    </h2>
-    <p class="fx-lede" data-anim="fade-up" style="animation-delay:.2s">
-      上半：市面五家各做什么，不做什么。下半：Flow2Spec 自己的 5 条能力，映到每家的空位。
-    </p>
-
-    <div class="fx-rivals" data-anim="fade-up" style="animation-delay:.28s">
-      <div class="fx-rival">
-        <div class="n">OpenSpec</div>
-        <div class="y">spec 格式最严</div>
-        <div class="x">× 单向 · 代码漂了不反哺</div>
-      </div>
-      <div class="fx-rival">
-        <div class="n">Superpowers<span>/ ohMyClaude</span></div>
-        <div class="y">现成技能即插即用</div>
-        <div class="x">× 绑 Claude · 无项目知识</div>
-      </div>
-      <div class="fx-rival">
-        <div class="n">RAG 向量库</div>
-        <div class="y">全量索引 · 相似检索</div>
-        <div class="x">× 概率命中 · 硬约束拿不住</div>
-      </div>
-      <div class="fx-rival">
-        <div class="n">Spec Kit<span>/ Kiro / BMAD</span></div>
-        <div class="y">PM 友好 · 需求直出</div>
-        <div class="x">× 一次性 · 二次迭代分家</div>
-      </div>
-      <div class="fx-rival">
-        <div class="n">Claude Memory</div>
-        <div class="y">省得反复自我介绍</div>
-        <div class="x">× 绑模型 · 不可团队共享</div>
-      </div>
-    </div>
-
-    <div class="fx-capabilities" data-anim="fade-up" style="animation-delay:.42s">
-      <div class="title"><span class="brand">Flow2Spec</span> · 5 条能力</div>
-      <div class="grid">
-        <div class="cap">
-          <div class="id">①</div><div class="k">多端复用</div>
-          <div class="v"><code>.Knowledge/</code> 一份 · Cursor / Claude / Codex 原生加载并存</div>
+          <div
+            class="fx-kpi"
+            data-anim="fade-up"
+            style="animation-delay: 0.66s">
+            <div>
+              <div class="lbl">接口 / 端 / 任务清单</div>
+              <div class="num">17/3/14</div>
+            </div>
+            <div class="desc">
+              断续 4 天 · 跨
+              <span style="color: var(--fx-cyan)">B 端 · C 端 · 接口端</span>
+              三仓库 · 评价模板库 / 标签 / 文章改造 / AI 审核 / agent 评分体系 /
+              前端自定义评分
+            </div>
+          </div>
         </div>
-        <div class="cap">
-          <div class="id">②</div><div class="k">路由收窄</div>
-          <div class="v">matcher 命中 + 依赖链 + <span class="hl">缺口闸门</span>强制澄清</div>
+
+        <div class="fx-footer">
+          <span class="brand"
+            >某大型互联网公司业务后端 · trn-fe-ops-commerce-api · 2026-05-09 ~
+            05-13</span
+          >
+          <span class="page">03 / 13</span>
         </div>
-        <div class="cap">
-          <div class="id">③</div><div class="k">双向同步</div>
-          <div class="v"><code>f2s-kb-feat/fix</code> 改代码带改知识 · 不是一次性生成</div>
+        <div class="notes">
+          这套在一个 796 文件、4.7 MB、10 万行、416
+          个对外接口的真实真实生产仓库跑了几个月。最近这几天（5.9 ~
+          5.13）断断续续产出 17 个接口、14 条归档任务清单，跨 B 端、C
+          端、接口端三个仓库——需求包括评价模板库 + 标签 + 文章改造 + AI 审核 +
+          agent 评分体系 + 前端自定义 agent
+          评分能力。这种跨端跨项目的需求节奏，没有知识库我一个人扛不下来。
         </div>
-        <div class="cap">
-          <div class="id">④</div><div class="k">原生 agent</div>
-          <div class="v">只给规则+知识+技能 · 不做 wrapper · 新模型来了不卡</div>
+      </section>
+
+      <!-- ======= Slide 4 · 为什么不是 X · Y · Z ======= -->
+      <section class="slide is-compact">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>
+            why not · openspec · superpowers · rag-kb · ohmyclaude · spec-kit
+          </div>
         </div>
-        <div class="cap">
-          <div class="id">⑤</div><div class="k">变更留痕 + 收尾闸门</div>
-          <div class="v"><code>.task/</code> 跨会话续作 · <code>f2s-git-commit</code> <span class="hl">提交前强制查 KB 覆盖</span></div>
+
+        <p class="fx-prompt" data-anim="fade-up">diff market.md</p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          不强行比 · <span class="accent">让你自己打分</span>
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          上半：市面五家各做什么，不做什么。下半：Flow2Spec 自己的 5
+          条能力，映到每家的空位。
+        </p>
+
+        <div
+          class="fx-rivals"
+          data-anim="fade-up"
+          style="animation-delay: 0.28s">
+          <div class="fx-rival">
+            <div class="n">OpenSpec</div>
+            <div class="y">spec 格式最严</div>
+            <div class="x">× 单向 · 代码漂了不反哺</div>
+          </div>
+          <div class="fx-rival">
+            <div class="n">Superpowers<span>/ ohMyClaude</span></div>
+            <div class="y">现成技能即插即用</div>
+            <div class="x">× 绑 Claude · 无项目知识</div>
+          </div>
+          <div class="fx-rival">
+            <div class="n">RAG 向量库</div>
+            <div class="y">全量索引 · 相似检索</div>
+            <div class="x">× 概率命中 · 硬约束拿不住</div>
+          </div>
+          <div class="fx-rival">
+            <div class="n">Spec Kit<span>/ Kiro / BMAD</span></div>
+            <div class="y">PM 友好 · 需求直出</div>
+            <div class="x">× 一次性 · 二次迭代分家</div>
+          </div>
+          <div class="fx-rival">
+            <div class="n">Claude Memory</div>
+            <div class="y">省得反复自我介绍</div>
+            <div class="x">× 绑模型 · 不可团队共享</div>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="fx-honest" data-anim="fade-up" style="animation-delay:.55s">
-      <span class="lbl">// 老实话</span>
-      停用 <code>f2s-kb-feat / fix</code> 一样腐化 —— 差别是会被<span class="hl">缺口闸门喊出来</span>，不是静默偏差。
-    </div>
-
-    <div class="fx-footer">
-      <span class="brand">flow2spec-intro · market-diff</span>
-      <span class="page">04 / 13</span>
-    </div>
-    <div class="notes">这一页不强行比。上半把五家对手摆出来——每家都有它的强项，我不贬低谁。下半才讲我自己的 5 条能力。最后一行是老实话：Flow2Spec 也会腐化，停用 f2s-kb-feat / f2s-kb-fix 知识库一样偏离代码。区别是腐化会被缺口闸门喊出来，AI 读不懂会停下要文档，不是静默拿错段继续改。我必须这样讲，否则不可信。</div>
-  </section>
-
-  <!-- ======= Slide 5 · 卖点一 · 渐进式读取（商品评价） ======= -->
-  <section class="slide">
-    <div class="fx-grid"></div>
-    <div class="fx-glow-cyan"></div>
-    <div class="fx-vignette"></div>
-    <div class="fx-scanlines"></div>
-
-    <div class="fx-chrome">
-      <div class="dots"><span></span><span></span><span></span></div>
-      <div>feature · 01 / 03 · progressive load</div>
-    </div>
-
-    <p class="fx-prompt" data-anim="fade-up">cat match &amp;&amp; expand &amp;&amp; verify &amp;&amp; act</p>
-    <h2 class="fx-h1" data-anim="fade-up" style="animation-delay:.1s">
-      渐进式读取 · <span class="accent">先查目录</span>，再翻书
-    </h2>
-    <p class="fx-lede" data-anim="fade-up" style="animation-delay:.2s">
-      用户说一句「改评价模板文案库的批量重评分」，Flow2Spec 走四步：
-    </p>
-
-    <div class="fx-flow" data-anim="fade-up" style="animation-delay:.32s">
-      <div class="fx-flow-node n1">
-        <div class="lbl">match</div>
-        <div class="val">m-product-review-<br>template-library</div>
-        <div class="sub">命中 matcher，只读这一个分片</div>
-      </div>
-      <div class="fx-flow-arrow">→</div>
-      <div class="fx-flow-node n2">
-        <div class="lbl">expand</div>
-        <div class="val">+3 依赖 topic</div>
-        <div class="sub">common / platform / toClient 自动拉齐</div>
-      </div>
-      <div class="fx-flow-arrow">→</div>
-      <div class="fx-flow-node n3">
-        <div class="lbl">verify</div>
-        <div class="val">缺口检查</div>
-        <div class="sub">置信度不足 → 先向用户澄清</div>
-      </div>
-      <div class="fx-flow-arrow">→</div>
-      <div class="fx-flow-node n4">
-        <div class="lbl">act</div>
-        <div class="val">开始改代码</div>
-        <div class="sub">预计 3 处文件 · 带硬约束</div>
-      </div>
-    </div>
-
-    <div class="fx-task" style="grid-template-columns:1fr;margin-top:40px">
-      <div class="fx-task-aside">
-        <div class="quote" data-anim="fade-up" style="animation-delay:.5s">
-          加载什么，就是不加载什么 —— <span style="color:var(--fx-cyan)">4.7 MB 源码 → 300 行 topic</span>，
-          不是让 AI 更聪明，是把噪声切掉。
+        <div
+          class="fx-capabilities"
+          data-anim="fade-up"
+          style="animation-delay: 0.42s">
+          <div class="title">
+            <span class="brand">Flow2Spec</span> · 5 条能力
+          </div>
+          <div class="grid">
+            <div class="cap">
+              <div class="id">①</div>
+              <div class="k">多端复用</div>
+              <div class="v">
+                <code>.Knowledge/</code> 一份 · Cursor / Claude / Codex
+                原生加载并存
+              </div>
+            </div>
+            <div class="cap">
+              <div class="id">②</div>
+              <div class="k">路由收窄</div>
+              <div class="v">
+                matcher 命中 + 依赖链 + <span class="hl">缺口闸门</span>强制澄清
+              </div>
+            </div>
+            <div class="cap">
+              <div class="id">③</div>
+              <div class="k">双向同步</div>
+              <div class="v">
+                <code>f2s-kb-feat/fix</code> 改代码带改知识 · 不是一次性生成
+              </div>
+            </div>
+            <div class="cap">
+              <div class="id">④</div>
+              <div class="k">原生 agent</div>
+              <div class="v">
+                只给规则+知识+技能 · 不做 wrapper · 新模型来了不卡
+              </div>
+            </div>
+            <div class="cap">
+              <div class="id">⑤</div>
+              <div class="k">变更留痕 + 收尾闸门</div>
+              <div class="v">
+                <code>.task/</code> 跨会话续作 · <code>f2s-git-commit</code>
+                <span class="hl">提交前强制查 KB 覆盖</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="fx-footer">
-      <span class="brand">feature · progressive-load · product-review</span>
-      <span class="page">05 / 13</span>
-    </div>
-    <div class="notes">渐进式读取是会议纪要里大家总结出来的第一个亮点。四步 match→expand→verify→act，每一步都可以被打断和澄清。不是 AI 变聪明，是它每次只拿到有用的东西。</div>
-  </section>
-
-  <!-- ======= Slide 6 · 卖点二 · 任务续作（review_publish_flow） ======= -->
-  <section class="slide">
-    <div class="fx-grid"></div>
-    <div class="fx-glow-magenta"></div>
-    <div class="fx-glow-purple"></div>
-    <div class="fx-vignette"></div>
-    <div class="fx-scanlines"></div>
-
-    <div class="fx-chrome">
-      <div class="dots"><span></span><span></span><span></span></div>
-      <div>feature · 02 / 03 · resume-across-sessions</div>
-    </div>
-
-    <p class="fx-prompt" data-anim="fade-up">cat .task/completed/20260511-product_review_review_publish_flow/task.md</p>
-    <h2 class="fx-h1" data-anim="fade-up" style="animation-delay:.1s">
-      会话断了 · AI <span class="accent">自己接上</span>
-    </h2>
-    <p class="fx-lede" data-anim="fade-up" style="animation-delay:.2s">
-      一个横跨三端、9 步、分多次会话完成的真实任务 —— 中途任何一次下班关机，下次只说一句「继续」。
-    </p>
-
-    <div class="fx-task" data-anim="fade-up" style="animation-delay:.32s">
-      <div class="fx-task-card">
-        <div class="path">.task/completed/20260511-product_review_review_publish_flow/task.md</div>
-        <div class="title"># product_review_review_publish_flow</div>
-        <ul>
-          <li>步骤1：生成技术方案（接口端 + B端）</li>
-          <li>步骤2：接口端 · 文章表新增 5 字段</li>
-          <li>步骤3：修改文章创建接口</li>
-          <li>步骤4：修改审核接口（状态流转：已通过→待发布）</li>
-          <li>步骤5：新增文章发布接口（回填帖子链接 + 合作码）</li>
-          <li>步骤6：B端 · 修改列表/详情接口</li>
-          <li>步骤7：B端 · 修改编辑接口</li>
-          <li>步骤8：同步知识库</li>
-          <li>步骤9：提交代码</li>
-        </ul>
-      </div>
-      <div class="fx-task-aside">
-        <h3>// 续作体验</h3>
-        <div class="story">
-          下一次会话开口只说 <span class="hl">「帮我继续做文章发布流程」</span>——<br>
-          关键词命中 <code style="font-family:'JetBrains Mono',monospace;color:var(--fx-cyan)">todo.json</code> 里的任务，
-          AI 读出 <span class="hl">剩余步骤</span>、自动加载技能规则、从上次断点继续。
+        <div
+          class="fx-honest"
+          data-anim="fade-up"
+          style="animation-delay: 0.55s">
+          <span class="lbl">// 老实话</span>
+          停用 <code>f2s-kb-feat / fix</code> 一样腐化 —— 差别是会被<span
+            class="hl"
+            >缺口闸门喊出来</span
+          >，不是静默偏差。
         </div>
-        <div class="quote">
-          大模型没有跨会话记忆 · 我们用一份 <span style="color:var(--fx-cyan)">.task/todo.json</span> 显式接回来。<br>
-          user-todos.md 还会把<span style="color:var(--fx-magenta)">须用户在线下做的事</span>（跑 DDL、开开关、发版）落盘。
+
+        <div class="fx-footer">
+          <span class="brand">flow2spec-intro · market-diff</span>
+          <span class="page">04 / 13</span>
         </div>
-      </div>
-    </div>
+        <div class="notes">
+          这一页不强行比。上半把五家对手摆出来——每家都有它的强项，我不贬低谁。下半才讲我自己的
+          5 条能力。最后一行是老实话：Flow2Spec 也会腐化，停用 f2s-kb-feat /
+          f2s-kb-fix 知识库一样偏离代码。区别是腐化会被缺口闸门喊出来，AI
+          读不懂会停下要文档，不是静默拿错段继续改。我必须这样讲，否则不可信。
+        </div>
+      </section>
 
-    <div class="fx-footer">
-      <span class="brand">feature · resume · article-publish-flow</span>
-      <span class="page">06 / 13</span>
-    </div>
-    <div class="notes">这张是真实任务截图——9 步全打钩，跨好几次会话。同事经常问：中途下班怎么办？todo.json 就是答案。user-todos.md 更进一步：AI 干不了的事（跑 SQL、改线上配置）也会落盘给你，不会只在对话里吼一嗓子。</div>
-  </section>
+      <!-- ======= Slide 5 · 卖点一 · 渐进式读取（商品评价） ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
 
-  <!-- ======= Slide 7 · 知识库渐进式创建（消解心智负担） ======= -->
-  <section class="slide is-compact">
-    <div class="fx-grid"></div>
-    <div class="fx-glow-cyan"></div>
-    <div class="fx-glow-magenta"></div>
-    <div class="fx-vignette"></div>
-    <div class="fx-scanlines"></div>
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>feature · 01 / 03 · progressive load</div>
+        </div>
 
-    <div class="fx-chrome">
-      <div class="dots"><span></span><span></span><span></span></div>
-      <div>onboarding · progressive-kb</div>
-    </div>
+        <p class="fx-prompt" data-anim="fade-up">
+          cat match &amp;&amp; expand &amp;&amp; verify &amp;&amp; act
+        </p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          渐进式读取 · <span class="accent">先查目录</span>，再翻书
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          用户说一句「改评价模板文案库的批量重评分」，Flow2Spec 走四步：
+        </p>
 
-    <p class="fx-prompt" style="margin-top:20px">f2s progressive --no-upfront-cost</p>
-    <h1 class="fx-h1">写着用 · <span class="accent">不用先写完</span></h1>
-    <p class="fx-lede">最小可用集是 <b style="color:var(--fx-cyan)">1 条 manifest + 1 个 matcher + 1 份 topic</b>，其余**随需求长出来**。</p>
+        <div class="fx-flow" data-anim="fade-up" style="animation-delay: 0.32s">
+          <div class="fx-flow-node n1">
+            <div class="lbl">match</div>
+            <div class="val">m-product-review-<br />template-library</div>
+            <div class="sub">命中 matcher，只读这一个分片</div>
+          </div>
+          <div class="fx-flow-arrow">→</div>
+          <div class="fx-flow-node n2">
+            <div class="lbl">expand</div>
+            <div class="val">+3 依赖 topic</div>
+            <div class="sub">common / platform / toClient 自动拉齐</div>
+          </div>
+          <div class="fx-flow-arrow">→</div>
+          <div class="fx-flow-node n3">
+            <div class="lbl">verify</div>
+            <div class="val">缺口检查</div>
+            <div class="sub">置信度不足 → 先向用户澄清</div>
+          </div>
+          <div class="fx-flow-arrow">→</div>
+          <div class="fx-flow-node n4">
+            <div class="lbl">act</div>
+            <div class="val">开始改代码</div>
+            <div class="sub">预计 3 处文件 · 带硬约束</div>
+          </div>
+        </div>
 
-    <div class="fx-timeline">
-      <div class="fx-stage">
-        <div class="fx-stage-head"><span class="fx-stage-tag">Day 0</span><span class="fx-stage-dur">5 分钟</span></div>
-        <div class="fx-stage-title">init 框架</div>
-        <pre class="fx-stage-cmd"><span class="cm"># 拉起骨架，不写一行知识</span>
+        <div
+          class="fx-task"
+          style="grid-template-columns: 1fr; margin-top: 40px">
+          <div class="fx-task-aside">
+            <div
+              class="quote"
+              data-anim="fade-up"
+              style="animation-delay: 0.5s">
+              加载什么，就是不加载什么 ——
+              <span style="color: var(--fx-cyan)"
+                >4.7 MB 源码 → 300 行 topic</span
+              >， 不是让 AI 更聪明，是把噪声切掉。
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">feature · progressive-load · product-review</span>
+          <span class="page">05 / 13</span>
+        </div>
+        <div class="notes">
+          渐进式读取是会议纪要里大家总结出来的第一个亮点。四步
+          match→expand→verify→act，每一步都可以被打断和澄清。不是 AI
+          变聪明，是它每次只拿到有用的东西。
+        </div>
+      </section>
+
+      <!-- ======= Slide 6 · 卖点二 · 任务续作（review_publish_flow） ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-glow-purple"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>feature · 02 / 03 · resume-across-sessions</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">
+          cat
+          .task/completed/20260511-product_review_review_publish_flow/task.md
+        </p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          会话断了 · AI <span class="accent">自己接上</span>
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          一个横跨三端、9 步、分多次会话完成的真实任务 ——
+          中途任何一次下班关机，下次只说一句「继续」。
+        </p>
+
+        <div class="fx-task" data-anim="fade-up" style="animation-delay: 0.32s">
+          <div class="fx-task-card">
+            <div class="path">
+              .task/completed/20260511-product_review_review_publish_flow/task.md
+            </div>
+            <div class="title"># product_review_review_publish_flow</div>
+            <ul>
+              <li>步骤1：生成技术方案（接口端 + B端）</li>
+              <li>步骤2：接口端 · 文章表新增 5 字段</li>
+              <li>步骤3：修改文章创建接口</li>
+              <li>步骤4：修改审核接口（状态流转：已通过→待发布）</li>
+              <li>步骤5：新增文章发布接口（回填帖子链接 + 合作码）</li>
+              <li>步骤6：B端 · 修改列表/详情接口</li>
+              <li>步骤7：B端 · 修改编辑接口</li>
+              <li>步骤8：同步知识库</li>
+              <li>步骤9：提交代码</li>
+            </ul>
+          </div>
+          <div class="fx-task-aside">
+            <h3>// 续作体验</h3>
+            <div class="story">
+              下一次会话开口只说
+              <span class="hl">「帮我继续做文章发布流程」</span>——<br />
+              关键词命中
+              <code
+                style="
+                  font-family: &quot;JetBrains Mono&quot;, monospace;
+                  color: var(--fx-cyan);
+                "
+                >todo.json</code
+              >
+              里的任务， AI 读出
+              <span class="hl">剩余步骤</span
+              >、自动加载技能规则、从上次断点继续。
+            </div>
+            <div class="quote">
+              大模型没有跨会话记忆 · 我们用一份
+              <span style="color: var(--fx-cyan)">.task/todo.json</span>
+              显式接回来。<br />
+              user-todos.md 还会把<span style="color: var(--fx-magenta)"
+                >须用户在线下做的事</span
+              >（跑 DDL、开开关、发版）落盘。
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">feature · resume · article-publish-flow</span>
+          <span class="page">06 / 13</span>
+        </div>
+        <div class="notes">
+          这张是真实任务截图——9
+          步全打钩，跨好几次会话。同事经常问：中途下班怎么办？todo.json
+          就是答案。user-todos.md 更进一步：AI 干不了的事（跑
+          SQL、改线上配置）也会落盘给你，不会只在对话里吼一嗓子。
+        </div>
+      </section>
+
+      <!-- ======= Slide 7 · 知识库渐进式创建（消解心智负担） ======= -->
+      <section class="slide is-compact">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>onboarding · progressive-kb</div>
+        </div>
+
+        <p class="fx-prompt" style="margin-top: 20px">
+          f2s progressive --no-upfront-cost
+        </p>
+        <h1 class="fx-h1">写着用 · <span class="accent">不用先写完</span></h1>
+        <p class="fx-lede">
+          最小可用集是
+          <b style="color: var(--fx-cyan)"
+            >1 条 manifest + 1 个 matcher + 1 份 topic</b
+          >，其余**随需求长出来**。
+        </p>
+
+        <div class="fx-timeline">
+          <div class="fx-stage">
+            <div class="fx-stage-head">
+              <span class="fx-stage-tag">Day 0</span
+              ><span class="fx-stage-dur">5 分钟</span>
+            </div>
+            <div class="fx-stage-title">init 框架</div>
+            <pre
+              class="fx-stage-cmd"><span class="cm"># 拉起骨架，不写一行知识</span>
 <span class="kw">$</span> npx flow2spec init</pre>
-        <div class="fx-stage-out">生成 <code>.Knowledge/</code> + <code>.cursor/.claude/.codex/</code><br>空的 manifest-routing.json，可直接跑</div>
-      </div>
+            <div class="fx-stage-out">
+              生成 <code>.Knowledge/</code> +
+              <code>.cursor/.claude/.codex/</code><br />空的
+              manifest-routing.json，可直接跑
+            </div>
+          </div>
 
-      <div class="fx-stage-arrow">→</div>
+          <div class="fx-stage-arrow">→</div>
 
-      <div class="fx-stage">
-        <div class="fx-stage-head"><span class="fx-stage-tag cy">Day 1</span><span class="fx-stage-dur">一个需求</span></div>
-        <div class="fx-stage-title">沉淀架构（可选）</div>
-        <pre class="fx-stage-cmd"><span class="cm"># 喂一份 PDF / 架构图 / README</span>
+          <div class="fx-stage">
+            <div class="fx-stage-head">
+              <span class="fx-stage-tag cy">Day 1</span
+              ><span class="fx-stage-dur">一个需求</span>
+            </div>
+            <div class="fx-stage-title">沉淀架构（可选）</div>
+            <pre
+              class="fx-stage-cmd"><span class="cm"># 喂一份 PDF / 架构图 / README</span>
 <span class="kw">/</span>f2s-doc-arch
 <span class="kw">/</span>f2s-doc-add</pre>
-        <div class="fx-stage-out">AI 读存量文档<br>→ 生成首个 topic + matcher</div>
-      </div>
+            <div class="fx-stage-out">
+              AI 读存量文档<br />→ 生成首个 topic + matcher
+            </div>
+          </div>
 
-      <div class="fx-stage-arrow">→</div>
+          <div class="fx-stage-arrow">→</div>
 
-      <div class="fx-stage">
-        <div class="fx-stage-head"><span class="fx-stage-tag mg">Day 2 ~ N</span><span class="fx-stage-dur">日常</span></div>
-        <div class="fx-stage-title">改一处 · 记一处</div>
-        <pre class="fx-stage-cmd"><span class="cm"># 改代码顺手改知识</span>
+          <div class="fx-stage">
+            <div class="fx-stage-head">
+              <span class="fx-stage-tag mg">Day 2 ~ N</span
+              ><span class="fx-stage-dur">日常</span>
+            </div>
+            <div class="fx-stage-title">改一处 · 记一处</div>
+            <pre class="fx-stage-cmd"><span class="cm"># 改代码顺手改知识</span>
 <span class="kw">/</span>f2s-kb-feat
 <span class="kw">/</span>f2s-kb-fix</pre>
-        <div class="fx-stage-out">代码 diff + topic diff 同屏<br>知识库**随业务增长**，不腐化</div>
-      </div>
+            <div class="fx-stage-out">
+              代码 diff + topic diff 同屏<br />知识库**随业务增长**，不腐化
+            </div>
+          </div>
 
-      <div class="fx-stage-arrow">→</div>
+          <div class="fx-stage-arrow">→</div>
 
-      <div class="fx-stage">
-        <div class="fx-stage-head"><span class="fx-stage-tag pu">Week 2+</span><span class="fx-stage-dur">按需</span></div>
-        <div class="fx-stage-title">体检 · 校准</div>
-        <pre class="fx-stage-cmd"><span class="cm"># 代码在前、知识落后了</span>
+          <div class="fx-stage">
+            <div class="fx-stage-head">
+              <span class="fx-stage-tag pu">Week 2+</span
+              ><span class="fx-stage-dur">按需</span>
+            </div>
+            <div class="fx-stage-title">体检 · 校准</div>
+            <pre
+              class="fx-stage-cmd"><span class="cm"># 代码在前、知识落后了</span>
 <span class="kw">/</span>f2s-kb-sync
 <span class="kw">/</span>f2s-kb-merge</pre>
-        <div class="fx-stage-out">扫描 diff 反哺 topic<br>合并冲突分支的知识</div>
-      </div>
-    </div>
-
-    <div class="fx-anxiety">
-      <div class="fx-anxiety-row"><span class="fx-anxiety-q">"得先写完所有文档才能用？"</span><span class="fx-anxiety-a">→ init 当天就跑，文档为零也不挡路</span></div>
-      <div class="fx-anxiety-row"><span class="fx-anxiety-q">"不知道写多少才够？"</span><span class="fx-anxiety-a">→ 1 topic + 1 matcher 起步，缺口闸门会喊</span></div>
-      <div class="fx-anxiety-row"><span class="fx-anxiety-q">"格式学习成本高？"</span><span class="fx-anxiety-a">→ 不用手写，<code>f2s-*</code> 技能代写、代改、代校验</span></div>
-      <div class="fx-anxiety-row"><span class="fx-anxiety-q">"写了用不起来？"</span><span class="fx-anxiety-a">→ 加一条测一条，matcher 命中即验证</span></div>
-      <div class="fx-anxiety-row hi"><span class="fx-anxiety-q">"历史项目要整块迁？"</span><span class="fx-anxiety-a">→ <b>不必</b>。init 骨架 → 下次需求命中哪块，写哪块</span></div>
-    </div>
-
-    <div class="fx-footer">
-      <span>progressive · pay-as-you-grow</span>
-      <span class="page">07 / 13</span>
-    </div>
-    <div class="notes">这页专门解初始化心智负担。很多同事以为「上知识库 = 先写两周文档」——恰恰相反：init 只拉骨架，5 分钟就能跑。第一天可选沉淀一份架构，第二天起靠 f2s-kb-feat/fix 随改随记。历史项目不用整块迁，只在下次需求命中时补那一块。底部 5 句话是常见顾虑的直球回答，讲的时候挑自己被问过的那条举例。</div>
-  </section>
-
-  <!-- ======= Slide 8 · 依赖链自动展开 ======= -->
-  <section class="slide">
-    <div class="fx-grid"></div>
-    <div class="fx-glow-purple"></div>
-    <div class="fx-vignette"></div>
-    <div class="fx-scanlines"></div>
-
-    <div class="fx-chrome">
-      <div class="dots"><span></span><span></span><span></span></div>
-      <div>feature · 03 / 03 · topicDependencies</div>
-    </div>
-
-    <p class="fx-prompt" data-anim="fade-up">resolve topicDependencies('product-review-template-library')</p>
-    <h2 class="fx-h1" data-anim="fade-up" style="animation-delay:.1s">
-      一句话 · <span class="accent">4 层依赖</span>自动展开
-    </h2>
-    <p class="fx-lede" data-anim="fade-up" style="animation-delay:.2s">
-      你只说了「商品评价」三个字，AI 已经知道要先读通用约定 → 子域边界 → C 端白名单，再读本域细则。
-    </p>
-
-    <div class="fx-tree" data-anim="fade-up" style="animation-delay:.3s">
-
-      <div class="fx-tree-row l1">
-        <span class="fx-tree-indent">└─</span>
-        <div class="fx-tree-node">
-          <span class="name">common-modules-context</span>
-          <span class="dsc">ctx · responseData · QMQ · getDb · DB 字段规范</span>
-          <span class="lines">79 行</span>
-        </div>
-      </div>
-
-      <div class="fx-tree-row l2">
-        <span class="fx-tree-indent">&nbsp;&nbsp;└─</span>
-        <div class="fx-tree-node">
-          <span class="name">social-media-platform-context</span>
-          <span class="dsc">业务 B 端子域 · 3 仓库分工 · @sm/* 别名</span>
-          <span class="lines">79 行</span>
-        </div>
-      </div>
-
-      <div class="fx-tree-row l3">
-        <span class="fx-tree-indent">&nbsp;&nbsp;&nbsp;&nbsp;└─</span>
-        <div class="fx-tree-node">
-          <span class="name">social-media-toclient-whitelist</span>
-          <span class="dsc">C 端 checkUidAndWhiteList · UID 隔离 · 错误码</span>
-          <span class="lines">39 行</span>
-        </div>
-      </div>
-
-      <div class="fx-tree-row l4">
-        <span class="fx-tree-indent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─</span>
-        <div class="fx-tree-node">
-          <span class="name">product-review-template-library</span>
-          <span class="dsc">本域细则 · Redis 锁 · AI 评分 · 本域例外</span>
-          <span class="lines">67 行</span>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="fx-task-aside" style="margin-top:30px">
-      <div class="quote" data-anim="fade-up" style="animation-delay:.5s">
-        依赖挂在<span style="color:var(--fx-cyan)">主题级</span>，不是任务级 ——
-        新增任务无需重复声明前置，漏了也不会静默失效。
-      </div>
-    </div>
-
-    <div class="fx-footer">
-      <span class="brand">feature · dependency-expansion</span>
-      <span class="page">08 / 13</span>
-    </div>
-    <div class="notes">很多人觉得"依赖"只是一个语法细节。在这个项目里，商品评价主题挂了 3 层前置依赖——这些是每次改代码都必须先知道的通用约束。依赖挂在主题而不是任务上，意味着新增任务不会漏。</div>
-  </section>
-
-  <!-- ======= Slide 9 · 硬约束密度（欧铁拼团） ======= -->
-  <section class="slide">
-    <div class="fx-grid"></div>
-    <div class="fx-glow-cyan"></div>
-    <div class="fx-glow-magenta"></div>
-    <div class="fx-vignette"></div>
-    <div class="fx-scanlines"></div>
-
-    <div class="fx-chrome">
-      <div class="dots"><span></span><span></span><span></span></div>
-      <div>case · groupon × coupon · hard-constraints</div>
-    </div>
-
-    <p class="fx-prompt" data-anim="fade-up">cat .Knowledge/topics/{groupon,coupon}-context.md | grep "必须\|禁止"</p>
-    <h2 class="fx-h1" data-anim="fade-up" style="animation-delay:.1s">
-      每一条 topic · 都是 <span class="accent">挡 AI 犯错</span>的防线
-    </h2>
-    <p class="fx-lede" data-anim="fade-up" style="animation-delay:.2s">
-      另一条主线：拼团 + 通用券。这些约束凭 AI「看代码」绝对猜不出来 —— 写在 topic 里直接挡掉。
-    </p>
-
-    <div class="fx-rules">
-
-      <div class="fx-rule" data-anim="fade-up" style="animation-delay:.3s">
-        <div class="tag">groupon · 01</div>
-        <h4>joinGroupon · 同事务双写</h4>
-        <div class="body">
-          参团记录 + 用户统计表 <span class="pos">必须在同一 sequelize.transaction() 内</span>提交。<br>
-          <span class="neg">禁止</span>先写参团记录再另起事务更新统计，
-          <em style="color:var(--fx-ink2)">并发下会出现 maxUserJoins 漂移。</em>
-        </div>
-      </div>
-
-      <div class="fx-rule" data-anim="fade-up" style="animation-delay:.4s">
-        <div class="tag">groupon · 02</div>
-        <h4>maxUserTeamLeader · 按 type 隔离</h4>
-        <div class="body">
-          团长上限 <span class="pos">仅统计当前活动 type 的开团数</span>，<br>
-          <span class="neg">跨 type 不累加</span>；校验源为 QConfig <code>groupon-setting.json</code> ·
-          <code>validField / maxUserJoins / needNewGuest</code> 必须先读再动。
-        </div>
-      </div>
-
-      <div class="fx-rule" data-anim="fade-up" style="animation-delay:.5s">
-        <div class="tag">coupon · 03</div>
-        <h4>前端只传 activityCode</h4>
-        <div class="body">
-          对外接口<span class="pos">不接受 promotionId</span>；后端通过 <code>activityCode</code> 查
-          <code>promotionId + couponConfigId</code>，改造必经 <code>@/utils/couponHelper.js</code>。<br>
-          <em style="color:var(--fx-ink2)">泄露 promotionId 会让活动在未上线时被枚举调用。</em>
-        </div>
-      </div>
-
-      <div class="fx-rule" data-anim="fade-up" style="animation-delay:.6s">
-        <div class="tag">coupon · 04</div>
-        <h4>status 优先级 0 &gt; 1 &gt; 2</h4>
-        <div class="body">
-          领券结果 <code>status</code> 语义：<span class="neg">0=失败</span> · <span class="pos">1=成功</span> ·
-          <code>2=已领取</code> · <code>3=已领完</code> · <code>4=不可领</code>。<br>
-          合并多源状态时 <span class="neg">必须按 0&gt;1&gt;2&gt;3&gt;4 取优先级</span>，不是取 max 也不是取 min。
-        </div>
-      </div>
-
-    </div>
-
-    <div class="fx-footer">
-      <span class="brand">case · groupon × coupon · real-constraints</span>
-      <span class="page">09 / 13</span>
-    </div>
-    <div class="notes">如果上一页在讲"广度"，这一页讲"密度"。拼团的同事务双写、通用券的 activityCode-only 和 status 优先级——这些是你问 AI「应该这么写吗」它也答不出来的那种。写在 topic 里，下一次改代码直接按约束来——这才是知识库的真实价值。</div>
-  </section>
-
-  <!-- ======= Slide 10 · 全景一图：两层 ======= -->
-  <section class="slide">
-    <div class="fx-grid"></div>
-    <div class="fx-glow-cyan"></div>
-    <div class="fx-glow-magenta"></div>
-    <div class="fx-vignette"></div>
-    <div class="fx-scanlines"></div>
-
-    <div class="fx-chrome">
-      <div class="dots"><span></span><span></span><span></span></div>
-      <div>architecture · two-layer · one-arrow</div>
-    </div>
-
-    <p class="fx-prompt" data-anim="fade-up">tree -L 1 -d</p>
-    <h2 class="fx-h1" data-anim="fade-up" style="animation-delay:.1s">
-      一张图 · <span class="accent">两层</span> · 一根箭头
-    </h2>
-    <p class="fx-lede" data-anim="fade-up" style="animation-delay:.2s">
-      知识层随项目走 · 规则层随工具走 · 生命周期不同，分开是最基本的决策。
-    </p>
-
-    <div class="fx-arch">
-
-      <div class="fx-arch-layer top" data-anim="fade-up" style="animation-delay:.3s">
-        <div class="lbl">KNOWLEDGE LAYER · 随项目</div>
-        <div class="title">.Knowledge/</div>
-        <div class="sub">业务主题路由 · 存量文档 · 需求澄清 · 终稿方案 · 一份，只在这里写一次。</div>
-        <div class="pills">
-          <span class="pill">manifest-routing.json</span>
-          <span class="pill">matchers/*.json</span>
-          <span class="pill">topics/*.md</span>
-          <span class="pill">stock-docs/*.md</span>
-          <span class="pill">req-docs/*.md</span>
-        </div>
-      </div>
-
-      <div class="fx-arch-link" data-anim="fade-up" style="animation-delay:.42s">
-        <div class="bar"></div>
-        <div class="txt">f2s-* 技能 · 维护 ↑ · 触发 ↓</div>
-        <div class="bar"></div>
-      </div>
-
-      <div class="fx-arch-layer bot" data-anim="fade-up" style="animation-delay:.54s">
-        <div class="lbl">RULES LAYER · 随工具</div>
-        <div class="title">.cursor/ · .claude/ · .codex/</div>
-        <div class="sub">各工具按自己原生方式加载规则和技能 · 知识层统一，执行层各自独立。</div>
-        <div class="pills">
-          <span class="pill">.cursor/rules/*.mdc</span>
-          <span class="pill">.claude/rules/*.md</span>
-          <span class="pill">.codex/AGENTS.md</span>
-          <span class="pill">skills/*/SKILL.md</span>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="fx-footer">
-      <span class="brand">architecture · knowledge × rules</span>
-      <span class="page">10 / 13</span>
-    </div>
-    <div class="notes">只给大家一张图。上面随项目走，下面随工具走，中间一根箭头。团队里不同人用不同 AI、CI 用 Codex 本地用 Claude——这张图回答了为什么知识只写一份就够。</div>
-  </section>
-
-  <!-- ======= Slide 11 · 现场 Demo 路书 ======= -->
-  <section class="slide is-scroll">
-    <div class="fx-grid"></div>
-    <div class="fx-glow-magenta"></div>
-    <div class="fx-glow-cyan"></div>
-    <div class="fx-vignette"></div>
-    <div class="fx-scanlines"></div>
-
-    <div class="fx-chrome">
-      <div class="dots"><span></span><span></span><span></span></div>
-      <div>live · demo · routemap</div>
-    </div>
-
-    <p class="fx-prompt" data-anim="fade-up">./demo.sh --case product-review-template-library</p>
-    <h2 class="fx-h1" data-anim="fade-up" style="animation-delay:.1s">
-      真实案例 · <span class="accent">评价模板文案库</span>
-    </h2>
-    <p class="fx-lede" data-anim="fade-up" style="animation-delay:.2s">
-      一条主线 6 步走通 · 期间穿插十余次 feat/fix 小迭代，都在同一条知识链上生长。
-    </p>
-
-    <div class="fx-demo">
-
-      <div class="fx-demo-step" data-anim="fade-up" style="animation-delay:.3s">
-        <div class="n">1</div>
-        <div class="body">
-          <div class="cmd"><span class="op">/f2s-req-clarify</span> <span class="ar">「做一个模版库给用户文章做 AI 润色，模版和文章都要 AI 评分，B/C 两端都要读」</span></div>
-          <div class="dsc" style="padding-top:2px">
-            <div style="font-size:13px;margin-bottom:6px;color:var(--fx-ink2)">澄清是 <b style="color:var(--fx-cyan)">「成批问 → 你答 → AI 对知识库查缺 → 再成批问」</b>的迭代，不是一问一答：</div>
-
-            <div style="margin:6px 0;padding:8px 12px;border-left:2px solid rgba(126,246,255,.4);background:rgba(126,246,255,.04);border-radius:0 4px 4px 0;font-size:12.5px">
-              <div style="color:var(--fx-cyan);font-family:'JetBrains Mono',monospace;margin-bottom:3px">轮 1 · 一次性抛 12 个问题</div>
-              <div style="color:var(--fx-ink2)"><b style="color:var(--fx-ink)">AI</b>：定位（仅运营编辑？C 端选模版发帖？历史版本？去重？）· 数据形态（标签独立表/内联？多对多？纯文本/富文本？3000 字按字符数？图片数组几张？占位符？）· 匹配（U⊆L 完全覆盖 vs 交集最大？权重何时 +1？下线/删除可被命中？）</div>
-              <div style="color:var(--fx-ink2)"><b style="color:var(--fx-ink)">我</b>：一次性逐条回答。</div>
+            <div class="fx-stage-out">
+              扫描 diff 反哺 topic<br />合并冲突分支的知识
             </div>
-
-            <div style="margin:6px 0;padding:8px 12px;border-left:2px solid rgba(187,160,255,.4);background:rgba(187,160,255,.04);border-radius:0 4px 4px 0;font-size:12.5px">
-              <div style="color:var(--fx-purple);font-family:'JetBrains Mono',monospace;margin-bottom:3px">↓ AI 自检 · 把答案对齐已加载的 4 层 topic + stock-docs</div>
-              <div style="color:var(--fx-ink2)">对照 <code>product-review</code> / <code>common-modules</code> / <code>social-media-platform</code> 已有事实：发现 <b style="color:var(--fx-ink)">(a)</b> 批量方法没说够数是否补查、<b style="color:var(--fx-ink)">(b)</b> 并列怎么破没讲、<b style="color:var(--fx-ink)">(c)</b> 图片上传工具没点名、<b style="color:var(--fx-ink)">(d)</b> 接口是新建还是复用现有没确认 → 继续追问。</div>
-            </div>
-
-            <div style="margin:6px 0;padding:8px 12px;border-left:2px solid rgba(126,246,255,.4);background:rgba(126,246,255,.04);border-radius:0 4px 4px 0;font-size:12.5px">
-              <div style="color:var(--fx-cyan);font-family:'JetBrains Mono',monospace;margin-bottom:3px">轮 2 · 针对缺口再抛 4 个问题</div>
-              <div style="color:var(--fx-ink2)"><b style="color:var(--fx-ink)">AI</b>：需要 <code>needCount</code> 不足时补查吗？|L| 最小相等时按什么兜底？图片上传复用 admin <code>utils</code> 还是新建？BC 接口从零实现吗（当前 0）？</div>
-              <div style="color:var(--fx-ink2)"><b style="color:var(--fx-ink)">我</b>：不补查直接返回 · 按使用权重破平 · 复用 admin utils · BC 均从零。</div>
-            </div>
-
-            <div style="font-size:12.5px;margin-top:6px;color:var(--fx-ink2)">→ AI 再次对 KB 查缺，无遗留 → 定稿 <code>req-docs/商品评价_模版文案库_需求澄清.md</code>（10 小节 · U⊆L 三档规则）+ 配套 <code>商品评价_文章发布流程改造_技术方案.md</code>（postType / imageUrls / publishStatus 流转）</div>
           </div>
         </div>
-      </div>
 
-      <div class="fx-demo-step" data-anim="fade-up" style="animation-delay:.38s">
-        <div class="n">2</div>
-        <div class="body">
-          <div class="cmd"><span class="op">/f2s-req-backend</span> <span class="ar">matcher 命中 m-product-review-template-library</span></div>
-          <div class="dsc">自动加载 4 层 topic 依赖（common-modules → social-media → product-review → template-library），产出 <code>req-docs/商品评价_模版文案库_技术方案.md</code> + 5 份 DDL（文案库 / 标签 / 关联 / 评分规则 / agent prompt）。</div>
-        </div>
-      </div>
-
-      <div class="fx-demo-step" data-anim="fade-up" style="animation-delay:.46s">
-        <div class="n">3</div>
-        <div class="body">
-          <div class="cmd"><span class="ar">方案定稿后 <b style="color:var(--fx-cyan)">你说一句「实现这个技术方案」或「继续」</b> · 落 <code>.task/active/template_ai_score/</code></span></div>
-          <div class="dsc">不用记命令——读到 <code>req-docs/</code> 里的技术方案，AI 触发 <code>f2s-implement-tech-design</code>，自动拆 8 步 checklist：建评分规则表 → 模型 → aiScoreHelper（先 mock）→ 4 个 CRUD + serverless 注册 → 入库 fire-and-forget 触发评分 → 批量重评分接口 → 列表/详情透传 aiScore → KB 同步。每步勾钩，中断可续。</div>
-        </div>
-      </div>
-
-      <div class="fx-demo-step" data-anim="fade-up" style="animation-delay:.54s">
-        <div class="n">4</div>
-        <div class="body">
-          <div class="cmd"><span class="op">/f2s-kb-feat</span> <span class="ar">2 次能力扩展 · <b style="color:var(--fx-cyan)">写完代码当场写 KB</b></span></div>
-          <div class="dsc" style="padding-top:2px">
-
-            <div style="margin:6px 0;padding:8px 12px;border-left:2px solid rgba(126,246,255,.4);background:rgba(126,246,255,.04);border-radius:0 4px 4px 0;font-size:12.5px">
-              <div style="color:var(--fx-cyan);font-family:'JetBrains Mono',monospace;margin-bottom:3px">① <code>a1b2c3d</code> · 图片上传抽公共方法</div>
-              <div style="color:var(--fx-ink2)"><b style="color:var(--fx-ink)">我</b>：admin 这边图片上传要改走后端 multipart 接口，顺带写个公共方法，别人也能用</div>
-              <div style="color:var(--fx-ink2)"><b style="color:var(--fx-ink)">AI</b>：抽到 <code>utils/uploadImageByMultipart.ts</code>，返回 CDN URL。要我同步写进 topic 吗？下次 AI 改上传就直接复用。</div>
-              <div style="color:var(--fx-cyan);font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:4px">→ topic 追加片段：<span style="color:var(--fx-ink)">「图片上传 = <code>uploadImageByMultipart(file)</code> → 回 CDN URL；禁止 base64 直传」</span></div>
-            </div>
-
-            <div style="margin:6px 0;padding:8px 12px;border-left:2px solid rgba(126,246,255,.4);background:rgba(126,246,255,.04);border-radius:0 4px 4px 0;font-size:12.5px">
-              <div style="color:var(--fx-cyan);font-family:'JetBrains Mono',monospace;margin-bottom:3px">② <code>e4f5a6b7</code> · 对外 UUID / 内部 id 分离</div>
-              <div style="color:var(--fx-ink2)"><b style="color:var(--fx-ink)">我</b>：模版库接口不能暴露自增 id，外部要 UUID，但内部 join 还是走 id</div>
-              <div style="color:var(--fx-ink2)"><b style="color:var(--fx-ink)">AI</b>：加 <code>libraryUuid VARCHAR(36)</code> 字段 + 唯一索引，响应里只吐 uuid。我把「外 uuid / 内 id」写进 topic 的 ID 约定段，下次这个域一律按这条走。</div>
-              <div style="color:var(--fx-cyan);font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:4px">→ topic 追加片段：<span style="color:var(--fx-ink)">「对外契约 <code>libraryUuid</code>，内部 join 用 <code>id</code>」</span></div>
-            </div>
-
+        <div class="fx-anxiety">
+          <div class="fx-anxiety-row">
+            <span class="fx-anxiety-q">"得先写完所有文档才能用？"</span
+            ><span class="fx-anxiety-a">→ init 当天就跑，文档为零也不挡路</span>
+          </div>
+          <div class="fx-anxiety-row">
+            <span class="fx-anxiety-q">"不知道写多少才够？"</span
+            ><span class="fx-anxiety-a"
+              >→ 1 topic + 1 matcher 起步，缺口闸门会喊</span
+            >
+          </div>
+          <div class="fx-anxiety-row">
+            <span class="fx-anxiety-q">"格式学习成本高？"</span
+            ><span class="fx-anxiety-a"
+              >→ 不用手写，<code>f2s-*</code> 技能代写、代改、代校验</span
+            >
+          </div>
+          <div class="fx-anxiety-row">
+            <span class="fx-anxiety-q">"写了用不起来？"</span
+            ><span class="fx-anxiety-a"
+              >→ 加一条测一条，matcher 命中即验证</span
+            >
+          </div>
+          <div class="fx-anxiety-row hi">
+            <span class="fx-anxiety-q">"历史项目要整块迁？"</span
+            ><span class="fx-anxiety-a"
+              >→ <b>不必</b>。init 骨架 → 下次需求命中哪块，写哪块</span
+            >
           </div>
         </div>
-      </div>
 
-      <div class="fx-demo-step" data-anim="fade-up" style="animation-delay:.62s">
-        <div class="n">5</div>
-        <div class="body">
-          <div class="cmd"><span class="op">/f2s-kb-fix</span> <span class="ar">3 次迭代都走同一入口 · <b style="color:var(--fx-cyan)">每次带着改 topic</b></span></div>
-          <div class="dsc" style="padding-top:2px">
+        <div class="fx-footer">
+          <span>progressive · pay-as-you-grow</span>
+          <span class="page">07 / 13</span>
+        </div>
+        <div class="notes">
+          这页专门解初始化心智负担。很多同事以为「上知识库 =
+          先写两周文档」——恰恰相反：init 只拉骨架，5
+          分钟就能跑。第一天可选沉淀一份架构，第二天起靠 f2s-kb-feat/fix
+          随改随记。历史项目不用整块迁，只在下次需求命中时补那一块。底部 5
+          句话是常见顾虑的直球回答，讲的时候挑自己被问过的那条举例。
+        </div>
+      </section>
 
-            <div style="margin:6px 0;padding:8px 12px;border-left:2px solid rgba(255,120,214,.4);background:rgba(255,120,214,.04);border-radius:0 4px 4px 0;font-size:12.5px">
-              <div style="color:var(--fx-magenta);font-family:'JetBrains Mono',monospace;margin-bottom:3px">① <code>c8d9e0f1</code> · 评分漏传 title</div>
-              <div style="color:var(--fx-ink2)"><b style="color:var(--fx-ink)">我</b>：运营吐槽同样内容分数波动大——我一看 <code>scoreContent</code> 只把 content 扔给 Agent，标题完全没进去</div>
-              <div style="color:var(--fx-ink2)"><b style="color:var(--fx-ink)">AI</b>：给 <code>scoreContent(title, content, model?)</code>，prompt 里把标题作为独立上下文。六个 handler 都补一下调用。要改 topic 吗？</div>
-              <div style="color:var(--fx-magenta);font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:4px">→ topic「评分输入结构」表新增一行：<span style="color:var(--fx-ink)"><code>title: string · 必传 · 用于 Agent 理解主题意图</code></span></div>
+      <!-- ======= Slide 8 · 依赖链自动展开 ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-purple"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>feature · 03 / 03 · topicDependencies</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">
+          resolve topicDependencies('product-review-template-library')
+        </p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          一句话 · <span class="accent">4 层依赖</span>自动展开
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          你只说了「商品评价」三个字，AI 已经知道要先读通用约定 → 子域边界 → C
+          端白名单，再读本域细则。
+        </p>
+
+        <div class="fx-tree" data-anim="fade-up" style="animation-delay: 0.3s">
+          <div class="fx-tree-row l1">
+            <span class="fx-tree-indent">└─</span>
+            <div class="fx-tree-node">
+              <span class="name">common-modules-context</span>
+              <span class="dsc"
+                >ctx · responseData · QMQ · getDb · DB 字段规范</span
+              >
+              <span class="lines">79 行</span>
             </div>
+          </div>
 
-            <div style="margin:6px 0;padding:8px 12px;border-left:2px solid rgba(255,120,214,.4);background:rgba(255,120,214,.04);border-radius:0 4px 4px 0;font-size:12.5px">
-              <div style="color:var(--fx-magenta);font-family:'JetBrains Mono',monospace;margin-bottom:3px">② <code>2a3b4c5d</code> · scoreContentBatch 串行改并发</div>
-              <div style="color:var(--fx-ink2)"><b style="color:var(--fx-ink)">我</b>：批量重评分 10 条要 90 秒，老板说不能接受，这个方法不用一条一条等</div>
-              <div style="color:var(--fx-ink2)"><b style="color:var(--fx-ink)">AI</b>：<code>for-await</code> 改 <code>Promise.all</code> 并发触发，实测 10 条 9 秒。顺手把繁忙错误码 <code>AI_BUSY</code> 从字面量拆到 <code>_enum</code>——避免后面又飞散。</div>
-              <div style="color:var(--fx-magenta);font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:4px">→ topic「批量重评分时序」从「顺序」改「并发」<span style="color:var(--fx-ink)">+ 加一段 Redis 互斥锁（避免并发雪崩）</span></div>
+          <div class="fx-tree-row l2">
+            <span class="fx-tree-indent">&nbsp;&nbsp;└─</span>
+            <div class="fx-tree-node">
+              <span class="name">social-media-platform-context</span>
+              <span class="dsc">业务 B 端子域 · 3 仓库分工 · @sm/* 别名</span>
+              <span class="lines">79 行</span>
             </div>
+          </div>
 
-            <div style="margin:6px 0;padding:8px 12px;border-left:2px solid rgba(255,120,214,.4);background:rgba(255,120,214,.04);border-radius:0 4px 4px 0;font-size:12.5px">
-              <div style="color:var(--fx-magenta);font-family:'JetBrains Mono',monospace;margin-bottom:3px">③ <code>6e7f8a9b</code> · 标签软删改物理删</div>
-              <div style="color:var(--fx-ink2)"><b style="color:var(--fx-ink)">我</b>：标签软删之后，关联表里还挂着脏数据，查询偶尔带出已删标签，先改物理删</div>
-              <div style="color:var(--fx-ink2)"><b style="color:var(--fx-ink)">AI</b>：删标签改物理删除 + 开事务一起清 <code>commerce_review_template_library_tag_rel</code>。topic「标签生命周期」那段原来写的是「软删保留 180 天」，我直接改成「物理删 + 事务清关联」</div>
-              <div style="color:var(--fx-magenta);font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:4px">→ topic 更正：<span style="color:var(--fx-ink)">删除语义 = <b>物理删 + 事务清关联</b>（旧版软删描述已废弃）</span></div>
+          <div class="fx-tree-row l3">
+            <span class="fx-tree-indent">&nbsp;&nbsp;&nbsp;&nbsp;└─</span>
+            <div class="fx-tree-node">
+              <span class="name">social-media-toclient-whitelist</span>
+              <span class="dsc"
+                >C 端 checkUidAndWhiteList · UID 隔离 · 错误码</span
+              >
+              <span class="lines">39 行</span>
             </div>
+          </div>
 
+          <div class="fx-tree-row l4">
+            <span class="fx-tree-indent"
+              >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─</span
+            >
+            <div class="fx-tree-node">
+              <span class="name">product-review-template-library</span>
+              <span class="dsc">本域细则 · Redis 锁 · AI 评分 · 本域例外</span>
+              <span class="lines">67 行</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="fx-demo-step" data-anim="fade-up" style="animation-delay:.70s">
-        <div class="n">6</div>
-        <div class="body">
-          <div class="cmd"><span class="op">/f2s-git-commit</span> <span class="ar">收尾闸门 · 冲突扫 / KB 覆盖查 / emoji + Conventional</span></div>
-          <div class="dsc">提交前强制三查：① 冲突标记预扫 ② topic 已覆盖新字段 ✓ ③ 首行 <code>🚀 feat(product-review): 模版文案库 + AI 评分</code> · 不 add -A · 不跳 hooks · 不自动 push。B 端管理 UI 另起仓库走同一套。</div>
+        <div class="fx-task-aside" style="margin-top: 30px">
+          <div class="quote" data-anim="fade-up" style="animation-delay: 0.5s">
+            依赖挂在<span style="color: var(--fx-cyan)">主题级</span
+            >，不是任务级 —— 新增任务无需重复声明前置，漏了也不会静默失效。
+          </div>
         </div>
-      </div>
 
+        <div class="fx-footer">
+          <span class="brand">feature · dependency-expansion</span>
+          <span class="page">08 / 13</span>
+        </div>
+        <div class="notes">
+          很多人觉得"依赖"只是一个语法细节。在这个项目里，商品评价主题挂了 3
+          层前置依赖——这些是每次改代码都必须先知道的通用约束。依赖挂在主题而不是任务上，意味着新增任务不会漏。
+        </div>
+      </section>
+
+      <!-- ======= Slide 9 · 硬约束密度（欧铁拼团） ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>case · groupon × coupon · hard-constraints</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">
+          cat .Knowledge/topics/{groupon,coupon}-context.md | grep "必须\|禁止"
+        </p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          每一条 topic · 都是 <span class="accent">挡 AI 犯错</span>的防线
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          另一条主线：拼团 + 通用券。这些约束凭 AI「看代码」绝对猜不出来 —— 写在
+          topic 里直接挡掉。
+        </p>
+
+        <div class="fx-rules">
+          <div
+            class="fx-rule"
+            data-anim="fade-up"
+            style="animation-delay: 0.3s">
+            <div class="tag">groupon · 01</div>
+            <h4>joinGroupon · 同事务双写</h4>
+            <div class="body">
+              参团记录 + 用户统计表
+              <span class="pos">必须在同一 sequelize.transaction() 内</span
+              >提交。<br />
+              <span class="neg">禁止</span>先写参团记录再另起事务更新统计，
+              <em style="color: var(--fx-ink2)"
+                >并发下会出现 maxUserJoins 漂移。</em
+              >
+            </div>
+          </div>
+
+          <div
+            class="fx-rule"
+            data-anim="fade-up"
+            style="animation-delay: 0.4s">
+            <div class="tag">groupon · 02</div>
+            <h4>maxUserTeamLeader · 按 type 隔离</h4>
+            <div class="body">
+              团长上限
+              <span class="pos">仅统计当前活动 type 的开团数</span>，<br />
+              <span class="neg">跨 type 不累加</span>；校验源为 QConfig
+              <code>groupon-setting.json</code> ·
+              <code>validField / maxUserJoins / needNewGuest</code>
+              必须先读再动。
+            </div>
+          </div>
+
+          <div
+            class="fx-rule"
+            data-anim="fade-up"
+            style="animation-delay: 0.5s">
+            <div class="tag">coupon · 03</div>
+            <h4>前端只传 activityCode</h4>
+            <div class="body">
+              对外接口<span class="pos">不接受 promotionId</span>；后端通过
+              <code>activityCode</code> 查
+              <code>promotionId + couponConfigId</code>，改造必经
+              <code>@/utils/couponHelper.js</code>。<br />
+              <em style="color: var(--fx-ink2)"
+                >泄露 promotionId 会让活动在未上线时被枚举调用。</em
+              >
+            </div>
+          </div>
+
+          <div
+            class="fx-rule"
+            data-anim="fade-up"
+            style="animation-delay: 0.6s">
+            <div class="tag">coupon · 04</div>
+            <h4>status 优先级 0 &gt; 1 &gt; 2</h4>
+            <div class="body">
+              领券结果 <code>status</code> 语义：<span class="neg">0=失败</span>
+              · <span class="pos">1=成功</span> · <code>2=已领取</code> ·
+              <code>3=已领完</code> · <code>4=不可领</code>。<br />
+              合并多源状态时
+              <span class="neg">必须按 0&gt;1&gt;2&gt;3&gt;4 取优先级</span
+              >，不是取 max 也不是取 min。
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">case · groupon × coupon · real-constraints</span>
+          <span class="page">09 / 13</span>
+        </div>
+        <div class="notes">
+          如果上一页在讲"广度"，这一页讲"密度"。拼团的同事务双写、通用券的
+          activityCode-only 和 status 优先级——这些是你问
+          AI「应该这么写吗」它也答不出来的那种。写在 topic
+          里，下一次改代码直接按约束来——这才是知识库的真实价值。
+        </div>
+      </section>
+
+      <!-- ======= Slide 10 · 全景一图：两层 ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>architecture · two-layer · one-arrow</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">tree -L 1 -d</p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          一张图 · <span class="accent">两层</span> · 一根箭头
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          知识层随项目走 · 规则层随工具走 · 生命周期不同，分开是最基本的决策。
+        </p>
+
+        <div class="fx-arch">
+          <div
+            class="fx-arch-layer top"
+            data-anim="fade-up"
+            style="animation-delay: 0.3s">
+            <div class="lbl">KNOWLEDGE LAYER · 随项目</div>
+            <div class="title">.Knowledge/</div>
+            <div class="sub">
+              业务主题路由 · 存量文档 · 需求澄清 · 终稿方案 ·
+              一份，只在这里写一次。
+            </div>
+            <div class="pills">
+              <span class="pill">manifest-routing.json</span>
+              <span class="pill">matchers/*.json</span>
+              <span class="pill">topics/*.md</span>
+              <span class="pill">stock-docs/*.md</span>
+              <span class="pill">req-docs/*.md</span>
+            </div>
+          </div>
+
+          <div
+            class="fx-arch-link"
+            data-anim="fade-up"
+            style="animation-delay: 0.42s">
+            <div class="bar"></div>
+            <div class="txt">f2s-* 技能 · 维护 ↑ · 触发 ↓</div>
+            <div class="bar"></div>
+          </div>
+
+          <div
+            class="fx-arch-layer bot"
+            data-anim="fade-up"
+            style="animation-delay: 0.54s">
+            <div class="lbl">RULES LAYER · 随工具</div>
+            <div class="title">.cursor/ · .claude/ · .codex/</div>
+            <div class="sub">
+              各工具按自己原生方式加载规则和技能 · 知识层统一，执行层各自独立。
+            </div>
+            <div class="pills">
+              <span class="pill">.cursor/rules/*.mdc</span>
+              <span class="pill">.claude/rules/*.md</span>
+              <span class="pill">.codex/AGENTS.md</span>
+              <span class="pill">skills/*/SKILL.md</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">architecture · knowledge × rules</span>
+          <span class="page">10 / 13</span>
+        </div>
+        <div class="notes">
+          只给大家一张图。上面随项目走，下面随工具走，中间一根箭头。团队里不同人用不同
+          AI、CI 用 Codex 本地用 Claude——这张图回答了为什么知识只写一份就够。
+        </div>
+      </section>
+
+      <!-- ======= Slide 11 · 现场 Demo 路书 ======= -->
+      <section class="slide is-scroll">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>live · demo · routemap</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">
+          ./demo.sh --case product-review-template-library
+        </p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          真实案例 · <span class="accent">评价模板文案库</span>
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          一条主线 6 步走通 · 期间穿插十余次 feat/fix
+          小迭代，都在同一条知识链上生长。
+        </p>
+
+        <div class="fx-demo">
+          <div
+            class="fx-demo-step"
+            data-anim="fade-up"
+            style="animation-delay: 0.3s">
+            <div class="n">1</div>
+            <div class="body">
+              <div class="cmd">
+                <span class="op">/f2s-req-clarify</span>
+                <span class="ar"
+                  >「做一个模版库给用户文章做 AI 润色，模版和文章都要 AI
+                  评分，B/C 两端都要读」</span
+                >
+              </div>
+              <div class="dsc" style="padding-top: 2px">
+                <div
+                  style="
+                    font-size: 13px;
+                    margin-bottom: 6px;
+                    color: var(--fx-ink2);
+                  ">
+                  澄清是
+                  <b style="color: var(--fx-cyan)"
+                    >「成批问 → 你答 → AI 对知识库查缺 → 再成批问」</b
+                  >的迭代，不是一问一答：
+                </div>
+
+                <div
+                  style="
+                    margin: 6px 0;
+                    padding: 8px 12px;
+                    border-left: 2px solid rgba(126, 246, 255, 0.4);
+                    background: rgba(126, 246, 255, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      margin-bottom: 3px;
+                    ">
+                    轮 1 · 一次性抛 12 个问题
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>：定位（仅运营编辑？C
+                    端选模版发帖？历史版本？去重？）·
+                    数据形态（标签独立表/内联？多对多？纯文本/富文本？3000
+                    字按字符数？图片数组几张？占位符？）· 匹配（U⊆L 完全覆盖 vs
+                    交集最大？权重何时 +1？下线/删除可被命中？）
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">我</b>：一次性逐条回答。
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    margin: 6px 0;
+                    padding: 8px 12px;
+                    border-left: 2px solid rgba(187, 160, 255, 0.4);
+                    background: rgba(187, 160, 255, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-purple);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      margin-bottom: 3px;
+                    ">
+                    ↓ AI 自检 · 把答案对齐已加载的 4 层 topic + stock-docs
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    对照 <code>product-review</code> /
+                    <code>common-modules</code> /
+                    <code>social-media-platform</code> 已有事实：发现
+                    <b style="color: var(--fx-ink)">(a)</b>
+                    批量方法没说够数是否补查、<b style="color: var(--fx-ink)"
+                      >(b)</b
+                    >
+                    并列怎么破没讲、<b style="color: var(--fx-ink)">(c)</b>
+                    图片上传工具没点名、<b style="color: var(--fx-ink)">(d)</b>
+                    接口是新建还是复用现有没确认 → 继续追问。
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    margin: 6px 0;
+                    padding: 8px 12px;
+                    border-left: 2px solid rgba(126, 246, 255, 0.4);
+                    background: rgba(126, 246, 255, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      margin-bottom: 3px;
+                    ">
+                    轮 2 · 针对缺口再抛 4 个问题
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>：需要
+                    <code>needCount</code> 不足时补查吗？|L|
+                    最小相等时按什么兜底？图片上传复用 admin
+                    <code>utils</code> 还是新建？BC 接口从零实现吗（当前 0）？
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">我</b>：不补查直接返回 ·
+                    按使用权重破平 · 复用 admin utils · BC 均从零。
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    font-size: 12.5px;
+                    margin-top: 6px;
+                    color: var(--fx-ink2);
+                  ">
+                  → AI 再次对 KB 查缺，无遗留 → 定稿
+                  <code>req-docs/商品评价_模版文案库_需求澄清.md</code>（10 小节
+                  · U⊆L 三档规则）+ 配套
+                  <code>商品评价_文章发布流程改造_技术方案.md</code>（postType /
+                  imageUrls / publishStatus 流转）
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="fx-demo-step"
+            data-anim="fade-up"
+            style="animation-delay: 0.38s">
+            <div class="n">2</div>
+            <div class="body">
+              <div class="cmd">
+                <span class="op">/f2s-req-backend</span>
+                <span class="ar"
+                  >matcher 命中 m-product-review-template-library</span
+                >
+              </div>
+              <div class="dsc">
+                自动加载 4 层 topic 依赖（common-modules → social-media →
+                product-review → template-library），产出
+                <code>req-docs/商品评价_模版文案库_技术方案.md</code> + 5 份
+                DDL（文案库 / 标签 / 关联 / 评分规则 / agent prompt）。
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="fx-demo-step"
+            data-anim="fade-up"
+            style="animation-delay: 0.46s">
+            <div class="n">3</div>
+            <div class="body">
+              <div class="cmd">
+                <span class="ar"
+                  >方案定稿后
+                  <b style="color: var(--fx-cyan)"
+                    >你说一句「实现这个技术方案」或「继续」</b
+                  >
+                  · 落 <code>.task/active/template_ai_score/</code></span
+                >
+              </div>
+              <div class="dsc">
+                不用记命令——读到 <code>req-docs/</code> 里的技术方案，AI 触发
+                <code>f2s-implement-tech-design</code>，自动拆 8 步
+                checklist：建评分规则表 → 模型 → aiScoreHelper（先 mock）→ 4 个
+                CRUD + serverless 注册 → 入库 fire-and-forget 触发评分 →
+                批量重评分接口 → 列表/详情透传 aiScore → KB
+                同步。每步勾钩，中断可续。
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="fx-demo-step"
+            data-anim="fade-up"
+            style="animation-delay: 0.54s">
+            <div class="n">4</div>
+            <div class="body">
+              <div class="cmd">
+                <span class="op">/f2s-kb-feat</span>
+                <span class="ar"
+                  >2 次能力扩展 ·
+                  <b style="color: var(--fx-cyan)">写完代码当场写 KB</b></span
+                >
+              </div>
+              <div class="dsc" style="padding-top: 2px">
+                <div
+                  style="
+                    margin: 6px 0;
+                    padding: 8px 12px;
+                    border-left: 2px solid rgba(126, 246, 255, 0.4);
+                    background: rgba(126, 246, 255, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      margin-bottom: 3px;
+                    ">
+                    ① <code>a1b2c3d</code> · 图片上传抽公共方法
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">我</b>：admin
+                    这边图片上传要改走后端 multipart
+                    接口，顺带写个公共方法，别人也能用
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>：抽到
+                    <code>utils/uploadImageByMultipart.ts</code>，返回 CDN
+                    URL。要我同步写进 topic 吗？下次 AI 改上传就直接复用。
+                  </div>
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 11px;
+                      margin-top: 4px;
+                    ">
+                    → topic 追加片段：<span style="color: var(--fx-ink)"
+                      >「图片上传 = <code>uploadImageByMultipart(file)</code> →
+                      回 CDN URL；禁止 base64 直传」</span
+                    >
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    margin: 6px 0;
+                    padding: 8px 12px;
+                    border-left: 2px solid rgba(126, 246, 255, 0.4);
+                    background: rgba(126, 246, 255, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      margin-bottom: 3px;
+                    ">
+                    ② <code>e4f5a6b7</code> · 对外 UUID / 内部 id 分离
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">我</b
+                    >：模版库接口不能暴露自增 id，外部要 UUID，但内部 join
+                    还是走 id
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>：加
+                    <code>libraryUuid VARCHAR(36)</code> 字段 +
+                    唯一索引，响应里只吐 uuid。我把「外 uuid / 内 id」写进 topic
+                    的 ID 约定段，下次这个域一律按这条走。
+                  </div>
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 11px;
+                      margin-top: 4px;
+                    ">
+                    → topic 追加片段：<span style="color: var(--fx-ink)"
+                      >「对外契约 <code>libraryUuid</code>，内部 join 用
+                      <code>id</code>」</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="fx-demo-step"
+            data-anim="fade-up"
+            style="animation-delay: 0.62s">
+            <div class="n">5</div>
+            <div class="body">
+              <div class="cmd">
+                <span class="op">/f2s-kb-fix</span>
+                <span class="ar"
+                  >3 次迭代都走同一入口 ·
+                  <b style="color: var(--fx-cyan)">每次带着改 topic</b></span
+                >
+              </div>
+              <div class="dsc" style="padding-top: 2px">
+                <div
+                  style="
+                    margin: 6px 0;
+                    padding: 8px 12px;
+                    border-left: 2px solid rgba(255, 120, 214, 0.4);
+                    background: rgba(255, 120, 214, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-magenta);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      margin-bottom: 3px;
+                    ">
+                    ① <code>c8d9e0f1</code> · 评分漏传 title
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">我</b
+                    >：运营吐槽同样内容分数波动大——我一看
+                    <code>scoreContent</code> 只把 content 扔给
+                    Agent，标题完全没进去
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>：给
+                    <code>scoreContent(title, content, model?)</code>，prompt
+                    里把标题作为独立上下文。六个 handler 都补一下调用。要改
+                    topic 吗？
+                  </div>
+                  <div
+                    style="
+                      color: var(--fx-magenta);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 11px;
+                      margin-top: 4px;
+                    ">
+                    → topic「评分输入结构」表新增一行：<span
+                      style="color: var(--fx-ink)"
+                      ><code
+                        >title: string · 必传 · 用于 Agent 理解主题意图</code
+                      ></span
+                    >
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    margin: 6px 0;
+                    padding: 8px 12px;
+                    border-left: 2px solid rgba(255, 120, 214, 0.4);
+                    background: rgba(255, 120, 214, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-magenta);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      margin-bottom: 3px;
+                    ">
+                    ② <code>2a3b4c5d</code> · scoreContentBatch 串行改并发
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">我</b>：批量重评分 10 条要
+                    90 秒，老板说不能接受，这个方法不用一条一条等
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>：<code
+                      >for-await</code
+                    >
+                    改 <code>Promise.all</code> 并发触发，实测 10 条 9
+                    秒。顺手把繁忙错误码 <code>AI_BUSY</code> 从字面量拆到
+                    <code>_enum</code>——避免后面又飞散。
+                  </div>
+                  <div
+                    style="
+                      color: var(--fx-magenta);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 11px;
+                      margin-top: 4px;
+                    ">
+                    → topic「批量重评分时序」从「顺序」改「并发」<span
+                      style="color: var(--fx-ink)"
+                      >+ 加一段 Redis 互斥锁（避免并发雪崩）</span
+                    >
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    margin: 6px 0;
+                    padding: 8px 12px;
+                    border-left: 2px solid rgba(255, 120, 214, 0.4);
+                    background: rgba(255, 120, 214, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-magenta);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      margin-bottom: 3px;
+                    ">
+                    ③ <code>6e7f8a9b</code> · 标签软删改物理删
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">我</b
+                    >：标签软删之后，关联表里还挂着脏数据，查询偶尔带出已删标签，先改物理删
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>：删标签改物理删除 +
+                    开事务一起清
+                    <code>commerce_review_template_library_tag_rel</code
+                    >。topic「标签生命周期」那段原来写的是「软删保留 180
+                    天」，我直接改成「物理删 + 事务清关联」
+                  </div>
+                  <div
+                    style="
+                      color: var(--fx-magenta);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 11px;
+                      margin-top: 4px;
+                    ">
+                    → topic 更正：<span style="color: var(--fx-ink)"
+                      >删除语义 =
+                      <b>物理删 + 事务清关联</b>（旧版软删描述已废弃）</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="fx-demo-step"
+            data-anim="fade-up"
+            style="animation-delay: 0.7s">
+            <div class="n">6</div>
+            <div class="body">
+              <div class="cmd">
+                <span class="op">/f2s-git-commit</span>
+                <span class="ar"
+                  >收尾闸门 · 冲突扫 / KB 覆盖查 / emoji + Conventional</span
+                >
+              </div>
+              <div class="dsc">
+                提交前强制三查：① 冲突标记预扫 ② topic 已覆盖新字段 ✓ ③ 首行
+                <code>🚀 feat(product-review): 模版文案库 + AI 评分</code> · 不
+                add -A · 不跳 hooks · 不自动 push。B 端管理 UI
+                另起仓库走同一套。
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="fx-demo-goal"
+          data-anim="fade-up"
+          style="animation-delay: 0.82s">
+          一条主线 <span class="big">6 步</span> 走通 · 期间<span
+            style="color: var(--fx-cyan)">
+            10+ 次小迭代</span
+          >
+          都在同一条知识链上生长。
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">live · demo · end-to-end</span>
+          <span class="page">11 / 13</span>
+        </div>
+        <div class="notes">
+          这一页是评价模板文案库从 0 接口到 17 接口的完整全景，4
+          天断续跑完，都是真实提交。六步讲法：①
+          澄清不是一次问完——"图片是否参与匹配""占位符要不要""下线后能否命中"全是
+          AI 反问逼出来的边界，落成 req-docs 里几十条的澄清稿；② matcher 命中
+          m-product-review-template-library，4 层 topic 依赖链自动展开；③ 8 步
+          checklist 在
+          .task/completed/20260509-template_ai_score/，演示时可以翻出来；④
+          重点讲公共方法——admin 图片上传改 multipart 回写 CDN URL（commit
+          a1b2c3d），当场把使用示例写进 topic，下次其他页面 AI 直接复用；⑤
+          重点讲三个 kb-fix，都是真实 commit：(a) c8d9e0f1 评分漏传 title，Agent
+          看不懂为什么同样内容分数差那么多；(b) 2a3b4c5d scoreContentBatch 从
+          for-await 串行改 Promise.all 并发，批量 10 条从 90s 到 9s，同时把 AI
+          繁忙错误码拆到 _enum；(c) 6e7f8a9b
+          标签删除从软删改物理删+事务。每次都走同一入口带着改
+          topic——这就是"不腐化"的证据；⑥ git-commit 三查全过。收尾强调：17
+          接口、5 张表、跨 B/C 两端、4 天断续——不是演示用例，就是本周工作。
+        </div>
+      </section>
+
+      <!-- ======= Slide 12 · 什么时候不要用 ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>honest · dont-use-when</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">echo "not a silver bullet"</p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          说实话 · <span class="accent">什么时候不要用</span>
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          Flow2Spec 用结构投入换长期复利。下面三种场景，结构投入不划算，别硬上。
+        </p>
+
+        <div class="fx-dontuse">
+          <div class="c" data-anim="fade-up" style="animation-delay: 0.3s">
+            <div class="x">×</div>
+            <div class="t">一次性脚本 · 临时工具</div>
+            <div class="d">
+              写完就删的东西，直接把几个 Markdown 丢给 AI
+              更快。知识库维护是纯额外成本。
+            </div>
+          </div>
+
+          <div class="c" data-anim="fade-up" style="animation-delay: 0.42s">
+            <div class="x">×</div>
+            <div class="t">单人小项目 · 不多端协作</div>
+            <div class="d">
+              只有你一个人、一个 AI、一台电脑 —— 一份 CLAUDE.md
+              足够，路由和分片的开销大于收益。
+            </div>
+          </div>
+
+          <div class="c" data-anim="fade-up" style="animation-delay: 0.54s">
+            <div class="x">×</div>
+            <div class="t">团队不愿同步 .Knowledge/</div>
+            <div class="d">
+              改了代码不同步技能，知识库照样腐化。工具不能替代纪律，f2s-*
+              只是降低"同步成本"的手段。
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">honest · limits</span>
+          <span class="page">12 / 13</span>
+        </div>
+        <div class="notes">
+          同事上次反馈说"要做产品对比"——这一页是另一半的坦诚。说清楚什么时候不要用，比夸什么时候好用更可信。适合谁，反着讲最清楚。
+        </div>
+      </section>
+
+      <!-- ======= Slide 13 · 收束呼应 ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-glow-purple"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>~/flow2spec · end · 02:00:00</div>
+        </div>
+
+        <div class="fx-closer">
+          <div class="tag" data-anim="fade-up">// the takeaway</div>
+          <h1 data-anim="fade-up" style="animation-delay: 0.15s">
+            不是让 AI <span class="strike">更聪明</span>，<br />
+            是让 AI <span class="hl">一直知道</span>你在<span class="hl2"
+              >做什么</span
+            ><span class="fx-cursor"></span>
+          </h1>
+          <div class="kv" data-anim="fade-up" style="animation-delay: 0.35s">
+            <div>repo<span>·</span>github.com/Lands-1203/Flow2Spec</div>
+            <div>
+              install<span>·</span>npx @double-codeing/flow2spec@latest init
+            </div>
+            <div>contact<span>·</span>兰涛</div>
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">flow2spec · let's talk</span>
+          <span class="page">13 / 13</span>
+        </div>
+        <div class="notes">
+          收束和开场呼应。一句话——不是让 AI 更聪明，是让 AI
+          一直知道你在做什么。底下三行留联系方式和仓库地址。
+        </div>
+      </section>
     </div>
 
-    <div class="fx-demo-goal" data-anim="fade-up" style="animation-delay:.82s">
-      一条主线 <span class="big">6 步</span> 走通 · 期间<span style="color:var(--fx-cyan)"> 10+ 次小迭代</span> 都在同一条知识链上生长。
-    </div>
-
-    <div class="fx-footer">
-      <span class="brand">live · demo · end-to-end</span>
-      <span class="page">11 / 13</span>
-    </div>
-    <div class="notes">这一页是评价模板文案库从 0 接口到 17 接口的完整全景，4 天断续跑完，都是真实提交。六步讲法：① 澄清不是一次问完——"图片是否参与匹配""占位符要不要""下线后能否命中"全是 AI 反问逼出来的边界，落成 req-docs 里几十条的澄清稿；② matcher 命中 m-product-review-template-library，4 层 topic 依赖链自动展开；③ 8 步 checklist 在 .task/completed/20260509-template_ai_score/，演示时可以翻出来；④ 重点讲公共方法——admin 图片上传改 multipart 回写 CDN URL（commit a1b2c3d），当场把使用示例写进 topic，下次其他页面 AI 直接复用；⑤ 重点讲三个 kb-fix，都是真实 commit：(a) c8d9e0f1 评分漏传 title，Agent 看不懂为什么同样内容分数差那么多；(b) 2a3b4c5d scoreContentBatch 从 for-await 串行改 Promise.all 并发，批量 10 条从 90s 到 9s，同时把 AI 繁忙错误码拆到 _enum；(c) 6e7f8a9b 标签删除从软删改物理删+事务。每次都走同一入口带着改 topic——这就是"不腐化"的证据；⑥ git-commit 三查全过。收尾强调：17 接口、5 张表、跨 B/C 两端、4 天断续——不是演示用例，就是本周工作。</div>
-  </section>
-
-  <!-- ======= Slide 12 · 什么时候不要用 ======= -->
-  <section class="slide">
-    <div class="fx-grid"></div>
-    <div class="fx-vignette"></div>
-    <div class="fx-scanlines"></div>
-
-    <div class="fx-chrome">
-      <div class="dots"><span></span><span></span><span></span></div>
-      <div>honest · dont-use-when</div>
-    </div>
-
-    <p class="fx-prompt" data-anim="fade-up">echo "not a silver bullet"</p>
-    <h2 class="fx-h1" data-anim="fade-up" style="animation-delay:.1s">
-      说实话 · <span class="accent">什么时候不要用</span>
-    </h2>
-    <p class="fx-lede" data-anim="fade-up" style="animation-delay:.2s">
-      Flow2Spec 用结构投入换长期复利。下面三种场景，结构投入不划算，别硬上。
-    </p>
-
-    <div class="fx-dontuse">
-
-      <div class="c" data-anim="fade-up" style="animation-delay:.3s">
-        <div class="x">×</div>
-        <div class="t">一次性脚本 · 临时工具</div>
-        <div class="d">写完就删的东西，直接把几个 Markdown 丢给 AI 更快。知识库维护是纯额外成本。</div>
-      </div>
-
-      <div class="c" data-anim="fade-up" style="animation-delay:.42s">
-        <div class="x">×</div>
-        <div class="t">单人小项目 · 不多端协作</div>
-        <div class="d">只有你一个人、一个 AI、一台电脑 —— 一份 CLAUDE.md 足够，路由和分片的开销大于收益。</div>
-      </div>
-
-      <div class="c" data-anim="fade-up" style="animation-delay:.54s">
-        <div class="x">×</div>
-        <div class="t">团队不愿同步 .Knowledge/</div>
-        <div class="d">改了代码不同步技能，知识库照样腐化。工具不能替代纪律，f2s-* 只是降低"同步成本"的手段。</div>
-      </div>
-
-    </div>
-
-    <div class="fx-footer">
-      <span class="brand">honest · limits</span>
-      <span class="page">12 / 13</span>
-    </div>
-    <div class="notes">同事上次反馈说"要做产品对比"——这一页是另一半的坦诚。说清楚什么时候不要用，比夸什么时候好用更可信。适合谁，反着讲最清楚。</div>
-  </section>
-
-  <!-- ======= Slide 13 · 收束呼应 ======= -->
-  <section class="slide">
-    <div class="fx-grid"></div>
-    <div class="fx-glow-cyan"></div>
-    <div class="fx-glow-magenta"></div>
-    <div class="fx-glow-purple"></div>
-    <div class="fx-vignette"></div>
-    <div class="fx-scanlines"></div>
-
-    <div class="fx-chrome">
-      <div class="dots"><span></span><span></span><span></span></div>
-      <div>~/flow2spec · end · 02:00:00</div>
-    </div>
-
-    <div class="fx-closer">
-      <div class="tag" data-anim="fade-up">// the takeaway</div>
-      <h1 data-anim="fade-up" style="animation-delay:.15s">
-        不是让 AI <span class="strike">更聪明</span>，<br>
-        是让 AI <span class="hl">一直知道</span>你在<span class="hl2">做什么</span><span class="fx-cursor"></span>
-      </h1>
-      <div class="kv" data-anim="fade-up" style="animation-delay:.35s">
-        <div>repo<span>·</span>github.com/Lands-1203/Flow2Spec</div>
-        <div>install<span>·</span>npx @double-codeing/flow2spec@latest init</div>
-        <div>contact<span>·</span>兰涛</div>
-      </div>
-    </div>
-
-    <div class="fx-footer">
-      <span class="brand">flow2spec · let's talk</span>
-      <span class="page">13 / 13</span>
-    </div>
-    <div class="notes">收束和开场呼应。一句话——不是让 AI 更聪明，是让 AI 一直知道你在做什么。底下三行留联系方式和仓库地址。</div>
-  </section>
-
-</div>
-
-<script src="../../.claude/skills/html-ppt/assets/runtime.js"></script>
-</body>
+    <script src="../../.claude/skills/html-ppt/assets/runtime.js"></script>
+  </body>
 </html>
