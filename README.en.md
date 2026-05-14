@@ -5,7 +5,7 @@
 >
 > 🌐 **[中文](./README.md)** · 中 / EN
 
-🎬 **[Live Demo](https://lands-1203.github.io/Flow2Spec/)** (13-slide HTML PPT, `←` `→` to navigate, `S` for presenter mode)
+🎬 **[Live Demo (English)](https://lands-1203.github.io/Flow2Spec/en/)** | **[中文演示](https://lands-1203.github.io/Flow2Spec/)** (13-slide HTML PPT, `←` `→` to navigate, `S` for presenter mode)
 
 🔧 **Quick start**:
 

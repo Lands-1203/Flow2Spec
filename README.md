@@ -5,7 +5,7 @@
 >
 > 🌐 **[English](./README.en.md)** · 中 / EN
 
-🎬 **[在线演示](https://lands-1203.github.io/Flow2Spec/)**（13 页 HTML PPT，`←` `→` 翻页，`S` 演讲者模式）
+🎬 **[在线演示(中文)](https://lands-1203.github.io/Flow2Spec/)** | **[English Demo](https://lands-1203.github.io/Flow2Spec/en/)**（13 页 HTML PPT，`←` `→` 翻页，`S` 演讲者模式）
 
 🔧 **快速体验**：
 
