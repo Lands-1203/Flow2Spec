@@ -1,0 +1,36 @@
+---
+description: Flow2Spec 插件首次安装引导：检测知识库是否初始化，未初始化时提示用户运行 f2s-kb-upgrade
+alwaysApply: true
+---
+
+# Flow2Spec 安装后引导
+
+## 检测条件
+
+当用户首次与你对话，或你发现以下任一情况时，**必须主动提示**：
+
+1. 项目根不存在 `.Knowledge/manifest-routing.json`
+2. 项目根不存在 `flow2spec.config.json`
+
+## 提示内容
+
+```
+👋 检测到 Flow2Spec 插件已安装，但项目知识库尚未初始化。
+
+建议运行以下命令完成初始化：
+
+  /f2s-kb-upgrade
+
+该命令会：
+• 在项目根生成 .Knowledge/ 知识库骨架（manifest-routing + matchers + topics）
+• 生成 flow2spec.config.json 配置文件
+• 对齐规则与技能到最新版本
+
+初始化完成后，你可以通过 /f2s-doc-arch 或 /f2s-ctx-build 开始沉淀项目知识。
+```
+
+## 约束
+
+- 每个会话**最多提示一次**，不重复打扰。
+- 若用户已有 `.Knowledge/manifest-routing.json`，说明已初始化，**不提示**。
+- 若用户明确表示不需要知识库（如"我只用规则"），尊重选择，不再提示。
