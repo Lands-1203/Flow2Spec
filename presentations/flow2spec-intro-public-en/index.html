@@ -1,0 +1,1606 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flow2Spec · Keep Your AI Always in Context</title>
+    <link
+      rel="stylesheet"
+      href="../../.claude/skills/html-ppt/assets/fonts.css" />
+    <link
+      rel="stylesheet"
+      href="../../.claude/skills/html-ppt/assets/base.css" />
+    <link
+      rel="stylesheet"
+      href="../../.claude/skills/html-ppt/assets/animations/animations.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="tpl-flow2spec-intro">
+    <div class="deck">
+      <!-- ======= Slide 1 · Opening (Emotion) ======= -->
+      <section class="slide is-active">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-glow-purple"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>~/flow2spec · zsh · 01:00:00</div>
+        </div>
+
+        <div class="fx-cover">
+          <p class="fx-prompt" data-anim="fade-up">whoami</p>
+          <h1
+            class="fx-hero"
+            data-anim="fade-up"
+            style="animation-delay: 0.15s">
+            Has Your <span class="c2">AI</span><br />
+            <span class="c1">Lost Its Memory</span>?<span class="fx-cursor"></span>
+          </h1>
+          <p class="fx-sub" data-anim="fade-up" style="animation-delay: 0.35s">
+            <span class="brand">Flow2Spec</span> · Keep Your AI Always in Context
+          </p>
+          <p class="fx-desc" data-anim="fade-up" style="animation-delay: 0.45s">
+            An AI collaboration framework —
+            <span class="hl">cross-device sessions</span> that remember project context ·
+            Internal <span class="hl">routing manifest</span> design so AI
+            doesn't rummage through the repo, only fetches what it needs ·
+            <span class="hl">f2s-* skills</span>
+            update knowledge alongside code changes, always fresh, never stale
+          </p>
+          <div
+            class="fx-meta"
+            data-anim="fade-up"
+            style="animation-delay: 0.55s">
+            Lan Tao<span>·</span>2026.05<span>·</span>Frontend Team
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">flow2spec-intro</span>
+          <span class="page">01 / 13</span>
+        </div>
+        <div class="notes">
+          Has your AI lost its memory? Every new session, it forgets what was discussed last time, doesn't know the project structure, and can't recall constraints. Flow2Spec does three things: first, cross-device sessions that remember project context; second, an internal routing manifest design so AI doesn't rummage through the repo, only fetches what it needs; third, f2s-* skills update knowledge alongside code changes, keeping it always fresh and never stale. Today we'll start with the pain points, discuss how it works, and finish with how to get started.
+        </div>
+      </section>
+
+      <!-- ======= Slide 2 · Before / After Conversation ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>session · diff · product-review / batch-rescore</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">compare before-after</p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          Same Request, <span class="accent">Two Conversations</span>
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          Real scenario: a major internet company's backend service trn-fe-ops-commerce-api · 796 files
+          / 4.7 MB · 416 endpoints
+        </p>
+
+        <div class="fx-compare">
+          <div
+            class="fx-panel bad"
+            data-anim="fade-up"
+            style="animation-delay: 0.35s">
+            <div class="fx-panel-title">
+              <span class="dot"></span>Without Flow2Spec
+            </div>
+            <pre><span class="user">&gt; Modify the batch rescore for the review template library</span>
+
+<span class="ai">AI: Where's the table for this module?</span>
+<span class="ai">AI: Is batchReScore sync or async?</span>
+<span class="ai">AI: Is there a lock? What's the idempotency key?</span>
+<span class="ai">AI: What's the response format? What's the error code?</span>
+<span class="ai">AI: <span class="k">(Scanning all 416 endpoints, 796 files, 4.7 MB of source code...)</span></span></pre>
+            <div class="fx-panel-foot">Repeated explanations · Repeated code scanning · Repeated pitfalls</div>
+          </div>
+
+          <div
+            class="fx-panel good"
+            data-anim="fade-up"
+            style="animation-delay: 0.5s">
+            <div class="fx-panel-title">
+              <span class="dot"></span>With Flow2Spec
+            </div>
+            <pre><span class="user">&gt; Modify the batch rescore for the review template library</span>
+
+<span class="ai"><span class="p">[matcher hit]</span> m-product-review-template-library</span>
+<span class="ai"><span class="p">[loading deps]</span> 4 topics · ~300 lines</span>
+<span class="ai">AI: Already known — <span class="g">fire-and-forget</span></span>
+<span class="ai">     Redis lock <span class="a">smp:product-review:template-library</span></span>
+<span class="ai">     <span class="a">:batch-rescore:lock</span> (TTL 10 min)</span>
+<span class="ai">     Max <span class="g">100 items</span> per batch · error code <span class="g">101</span></span>
+<span class="ai">AI: Starting changes, estimated 3 files.</span></pre>
+            <div class="fx-panel-foot">4.7 MB → 300 lines · Instant access to hard constraints</div>
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">flow2spec-intro</span>
+          <span class="page">02 / 13</span>
+        </div>
+        <div class="notes">
+          Look at this comparison. Same request: "Modify the batch rescore for the review template library." On the left, without the framework, AI asks where the table is, whether it's sync or async, what the lock is — scanning all 416 endpoints before it dares to start. On the right, with Flow2Spec, the matcher hits instantly — Redis lock key, error codes, batch limits all already known. The difference isn't a smarter model; it's more precise context. Same model, different data in, different output.
+        </div>
+      </section>
+
+      <!-- ======= Slide 3 · Scale Numbers ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-glow-purple"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>stats · trn-fe-ops-commerce-api · 2026-05-13</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">
+          du -sh . && cat .Knowledge/manifest-routing.json
+        </p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          Not a Concept — It's <span class="accent">Daily Reality</span>
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          In a real production repo deeply using Flow2Spec, these numbers grow every day.
+        </p>
+
+        <div class="fx-kpis">
+          <div class="fx-kpi" data-anim="fade-up" style="animation-delay: 0.3s">
+            <div>
+              <div class="lbl">Public Endpoints</div>
+              <div class="num">416</div>
+            </div>
+            <div class="desc">
+              Functions registered in serverless.yml · Traditional approach requires AI to read the entire repo
+            </div>
+          </div>
+
+          <div
+            class="fx-kpi"
+            data-anim="fade-up"
+            style="animation-delay: 0.42s">
+            <div>
+              <div class="lbl">src Files / Size / Lines</div>
+              <div class="num">796 · 4.7 MB · 100K lines</div>
+            </div>
+            <div class="desc">
+              Flow2Spec loads only ~300 lines of matched topics each time · 99% noise eliminated
+            </div>
+          </div>
+
+          <div
+            class="fx-kpi"
+            data-anim="fade-up"
+            style="animation-delay: 0.54s">
+            <div>
+              <div class="lbl">Topics / Matchers / Docs</div>
+              <div class="num">12 / 11 / 28</div>
+            </div>
+            <div class="desc">
+              Topic shards · keyword shards · dual-track documentation for existing and requirement docs
+            </div>
+          </div>
+
+          <div
+            class="fx-kpi"
+            data-anim="fade-up"
+            style="animation-delay: 0.66s">
+            <div>
+              <div class="lbl">Endpoints / Layers / Task Lists</div>
+              <div class="num">17/3/14</div>
+            </div>
+            <div class="desc">
+              4 days intermittent work · across
+              <span style="color: var(--fx-cyan)">B-side · C-side · API layer</span>
+              three repos · review template library / tags / article revamp / AI review / agent scoring system /
+              frontend custom scoring
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand"
+            >A major internet company backend · trn-fe-ops-commerce-api · 2026-05-09 ~
+            05-13</span
+          >
+          <span class="page">03 / 13</span>
+        </div>
+        <div class="notes">
+          Not a concept — it's daily reality. This repo has 416 endpoints, 796 files, 100K lines of code. Flow2Spec loads only 300 lines of matched topics each time, cutting 99% of noise. In the last 4 days: 17 endpoints delivered, 14 archived tasks, across B-side, C-side, and API layer — three repos in parallel. Without a knowledge base for context support, one person can't sustain this pace.
+        </div>
+      </section>
+
+      <!-- ======= Slide 4 · Why Not X · Y · Z ======= -->
+      <section class="slide is-compact">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>
+            why not · openspec · superpowers · rag-kb · ohmyclaude · spec-kit
+          </div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">diff market.md</p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          No Hard Sell — <span class="accent">Judge for Yourself</span>
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          Top half: what five market players do and don't do. Bottom half: Flow2Spec's 5
+          capabilities mapped to each gap.
+        </p>
+
+        <div
+          class="fx-rivals"
+          data-anim="fade-up"
+          style="animation-delay: 0.28s">
+          <div class="fx-rival">
+            <div class="n">OpenSpec</div>
+            <div class="y">Strictest spec format</div>
+            <div class="x">× One-way — code drifts, never feeds back</div>
+          </div>
+          <div class="fx-rival">
+            <div class="n">Superpowers<span>/ ohMyClaude</span></div>
+            <div class="y">Plug-and-play skills</div>
+            <div class="x">× Locked to Claude · No project knowledge</div>
+          </div>
+          <div class="fx-rival">
+            <div class="n">RAG Vector DB</div>
+            <div class="y">Full-text indexing · similarity search</div>
+            <div class="x">× Probabilistic hits · Can't enforce hard constraints</div>
+          </div>
+          <div class="fx-rival">
+            <div class="n">Spec Kit<span>/ Kiro / BMAD</span></div>
+            <div class="y">PM-friendly · requirements straight to spec</div>
+            <div class="x">× One-shot · Falls apart on iteration</div>
+          </div>
+          <div class="fx-rival">
+            <div class="n">Claude Memory</div>
+            <div class="y">No repeated introductions</div>
+            <div class="x">× Model-locked · Not team-shareable</div>
+          </div>
+        </div>
+
+        <div
+          class="fx-capabilities"
+          data-anim="fade-up"
+          style="animation-delay: 0.42s">
+          <div class="title">
+            <span class="brand">Flow2Spec</span> · 5 Capabilities
+          </div>
+          <div class="grid">
+            <div class="cap">
+              <div class="id">①</div>
+              <div class="k">Multi-Platform</div>
+              <div class="v">
+                One <code>.Knowledge/</code> · Cursor / Claude / Codex
+                natively coexist
+              </div>
+            </div>
+            <div class="cap">
+              <div class="id">②</div>
+              <div class="k">Route Narrowing</div>
+              <div class="v">
+                Matcher hit + dependency chain + <span class="hl">gap gate</span> forces clarification
+              </div>
+            </div>
+            <div class="cap">
+              <div class="id">③</div>
+              <div class="k">Two-Way Sync</div>
+              <div class="v">
+                <code>f2s-kb-feat/fix</code> updates knowledge when code changes — not one-shot generation
+              </div>
+            </div>
+            <div class="cap">
+              <div class="id">④</div>
+              <div class="k">Native Agent</div>
+              <div class="v">
+                Only rules + knowledge + skills · no wrapper · new models just work
+              </div>
+            </div>
+            <div class="cap">
+              <div class="id">⑤</div>
+              <div class="k">Change Tracking + Commit Gate</div>
+              <div class="v">
+                <code>.task/</code> cross-session resume · <code>f2s-git-commit</code>
+                <span class="hl">enforces KB coverage before commit</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="fx-honest"
+          data-anim="fade-up"
+          style="animation-delay: 0.55s">
+          <span class="lbl">// honest note</span>
+          Stop using <code>f2s-kb-feat / fix</code> and knowledge still decays — the difference is the
+          <span class="hl">gap gate calls it out</span>
+          instead of silent drift.
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">flow2spec-intro · market-diff</span>
+          <span class="page">04 / 13</span>
+        </div>
+        <div class="notes">
+          Side-by-side comparison. Top half, five players: OpenSpec has strict format but one-way, no feedback; Superpowers is plug-and-play but locked to one tool with no project knowledge; RAG has full indexing but probabilistic hits — can't enforce hard constraints; Spec Kit is PM-friendly but one-shot; Claude Memory saves introductions but is model-locked and not shareable. Bottom half: Flow2Spec's five capabilities — multi-platform, route narrowing, two-way sync, native agent, change tracking. Honest note: stop using the skills and the knowledge base decays just the same, but the difference is the gap gate calls it out — no silent drift.
+        </div>
+      </section>
+
+      <!-- ======= Slide 5 · Big Picture: Two Layers ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>architecture · two-layer · one-arrow</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">tree -L 1 -d</p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          One Diagram · <span class="accent">Two Layers</span> · One Arrow
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          Knowledge layer follows the project · Rules layer follows the tool · Different lifecycles, keeping them separate is the most fundamental decision.
+        </p>
+
+        <div class="fx-arch">
+          <div
+            class="fx-arch-layer top"
+            data-anim="fade-up"
+            style="animation-delay: 0.3s">
+            <div class="lbl">KNOWLEDGE LAYER · Follows the Project</div>
+            <div class="title">.Knowledge/</div>
+            <div class="sub">
+              Business topic routing · existing docs · requirement clarification · finalized specs —
+              one copy, written once, right here.
+            </div>
+            <div class="pills">
+              <span class="pill">manifest-routing.json</span>
+              <span class="pill">matchers/*.json</span>
+              <span class="pill">topics/*.md</span>
+              <span class="pill">stock-docs/*.md</span>
+              <span class="pill">req-docs/*.md</span>
+            </div>
+          </div>
+
+          <div
+            class="fx-arch-link"
+            data-anim="fade-up"
+            style="animation-delay: 0.42s">
+            <div class="bar"></div>
+            <div class="txt">f2s-* skills · maintain ↑ · trigger ↓</div>
+            <div class="bar"></div>
+          </div>
+
+          <div
+            class="fx-arch-layer bot"
+            data-anim="fade-up"
+            style="animation-delay: 0.54s">
+            <div class="lbl">RULES LAYER · Follows the Tool</div>
+            <div class="title">.cursor/ · .claude/ · .codex/</div>
+            <div class="sub">
+              Each tool loads rules and skills in its own native way · Knowledge unified, execution independent.
+            </div>
+            <div class="pills">
+              <span class="pill">.cursor/rules/*.mdc</span>
+              <span class="pill">.claude/rules/*.md</span>
+              <span class="pill">.codex/AGENTS.md</span>
+              <span class="pill">skills/*/SKILL.md</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">architecture · knowledge × rules</span>
+          <span class="page">05 / 13</span>
+        </div>
+        <div class="notes">
+          Architecture diagram. Top: knowledge layer follows the project — manifest routing, matcher keywords, topic knowledge, existing and requirement docs — one copy, written once. Bottom: rules layer follows the tool — Cursor, Claude, Codex each load in their own native way. One arrow in the middle: f2s-* skills maintain the top, trigger the bottom. Why separate them? Because some team members use Cursor, others use Claude, CI uses Codex. Knowledge in one place, rules adapted per tool — no manual copying.
+        </div>
+      </section>
+
+      <!-- ======= Slide 6 · Feature 1 · Progressive Loading (Product Review) ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>feature · 01 / 03 · progressive load</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">
+          cat match &amp;&amp; expand &amp;&amp; verify &amp;&amp; act
+        </p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          Progressive Loading · <span class="accent">Check the Index First</span>, Then Open the Book
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          User says "modify the batch rescore for the review template library" — Flow2Spec walks through four steps:
+        </p>
+
+        <div class="fx-flow" data-anim="fade-up" style="animation-delay: 0.32s">
+          <div class="fx-flow-node n1">
+            <div class="lbl">match</div>
+            <div class="val">m-product-review-<br />template-library</div>
+            <div class="sub">Hits the matcher, reads only this one shard</div>
+          </div>
+          <div class="fx-flow-arrow">→</div>
+          <div class="fx-flow-node n2">
+            <div class="lbl">expand</div>
+            <div class="val">+3 dependency topics</div>
+            <div class="sub">common / platform / toClient auto-resolved</div>
+          </div>
+          <div class="fx-flow-arrow">→</div>
+          <div class="fx-flow-node n3">
+            <div class="lbl">verify</div>
+            <div class="val">Gap check</div>
+            <div class="sub">Low confidence → clarify with user first</div>
+          </div>
+          <div class="fx-flow-arrow">→</div>
+          <div class="fx-flow-node n4">
+            <div class="lbl">act</div>
+            <div class="val">Start coding</div>
+            <div class="sub">Estimated 3 files · with hard constraints</div>
+          </div>
+        </div>
+
+        <div
+          class="fx-task"
+          style="grid-template-columns: 1fr; margin-top: 40px">
+          <div class="fx-task-aside">
+            <div
+              class="quote"
+              data-anim="fade-up"
+              style="animation-delay: 0.5s">
+              What you load is what you don't load —
+              <span style="color: var(--fx-cyan)"
+                >4.7 MB source → 300 lines of topics</span
+              >. It's not about making AI smarter — it's about cutting the noise.
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">feature · progressive-load · product-review</span>
+          <span class="page">06 / 13</span>
+        </div>
+        <div class="notes">
+          Core mechanism: progressive loading. User says one sentence, the framework walks four steps. Match hits the keyword shard, reads only one file; expand auto-resolves dependency topics — common conventions, subdomain boundaries, whitelists; verify runs gap checks — low confidence triggers clarification instead of guessing; act only starts coding after confirmation. Key quote: 4.7 MB becomes 300 lines — it's not about making AI smarter, it's about cutting the noise.
+        </div>
+      </section>
+
+      <!-- ======= Slide 7 · Feature 2 · Auto Dependency Expansion ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-purple"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>feature · 02 / 03 · topicDependencies</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">
+          resolve topicDependencies('product-review-template-library')
+        </p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          One Sentence · <span class="accent">4-Layer Dependencies</span> Auto-Expanded
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          You only said "product review" — the AI already knows to first read common conventions → subdomain boundaries → C-side
+          whitelist, then the domain-specific rules.
+        </p>
+
+        <div class="fx-tree" data-anim="fade-up" style="animation-delay: 0.3s">
+          <div class="fx-tree-row l1">
+            <span class="fx-tree-indent">└─</span>
+            <div class="fx-tree-node">
+              <span class="name">common-modules-context</span>
+              <span class="dsc"
+                >ctx · responseData · QMQ · getDb · DB field conventions</span
+              >
+              <span class="lines">79 lines</span>
+            </div>
+          </div>
+
+          <div class="fx-tree-row l2">
+            <span class="fx-tree-indent">&nbsp;&nbsp;└─</span>
+            <div class="fx-tree-node">
+              <span class="name">social-media-platform-context</span>
+              <span class="dsc">Business B-side subdomain · 3-repo split · @sm/* aliases</span>
+              <span class="lines">79 lines</span>
+            </div>
+          </div>
+
+          <div class="fx-tree-row l3">
+            <span class="fx-tree-indent">&nbsp;&nbsp;&nbsp;&nbsp;└─</span>
+            <div class="fx-tree-node">
+              <span class="name">social-media-toclient-whitelist</span>
+              <span class="dsc"
+                >C-side checkUidAndWhiteList · UID isolation · error codes</span
+              >
+              <span class="lines">39 lines</span>
+            </div>
+          </div>
+
+          <div class="fx-tree-row l4">
+            <span class="fx-tree-indent"
+              >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─</span
+            >
+            <div class="fx-tree-node">
+              <span class="name">product-review-template-library</span>
+              <span class="dsc">Domain rules · Redis lock · AI scoring · domain exceptions</span>
+              <span class="lines">67 lines</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-task-aside" style="margin-top: 30px">
+          <div class="quote" data-anim="fade-up" style="animation-delay: 0.5s">
+            Dependencies are attached at the <span style="color: var(--fx-cyan)">topic level</span>,
+            not the task level — new tasks don't need to re-declare prerequisites, and missing ones won't silently fail.
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">feature · dependency-expansion</span>
+          <span class="page">07 / 13</span>
+        </div>
+        <div class="notes">
+          One sentence triggers four layers of dependencies. The user only says "product review," but the AI actually reads four layers: from common ctx conventions to subdomain boundaries, from whitelists to domain-specific rules — 264 lines total. Key design: dependencies are attached at the topic level — declare once, shared by all tasks. New tasks don't need to re-declare prerequisites, and missing ones won't silently fail.
+        </div>
+      </section>
+
+      <!-- ======= Slide 8 · Hard Constraint Density (Groupon + Coupon) ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>case · groupon × coupon · hard-constraints</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">
+          cat .Knowledge/topics/{groupon,coupon}-context.md | grep "MUST\|NEVER"
+        </p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          Every Topic Is a <span class="accent">Guardrail Against AI Mistakes</span>
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          Another storyline: group buying + general coupons. These constraints can never be guessed by AI
+          "reading code" — written in topics, they block errors directly.
+        </p>
+
+        <div class="fx-rules">
+          <div
+            class="fx-rule"
+            data-anim="fade-up"
+            style="animation-delay: 0.3s">
+            <div class="tag">groupon · 01</div>
+            <h4>joinGroupon · Same-Transaction Dual Write</h4>
+            <div class="body">
+              Group join record + user stats table
+              <span class="pos">MUST be committed within the same sequelize.transaction()</span>.<br />
+              <span class="neg">NEVER</span> write the join record first then open another transaction for stats —
+              <em style="color: var(--fx-ink2)"
+                >under concurrency, maxUserJoins will drift.</em
+              >
+            </div>
+          </div>
+
+          <div
+            class="fx-rule"
+            data-anim="fade-up"
+            style="animation-delay: 0.4s">
+            <div class="tag">groupon · 02</div>
+            <h4>maxUserTeamLeader · Isolated by Type</h4>
+            <div class="body">
+              Team leader cap
+              <span class="pos">only counts groups of the current activity type</span>,<br />
+              <span class="neg">cross-type counts do NOT accumulate</span>; source of truth is QConfig
+              <code>groupon-setting.json</code> ·
+              <code>validField / maxUserJoins / needNewGuest</code>
+              must be read before any changes.
+            </div>
+          </div>
+
+          <div
+            class="fx-rule"
+            data-anim="fade-up"
+            style="animation-delay: 0.5s">
+            <div class="tag">coupon · 03</div>
+            <h4>Frontend Only Passes activityCode</h4>
+            <div class="body">
+              Public API <span class="pos">does not accept promotionId</span>; backend resolves
+              <code>promotionId + couponConfigId</code> via
+              <code>activityCode</code>, all changes must go through
+              <code>@/utils/couponHelper.js</code>.<br />
+              <em style="color: var(--fx-ink2)"
+                >Leaking promotionId allows unpublished campaigns to be enumerated.</em
+              >
+            </div>
+          </div>
+
+          <div
+            class="fx-rule"
+            data-anim="fade-up"
+            style="animation-delay: 0.6s">
+            <div class="tag">coupon · 04</div>
+            <h4>status Priority 0 &gt; 1 &gt; 2</h4>
+            <div class="body">
+              Coupon claim <code>status</code> semantics: <span class="neg">0=failed</span>
+              · <span class="pos">1=success</span> · <code>2=already claimed</code> ·
+              <code>3=sold out</code> · <code>4=not eligible</code>.<br />
+              When merging multi-source statuses,
+              <span class="neg">MUST follow priority 0&gt;1&gt;2&gt;3&gt;4</span>
+              — not max, not min.
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">case · groupon × coupon · real-constraints</span>
+          <span class="page">08 / 13</span>
+        </div>
+        <div class="notes">
+          Previous slide showed the breadth of the knowledge base; this one shows its density. Groupon's same-transaction dual-write constraint, coupon's status priority — these are things AI can never guess from reading code alone. They were all discovered during development, and written into topics via f2s-kb-fix on the spot. A topic's full lifecycle: code changes, hit a pitfall, fix the bug, write a topic, future AI gets blocked from repeating the mistake. That's the knowledge base's generation logic.
+        </div>
+      </section>
+
+      <!-- ======= Slide 9 · Feature 3 · Cross-Session Resume (review_publish_flow) ======= -->
+      <section class="slide is-scroll">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-glow-purple"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>feature · 03 / 03 · resume-across-sessions</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">
+          cat
+          .task/completed/20260511-product_review_review_publish_flow/task.md
+        </p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          Session Dropped · AI <span class="accent">Picks Up Where It Left Off</span>
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          A real task spanning three layers, 9 steps, completed across multiple sessions —
+          shut down anytime, next time just say "continue."
+        </p>
+
+        <div class="fx-task" data-anim="fade-up" style="animation-delay: 0.32s">
+          <div class="fx-task-card">
+            <div class="path">
+              .task/completed/20260511-product_review_review_publish_flow/task.md
+            </div>
+            <div class="title"># product_review_review_publish_flow</div>
+            <ul>
+              <li>Step 1: Generate technical spec (API layer + B-side)</li>
+              <li>Step 2: API layer · Add 5 fields to article table</li>
+              <li>Step 3: Modify article creation endpoint</li>
+              <li>Step 4: Modify review endpoint (state transition: approved → pending publish)</li>
+              <li>Step 5: New article publish endpoint (backfill post link + partner code)</li>
+              <li>Step 6: B-side · Modify list/detail endpoints</li>
+              <li>Step 7: B-side · Modify edit endpoint</li>
+              <li>Step 8: Sync knowledge base</li>
+              <li>Step 9: Commit code</li>
+            </ul>
+          </div>
+          <div class="fx-task-aside">
+            <h3>// Resume Experience</h3>
+            <div class="story">
+              Next session, just say
+              <span class="hl">"help me continue the article publish flow"</span> —<br />
+              Keywords match the task in
+              <code
+                style="
+                  font-family: &quot;JetBrains Mono&quot;, monospace;
+                  color: var(--fx-cyan);
+                "
+                >todo.json</code
+              >,
+              AI reads out the
+              <span class="hl">remaining steps</span>,
+              auto-loads skill rules, and resumes from the last breakpoint.
+            </div>
+            <div class="quote">
+              LLMs have no cross-session memory · We use a
+              <span style="color: var(--fx-cyan)">.task/todo.json</span>
+              to explicitly bring it back.<br />
+              user-todos.md also persists <span style="color: var(--fx-magenta)"
+                >things only the user can do offline</span
+              > (run DDL, flip switches, deploy).
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="fx-dirtree"
+          data-anim="fade-up"
+          style="animation-delay: 0.5s">
+          <div class="fx-dirtree-title">// .task/ directory structure</div>
+          <pre class="fx-dirtree-pre"><span class="cm">.task/</span>
+├── <span class="hl">todo.json</span>              ← Task index · keyword match to resume
+├── active/
+│   └── template_ai_score/
+│       ├── <span class="k">task.md</span>        ← Checklist ([x] = progress)
+│       ├── <span class="k">context.md</span>     ← Files involved · reference links
+│       └── <span class="k">user-todos.md</span>  ← User offline tasks (DDL · deploy)
+└── completed/
+    └── 20260511-<span class="a">product_review_review_publish_flow</span>/
+        ├── <span class="k">task.md</span>        ← All ✅
+        ├── <span class="k">context.md</span>
+        └── <span class="k">user-todos.md</span></pre>
+        </div>
+
+        <div class="fx-dirtree-summary">
+          <code>todo.json</code> <span class="arr">→</span> Keyword match
+          <span class="arr">→</span> Read <code>task.md</code> remaining steps
+          <span class="arr">→</span> <span class="res">Resume from breakpoint</span>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">feature · resume · article-publish-flow</span>
+          <span class="page">09 / 13</span>
+        </div>
+        <div class="notes">
+          Cross-session resume. On the left is a real task spanning three layers, 9 steps, completed across multiple sessions. Every time you shut down for the day, next time just say "continue" — todo.json matches keywords, AI reads remaining steps and resumes from the breakpoint. The directory structure at the bottom is also clear: todo.json as index, active for in-progress tasks, completed for archived ones. There's also a detail — user-todos.md persists things like running DDL, flipping switches, and deploying — things AI can't do — so they're not just mentioned in conversation and lost.
+        </div>
+      </section>
+
+      <!-- ======= Slide 10 · Progressive Knowledge Base Creation (Reducing Mental Overhead) ======= -->
+      <section class="slide is-scroll">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>onboarding · progressive-kb</div>
+        </div>
+
+        <p class="fx-prompt" style="margin-top: 20px">
+          f2s progressive --no-upfront-cost
+        </p>
+        <h1 class="fx-h1">Build as You Go · <span class="accent">No Need to Finish First</span></h1>
+        <p class="fx-lede">
+          The minimum viable set is
+          <b style="color: var(--fx-cyan)"
+            >1 manifest entry + 1 matcher + 1 topic</b
+          > — the rest **grows with your requirements**.
+        </p>
+
+        <div class="fx-timeline">
+          <div class="fx-stage">
+            <div class="fx-stage-head">
+              <span class="fx-stage-tag">init</span
+              ><span class="fx-stage-dur">1 minute</span>
+            </div>
+            <div class="fx-stage-title">Scaffold the Skeleton</div>
+            <pre
+              class="fx-stage-cmd"><span class="cm"># Generate .Knowledge/ + tool configs</span>
+<span class="kw">$</span> npx @double-codeing/flow2spec@latest init</pre>
+            <div class="fx-stage-out">
+              Empty manifest-routing.json<br />Ready to run — zero knowledge written
+            </div>
+          </div>
+
+          <div class="fx-stage-arrow">→</div>
+
+          <div class="fx-stage">
+            <div class="fx-stage-head">
+              <span class="fx-stage-tag cy">First Use</span
+              ><span class="fx-stage-dur">One requirement</span>
+            </div>
+            <div class="fx-stage-title">Seed Your First Knowledge</div>
+            <pre
+              class="fx-stage-cmd"><span class="cm"># Feed an architecture doc</span>
+<span class="kw">/</span>f2s-doc-arch
+<span class="kw">/</span>f2s-doc-add</pre>
+            <div class="fx-stage-out">
+              AI reads existing docs<br />→ Generates first topic + matcher
+            </div>
+          </div>
+
+          <div class="fx-stage-arrow">→</div>
+
+          <div class="fx-stage">
+            <div class="fx-stage-head">
+              <span class="fx-stage-tag mg">Daily</span
+              ><span class="fx-stage-dur">Code → Record → Commit</span>
+            </div>
+            <div class="fx-stage-title">Development Loop</div>
+            <pre class="fx-stage-cmd"><span class="cm"># One command for the full loop: code + record + commit check</span>
+<span class="kw">/</span>f2s-kb-feat    <span class="cm"># New feature → code + topic synced to KB</span>
+<span class="kw">/</span>f2s-kb-fix     <span class="cm"># Bug fix → update topic to prevent recurrence</span>
+<span class="kw">/</span>f2s-git-commit <span class="cm"># Pre-commit check: topic coverage + commit format</span></pre>
+            <div class="fx-stage-out">
+              Code, record knowledge, commit check — all in one flow<br />Knowledge base **grows with the business**, never decays
+            </div>
+          </div>
+
+          <div class="fx-stage-arrow">→</div>
+
+          <div class="fx-stage">
+            <div class="fx-stage-head">
+              <span class="fx-stage-tag pu">Maintenance</span
+              ><span class="fx-stage-dur">As needed</span>
+            </div>
+            <div class="fx-stage-title">Health Check · Alignment</div>
+            <pre
+              class="fx-stage-cmd"><span class="cm"># Code got ahead / merge conflict</span>
+<span class="kw">/</span>f2s-kb-sync   <span class="cm"># Sync capabilities to KB — outline first, then persist</span>
+<span class="kw">/</span>f2s-kb-merge  <span class="cm"># Handle context conflicts after rebase/merge</span></pre>
+            <div class="fx-stage-out">
+              kb-sync: backfill KB after implementation lands<br />kb-merge: resolve knowledge conflicts after branch merges
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-kb" data-anim="fade-up" style="animation-delay: 0.42s">
+          <div class="lbl">// Knowledge Base + Project Config + Built-in Rule Topics</div>
+
+          <div class="col">
+            <div class="col-title">
+              <span class="hl">.Knowledge/</span> + Config
+            </div>
+            <pre class="fx-kb-pre"><span class="cm">.Knowledge/</span>
+├── <span class="hl">manifest-routing.json</span>         ← Routing table
+├── matchers/
+│   └── <span class="k">*.json</span>                       ← Keyword shards
+├── topics/
+│   └── <span class="k">&lt;topic&gt;.md</span>                   ← Topic knowledge
+├── stock-docs/
+│   └── <span class="k">*.md</span>                        ← Existing docs
+└── req-docs/
+    └── <span class="k">*.md</span>                        ← Requirements + specs
+
+<span class="cm">flow2spec.config.json</span>
+├── subAgent: true/false              ← Sub-agent toggle
+└── switchAgentVerification           ← Cross-verification
+    changeTracking.feat/fix/implement ← Change tracking</pre>
+          </div>
+
+          <div class="col">
+            <div class="col-title">
+              <span class="hl">.claude/rules/</span> ·
+              <span class="hl">.cursor/rules/</span> (mirror synced)
+            </div>
+            <pre
+              class="fx-kb-pre"><span class="a">f2s-*</span> Built-in Rule Topics (package template → init persists)
+├── <span class="k">f2s-config-check.md</span>           ← Skill pre-flight mandatory step
+├── <span class="k">f2s-knowledge-preflight.md</span>    ← KB-first read constraint
+├── <span class="k">f2s-karpathy-guidelines.md</span>    ← Karpathy coding guidelines
+├── <span class="k">f2s-task.md</span>                    ← Change tracking spec
+└── <span class="k">f2s-flow2spec-unified-entry.md</span> ← Knowledge read order
+
+<span class="r">init</span> scaffolds → <span class="r">f2s-*</span> skills grow with requirements → <span class="r">gap gate</span> prevents silent drift</pre>
+          </div>
+        </div>
+
+        <div class="fx-anxiety">
+          <div class="fx-anxiety-row">
+            <span class="fx-anxiety-q">"Do I need to write all docs before I can use it?"</span
+            ><span class="fx-anxiety-a">→ init runs on day one — zero docs, no blockers</span>
+          </div>
+          <div class="fx-anxiety-row">
+            <span class="fx-anxiety-q">"How much is enough?"</span
+            ><span class="fx-anxiety-a"
+              >→ Start with 1 topic + 1 matcher — the gap gate will tell you</span
+            >
+          </div>
+          <div class="fx-anxiety-row">
+            <span class="fx-anxiety-q">"Steep learning curve for the format?"</span
+            ><span class="fx-anxiety-a"
+              >→ No manual writing — <code>f2s-*</code> skills write, edit, and verify for you</span
+            >
+          </div>
+          <div class="fx-anxiety-row">
+            <span class="fx-anxiety-q">"What if I write it but it doesn't work?"</span
+            ><span class="fx-anxiety-a"
+              >→ Add one, test one — matcher hit = verified</span
+            >
+          </div>
+          <div class="fx-anxiety-row hi">
+            <span class="fx-anxiety-q">"Do I need to migrate the whole legacy project?"</span
+            ><span class="fx-anxiety-a"
+              >→ <b>Nope.</b> init the skeleton → next requirement hits a module, write that module</span
+            >
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span>progressive · pay-as-you-grow</span>
+          <span class="page">10 / 13</span>
+        </div>
+        <div class="notes">
+          Many colleagues assume adopting a knowledge base means writing docs for two weeks first. It's the opposite. The minimum viable set is just one route, one keyword, and one topic. Init scaffolds the skeleton in one minute and you're ready to go; first use — feed an architecture doc, AI generates the first topic; daily development uses f2s-kb-feat and fix to record knowledge alongside code, then f2s-git-commit auto-checks topic coverage before committing; maintenance phase uses kb-sync to backfill after implementation and kb-merge to handle knowledge conflicts after merges. The principle is simple: next requirement hits a module, write that module — no need to migrate everything at once.
+        </div>
+      </section>
+
+      <!-- ======= Slide 11 · Live Demo Roadmap ======= -->
+      <section class="slide is-scroll">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>live · demo · routemap</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">
+          ./demo.sh --case product-review-template-library
+        </p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          Real Case · <span class="accent">Review Template Library</span>
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          One main line, 6 steps end-to-end · with 10+ feat/fix
+          micro-iterations along the way, all growing on the same knowledge chain.
+        </p>
+
+        <div class="fx-demo">
+          <div
+            class="fx-demo-step"
+            data-anim="fade-up"
+            style="animation-delay: 0.3s">
+            <div class="n">1</div>
+            <div class="body">
+              <div class="cmd">
+                <span class="op">/f2s-req-clarify</span>
+                <span class="ar"
+                  >"Build a template library for AI-polished user articles, with AI scoring for both
+                  templates and articles, readable from both B-side and C-side"</span
+                >
+              </div>
+              <div class="dsc" style="padding-top: 2px">
+                <div
+                  style="
+                    font-size: 13px;
+                    margin-bottom: 6px;
+                    color: var(--fx-ink2);
+                  ">
+                  Clarification is
+                  <b style="color: var(--fx-cyan)"
+                    >"batch questions → you answer → AI cross-checks KB for gaps → another batch"</b
+                  > iterative, not one-question-one-answer:
+                </div>
+
+                <div
+                  style="
+                    margin: 6px 0;
+                    padding: 8px 12px;
+                    border-left: 2px solid rgba(126, 246, 255, 0.4);
+                    background: rgba(126, 246, 255, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      margin-bottom: 3px;
+                    ">
+                    Round 1 · 12 questions at once
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>: Scope (ops-only editing? C-side
+                    template selection for posts? Version history? Dedup?) ·
+                    Data shape (tags in separate table or inline? Many-to-many? Plain text or rich text? 3000
+                    chars by character count? Image array — how many? Placeholders?) · Matching (U⊆L full coverage vs
+                    max intersection? When does weight +1? Can offline/deleted items be matched?)
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">Me</b>: Answer all at once.
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    margin: 6px 0;
+                    padding: 8px 12px;
+                    border-left: 2px solid rgba(187, 160, 255, 0.4);
+                    background: rgba(187, 160, 255, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-purple);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      margin-bottom: 3px;
+                    ">
+                    ↓ AI self-check · Cross-references answers against 4-layer topics + stock-docs
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    Cross-checks <code>product-review</code> /
+                    <code>common-modules</code> /
+                    <code>social-media-platform</code> existing facts: discovers
+                    <b style="color: var(--fx-ink)">(a)</b>
+                    batch method doesn't say whether to backfill on short count,
+                    <b style="color: var(--fx-ink)">(b)</b>
+                    tie-breaking not specified,
+                    <b style="color: var(--fx-ink)">(c)</b>
+                    image upload utility not named,
+                    <b style="color: var(--fx-ink)">(d)</b>
+                    new endpoint or reuse existing not confirmed → follows up.
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    margin: 6px 0;
+                    padding: 8px 12px;
+                    border-left: 2px solid rgba(126, 246, 255, 0.4);
+                    background: rgba(126, 246, 255, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      margin-bottom: 3px;
+                    ">
+                    Round 2 · 4 follow-up questions targeting gaps
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>: Should
+                    <code>needCount</code> backfill when short? When |L|
+                    is minimum-equal, what's the tiebreaker? Image upload — reuse admin
+                    <code>utils</code> or new? B/C endpoints from scratch (currently 0)?
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">Me</b>: No backfill, return as-is ·
+                    Break ties by usage weight · Reuse admin utils · Both B/C from scratch.
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    font-size: 12.5px;
+                    margin-top: 6px;
+                    color: var(--fx-ink2);
+                  ">
+                  → AI cross-checks KB again, no gaps remaining → finalized as
+                  <code>req-docs/product-review_template-library_req-clarify.md</code> (10 sections
+                  · U⊆L three-tier rules) + companion
+                  <code>product-review_article-publish-flow_tech-spec.md</code> (postType /
+                  imageUrls / publishStatus transitions)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="fx-demo-step"
+            data-anim="fade-up"
+            style="animation-delay: 0.38s">
+            <div class="n">2</div>
+            <div class="body">
+              <div class="cmd">
+                <span class="op">/f2s-req-backend</span>
+                <span class="ar"
+                  >matcher hit m-product-review-template-library</span
+                >
+              </div>
+              <div class="dsc">
+                Auto-loads 4-layer topic dependencies (common-modules → social-media →
+                product-review → template-library), produces
+                <code>req-docs/product-review_template-library_tech-spec.md</code> + 5
+                DDLs (template library / tags / relations / scoring rules / agent prompt).
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="fx-demo-step"
+            data-anim="fade-up"
+            style="animation-delay: 0.46s">
+            <div class="n">3</div>
+            <div class="body">
+              <div class="cmd">
+                <span class="ar"
+                  >Once the spec is finalized,
+                  <b style="color: var(--fx-cyan)"
+                    >just say "implement this tech spec" or "continue"</b
+                  >
+                  · Creates <code>.task/active/template_ai_score/</code></span
+                >
+              </div>
+              <div class="dsc">
+                No commands to memorize — reads the tech spec from <code>req-docs/</code>, AI triggers
+                <code>f2s-implement-tech-design</code>, auto-splits into 8-step
+                checklist: create scoring rules table → model → aiScoreHelper (mock first) → 4
+                CRUDs + serverless registration → fire-and-forget scoring on insert →
+                batch rescore endpoint → list/detail pass-through aiScore → KB
+                sync. Each step checked off, interruption-safe.
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="fx-demo-step"
+            data-anim="fade-up"
+            style="animation-delay: 0.54s">
+            <div class="n">4</div>
+            <div class="body">
+              <div class="cmd">
+                <span class="op">/f2s-kb-feat</span>
+                <span class="ar"
+                  ><b style="color: var(--fx-cyan)"
+                    >Describe the need = Implementation + Auto KB entry</b
+                  ></span
+                >
+              </div>
+              <div
+                class="dsc"
+                style="
+                  padding-top: 2px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 6px;
+                ">
+                <div
+                  style="
+                    padding: 7px 12px;
+                    border-left: 2px solid rgba(126, 246, 255, 0.4);
+                    background: rgba(126, 246, 255, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 11.5px;
+                      margin-bottom: 2px;
+                    ">
+                    <code style="font-size: 11px">c1d2e3f</code> · Add
+                    rpAiForPeta
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">Me</b
+                    >: Format is field mapping; model, endpoint, and apiKey
+                    are passed from the client — server only forwards + validates format
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>: Implement
+                    <code>rpAiForPeta(fields, model, apiKey, endpoint)</code> ·
+                    Extract fields by mapping → build prompt → call specified model ·
+                    <span style="color: var(--fx-amber)"
+                      >model whitelist gpt-4o-mini / deepseek-chat · endpoint
+                      must be whitelisted domain · timeout 30s</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 10.5px;
+                      margin-top: 3px;
+                    ">
+                    → topic "rpAiForPeta" mapping rules / client params / whitelist /
+                    timeout constraints
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    padding: 7px 12px;
+                    border-left: 2px solid rgba(126, 246, 255, 0.4);
+                    background: rgba(126, 246, 255, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 11.5px;
+                      margin-bottom: 2px;
+                    ">
+                    <code style="font-size: 11px">f4a5b6c</code> ·
+                    C-side: Add image upload method
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">Me</b>: Upload images before posting to get CDN
+                    URLs, max 10MB per image, max 9 per upload
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>: <code
+                      >POST /api/c/upload/image</code
+                    >
+                    · Restrict formats to jpg/png/webp · Auth reuses posting token ·
+                    <span style="color: var(--fx-amber)">base64 direct upload forbidden</span>
+                  </div>
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 10.5px;
+                      margin-top: 3px;
+                    ">
+                    → topic "C-side image upload" endpoint path / limits / auth
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    padding: 7px 12px;
+                    border-left: 2px solid rgba(126, 246, 255, 0.4);
+                    background: rgba(126, 246, 255, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 11.5px;
+                      margin-bottom: 2px;
+                    ">
+                    <code style="font-size: 11px">a7b8c9d</code> ·
+                    User-uploaded articles also need scoring
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">Me</b
+                    >: Not just the template library — user-uploaded articles need AI scoring too
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>: <code
+                      >scoreContent</code
+                    >
+                    is already generic → add scoring call to posting endpoint ·
+                    <span style="color: var(--fx-amber)"
+                      >results go to new user_article_score table, not the template library table</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 10.5px;
+                      margin-top: 3px;
+                    ">
+                    → topic "scoring system" addendum: user article scoring → separate table
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="fx-demo-step"
+            data-anim="fade-up"
+            style="animation-delay: 0.62s">
+            <div class="n">5</div>
+            <div class="body">
+              <div class="cmd">
+                <span class="op">/f2s-kb-fix</span>
+                <span class="ar"
+                  >3 iterations all through the same entry ·
+                  <b style="color: var(--fx-cyan)">each time updating the topic</b></span
+                >
+              </div>
+              <div class="dsc" style="padding-top: 2px">
+                <div
+                  style="
+                    margin: 6px 0;
+                    padding: 8px 12px;
+                    border-left: 2px solid rgba(255, 120, 214, 0.4);
+                    background: rgba(255, 120, 214, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-magenta);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      margin-bottom: 3px;
+                    ">
+                    ① <code>c8d9e0f1</code> · Scoring missed the title field
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">Me</b
+                    >: Ops complained that scores fluctuate wildly for same content — I checked and
+                    <code>scoreContent</code> was only passing content to the
+                    Agent, title was completely missing
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>: Update to
+                    <code>scoreContent(title, content, model?)</code>, include
+                    title as separate context in the prompt. Patch all six handler call sites. Update
+                    topic?
+                  </div>
+                  <div
+                    style="
+                      color: var(--fx-magenta);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 11px;
+                      margin-top: 4px;
+                    ">
+                    → topic "scoring input structure" adds new row: <span
+                      style="color: var(--fx-ink)"
+                      ><code
+                        >title: string · required · used by Agent to understand topic intent</code
+                      ></span
+                    >
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    margin: 6px 0;
+                    padding: 8px 12px;
+                    border-left: 2px solid rgba(255, 120, 214, 0.4);
+                    background: rgba(255, 120, 214, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-magenta);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      margin-bottom: 3px;
+                    ">
+                    ② <code>2a3b4c5d</code> · scoreContentBatch: sequential → concurrent
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">Me</b>: Batch rescore for 10 items takes
+                    90 seconds — this method shouldn't wait one by one
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>: <code
+                      >for-await</code
+                    >
+                    changed to <code>Promise.all</code> for concurrent execution, tested 10 items in 9
+                    seconds. Also extracted <code>AI_BUSY</code> error code from literal to
+                    <code>_enum</code> — prevents future scattering.
+                  </div>
+                  <div
+                    style="
+                      color: var(--fx-magenta);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 11px;
+                      margin-top: 4px;
+                    ">
+                    → topic "batch rescore timing" changed from "sequential" to "concurrent" <span
+                      style="color: var(--fx-ink)"
+                      >+ added Redis mutex lock section (prevents concurrent avalanche)</span
+                    >
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    margin: 6px 0;
+                    padding: 8px 12px;
+                    border-left: 2px solid rgba(255, 120, 214, 0.4);
+                    background: rgba(255, 120, 214, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-magenta);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      margin-bottom: 3px;
+                    ">
+                    ③ <code>6e7f8a9b</code> · Tag soft-delete → hard-delete
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">Me</b
+                    >: After soft-deleting tags, the relation table still has stale data — queries occasionally return deleted tags. Switching to hard-delete.
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>: Changed tag deletion to hard-delete +
+                    transactional cleanup of
+                    <code>commerce_review_template_library_tag_rel</code>.
+                    Topic "tag lifecycle" previously said "soft-delete retained 180
+                    days" — updated to "hard-delete + transactional relation cleanup."
+                  </div>
+                  <div
+                    style="
+                      color: var(--fx-magenta);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 11px;
+                      margin-top: 4px;
+                    ">
+                    → topic corrected: <span style="color: var(--fx-ink)"
+                      >delete semantics =
+                      <b>hard-delete + transactional relation cleanup</b> (old soft-delete description deprecated)</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="fx-demo-step"
+            data-anim="fade-up"
+            style="animation-delay: 0.7s">
+            <div class="n">6</div>
+            <div class="body">
+              <div class="cmd">
+                <span class="op">/f2s-git-commit</span>
+                <span class="ar"
+                  >Commit gate · conflict scan / KB coverage check / emoji + Conventional</span
+                >
+              </div>
+              <div class="dsc">
+                Pre-commit enforces three checks: ① Conflict marker scan ② Topic covers new fields ✓ ③ First line
+                <code>🚀 feat(product-review): template library + AI scoring</code> · No
+                add -A · No skipping hooks · No auto-push. B-side admin UI
+                in a separate repo follows the same workflow.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="fx-demo-goal"
+          data-anim="fade-up"
+          style="animation-delay: 0.82s">
+          One main line, <span class="big">6 steps</span> end-to-end · with<span
+            style="color: var(--fx-cyan)">
+            10+ micro-iterations</span
+          >
+          all growing on the same knowledge chain.
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">live · demo · end-to-end</span>
+          <span class="page">11 / 13</span>
+        </div>
+        <div class="notes">
+          End-to-end walkthrough. The review template library from zero to 17 endpoints, four intermittent days, in six steps: clarification phase — AI asks in batches, you answer, it cross-checks the KB for gaps and follows up — two rounds to finalize; spec phase — four-layer dependencies auto-expanded, producing a tech spec plus five DDLs; implementation phase — say "continue" and AI auto-splits into an 8-step checklist; feat phase — deliver a requirement and it auto-enters the KB; fix phase — every bug fix also updates the topic; finally the commit gate passes all three checks. This isn't a demo scenario — it's this week's actual work.
+        </div>
+      </section>
+
+      <!-- ======= Slide 12 · When NOT to Use It ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>honest · dont-use-when</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">echo "not a silver bullet"</p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          Honest Talk · <span class="accent">When NOT to Use It</span>
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          Flow2Spec trades structural investment for long-term compound returns. In these three scenarios, the investment doesn't pay off — don't force it.
+        </p>
+
+        <div class="fx-dontuse">
+          <div class="c" data-anim="fade-up" style="animation-delay: 0.3s">
+            <div class="x">×</div>
+            <div class="t">Throwaway Scripts · Temp Tools</div>
+            <div class="d">
+              For things you'll delete after writing, just toss a few Markdown files at AI —
+              that's faster. Knowledge base maintenance is pure overhead.
+            </div>
+          </div>
+
+          <div class="c" data-anim="fade-up" style="animation-delay: 0.42s">
+            <div class="x">×</div>
+            <div class="t">Solo Small Projects · No Multi-Platform Needs</div>
+            <div class="d">
+              Just you, one AI, one machine — a single CLAUDE.md
+              is enough. Routing and sharding overhead outweighs the benefit.
+            </div>
+          </div>
+
+          <div class="c" data-anim="fade-up" style="animation-delay: 0.54s">
+            <div class="x">×</div>
+            <div class="t">Team Won't Sync .Knowledge/</div>
+            <div class="d">
+              If code changes without syncing skills, the knowledge base decays anyway. Tools can't replace discipline — f2s-*
+              only lowers the "cost of syncing."
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">honest · limits</span>
+          <span class="page">12 / 13</span>
+        </div>
+        <div class="notes">
+          Being clear about when not to use it is more credible than hyping when it's great. Three scenarios to avoid: throwaway scripts — just toss docs at AI, it's faster; solo small projects — one CLAUDE.md is enough, sharding overhead exceeds the benefit; teams that won't sync the knowledge base — tools can't replace discipline. Simply put: don't force it when the ROI doesn't make sense.
+        </div>
+      </section>
+
+      <!-- ======= Slide 13 · Closing Callback ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-glow-purple"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>~/flow2spec · end · 02:00:00</div>
+        </div>
+
+        <div class="fx-closer">
+          <div class="tag" data-anim="fade-up">// the takeaway</div>
+          <h1 data-anim="fade-up" style="animation-delay: 0.15s">
+            It's not about making AI <span class="strike">smarter</span>,<br />
+            it's about keeping AI <span class="hl">always aware</span> of what you're <span class="hl2"
+              >working on</span
+            ><span class="fx-cursor"></span>
+          </h1>
+          <div class="kv" data-anim="fade-up" style="animation-delay: 0.35s">
+            <div>repo<span>·</span>github.com/Lands-1203/Flow2Spec</div>
+            <div>
+              install<span>·</span>npx @double-codeing/flow2spec@latest init
+            </div>
+            <div>contact<span>·</span>Lan Tao</div>
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">flow2spec · let's talk</span>
+          <span class="page">13 / 13</span>
+        </div>
+        <div class="notes">
+          Back to the opening question. It's not about making AI smarter — if it were just about the model, why does the same AI sometimes deliver and sometimes flop? The difference is whether it knows the context. So the answer isn't waiting for a better model — it's keeping AI always aware of what you're working on. The repo and install command are right here. Questions? Come find me anytime.
+        </div>
+      </section>
+    </div>
+
+    <script src="../../.claude/skills/html-ppt/assets/runtime.js"></script>
+  </body>
+</html>
