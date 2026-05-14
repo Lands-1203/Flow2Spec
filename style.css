@@ -59,6 +59,8 @@
 .tpl-flow2spec-intro .fx-hero .c3{color:var(--fx-purple);text-shadow:0 0 40px rgba(187,160,255,.55),0 0 90px rgba(187,160,255,.22)}
 .tpl-flow2spec-intro .fx-sub{font-size:26px;color:var(--fx-ink);font-weight:400;margin-top:32px;letter-spacing:.02em;font-family:'Inter','PingFang SC','Noto Sans SC',sans-serif}
 .tpl-flow2spec-intro .fx-sub .brand{color:var(--fx-cyan);font-family:'JetBrains Mono',monospace;font-weight:600}
+.tpl-flow2spec-intro .fx-desc{font-size:16px;color:var(--fx-ink2);line-height:1.7;max-width:740px;margin-top:18px;font-family:'Inter','PingFang SC','Noto Sans SC',sans-serif}
+.tpl-flow2spec-intro .fx-desc .hl{color:var(--fx-cyan);font-weight:500}
 
 /* 常规标题 */
 .tpl-flow2spec-intro .fx-h1{font-family:'JetBrains Mono',monospace;font-size:62px;font-weight:700;line-height:1.05;letter-spacing:-.02em;color:var(--fx-ink);margin:12px 0 8px}

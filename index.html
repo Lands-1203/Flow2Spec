@@ -43,6 +43,12 @@
           <p class="fx-sub" data-anim="fade-up" style="animation-delay: 0.35s">
             <span class="brand">Flow2Spec</span> · 让 AI 一直知道你在做什么
           </p>
+          <p class="fx-desc" data-anim="fade-up" style="animation-delay: 0.45s">
+            AI 协作框架 —— <span class="hl">跨设备会话</span>记住项目上下文 ·
+            内部<span class="hl">路由清单</span>设计让 AI
+            不翻仓库、只拿该拿的 · <span class="hl">f2s-* 技能</span>
+            改代码顺手更新知识、始终最新不腐化
+          </p>
           <div
             class="fx-meta"
             data-anim="fade-up"
@@ -56,8 +62,10 @@
           <span class="page">01 / 13</span>
         </div>
         <div class="notes">
-          开场只讲一句：每一次新会话，AI 都在失忆。我们用 30
-          分钟聊一套让它不再失忆的办法。
+          你们的 AI
+          失忆了吗？每次开新会话都不记得上一轮说了什么，不知道项目结构，不记得约束。Flow2Spec
+          就干三件事：第一，跨设备会话记住项目上下文；第二，内部路由清单设计让 AI
+          不翻仓库、只拿该拿的；第三，f2s-星技能改代码顺手更新知识，知识始终最新不腐化。今天从痛点讲起，再聊怎么做到的，最后说怎么上手。
         </div>
       </section>
 
@@ -126,9 +134,10 @@
           <span class="page">02 / 13</span>
         </div>
         <div class="notes">
-          这是全场最关键的一页。同样的一句话，差别不是 AI
-          变聪明了，是它拿到的上下文变精准了。右边终端里那些长长的 Redis
-          key、100 条、错误码 101，全都是真实的约束，不是演示。
+          看这张对比图。同一句话「改一下评价模板文案库的批量重评分」，左边没框架的
+          AI 先问表在哪、再问同步异步、再问锁——翻遍 416 个接口才敢动手。右边有
+          Flow2Spec 的 AI，matcher 一命中，Redis 锁的
+          key、错误码、条数限制全部已知。差别不是模型变强了，是它拿到的上下文变准了。同样的模型，喂什么数据给什么活。
         </div>
       </section>
 
@@ -218,12 +227,10 @@
           <span class="page">03 / 13</span>
         </div>
         <div class="notes">
-          这套在一个 796 文件、4.7 MB、10 万行、416
-          个对外接口的真实真实生产仓库跑了几个月。最近这几天（5.9 ~
-          5.13）断断续续产出 17 个接口、14 条归档任务清单，跨 B 端、C
-          端、接口端三个仓库——需求包括评价模板库 + 标签 + 文章改造 + AI 审核 +
-          agent 评分体系 + 前端自定义 agent
-          评分能力。这种跨端跨项目的需求节奏，没有知识库我一个人扛不下来。
+          不是概念，是日常。这个仓库 416 个接口、796 个文件、10
+          万行代码。Flow2Spec 每次只加载 300 行命中的 topic，噪声切掉 99%。最近
+          4 天产出 17 个接口、14 个归档任务，跨 B 端、C
+          端、接口端三个仓库同步推进。没有知识库做上下文支撑，一个人扛不住这个节奏。
         </div>
       </section>
 
@@ -346,14 +353,96 @@
           <span class="page">04 / 13</span>
         </div>
         <div class="notes">
-          这一页不强行比。上半把五家对手摆出来——每家都有它的强项，我不贬低谁。下半才讲我自己的
-          5 条能力。最后一行是老实话：Flow2Spec 也会腐化，停用 f2s-kb-feat /
-          f2s-kb-fix 知识库一样偏离代码。区别是腐化会被缺口闸门喊出来，AI
-          读不懂会停下要文档，不是静默拿错段继续改。我必须这样讲，否则不可信。
+          横向对比。上半五家：OpenSpec 格式严但单向不反哺；Superpowers
+          即插即用但绑工具无项目知识；RAG 全量索引但概率命中，硬约束拿不住；Spec
+          Kit PM 友好但一次性；Claude Memory 省自我介绍但绑模型不能共享。下半是
+          Flow2Spec 五条能力——多端复用、路由收窄、双向同步、原生
+          agent、变更留痕。老实话：停用技能知识库一样会腐化，但差别是腐化会被缺口闸门喊出来，不会静默跑偏。
         </div>
       </section>
 
-      <!-- ======= Slide 5 · 卖点一 · 渐进式读取（商品评价） ======= -->
+      <!-- ======= Slide 5 · 全景一图：两层 ======= -->
+      <section class="slide">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>architecture · two-layer · one-arrow</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">tree -L 1 -d</p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          一张图 · <span class="accent">两层</span> · 一根箭头
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          知识层随项目走 · 规则层随工具走 · 生命周期不同，分开是最基本的决策。
+        </p>
+
+        <div class="fx-arch">
+          <div
+            class="fx-arch-layer top"
+            data-anim="fade-up"
+            style="animation-delay: 0.3s">
+            <div class="lbl">KNOWLEDGE LAYER · 随项目</div>
+            <div class="title">.Knowledge/</div>
+            <div class="sub">
+              业务主题路由 · 存量文档 · 需求澄清 · 终稿方案 ·
+              一份，只在这里写一次。
+            </div>
+            <div class="pills">
+              <span class="pill">manifest-routing.json</span>
+              <span class="pill">matchers/*.json</span>
+              <span class="pill">topics/*.md</span>
+              <span class="pill">stock-docs/*.md</span>
+              <span class="pill">req-docs/*.md</span>
+            </div>
+          </div>
+
+          <div
+            class="fx-arch-link"
+            data-anim="fade-up"
+            style="animation-delay: 0.42s">
+            <div class="bar"></div>
+            <div class="txt">f2s-* 技能 · 维护 ↑ · 触发 ↓</div>
+            <div class="bar"></div>
+          </div>
+
+          <div
+            class="fx-arch-layer bot"
+            data-anim="fade-up"
+            style="animation-delay: 0.54s">
+            <div class="lbl">RULES LAYER · 随工具</div>
+            <div class="title">.cursor/ · .claude/ · .codex/</div>
+            <div class="sub">
+              各工具按自己原生方式加载规则和技能 · 知识层统一，执行层各自独立。
+            </div>
+            <div class="pills">
+              <span class="pill">.cursor/rules/*.mdc</span>
+              <span class="pill">.claude/rules/*.md</span>
+              <span class="pill">.codex/AGENTS.md</span>
+              <span class="pill">skills/*/SKILL.md</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">architecture · knowledge × rules</span>
+          <span class="page">05 / 13</span>
+        </div>
+        <div class="notes">
+          架构图。上面知识层随项目走——manifest 路由、matcher 关键词、topic
+          主题知识、存量需求文档，一份只写一次。下面规则层随工具走——Cursor、Claude、Codex
+          各用自己的原生方式加载。中间一根箭头：f2s-星技能维护上面、触发下面。为什么要分开？因为团队里有人用
+          Cursor、有人用 Claude、CI 用
+          Codex，知识在一个地方写，规则各自适配，不做搬运工。
+        </div>
+      </section>
+
+      <!-- ======= Slide 6 · 卖点一 · 渐进式读取（商品评价） ======= -->
       <section class="slide">
         <div class="fx-grid"></div>
         <div class="fx-glow-cyan"></div>
@@ -419,301 +508,19 @@
 
         <div class="fx-footer">
           <span class="brand">feature · progressive-load · product-review</span>
-          <span class="page">05 / 13</span>
-        </div>
-        <div class="notes">
-          渐进式读取是会议纪要里大家总结出来的第一个亮点。四步
-          match→expand→verify→act，每一步都可以被打断和澄清。不是 AI
-          变聪明，是它每次只拿到有用的东西。
-        </div>
-      </section>
-
-      <!-- ======= Slide 6 · 卖点二 · 任务续作（review_publish_flow） ======= -->
-      <section class="slide is-scroll">
-        <div class="fx-grid"></div>
-        <div class="fx-glow-magenta"></div>
-        <div class="fx-glow-purple"></div>
-        <div class="fx-vignette"></div>
-        <div class="fx-scanlines"></div>
-
-        <div class="fx-chrome">
-          <div class="dots"><span></span><span></span><span></span></div>
-          <div>feature · 02 / 03 · resume-across-sessions</div>
-        </div>
-
-        <p class="fx-prompt" data-anim="fade-up">
-          cat
-          .task/completed/20260511-product_review_review_publish_flow/task.md
-        </p>
-        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
-          会话断了 · AI <span class="accent">自己接上</span>
-        </h2>
-        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
-          一个横跨三端、9 步、分多次会话完成的真实任务 ——
-          中途任何一次下班关机，下次只说一句「继续」。
-        </p>
-
-        <div class="fx-task" data-anim="fade-up" style="animation-delay: 0.32s">
-          <div class="fx-task-card">
-            <div class="path">
-              .task/completed/20260511-product_review_review_publish_flow/task.md
-            </div>
-            <div class="title"># product_review_review_publish_flow</div>
-            <ul>
-              <li>步骤1：生成技术方案（接口端 + B端）</li>
-              <li>步骤2：接口端 · 文章表新增 5 字段</li>
-              <li>步骤3：修改文章创建接口</li>
-              <li>步骤4：修改审核接口（状态流转：已通过→待发布）</li>
-              <li>步骤5：新增文章发布接口（回填帖子链接 + 合作码）</li>
-              <li>步骤6：B端 · 修改列表/详情接口</li>
-              <li>步骤7：B端 · 修改编辑接口</li>
-              <li>步骤8：同步知识库</li>
-              <li>步骤9：提交代码</li>
-            </ul>
-          </div>
-          <div class="fx-task-aside">
-            <h3>// 续作体验</h3>
-            <div class="story">
-              下一次会话开口只说
-              <span class="hl">「帮我继续做文章发布流程」</span>——<br />
-              关键词命中
-              <code
-                style="
-                  font-family: &quot;JetBrains Mono&quot;, monospace;
-                  color: var(--fx-cyan);
-                "
-                >todo.json</code
-              >
-              里的任务， AI 读出
-              <span class="hl">剩余步骤</span
-              >、自动加载技能规则、从上次断点继续。
-            </div>
-            <div class="quote">
-              大模型没有跨会话记忆 · 我们用一份
-              <span style="color: var(--fx-cyan)">.task/todo.json</span>
-              显式接回来。<br />
-              user-todos.md 还会把<span style="color: var(--fx-magenta)"
-                >须用户在线下做的事</span
-              >（跑 DDL、开开关、发版）落盘。
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="fx-dirtree"
-          data-anim="fade-up"
-          style="animation-delay: 0.5s">
-          <div class="fx-dirtree-title">// .task/ 目录结构</div>
-          <pre class="fx-dirtree-pre"><span class="cm">.task/</span>
-├── <span class="hl">todo.json</span>              ← 任务索引 · 命中关键词即续作
-├── active/
-│   └── template_ai_score/
-│       ├── <span class="k">task.md</span>        ← checklist（[x] = 进度）
-│       ├── <span class="k">context.md</span>     ← 涉及文件 · 资料链接
-│       └── <span class="k">user-todos.md</span>  ← 用户线下待办（DDL · 发版）
-└── completed/
-    └── 20260511-<span class="a">product_review_review_publish_flow</span>/
-        ├── <span class="k">task.md</span>        ← 全部 ✅
-        ├── <span class="k">context.md</span>
-        └── <span class="k">user-todos.md</span></pre>
-        </div>
-
-        <div class="fx-dirtree-summary">
-          <code>todo.json</code> <span class="arr">→</span> 命中关键词
-          <span class="arr">→</span> 读出 <code>task.md</code> 剩余步骤
-          <span class="arr">→</span> <span class="res">从断点继续</span>
-        </div>
-
-        <div class="fx-footer">
-          <span class="brand">feature · resume · article-publish-flow</span>
           <span class="page">06 / 13</span>
         </div>
         <div class="notes">
-          这张是真实任务截图——9
-          步全打钩，跨好几次会话。同事经常问：中途下班怎么办？todo.json
-          就是答案。user-todos.md 更进一步：AI 干不了的事（跑
-          SQL、改线上配置）也会落盘给你，不会只在对话里吼一嗓子。
+          核心机制：渐进式读取。用户说一句话，框架走四步。match
+          命中关键词分片，只读一个文件；expand
+          自动拉齐依赖主题——通用约定、子域边界、白名单；verify
+          做缺口检查，置信度不够就向用户澄清，不瞎猜；act
+          确认后才改代码。金句：4.7 MB 变 300 行，不是让 AI
+          更聪明，是把噪声切掉。
         </div>
       </section>
 
-      <!-- ======= Slide 7 · 知识库渐进式创建（消解心智负担） ======= -->
-      <section class="slide is-scroll">
-        <div class="fx-grid"></div>
-        <div class="fx-glow-cyan"></div>
-        <div class="fx-glow-magenta"></div>
-        <div class="fx-vignette"></div>
-        <div class="fx-scanlines"></div>
-
-        <div class="fx-chrome">
-          <div class="dots"><span></span><span></span><span></span></div>
-          <div>onboarding · progressive-kb</div>
-        </div>
-
-        <p class="fx-prompt" style="margin-top: 20px">
-          f2s progressive --no-upfront-cost
-        </p>
-        <h1 class="fx-h1">写着用 · <span class="accent">不用先写完</span></h1>
-        <p class="fx-lede">
-          最小可用集是
-          <b style="color: var(--fx-cyan)"
-            >1 条 manifest + 1 个 matcher + 1 份 topic</b
-          >，其余**随需求长出来**。
-        </p>
-
-        <div class="fx-timeline">
-          <div class="fx-stage">
-            <div class="fx-stage-head">
-              <span class="fx-stage-tag">Day 0</span
-              ><span class="fx-stage-dur">5 分钟</span>
-            </div>
-            <div class="fx-stage-title">init 框架</div>
-            <pre
-              class="fx-stage-cmd"><span class="cm"># 拉起骨架，不写一行知识</span>
-<span class="kw">$</span> npx flow2spec init</pre>
-            <div class="fx-stage-out">
-              生成 <code>.Knowledge/</code> +
-              <code>.cursor/.claude/.codex/</code><br />空的
-              manifest-routing.json，可直接跑
-            </div>
-          </div>
-
-          <div class="fx-stage-arrow">→</div>
-
-          <div class="fx-stage">
-            <div class="fx-stage-head">
-              <span class="fx-stage-tag cy">Day 1</span
-              ><span class="fx-stage-dur">一个需求</span>
-            </div>
-            <div class="fx-stage-title">沉淀架构（可选）</div>
-            <pre
-              class="fx-stage-cmd"><span class="cm"># 喂一份 PDF / 架构图 / README</span>
-<span class="kw">/</span>f2s-doc-arch
-<span class="kw">/</span>f2s-doc-add</pre>
-            <div class="fx-stage-out">
-              AI 读存量文档<br />→ 生成首个 topic + matcher
-            </div>
-          </div>
-
-          <div class="fx-stage-arrow">→</div>
-
-          <div class="fx-stage">
-            <div class="fx-stage-head">
-              <span class="fx-stage-tag mg">Day 2 ~ N</span
-              ><span class="fx-stage-dur">日常</span>
-            </div>
-            <div class="fx-stage-title">改一处 · 记一处</div>
-            <pre class="fx-stage-cmd"><span class="cm"># 改代码顺手改知识</span>
-<span class="kw">/</span>f2s-kb-feat
-<span class="kw">/</span>f2s-kb-fix</pre>
-            <div class="fx-stage-out">
-              代码 diff + topic diff 同屏<br />知识库**随业务增长**，不腐化
-            </div>
-          </div>
-
-          <div class="fx-stage-arrow">→</div>
-
-          <div class="fx-stage">
-            <div class="fx-stage-head">
-              <span class="fx-stage-tag pu">Week 2+</span
-              ><span class="fx-stage-dur">按需</span>
-            </div>
-            <div class="fx-stage-title">体检 · 校准</div>
-            <pre
-              class="fx-stage-cmd"><span class="cm"># 代码在前、知识落后了</span>
-<span class="kw">/</span>f2s-kb-sync
-<span class="kw">/</span>f2s-kb-merge</pre>
-            <div class="fx-stage-out">
-              扫描 diff 反哺 topic<br />合并冲突分支的知识
-            </div>
-          </div>
-        </div>
-
-        <div class="fx-kb" data-anim="fade-up" style="animation-delay: 0.42s">
-          <div class="lbl">// 知识库 + 项目配置 + 内置规则主题</div>
-
-          <div class="col">
-            <div class="col-title">
-              <span class="hl">.Knowledge/</span> + 配置
-            </div>
-            <pre class="fx-kb-pre"><span class="cm">.Knowledge/</span>
-├── <span class="hl">manifest-routing.json</span>         ← 路由表
-├── matchers/
-│   └── <span class="k">*.json</span>                       ← 关键词分片
-├── topics/
-│   └── <span class="k">&lt;topic&gt;.md</span>                   ← 主题知识
-├── stock-docs/
-│   └── <span class="k">*.md</span>                        ← 存量文档
-└── req-docs/
-    └── <span class="k">*.md</span>                        ← 需求 + 方案
-
-<span class="cm">flow2spec.config.json</span>
-├── subAgent: true/false              ← 子 agent 开关
-└── switchAgentVerification           ← 交叉校验
-    changeTracking.feat/fix/implement ← 变更追踪</pre>
-          </div>
-
-          <div class="col">
-            <div class="col-title">
-              <span class="hl">.claude/rules/</span> ·
-              <span class="hl">.cursor/rules/</span>（镜像同步）
-            </div>
-            <pre
-              class="fx-kb-pre"><span class="a">f2s-*</span> 内置规则主题（包模板 → init 落盘）
-├── <span class="k">f2s-config-check.md</span>           ← 技能前置强制步骤
-├── <span class="k">f2s-knowledge-preflight.md</span>    ← 知识库首读约束
-├── <span class="k">f2s-karpathy-guidelines.md</span>    ← Karpathy 编码准则
-├── <span class="k">f2s-task.md</span>                    ← 变更追踪规范
-└── <span class="k">f2s-flow2spec-unified-entry.md</span> ← 知识读取顺序
-
-<span class="r">init</span> 补齐骨架 → <span class="r">f2s-*</span> 技能随需求生长 → <span class="r">缺口闸门</span>防静默偏差</pre>
-          </div>
-        </div>
-
-        <div class="fx-anxiety">
-          <div class="fx-anxiety-row">
-            <span class="fx-anxiety-q">"得先写完所有文档才能用？"</span
-            ><span class="fx-anxiety-a">→ init 当天就跑，文档为零也不挡路</span>
-          </div>
-          <div class="fx-anxiety-row">
-            <span class="fx-anxiety-q">"不知道写多少才够？"</span
-            ><span class="fx-anxiety-a"
-              >→ 1 topic + 1 matcher 起步，缺口闸门会喊</span
-            >
-          </div>
-          <div class="fx-anxiety-row">
-            <span class="fx-anxiety-q">"格式学习成本高？"</span
-            ><span class="fx-anxiety-a"
-              >→ 不用手写，<code>f2s-*</code> 技能代写、代改、代校验</span
-            >
-          </div>
-          <div class="fx-anxiety-row">
-            <span class="fx-anxiety-q">"写了用不起来？"</span
-            ><span class="fx-anxiety-a"
-              >→ 加一条测一条，matcher 命中即验证</span
-            >
-          </div>
-          <div class="fx-anxiety-row hi">
-            <span class="fx-anxiety-q">"历史项目要整块迁？"</span
-            ><span class="fx-anxiety-a"
-              >→ <b>不必</b>。init 骨架 → 下次需求命中哪块，写哪块</span
-            >
-          </div>
-        </div>
-
-        <div class="fx-footer">
-          <span>progressive · pay-as-you-grow</span>
-          <span class="page">07 / 13</span>
-        </div>
-        <div class="notes">
-          这页专门解初始化心智负担。很多同事以为「上知识库 =
-          先写两周文档」——恰恰相反：init 只拉骨架，5
-          分钟就能跑。第一天可选沉淀一份架构，第二天起靠 f2s-kb-feat/fix
-          随改随记。历史项目不用整块迁，只在下次需求命中时补那一块。底部 5
-          句话是常见顾虑的直球回答，讲的时候挑自己被问过的那条举例。
-        </div>
-      </section>
-
-      <!-- ======= Slide 8 · 依赖链自动展开 ======= -->
+      <!-- ======= Slide 7 · 卖点三 · 依赖链自动展开 ======= -->
       <section class="slide">
         <div class="fx-grid"></div>
         <div class="fx-glow-purple"></div>
@@ -722,7 +529,7 @@
 
         <div class="fx-chrome">
           <div class="dots"><span></span><span></span><span></span></div>
-          <div>feature · 03 / 03 · topicDependencies</div>
+          <div>feature · 02 / 03 · topicDependencies</div>
         </div>
 
         <p class="fx-prompt" data-anim="fade-up">
@@ -789,15 +596,16 @@
 
         <div class="fx-footer">
           <span class="brand">feature · dependency-expansion</span>
-          <span class="page">08 / 13</span>
+          <span class="page">07 / 13</span>
         </div>
         <div class="notes">
-          很多人觉得"依赖"只是一个语法细节。在这个项目里，商品评价主题挂了 3
-          层前置依赖——这些是每次改代码都必须先知道的通用约束。依赖挂在主题而不是任务上，意味着新增任务不会漏。
+          一句话触发四层依赖。用户只说「商品评价」，AI 实际读了四层：从通用 ctx
+          规范到子域边界，从白名单到本域细则，加起来 264
+          行。关键设计：依赖挂在主题级，挂一次所有任务共享。新增任务不用重复声明前置约束，漏了也不会静默失效。
         </div>
       </section>
 
-      <!-- ======= Slide 9 · 硬约束密度（欧铁拼团） ======= -->
+      <!-- ======= Slide 8 · 硬约束密度（欧铁拼团） ======= -->
       <section class="slide">
         <div class="fx-grid"></div>
         <div class="fx-glow-cyan"></div>
@@ -891,18 +699,130 @@
 
         <div class="fx-footer">
           <span class="brand">case · groupon × coupon · real-constraints</span>
-          <span class="page">09 / 13</span>
+          <span class="page">08 / 13</span>
         </div>
         <div class="notes">
-          如果上一页在讲"广度"，这一页讲"密度"。拼团的同事务双写、通用券的
-          activityCode-only 和 status 优先级——这些是你问
-          AI「应该这么写吗」它也答不出来的那种。写在 topic
-          里，下一次改代码直接按约束来——这才是知识库的真实价值。
+          上一页讲了知识库的广度，这一页看密度。拼团的同事务双写限流、通用券的
+          status 优先级——这些约束 AI 看代码绝对猜不出来，都是开发中踩了坑，用
+          f2s-kb-fix 顺手写进 topic 的。一条 topic
+          的完整生命周期：改代码、踩坑、修 bug、落 topic、后续 AI
+          直接挡掉。这就是知识库的生成逻辑。
         </div>
       </section>
 
-      <!-- ======= Slide 10 · 全景一图：两层 ======= -->
-      <section class="slide">
+      <!-- ======= Slide 9 · 卖点二 · 任务续作（review_publish_flow） ======= -->
+      <section class="slide is-scroll">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-glow-purple"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>feature · 03 / 03 · resume-across-sessions</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up">
+          cat
+          .task/completed/20260511-product_review_review_publish_flow/task.md
+        </p>
+        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          会话断了 · AI <span class="accent">自己接上</span>
+        </h2>
+        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
+          一个横跨三端、9 步、分多次会话完成的真实任务 ——
+          中途任何一次下班关机，下次只说一句「继续」。
+        </p>
+
+        <div class="fx-task" data-anim="fade-up" style="animation-delay: 0.32s">
+          <div class="fx-task-card">
+            <div class="path">
+              .task/completed/20260511-product_review_review_publish_flow/task.md
+            </div>
+            <div class="title"># product_review_review_publish_flow</div>
+            <ul>
+              <li>步骤1：生成技术方案（接口端 + B端）</li>
+              <li>步骤2：接口端 · 文章表新增 5 字段</li>
+              <li>步骤3：修改文章创建接口</li>
+              <li>步骤4：修改审核接口（状态流转：已通过→待发布）</li>
+              <li>步骤5：新增文章发布接口（回填帖子链接 + 合作码）</li>
+              <li>步骤6：B端 · 修改列表/详情接口</li>
+              <li>步骤7：B端 · 修改编辑接口</li>
+              <li>步骤8：同步知识库</li>
+              <li>步骤9：提交代码</li>
+            </ul>
+          </div>
+          <div class="fx-task-aside">
+            <h3>// 续作体验</h3>
+            <div class="story">
+              下一次会话开口只说
+              <span class="hl">「帮我继续做文章发布流程」</span>——<br />
+              关键词命中
+              <code
+                style="
+                  font-family: &quot;JetBrains Mono&quot;, monospace;
+                  color: var(--fx-cyan);
+                "
+                >todo.json</code
+              >
+              里的任务， AI 读出
+              <span class="hl">剩余步骤</span
+              >、自动加载技能规则、从上次断点继续。
+            </div>
+            <div class="quote">
+              大模型没有跨会话记忆 · 我们用一份
+              <span style="color: var(--fx-cyan)">.task/todo.json</span>
+              显式接回来。<br />
+              user-todos.md 还会把<span style="color: var(--fx-magenta)"
+                >须用户在线下做的事</span
+              >（跑 DDL、开开关、发版）落盘。
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="fx-dirtree"
+          data-anim="fade-up"
+          style="animation-delay: 0.5s">
+          <div class="fx-dirtree-title">// .task/ 目录结构</div>
+          <pre class="fx-dirtree-pre"><span class="cm">.task/</span>
+├── <span class="hl">todo.json</span>              ← 任务索引 · 命中关键词即续作
+├── active/
+│   └── template_ai_score/
+│       ├── <span class="k">task.md</span>        ← checklist（[x] = 进度）
+│       ├── <span class="k">context.md</span>     ← 涉及文件 · 资料链接
+│       └── <span class="k">user-todos.md</span>  ← 用户线下待办（DDL · 发版）
+└── completed/
+    └── 20260511-<span class="a">product_review_review_publish_flow</span>/
+        ├── <span class="k">task.md</span>        ← 全部 ✅
+        ├── <span class="k">context.md</span>
+        └── <span class="k">user-todos.md</span></pre>
+        </div>
+
+        <div class="fx-dirtree-summary">
+          <code>todo.json</code> <span class="arr">→</span> 命中关键词
+          <span class="arr">→</span> 读出 <code>task.md</code> 剩余步骤
+          <span class="arr">→</span> <span class="res">从断点继续</span>
+        </div>
+
+        <div class="fx-footer">
+          <span class="brand">feature · resume · article-publish-flow</span>
+          <span class="page">09 / 13</span>
+        </div>
+        <div class="notes">
+          跨会话续作。左边是一个横跨三端、9
+          步、分多次完成的真实任务。每次下班关机，下次只说一句「继续」，todo.json
+          命中关键词，AI
+          读出剩余步骤、从断点继续。底部的目录结构也很清晰：todo.json
+          做索引、active 放进行中的、completed
+          归档已完成的。还有个细节——user-todos.md 把跑 DDL、开开关、发版这类 AI
+          干不了的事也落盘交接，不会只在对话里吼一嗓子。
+        </div>
+      </section>
+
+      <!-- ======= Slide 10 · 知识库渐进式创建（消解心智负担） ======= -->
+      <section class="slide is-scroll">
         <div class="fx-grid"></div>
         <div class="fx-glow-cyan"></div>
         <div class="fx-glow-magenta"></div>
@@ -911,71 +831,169 @@
 
         <div class="fx-chrome">
           <div class="dots"><span></span><span></span><span></span></div>
-          <div>architecture · two-layer · one-arrow</div>
+          <div>onboarding · progressive-kb</div>
         </div>
 
-        <p class="fx-prompt" data-anim="fade-up">tree -L 1 -d</p>
-        <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
-          一张图 · <span class="accent">两层</span> · 一根箭头
-        </h2>
-        <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
-          知识层随项目走 · 规则层随工具走 · 生命周期不同，分开是最基本的决策。
+        <p class="fx-prompt" style="margin-top: 20px">
+          f2s progressive --no-upfront-cost
+        </p>
+        <h1 class="fx-h1">写着用 · <span class="accent">不用先写完</span></h1>
+        <p class="fx-lede">
+          最小可用集是
+          <b style="color: var(--fx-cyan)"
+            >1 条 manifest + 1 个 matcher + 1 份 topic</b
+          >，其余**随需求长出来**。
         </p>
 
-        <div class="fx-arch">
-          <div
-            class="fx-arch-layer top"
-            data-anim="fade-up"
-            style="animation-delay: 0.3s">
-            <div class="lbl">KNOWLEDGE LAYER · 随项目</div>
-            <div class="title">.Knowledge/</div>
-            <div class="sub">
-              业务主题路由 · 存量文档 · 需求澄清 · 终稿方案 ·
-              一份，只在这里写一次。
+        <div class="fx-timeline">
+          <div class="fx-stage">
+            <div class="fx-stage-head">
+              <span class="fx-stage-tag">init</span
+              ><span class="fx-stage-dur">1 分钟</span>
             </div>
-            <div class="pills">
-              <span class="pill">manifest-routing.json</span>
-              <span class="pill">matchers/*.json</span>
-              <span class="pill">topics/*.md</span>
-              <span class="pill">stock-docs/*.md</span>
-              <span class="pill">req-docs/*.md</span>
+            <div class="fx-stage-title">拉起骨架</div>
+            <pre
+              class="fx-stage-cmd"><span class="cm"># 生成 .Knowledge/ + 工具配置</span>
+<span class="kw">$</span> npx @double-codeing/flow2spec@latest init</pre>
+            <div class="fx-stage-out">
+              空的 manifest-routing.json<br />可直接跑，不写一行知识
             </div>
           </div>
 
-          <div
-            class="fx-arch-link"
-            data-anim="fade-up"
-            style="animation-delay: 0.42s">
-            <div class="bar"></div>
-            <div class="txt">f2s-* 技能 · 维护 ↑ · 触发 ↓</div>
-            <div class="bar"></div>
+          <div class="fx-stage-arrow">→</div>
+
+          <div class="fx-stage">
+            <div class="fx-stage-head">
+              <span class="fx-stage-tag cy">首次接入</span
+              ><span class="fx-stage-dur">一个需求</span>
+            </div>
+            <div class="fx-stage-title">沉淀首批知识</div>
+            <pre
+              class="fx-stage-cmd"><span class="cm"># 喂一份架构文档</span>
+<span class="kw">/</span>f2s-doc-arch
+<span class="kw">/</span>f2s-doc-add</pre>
+            <div class="fx-stage-out">
+              AI 读存量文档<br />→ 生成首个 topic + matcher
+            </div>
           </div>
 
-          <div
-            class="fx-arch-layer bot"
-            data-anim="fade-up"
-            style="animation-delay: 0.54s">
-            <div class="lbl">RULES LAYER · 随工具</div>
-            <div class="title">.cursor/ · .claude/ · .codex/</div>
-            <div class="sub">
-              各工具按自己原生方式加载规则和技能 · 知识层统一，执行层各自独立。
+          <div class="fx-stage-arrow">→</div>
+
+          <div class="fx-stage">
+            <div class="fx-stage-head">
+              <span class="fx-stage-tag mg">日常</span
+              ><span class="fx-stage-dur">改代码 → 记知识 → 提交</span>
             </div>
-            <div class="pills">
-              <span class="pill">.cursor/rules/*.mdc</span>
-              <span class="pill">.claude/rules/*.md</span>
-              <span class="pill">.codex/AGENTS.md</span>
-              <span class="pill">skills/*/SKILL.md</span>
+            <div class="fx-stage-title">开发闭环</div>
+            <pre class="fx-stage-cmd"><span class="cm"># 一条命令走完：改 + 记 + 提交校验</span>
+<span class="kw">/</span>f2s-kb-feat    <span class="cm"># 新功能 → 代码 + topic 同步入库</span>
+<span class="kw">/</span>f2s-kb-fix     <span class="cm"># 修 bug → 更新 topic 防再踩</span>
+<span class="kw">/</span>f2s-git-commit <span class="cm"># 提交前检查 topic 覆盖 + 规范信息</span></pre>
+            <div class="fx-stage-out">
+              改代码、记知识、提交校验一条龙<br />知识库**随业务增长**，不腐化
             </div>
+          </div>
+
+          <div class="fx-stage-arrow">→</div>
+
+          <div class="fx-stage">
+            <div class="fx-stage-head">
+              <span class="fx-stage-tag pu">维护</span
+              ><span class="fx-stage-dur">按需</span>
+            </div>
+            <div class="fx-stage-title">体检 · 对齐</div>
+            <pre
+              class="fx-stage-cmd"><span class="cm"># 代码超前了 / 合并冲突了</span>
+<span class="kw">/</span>f2s-kb-sync   <span class="cm"># 同步能力到知识库，先出大纲再落盘</span>
+<span class="kw">/</span>f2s-kb-merge  <span class="cm"># rebase/merge 后处理上下文冲突</span></pre>
+            <div class="fx-stage-out">
+              kb-sync：实现落地后再补录知识库<br />kb-merge：解决分支合并后的知识冲突
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-kb" data-anim="fade-up" style="animation-delay: 0.42s">
+          <div class="lbl">// 知识库 + 项目配置 + 内置规则主题</div>
+
+          <div class="col">
+            <div class="col-title">
+              <span class="hl">.Knowledge/</span> + 配置
+            </div>
+            <pre class="fx-kb-pre"><span class="cm">.Knowledge/</span>
+├── <span class="hl">manifest-routing.json</span>         ← 路由表
+├── matchers/
+│   └── <span class="k">*.json</span>                       ← 关键词分片
+├── topics/
+│   └── <span class="k">&lt;topic&gt;.md</span>                   ← 主题知识
+├── stock-docs/
+│   └── <span class="k">*.md</span>                        ← 存量文档
+└── req-docs/
+    └── <span class="k">*.md</span>                        ← 需求 + 方案
+
+<span class="cm">flow2spec.config.json</span>
+├── subAgent: true/false              ← 子 agent 开关
+└── switchAgentVerification           ← 交叉校验
+    changeTracking.feat/fix/implement ← 变更追踪</pre>
+          </div>
+
+          <div class="col">
+            <div class="col-title">
+              <span class="hl">.claude/rules/</span> ·
+              <span class="hl">.cursor/rules/</span>（镜像同步）
+            </div>
+            <pre
+              class="fx-kb-pre"><span class="a">f2s-*</span> 内置规则主题（包模板 → init 落盘）
+├── <span class="k">f2s-config-check.md</span>           ← 技能前置强制步骤
+├── <span class="k">f2s-knowledge-preflight.md</span>    ← 知识库首读约束
+├── <span class="k">f2s-karpathy-guidelines.md</span>    ← Karpathy 编码准则
+├── <span class="k">f2s-task.md</span>                    ← 变更追踪规范
+└── <span class="k">f2s-flow2spec-unified-entry.md</span> ← 知识读取顺序
+
+<span class="r">init</span> 补齐骨架 → <span class="r">f2s-*</span> 技能随需求生长 → <span class="r">缺口闸门</span>防静默偏差</pre>
+          </div>
+        </div>
+
+        <div class="fx-anxiety">
+          <div class="fx-anxiety-row">
+            <span class="fx-anxiety-q">"得先写完所有文档才能用？"</span
+            ><span class="fx-anxiety-a">→ init 当天就跑，文档为零也不挡路</span>
+          </div>
+          <div class="fx-anxiety-row">
+            <span class="fx-anxiety-q">"不知道写多少才够？"</span
+            ><span class="fx-anxiety-a"
+              >→ 1 topic + 1 matcher 起步，缺口闸门会喊</span
+            >
+          </div>
+          <div class="fx-anxiety-row">
+            <span class="fx-anxiety-q">"格式学习成本高？"</span
+            ><span class="fx-anxiety-a"
+              >→ 不用手写，<code>f2s-*</code> 技能代写、代改、代校验</span
+            >
+          </div>
+          <div class="fx-anxiety-row">
+            <span class="fx-anxiety-q">"写了用不起来？"</span
+            ><span class="fx-anxiety-a"
+              >→ 加一条测一条，matcher 命中即验证</span
+            >
+          </div>
+          <div class="fx-anxiety-row hi">
+            <span class="fx-anxiety-q">"历史项目要整块迁？"</span
+            ><span class="fx-anxiety-a"
+              >→ <b>不必</b>。init 骨架 → 下次需求命中哪块，写哪块</span
+            >
           </div>
         </div>
 
         <div class="fx-footer">
-          <span class="brand">architecture · knowledge × rules</span>
+          <span>progressive · pay-as-you-grow</span>
           <span class="page">10 / 13</span>
         </div>
         <div class="notes">
-          只给大家一张图。上面随项目走，下面随工具走，中间一根箭头。团队里不同人用不同
-          AI、CI 用 Codex 本地用 Claude——这张图回答了为什么知识只写一份就够。
+          很多同事以为上知识库等于先写两周文档，恰恰相反。最小可用集只要一条路由、一个关键词、一份主题。init
+          一分钟拉骨架就能跑；首次接入喂一份架构 AI 生成首个 topic；日常开发用
+          f2s-kb-feat 和 fix 改代码记知识，再用 f2s-git-commit
+          提交前自动检查 topic 覆盖；维护阶段用 kb-sync
+          补录实现落地、kb-merge 处理合并后的知识冲突。方向很简单：下次需求命中哪块，写哪块，不用整块迁。
         </div>
       </section>
 
@@ -1518,22 +1536,12 @@
           <span class="page">11 / 13</span>
         </div>
         <div class="notes">
-          这一页是评价模板文案库从 0 接口到 17 接口的完整全景，4
-          天断续跑完，都是真实提交。六步讲法：①
-          澄清不是一次问完——"图片是否参与匹配""占位符要不要""下线后能否命中"全是
-          AI 反问逼出来的边界，落成 req-docs 里几十条的澄清稿；② matcher 命中
-          m-product-review-template-library，4 层 topic 依赖链自动展开；③ 8 步
-          checklist 在
-          .task/completed/20260509-template_ai_score/，演示时可以翻出来；④
-          重点讲公共方法——admin 图片上传改 multipart 回写 CDN URL（commit
-          a1b2c3d），当场把使用示例写进 topic，下次其他页面 AI 直接复用；⑤
-          重点讲三个 kb-fix，都是真实 commit：(a) c8d9e0f1 评分漏传 title，Agent
-          看不懂为什么同样内容分数差那么多；(b) 2a3b4c5d scoreContentBatch 从
-          for-await 串行改 Promise.all 并发，批量 10 条从 90s 到 9s，同时把 AI
-          繁忙错误码拆到 _enum；(c) 6e7f8a9b
-          标签删除从软删改物理删+事务。每次都走同一入口带着改
-          topic——这就是"不腐化"的证据；⑥ git-commit 三查全过。收尾强调：17
-          接口、5 张表、跨 B/C 两端、4 天断续——不是演示用例，就是本周工作。
+          端到端全景。评价模板文案库从零到 17
+          个接口，四天断续跑完，分六步：澄清环节 AI
+          成批提问、你答完它对知识库查缺再追一轮，两轮定稿；方案环节四层依赖自动展开，产出技术方案加五份
+          DDL；实现环节说一句「继续」AI 自动拆八步 checklist；feat
+          环节需求交付自动入库；fix 环节每次修 bug 顺手更新 topic；最后 commit
+          闸门三查全过。这不是演示用例，就是本周工作。
         </div>
       </section>
 
@@ -1590,7 +1598,9 @@
           <span class="page">12 / 13</span>
         </div>
         <div class="notes">
-          同事上次反馈说"要做产品对比"——这一页是另一半的坦诚。说清楚什么时候不要用，比夸什么时候好用更可信。适合谁，反着讲最清楚。
+          说清楚什么时候不要用，比夸什么时候好用更可信。三种场景别硬上：一次性脚本写完就删的，直接丢文档给
+          AI 更快；单人小项目一份 CLAUDE.md
+          就够，分片开销大于收益；团队不愿同步知识库的，工具不能替代纪律。简单说就是：投入产出比不划算的场合别硬来。
         </div>
       </section>
 
@@ -1630,8 +1640,7 @@
           <span class="page">13 / 13</span>
         </div>
         <div class="notes">
-          收束和开场呼应。一句话——不是让 AI 更聪明，是让 AI
-          一直知道你在做什么。底下三行留联系方式和仓库地址。
+          回到开场的问题。不是让 AI 更聪明——如果只是模型问题，为什么同一个 AI 有时候靠谱有时候不靠谱？差别在于它知不知道上下文。所以答案不是等更好的模型，是让 AI 一直知道你在做什么。仓库和安装命令都在这里，有问题随时找我。
         </div>
       </section>
     </div>
