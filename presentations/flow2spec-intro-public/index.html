@@ -429,7 +429,7 @@
       </section>
 
       <!-- ======= Slide 6 · 卖点二 · 任务续作（review_publish_flow） ======= -->
-      <section class="slide">
+      <section class="slide is-scroll">
         <div class="fx-grid"></div>
         <div class="fx-glow-magenta"></div>
         <div class="fx-glow-purple"></div>
@@ -499,6 +499,31 @@
           </div>
         </div>
 
+        <div
+          class="fx-dirtree"
+          data-anim="fade-up"
+          style="animation-delay: 0.5s">
+          <div class="fx-dirtree-title">// .task/ 目录结构</div>
+          <pre class="fx-dirtree-pre"><span class="cm">.task/</span>
+├── <span class="hl">todo.json</span>              ← 任务索引 · 命中关键词即续作
+├── active/
+│   └── template_ai_score/
+│       ├── <span class="k">task.md</span>        ← checklist（[x] = 进度）
+│       ├── <span class="k">context.md</span>     ← 涉及文件 · 资料链接
+│       └── <span class="k">user-todos.md</span>  ← 用户线下待办（DDL · 发版）
+└── completed/
+    └── 20260511-<span class="a">product_review_review_publish_flow</span>/
+        ├── <span class="k">task.md</span>        ← 全部 ✅
+        ├── <span class="k">context.md</span>
+        └── <span class="k">user-todos.md</span></pre>
+        </div>
+
+        <div class="fx-dirtree-summary">
+          <code>todo.json</code> <span class="arr">→</span> 命中关键词
+          <span class="arr">→</span> 读出 <code>task.md</code> 剩余步骤
+          <span class="arr">→</span> <span class="res">从断点继续</span>
+        </div>
+
         <div class="fx-footer">
           <span class="brand">feature · resume · article-publish-flow</span>
           <span class="page">06 / 13</span>
@@ -512,7 +537,7 @@
       </section>
 
       <!-- ======= Slide 7 · 知识库渐进式创建（消解心智负担） ======= -->
-      <section class="slide is-compact">
+      <section class="slide is-scroll">
         <div class="fx-grid"></div>
         <div class="fx-glow-cyan"></div>
         <div class="fx-glow-magenta"></div>
@@ -600,6 +625,47 @@
             <div class="fx-stage-out">
               扫描 diff 反哺 topic<br />合并冲突分支的知识
             </div>
+          </div>
+        </div>
+
+        <div class="fx-kb" data-anim="fade-up" style="animation-delay: 0.42s">
+          <div class="lbl">// 知识库 + 项目配置 + 内置规则主题</div>
+
+          <div class="col">
+            <div class="col-title">
+              <span class="hl">.Knowledge/</span> + 配置
+            </div>
+            <pre class="fx-kb-pre"><span class="cm">.Knowledge/</span>
+├── <span class="hl">manifest-routing.json</span>         ← 路由表
+├── matchers/
+│   └── <span class="k">*.json</span>                       ← 关键词分片
+├── topics/
+│   └── <span class="k">&lt;topic&gt;.md</span>                   ← 主题知识
+├── stock-docs/
+│   └── <span class="k">*.md</span>                        ← 存量文档
+└── req-docs/
+    └── <span class="k">*.md</span>                        ← 需求 + 方案
+
+<span class="cm">flow2spec.config.json</span>
+├── subAgent: true/false              ← 子 agent 开关
+└── switchAgentVerification           ← 交叉校验
+    changeTracking.feat/fix/implement ← 变更追踪</pre>
+          </div>
+
+          <div class="col">
+            <div class="col-title">
+              <span class="hl">.claude/rules/</span> ·
+              <span class="hl">.cursor/rules/</span>（镜像同步）
+            </div>
+            <pre
+              class="fx-kb-pre"><span class="a">f2s-*</span> 内置规则主题（包模板 → init 落盘）
+├── <span class="k">f2s-config-check.md</span>           ← 技能前置强制步骤
+├── <span class="k">f2s-knowledge-preflight.md</span>    ← 知识库首读约束
+├── <span class="k">f2s-karpathy-guidelines.md</span>    ← Karpathy 编码准则
+├── <span class="k">f2s-task.md</span>                    ← 变更追踪规范
+└── <span class="k">f2s-flow2spec-unified-entry.md</span> ← 知识读取顺序
+
+<span class="r">init</span> 补齐骨架 → <span class="r">f2s-*</span> 技能随需求生长 → <span class="r">缺口闸门</span>防静默偏差</pre>
           </div>
         </div>
 
@@ -1125,15 +1191,22 @@
               <div class="cmd">
                 <span class="op">/f2s-kb-feat</span>
                 <span class="ar"
-                  >2 次能力扩展 ·
-                  <b style="color: var(--fx-cyan)">写完代码当场写 KB</b></span
+                  ><b style="color: var(--fx-cyan)"
+                    >说需求 = 实现 + 自动入库</b
+                  ></span
                 >
               </div>
-              <div class="dsc" style="padding-top: 2px">
+              <div
+                class="dsc"
+                style="
+                  padding-top: 2px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 6px;
+                ">
                 <div
                   style="
-                    margin: 6px 0;
-                    padding: 8px 12px;
+                    padding: 7px 12px;
                     border-left: 2px solid rgba(126, 246, 255, 0.4);
                     background: rgba(126, 246, 255, 0.04);
                     border-radius: 0 4px 4px 0;
@@ -1143,38 +1216,41 @@
                     style="
                       color: var(--fx-cyan);
                       font-family: &quot;JetBrains Mono&quot;, monospace;
-                      margin-bottom: 3px;
+                      font-size: 11.5px;
+                      margin-bottom: 2px;
                     ">
-                    ① <code>a1b2c3d</code> · 图片上传抽公共方法
+                    <code style="font-size: 11px">c1d2e3f</code> · 新增
+                    rpAiForPeta
                   </div>
                   <div style="color: var(--fx-ink2)">
-                    <b style="color: var(--fx-ink)">我</b>：admin
-                    这边图片上传要改走后端 multipart
-                    接口，顺带写个公共方法，别人也能用
+                    <b style="color: var(--fx-ink)">我</b
+                    >：格式是字段映射关系，模型和 endpoint、 apiKey
+                    由端上传入，服务端只做转发+格式校验
                   </div>
                   <div style="color: var(--fx-ink2)">
-                    <b style="color: var(--fx-ink)">AI</b>：抽到
-                    <code>utils/uploadImageByMultipart.ts</code>，返回 CDN
-                    URL。要我同步写进 topic 吗？下次 AI 改上传就直接复用。
+                    <b style="color: var(--fx-ink)">AI</b>：实现
+                    <code>rpAiForPeta(fields, model, apiKey, endpoint)</code> ·
+                    按映射提字段 → 拼 prompt → 调指定模型 ·
+                    <span style="color: var(--fx-amber)"
+                      >model 白名单 gpt-4o-mini / deepseek-chat · endpoint
+                      须白名单域名 · 超时 30s</span
+                    >
                   </div>
                   <div
                     style="
                       color: var(--fx-cyan);
                       font-family: &quot;JetBrains Mono&quot;, monospace;
-                      font-size: 11px;
-                      margin-top: 4px;
+                      font-size: 10.5px;
+                      margin-top: 3px;
                     ">
-                    → topic 追加片段：<span style="color: var(--fx-ink)"
-                      >「图片上传 = <code>uploadImageByMultipart(file)</code> →
-                      回 CDN URL；禁止 base64 直传」</span
-                    >
+                    → topic「rpAiForPeta」映射规则 / 端上入参 / 白名单 /
+                    超时约束
                   </div>
                 </div>
 
                 <div
                   style="
-                    margin: 6px 0;
-                    padding: 8px 12px;
+                    padding: 7px 12px;
                     border-left: 2px solid rgba(126, 246, 255, 0.4);
                     background: rgba(126, 246, 255, 0.04);
                     border-radius: 0 4px 4px 0;
@@ -1184,32 +1260,73 @@
                     style="
                       color: var(--fx-cyan);
                       font-family: &quot;JetBrains Mono&quot;, monospace;
-                      margin-bottom: 3px;
+                      font-size: 11.5px;
+                      margin-bottom: 2px;
                     ">
-                    ② <code>e4f5a6b7</code> · 对外 UUID / 内部 id 分离
+                    <code style="font-size: 11px">f4a5b6c</code> ·
+                    C端新增图片上传方法
                   </div>
                   <div style="color: var(--fx-ink2)">
-                    <b style="color: var(--fx-ink)">我</b
-                    >：模版库接口不能暴露自增 id，外部要 UUID，但内部 join
-                    还是走 id
+                    <b style="color: var(--fx-ink)">我</b>：发帖前传图拿 CDN
+                    URL，单张 ≤10MB、每次 ≤9 张
                   </div>
                   <div style="color: var(--fx-ink2)">
-                    <b style="color: var(--fx-ink)">AI</b>：加
-                    <code>libraryUuid VARCHAR(36)</code> 字段 +
-                    唯一索引，响应里只吐 uuid。我把「外 uuid / 内 id」写进 topic
-                    的 ID 约定段，下次这个域一律按这条走。
+                    <b style="color: var(--fx-ink)">AI</b>：<code
+                      >POST /api/c/upload/image</code
+                    >
+                    · 限制格式 jpg/png/webp · 鉴权复用发帖 token ·
+                    <span style="color: var(--fx-amber)">禁止 base64 直传</span>
                   </div>
                   <div
                     style="
                       color: var(--fx-cyan);
                       font-family: &quot;JetBrains Mono&quot;, monospace;
-                      font-size: 11px;
-                      margin-top: 4px;
+                      font-size: 10.5px;
+                      margin-top: 3px;
                     ">
-                    → topic 追加片段：<span style="color: var(--fx-ink)"
-                      >「对外契约 <code>libraryUuid</code>，内部 join 用
-                      <code>id</code>」</span
+                    → topic「C端图片上传」接口路径 / 限制 / 鉴权
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    padding: 7px 12px;
+                    border-left: 2px solid rgba(126, 246, 255, 0.4);
+                    background: rgba(126, 246, 255, 0.04);
+                    border-radius: 0 4px 4px 0;
+                    font-size: 12.5px;
+                  ">
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 11.5px;
+                      margin-bottom: 2px;
+                    ">
+                    <code style="font-size: 11px">a7b8c9d</code> ·
+                    用户上传的文章也需要评分
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">我</b
+                    >：不只模版库，用户自上传文章也要 AI 评分
+                  </div>
+                  <div style="color: var(--fx-ink2)">
+                    <b style="color: var(--fx-ink)">AI</b>：<code
+                      >scoreContent</code
                     >
+                    已通用 → 发帖接口加评分调用 ·
+                    <span style="color: var(--fx-amber)"
+                      >结果不进模版库表，新开 user_article_score</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      color: var(--fx-cyan);
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 10.5px;
+                      margin-top: 3px;
+                    ">
+                    → topic「评分体系」补充：用户文章评分 → 独立表
                   </div>
                 </div>
               </div>
@@ -1294,7 +1411,7 @@
                   </div>
                   <div style="color: var(--fx-ink2)">
                     <b style="color: var(--fx-ink)">我</b>：批量重评分 10 条要
-                    90 秒，老板说不能接受，这个方法不用一条一条等
+                    90 秒，这个方法不用一条一条等
                   </div>
                   <div style="color: var(--fx-ink2)">
                     <b style="color: var(--fx-ink)">AI</b>：<code
