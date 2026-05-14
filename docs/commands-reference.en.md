@@ -474,7 +474,7 @@ The following are not skill commands but rules activated by trigger words to gui
 
 ### `f2s-task`
 
-**Trigger Words**: changeTracking, change tracking, task tracking, continuation, continue last task (in Chinese: 变更追踪, 任务追踪, 续作, 继续上次任务)
+**Trigger Words**: changeTracking, change tracking, task tracking, continuation, continue last task
 
 **Purpose**: Change tracking rules (`alwaysApply`). When the corresponding skill's `changeTracking.*` is set to `true`, automatically creates, progressively updates, and finally archives task checklists under `.task/` before and after skill execution, supporting cross-session continuation.
 
@@ -494,7 +494,7 @@ The following are not skill commands but rules activated by trigger words to gui
 
 ### `stock-docs-vs-req-docs`
 
-**Trigger Words**: stock-docs, req-docs, implemented capability, where to put the technical proposal, PDF final draft (in Chinese: 已落地能力, 技术方案放哪, PDF 终稿)
+**Trigger Words**: stock-docs, req-docs, implemented capability, where to put the technical proposal, PDF final draft
 
 **Purpose**: Distinguishes the boundary between the knowledge archival directory and the requirements implementation directory.
 
@@ -513,7 +513,7 @@ The following are not skill commands but rules activated by trigger words to gui
 
 ### `implement-tech-design`
 
-**Trigger Words**: implement according to technical proposal, implement-tech-design, implement per proposal (in Chinese: 按技术方案实现, 根据方案实现)
+**Trigger Words**: implement according to technical proposal, implement-tech-design, implement per proposal
 
 **Purpose**: Implements runnable code based on technical proposal documents in `req-docs/`.
 
@@ -592,14 +592,14 @@ For full principles and design intent, see [architecture.en.md Sec. 4. Agent Exe
 
 ## 7) Quick Reference
 
-For typical work scenarios and full workflows, see [usage-guide.en.md Sec. 3. Typical Work Scenarios](./usage-guide.en.md).
+For typical work scenarios and full workflows, see [Usage Guide § 3. Typical Workflows](./usage-guide.en.md).
 
-For a complete directory description, see [directory-conventions.en.md](./directory-conventions.en.md).
+For a complete directory description, see [Directory Conventions](./directory-conventions.en.md).
 
 ---
 
 Related Documents:
-- [usage-guide.en.md](./usage-guide.en.md)
-- [directory-conventions.en.md](./directory-conventions.en.md)
-- [architecture.en.md](./architecture.en.md)
-- [usage-scenarios.en.md](./usage-scenarios.en.md)
+- [Usage Guide](./usage-guide.en.md)
+- [Directory Conventions](./directory-conventions.en.md)
+- [Architecture](./architecture.en.md)
+- [Usage Scenarios](./usage-scenarios.en.md)
