@@ -116,7 +116,7 @@ Design intent: Cross-verification introduces an external perspective, reducing t
 
 ## 6. Related Documents
 
-- [usage-guide.en.md](./usage-guide.en.md)
-- [commands-reference.en.md](./commands-reference.en.md)
-- [directory-conventions.en.md](./directory-conventions.en.md)
-- [usage-scenarios.en.md](./usage-scenarios.en.md)
+- [Usage Guide](./usage-guide.en.md)
+- [Commands Reference](./commands-reference.en.md)
+- [Directory Conventions](./directory-conventions.en.md)
+- [Usage Scenarios](./usage-scenarios.en.md)

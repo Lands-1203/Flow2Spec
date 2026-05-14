@@ -12,7 +12,7 @@ The following examples revolve around the same e-commerce project, covering the 
 
 **You**
 
-> /f2s-req-clarify The product team provided a refund requirement doc, but it does not specify whether partial refunds and full refunds go through the same API, or whether points should be reversed after a successful refund. The document is at `.Knowledge/req-docs/退款需求v1.md`.
+> /f2s-req-clarify The product team provided a refund requirement doc, but it does not specify whether partial refunds and full refunds go through the same API, or whether points should be reversed after a successful refund. The document is at `.Knowledge/req-docs/refund-requirements-v1.md`.
 
 **Agent**
 
@@ -37,13 +37,13 @@ The following examples revolve around the same e-commerce project, covering the 
 
 **Agent**
 
-> Generated `.Knowledge/req-docs/退款功能_技术方案.md`, which includes:
+> Generated `.Knowledge/req-docs/refund-tech-design.md`, which includes:
 > - API design: `POST /refunds`, `amount` field distinguishes full / partial refunds
 > - State machine: `PENDING -> SUCCESS / FAILED`
 > - Points reversal: asynchronous queue, failures go to dead letter queue, alert for manual handling
 > - Error code list
 >
-> Next step: say "implement according to `.Knowledge/req-docs/退款功能_技术方案.md`" to trigger coding.
+> Next step: say "implement according to `.Knowledge/req-docs/refund-tech-design.md`" to trigger coding.
 
 ---
 
@@ -55,7 +55,7 @@ The following examples revolve around the same e-commerce project, covering the 
 
 **Agent**
 
-> Scanned the relevant directories. Generated `.Knowledge/stock-docs/订单服务架构说明_初稿.md`, which includes:
+> Scanned the relevant directories. Generated `.Knowledge/stock-docs/order-service-architecture-draft.md`, which includes:
 > - Module boundaries and dependencies
 > - Creation flow sequence diagram
 > - Payment callback idempotency mechanism (based on the `payment_callback_log` table)
@@ -65,15 +65,15 @@ The following examples revolve around the same e-commerce project, covering the 
 
 **You**
 
-> /f2s-doc-final .Knowledge/stock-docs/订单服务架构说明_初稿.md
+> /f2s-doc-final .Knowledge/stock-docs/order-service-architecture-draft.md
 
 **Agent**
 
-> Generated `.Knowledge/stock-docs/订单服务架构说明_终稿.md`, formatted according to the final-draft template, with placeholders for items still to be filled in.
+> Generated `.Knowledge/stock-docs/order-service-architecture-final.md`, formatted according to the final-draft template, with placeholders for items still to be filled in.
 
 **You**
 
-> f2s-ctx-build .Knowledge/stock-docs/订单服务架构说明_终稿.md
+> f2s-ctx-build .Knowledge/stock-docs/order-service-architecture-final.md
 
 **Agent**
 
@@ -91,7 +91,7 @@ The following examples revolve around the same e-commerce project, covering the 
 
 **You**
 
-> Implement according to `.Knowledge/req-docs/退款功能_技术方案.md`. Only modify `src/refund/`; do not touch the payment module.
+> Implement according to `.Knowledge/req-docs/refund-tech-design.md`. Only modify `src/refund/`; do not touch the payment module.
 
 **Agent**
 
@@ -127,15 +127,15 @@ The following examples revolve around the same e-commerce project, covering the 
 
 **You**
 
-> /f2s-doc-pdf /Users/me/Downloads/营销优惠券_v2.pdf
+> /f2s-doc-pdf /Users/me/Downloads/marketing-coupon-v2.pdf
 
 **Agent**
 
-> Converted and saved as `.Knowledge/req-docs/营销优惠券_v2.md`. Filled in the idempotency handling flow description and error code explanations that were missing in the PDF.
+> Converted and saved as `.Knowledge/req-docs/marketing-coupon-v2.md`. Filled in the idempotency handling flow description and error code explanations that were missing in the PDF.
 
 **You**
 
-> Implement according to `.Knowledge/req-docs/营销优惠券_v2.md`
+> Implement according to `.Knowledge/req-docs/marketing-coupon-v2.md`
 
 **Agent**
 
@@ -195,14 +195,14 @@ The following examples revolve around the same e-commerce project, covering the 
 
 **You**
 
-> /f2s-kb-merge `.Knowledge/index.md` and `.Knowledge/stock-docs/订单服务架构说明_终稿.md` have conflict markers after the merge. I have already resolved the conflicts in the business code manually.
+> /f2s-kb-merge `.Knowledge/index.md` and `.Knowledge/stock-docs/order-service-architecture-final.md` have conflict markers after the merge. I have already resolved the conflicts in the business code manually.
 
 **Agent**
 
 > Scanned the conflict markers in both files:
 >
 > - `index.md`: 2 conflicts, both in topic description fields. Took the HEAD version (newer content). Resolved automatically.
-> - `订单服务架构说明_终稿.md`: 1 conflict. The "monitoring alert threshold" differs between branches (3 vs. 5). Please confirm which one to keep.
+> - `order-service-architecture-final.md`: 1 conflict. The "monitoring alert threshold" differs between branches (3 vs. 5). Please confirm which one to keep.
 
 **You**
 
