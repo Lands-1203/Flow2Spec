@@ -1,5 +1,7 @@
 # Flow2Spec - Cursor Plugin
 
+> 本仓库为 cursor.directory 发布专用，主仓库及完整文档见 **[Flow2Spec](https://github.com/Lands-1203/Flow2Spec)**。
+
 文档驱动的 AI 协作骨架，让 Cursor Agent 在项目知识库上下文中精准协作。
 
 ## 功能
