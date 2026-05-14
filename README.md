@@ -1,117 +1,115 @@
-# Flow2Spec
+# Flow2Spec — 让 AI 一直知道你在做什么
 
-Flow2Spec 用于在业务仓库初始化一套可持续的 AI 协作结构：
+> 解决 Cursor / Claude Code 的「失忆症」——用一个命令初始化，让 AI
+> 跨会话记住项目上下文，不用每轮重新交代。
+>
+> 🌐 **[English](./README.en.md)** · 中 / EN
 
-- **业务知识文档**统一在 `.Knowledge/`
-- **规则与技能能力**保留在各 agent 配置根（`.cursor/`、`.claude/`、`.codex/`）
+🎬 **[在线演示](https://lands-1203.github.io/Flow2Spec/)**（13 页 HTML PPT，`←` `→` 翻页，`S` 演讲者模式）
 
-集中管理项目知识，同时不破坏各工具原生的 rules/skills 加载机制。
-
-> 🎬 **在线演示**：组内分享用的 13 页 HTML PPT（脱敏版）——**<https://lands-1203.github.io/Flow2Spec/>**
-> `←` `→` 翻页，`S` 打开演讲者模式。源文件见 [presentations/flow2spec-intro-public/](./presentations/flow2spec-intro-public/)。
-
----
-
-## 快速开始
+🔧 **快速体验**：
 
 ```bash
 npx @double-codeing/flow2spec@latest init
-npx @double-codeing/flow2spec@latest init cursor claude codex
 ```
 
-可选：全局安装 CLI 后，可在仓库根直接使用 `flow2spec init …`（与上文等价）：
+---
+
+## Before / After
+
+同样一句话，两段对话：
+
+```
+> 改一下评价模板文案库的批量重评分
+```
+
+**没有 Flow2Spec**：
+
+```
+AI: 这个模块的表在哪？
+AI: batchReScore 是同步还是异步？
+AI: 有没有锁？幂等键是什么？
+AI: 返回格式是什么？错误码是多少？
+AI: （翻遍 416 个接口、796 份文件、4.7 MB 源码…）
+```
+反复介绍 · 反复翻代码 · 反复踩坑
+
+**有 Flow2Spec**：
+
+```
+[matcher 命中] m-product-review-template-library
+[加载依赖] 4 个 topic · 约 300 行
+AI: 已知 — fire-and-forget
+     Redis 锁 smp:product-review:template-library:batch-rescore:lock（TTL 10 分钟）
+     单次最多 100 条 · 错误码 101
+AI: 开始改，预计 3 处文件。
+```
+4.7 MB → 300 行 · 秒级定位到硬约束
+
+---
+
+## Flow2Spec 做三件事
+
+**① 跨设备会话记住项目上下文**  
+`.Knowledge/` 结构化知识库：路由清单（manifest-routing.json）+ 关键词索引（matchers）+ 主题分片（topics）。AI
+启动时只读该读的。
+
+**② 路由清单让 AI 不翻仓库，只拿该拿的**  
+每次需求命中 1~4 个 topic，约 300 行。业务的硬约束——锁的 key、错误码、上限——都在
+topic 里，AI 不用从源码猜。
+
+**③ f2s-* 技能改代码顺手更新知识**  
+`/f2s-kb-feat` 写功能时同步写 topic，`/f2s-kb-fix` 修 bug 时更正 topic，
+`/f2s-git-commit` 提交前检查 topic 覆盖。改代码就是记知识，没有"单独维护文档"这件事。
+
+---
+
+## 上手成本
+
+**最小可用集是一个空骨架。**
 
 ```bash
-npm install -g @double-codeing/flow2spec@latest
+npx @double-codeing/flow2spec@latest init
 ```
 
-`init` 完成后的目录结构：
+1 分钟生成目录结构 + 路由配置，空的，直接跑。**下次需求命中哪块，写哪块**，不提前建设。
 
-| 路径                                             | 用途                                                                                             |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
-| `.Knowledge/stock-docs/`                         | 架构说明、终稿等沉淀文档                                                                         |
-| `.Knowledge/req-docs/`                           | 需求澄清与技术方案                                                                               |
-| `.Knowledge/topics/`                             | 主题路由摘要                                                                                     |
-| `.Knowledge/template/`                           | 终稿与技术方案模板                                                                               |
-| `.Knowledge/manifest-routing.json` + `matchers/` | 机器可读路由与关键词索引                                                                         |
-| `配置根/rules/` + `配置根/skills/`               | 各工具规则与技能入口                                                                             |
-| `flow2spec.config.json`                          | 控制 `subAgent`、`switchAgentVerification`、`changeTracking`（各技能独立子项），默认均为 `false` |
+真实仓库跑了三个月的数据：
 
-> `init` 只做结构与模板补齐，业务文档内容由 `f2s-*` 技能维护。详见 [Flow2Spec使用说明](./docs/Flow2Spec使用说明.md)。
-
-包升级后可在业务仓库用 **`/f2s-kb-upgrade`** 对齐知识库模板与路由；细则见 [使用说明](./docs/Flow2Spec使用说明.md)。
+| 指标 | 数值 |
+|---|---|
+| 对外接口数 | 416 |
+| 源码体积 | 796 文件 / 4.7 MB / ~10 万行 |
+| Flow2Spec 每次加载 | **≈ 300 行**（噪声切掉 99%） |
 
 ---
 
-## 工作流全景
+## 什么时候别用
 
-所有技能均以 `f2s-*` 前缀或主题名在 Agent 内触发。以下按**业务场景**分组，标明推荐执行链路与前置条件。
-
-> **前置要求**：涉及「旧库迁移」或「包模板对齐」时，需先在本地安装最新 CLI：
->
-> ```bash
-> npm install -g @double-codeing/flow2spec@latest
-> ```
->
-> 其余场景以仓库内已初始化的规则与技能为准。
-
-### 一、需求交付链路
-
-从 PRD 到代码落地的完整路径。
-
-> **任务清单控制**：`f2s-req-plan` **强制**创建任务清单；`f2s-implement-tech-design` 是否使用任务清单取决于 `changeTracking.implement` 配置。
-
-| 场景                           | 执行链                                                                              | 产出                              |
-| ------------------------------ | ----------------------------------------------------------------------------------- | --------------------------------- |
-| 有 PRD，需澄清后出方案并落地   | `f2s-req-clarify` → `f2s-req-backend` → `f2s-implement-tech-design` → `f2s-kb-feat` | 澄清纪要 → 技术方案 → 实现+知识库 |
-| 已有方案，需强制任务清单后实现 | `f2s-req-plan`                                     
-                                 | 可确认任务清单与实现编排          |
-
-### 二、知识沉淀链路
-
-将非结构化信息（口述、草稿、外部文档、代码）转化为可检索的知识资产。
-
-| 场景              | 执行链                                             | 产出                           |
-| ----------------- | -------------------------------------------------- | ------------------------------ |
-| 从口述/草稿到终稿 | `f2s-doc-arch` → `f2s-doc-final` → `f2s-ctx-build` | 架构初稿 → 规范终稿 → 主题路由 |
-| 外部文档转知识库  | `f2s-doc-final` → `f2s-ctx-build`                  | 可检索 Markdown + 路由索引     |
-| 存量代码/散稿补录 | `f2s-doc-add` 或 `f2s-kb-sync`                     | 自动提取能力 → 主题索引        |
-
-### 三、日常协作
-
-缺陷修复、迭代与上下文同步。
-
-| 场景           | 技能           |
-| -------------- | -------------- |
-| 修复缺陷       | `f2s-kb-fix`   |
-| 新增功能       | `f2s-kb-feat`  |
-| 同步已实现能力 | `f2s-kb-sync`  |
-| 解决合并冲突   | `f2s-kb-merge` |
-
-### 四、仓库治理
-
-一次性或周期性的结构化维护。
-
-| 场景                                         | 技能             | 注意事项           |
-| -------------------------------------------- | ---------------- | ------------------ |
-| 旧版迁移（rules/skills 散稿 → `.Knowledge`） | `f2s-kb-migrate` | 一次性；执行前备份 |
-| 模板对齐（包升级后同步）                     | `f2s-kb-upgrade` | 可重复执行         |
+- **一次性脚本** — 写完就删的东西，直接丢几个 Markdown 给 AI 更快
+- **单人小项目** — 一份 CLAUDE.md 就够，路由和分片的开销大于收益
+- **团队不愿同步 .Knowledge/** — 工具不能替代纪律
 
 ---
 
-## 关键原则
+## 详细文档
 
-1. `.Knowledge/` 只放业务文档与索引，不放规则执行文件。
-2. `rules/` `skills/` 始终在配置根，保证 Claude/Cursor/Codex 按各自方式加载。
-3. Codex 不读取 `rules/` 目录，通过 `.codex/AGENTS.md` + `skills/ + .codex/topics/*.md`承载约束入口。
+### 中文
+- [使用说明](./docs/Flow2Spec使用说明.md) — 技能链、配置详解
+- [命令说明](./docs/README-命令说明.md) — 所有 f2s-* 命令速查
+- [目录与路径约定](./docs/README-目录与路径约定.md)
+- [体系与原理](./docs/README-体系与原理.md)
+- [使用案例·模拟对话](./docs/Flow2Spec-使用案例-模拟对话.md)
+- [设计说明](./docs/Flow2Spec-设计说明.md)
 
----
+### English
+- [Usage Guide](./docs/usage-guide.en.md)
+- [Commands Reference](./docs/commands-reference.en.md)
+- [Directory Conventions](./docs/directory-conventions.en.md)
+- [Architecture & Principles](./docs/architecture.en.md)
+- [Usage Scenarios](./docs/usage-scenarios.en.md)
+- [Design Principles](./docs/design-principles.en.md)
 
-## 文档导航
+## 协议
 
-- [Flow2Spec使用说明](./docs/Flow2Spec使用说明.md)
-- [README-命令说明](./docs/README-命令说明.md)
-- [README-目录与路径约定](./docs/README-目录与路径约定.md)
-- [README-体系与原理](./docs/README-体系与原理.md)
-- [Flow2Spec-使用案例-模拟对话](./docs/Flow2Spec-使用案例-模拟对话.md)
-- [Flow2Spec-设计说明](./docs/Flow2Spec-设计说明.md)
+MIT. Copyright © 2026 兰涛
