@@ -1,0 +1,23 @@
+{
+  "name": "flow2spec",
+  "displayName": "Flow2Spec",
+  "version": "3.0.8",
+  "description": "文档驱动的 AI 协作骨架：知识库路由、f2s-* 技能流程、变更追踪与 Karpathy 式编码准则，让 AI Agent 在项目上下文中精准协作。",
+  "author": {
+    "name": "兰大神",
+    "email": "550947002@qq.com"
+  },
+  "license": "ISC",
+  "keywords": [
+    "flow2spec",
+    "knowledge-base",
+    "context-engineering",
+    "ai-workflow",
+    "cursor-rules",
+    "agent-skills",
+    "documentation",
+    "f2s"
+  ],
+  "logo": "assets/logo.svg",
+  "repository": "https://github.com/Lands-1203/Flow2Spec"
+}

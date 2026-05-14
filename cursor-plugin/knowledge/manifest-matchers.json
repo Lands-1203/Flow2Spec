@@ -1,0 +1,35 @@
+{
+  "version": "1.0.0",
+  "generatedFrom": ".Knowledge/manifest-routing.json",
+  "matcherKey": "matcherId",
+  "sourceOfTruth": ".Knowledge/manifest-routing.json",
+  "matchers": {
+    "m-implement-from-spec": {
+      "includeAny": [
+        "按技术方案实现",
+        "实现接口",
+        "需求文档开发"
+      ]
+    },
+    "m-doc-routing": {
+      "includeAny": [
+        "文档放哪",
+        "stock-docs",
+        "req-docs",
+        "目录约定"
+      ]
+    },
+    "m-f2s-config-precheck": {
+      "includeAny": [
+        "flow2spec.config.json",
+        "subAgent",
+        "switchAgentVerification",
+        "切换 agent 校验",
+        "技能前置",
+        "f2s-config-check",
+        "f2s-config-inject",
+        "changeTracking"
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "matcher": "Skill",
+      "script": "scripts/f2s-config-inject.js",
+      "description": "在调用 f2s-* Skill 前注入 flow2spec.config.json 配置摘要"
+    }
+  ]
+}
