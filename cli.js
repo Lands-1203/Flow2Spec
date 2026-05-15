@@ -12,6 +12,8 @@ const {
   getMissingConfigFields,
 } = require("./lib/flow2specConfig");
 
+const { execSync } = require("child_process");
+
 const args = process.argv.slice(2);
 const sub = args[0];
 
@@ -19,12 +21,16 @@ const agentList = Object.entries(AGENTS)
   .map(([id, { label }]) => `${id}(${label})`)
   .join(", ");
 
+const pkg = require("./package.json");
+
 const help = `
-Flow2Spec - 统一知识库工作流（AI 配置入口）
+Flow2Spec - 统一知识库工作流（AI 配置入口）  v${pkg.version}
 
 用法:
   flow2spec init [agent ...] [--reset-knowledge] [--yes]    在当前项目初始化：写入 .Knowledge 与所选 agent 入口
   flow2spec config              打印项目根 ${CONFIG_FILENAME} 的解析结果（缺省值合并后）
+  flow2spec version             显示当前 flow2spec 版本
+  flow2spec update              更新 flow2spec 到最新版本
   flow2spec --help              显示本说明
 
 agent（可多个，空格分隔；省略时交互选择）：
@@ -57,6 +63,35 @@ init 会:
 
 if (sub === "--help" || sub === "-h" || !sub) {
   console.log(help.trim());
+  process.exit(0);
+}
+
+if (sub === "version" || sub === "--version" || sub === "-v") {
+  console.log(`flow2spec v${pkg.version}`);
+  process.exit(0);
+}
+
+if (sub === "update") {
+  console.log(`当前版本: v${pkg.version}`);
+  console.log("正在检查最新版本...");
+  try {
+    const latest = execSync(`npm view ${pkg.name} version`, {
+      encoding: "utf8",
+    }).trim();
+    if (latest === pkg.version) {
+      console.log(`已是最新版本 v${latest}`);
+      process.exit(0);
+    }
+    console.log(`发现新版本: v${latest}`);
+    console.log("正在更新...");
+    execSync(`npm install -g ${pkg.name}@latest`, {
+      stdio: "inherit",
+    });
+    console.log(`\n✓ 已更新到 v${latest}`);
+  } catch (e) {
+    console.error("更新失败:", e.message || e);
+    process.exit(1);
+  }
   process.exit(0);
 }
 
@@ -98,7 +133,9 @@ if (sub === "init") {
       return defaultSelected.length ? defaultSelected : [items[0].value];
     }
 
-    const selected = new Set(defaultSelected.length ? defaultSelected : [items[0].value]);
+    const selected = new Set(
+      defaultSelected.length ? defaultSelected : [items[0].value],
+    );
     let cursor = 0;
     let rendered = 0;
 
@@ -160,9 +197,7 @@ if (sub === "init") {
   async function promptBooleanKey(question, defaultValue = false) {
     if (!process.stdin.isTTY || skipPrompts) return defaultValue;
 
-    const hint = defaultValue
-      ? "\x1b[2m[Y/n]\x1b[0m"
-      : "\x1b[2m[y/N]\x1b[0m";
+    const hint = defaultValue ? "\x1b[2m[Y/n]\x1b[0m" : "\x1b[2m[y/N]\x1b[0m";
     process.stdout.write(`  ${question} ${hint} `);
 
     return new Promise((resolve) => {
@@ -254,34 +289,42 @@ if (sub === "init") {
     .then(({ configValues, chosenAgents }) =>
       runInit(cwd, chosenAgents, { overwriteKnowledge, configValues }),
     )
-    .then(({ ids, knowledgeResult, routingUpgrade, indexSnapshot, projectConfig, claudeHooksResult }) => {
-      const lines = ids.map((id) => {
-        const { root, label } = AGENTS[id];
-        if (id === "codex")
-          return `  - ${root}/：（${label}）AGENTS.md、skills/`;
-        if (id === "claude") {
-          const hookLine = claudeHooksResult?.settingsChanged
-            ? "rules/、skills/、hooks/f2s-config-inject.js、settings.json（已写入 f2s PreToolUse hook）"
-            : "rules/、skills/（settings.json 中 f2s hook 已存在，跳过）";
-          return `  - ${root}/：（${label}）${hookLine}`;
-        }
-        return `  - ${root}/：（${label}）rules/、skills/`;
-      });
-      const knowledgeLine = overwriteKnowledge
-        ? "  - .Knowledge/：已按 --reset-knowledge 强制覆盖模板"
-        : `  - .Knowledge/：保留已有内容，补齐缺失模板（新增 ${knowledgeResult?.written || 0}，跳过 ${knowledgeResult?.skipped || 0}）`;
-      const routingLine = overwriteKnowledge
-        ? "  - .Knowledge/manifest-routing.json + .Knowledge/matchers/*：已随 reset 覆盖到模板版本（不再写入 manifest-matchers.json）"
-        : routingUpgrade?.upgraded
-          ? "  - 路由清单已与模板增量对齐"
-          : "  - 路由清单已是最新能力路由，无需变更";
-      const indexLine =
-        indexSnapshot?.written === false
-          ? `  - .Knowledge/template/index.template.md：未复制（${indexSnapshot?.reason || "skip"}）`
-          : "  - .Knowledge/template/index.template.md：已从包内 templates/knowledge/index.md 复制（与 .Knowledge/index.md 对照见 f2s-kb-upgrade 技能）";
-      const pc = projectConfig || {};
-      const configLine = `  - ${CONFIG_FILENAME}：subAgent=${Boolean(pc.subAgent)}, switchAgentVerification=${Boolean(pc.switchAgentVerification)}`;
-      console.log(`
+    .then(
+      ({
+        ids,
+        knowledgeResult,
+        routingUpgrade,
+        indexSnapshot,
+        projectConfig,
+        claudeHooksResult,
+      }) => {
+        const lines = ids.map((id) => {
+          const { root, label } = AGENTS[id];
+          if (id === "codex")
+            return `  - ${root}/：（${label}）AGENTS.md、skills/`;
+          if (id === "claude") {
+            const hookLine = claudeHooksResult?.settingsChanged
+              ? "rules/、skills/、hooks/f2s-config-inject.js、settings.json（已写入 f2s PreToolUse hook）"
+              : "rules/、skills/（settings.json 中 f2s hook 已存在，跳过）";
+            return `  - ${root}/：（${label}）${hookLine}`;
+          }
+          return `  - ${root}/：（${label}）rules/、skills/`;
+        });
+        const knowledgeLine = overwriteKnowledge
+          ? "  - .Knowledge/：已按 --reset-knowledge 强制覆盖模板"
+          : `  - .Knowledge/：保留已有内容，补齐缺失模板（新增 ${knowledgeResult?.written || 0}，跳过 ${knowledgeResult?.skipped || 0}）`;
+        const routingLine = overwriteKnowledge
+          ? "  - .Knowledge/manifest-routing.json + .Knowledge/matchers/*：已随 reset 覆盖到模板版本（不再写入 manifest-matchers.json）"
+          : routingUpgrade?.upgraded
+            ? "  - 路由清单已与模板增量对齐"
+            : "  - 路由清单已是最新能力路由，无需变更";
+        const indexLine =
+          indexSnapshot?.written === false
+            ? `  - .Knowledge/template/index.template.md：未复制（${indexSnapshot?.reason || "skip"}）`
+            : "  - .Knowledge/template/index.template.md：已从包内 templates/knowledge/index.md 复制（与 .Knowledge/index.md 对照见 f2s-kb-upgrade 技能）";
+        const pc = projectConfig || {};
+        const configLine = `  - ${CONFIG_FILENAME}：subAgent=${Boolean(pc.subAgent)}, switchAgentVerification=${Boolean(pc.switchAgentVerification)}`;
+        console.log(`
 ✓ Flow2Spec init 完成
 ${knowledgeLine}
 ${routingLine}
@@ -291,7 +334,8 @@ ${lines.join("\n")}
 
 建议阅读 README 或 docs/Flow2Spec使用说明.md，按「规则在配置根、文档在 .Knowledge」的方式使用。
 `);
-    })
+      },
+    )
     .catch((e) => {
       console.error(e.message || e);
       process.exit(1);

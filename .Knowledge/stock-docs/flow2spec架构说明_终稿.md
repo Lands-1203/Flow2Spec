@@ -33,6 +33,17 @@
 
 ---
 
+## CLI 命令
+
+| 命令 | 说明 |
+| --- | --- |
+| `flow2spec init [agent…] [flags]` | 项目初始化/结构对齐 |
+| `flow2spec config` | 打印解析后的配置（含缺省值合并） |
+| `flow2spec version` | 输出当前版本号（等价 `--version` / `-v`） |
+| `flow2spec update` | 比对 registry 最新版并全局更新 |
+
+---
+
 ## 关键流程
 
 ### 流程一：项目初始化（推荐 `npx @double-codeing/flow2spec@latest init`）

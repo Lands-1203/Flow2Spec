@@ -8,6 +8,8 @@
 
 **Purpose**: Generates an architecture overview draft based on user descriptions or code scanning. No fixed format required; it should clearly describe the system structure, module relationships, and key decisions.
 
+**How It Works**: Centered on inventory-driven scanning: the main agent first produces a module inventory and a scan contract (which entry points to read, which dimensions to focus on), then performs read-only code scanning according to that inventory, and finally aggregates the results into a human-readable architecture draft persisted under `stock-docs/`. The flow does not change code; it is one-way "code → document" extraction only.
+
 **Use Cases**:
 - A new project needs architecture documentation
 - An existing project needs architecture descriptions supplemented
@@ -34,6 +36,8 @@
 
 **Purpose**: Converts PDF technical proposals or draft documents into the standardized "Final Draft Template" format, unifying the document structure for subsequent knowledge base ingestion.
 
+**How It Works**: Unstructured or heterogeneous documents (PDF/drafts) are normalized against the built-in final-draft template: core concept tables, business rules, key flows, configuration, error handling, and other standard sections are extracted; missing section markers are filled in; the output is a consistently structured `_final.md`. The final draft is the standard input for `f2s-ctx-build`, keeping knowledge-base entry structure uniform.
+
 **Use Cases**:
 - PDF technical proposals need conversion to Markdown
 - Draft documents need normalization for long-term storage
@@ -59,6 +63,8 @@
 ### `f2s-ctx-build`
 
 **Purpose**: Synchronizes documents from `stock-docs/` (architecture, final drafts) into the knowledge base routing system, generating/updating topic files, the index, manifest-routing, and matchers.
+
+**How It Works**: Starting from a final-draft document, it runs a three-step "document → routing" mapping: (1) extract capability topics and keywords from the draft; (2) generate `topics/<topic>.md` (routing summary with execution boundaries and next-step pointers) and `matchers/<id>.json` (machine-readable `includeAny` terms); (3) register task→topic rules in `manifest-routing.json` and update the human-readable `index.md`. After that, the task routing engine can hit the topic via keywords.
 
 **Use Cases**:
 - After a final draft is complete, the knowledge base needs to "know about" these documents
@@ -92,6 +98,8 @@
 
 **Purpose**: Parses already-implemented capabilities (aggregated from multiple files) into the knowledge base. Suitable when code already exists but lacks documentation, or when multiple documents need to be imported into the knowledge base in a unified manner.
 
+**How It Works**: Aggregates capability descriptions from multiple scattered sources (code, config, loose docs) and runs the full "draft → final draft → topics/index/manifest" pipeline. Unlike `f2s-ctx-build`, the input differs: `ctx-build` is driven from a single existing final draft; `doc-add` aggregates many scattered sources first, then follows the same pipeline. It closes the gap of "implementation exists but documentation does not."
+
 **Use Cases**:
 - Existing code needs knowledge base documentation
 - Multiple related documents need aggregated import
@@ -123,6 +131,8 @@
 
 **Purpose**: Deletes corresponding knowledge topics and index mappings based on `stock-docs` documents. Only removes reference relationships in the knowledge base, not the source documents themselves.
 
+**How It Works**: The inverse of `f2s-ctx-build` — given a `stock-docs` document path, locate its task→topic rules in `manifest-routing.json`, the corresponding `matchers/<id>.json` shard, `topics/<topic>.md`, and entries in `index.md`, and remove those references one by one. If a topic has no remaining task references after deletion, remove that topic file. Source documents are left in place; the user may delete them physically if desired.
+
 **Use Cases**:
 - A document is deprecated and needs removal from the knowledge routing
 - A document was imported by mistake and its routing mapping needs revocation
@@ -142,6 +152,8 @@
 ### `f2s-doc-pdf`
 
 **Purpose**: Converts PDF technical proposals to Markdown format, saves to `req-docs/`, and can supplement the process description.
+
+**How It Works**: Targets the step before "implement from a proposal" — extracts structured content from the PDF (API definitions, data models, sequence flows, etc.) into Markdown under `req-docs/`. Unlike `f2s-doc-final`, the destination and use differ: `doc-pdf` writes to `req-docs/` for consumption by the `implement-tech-design` rule to drive coding; `doc-final` writes to `stock-docs/` for ingestion via `ctx-build`.
 
 **Use Cases**:
 - A PDF technical proposal needs to be implemented
@@ -173,6 +185,8 @@
 
 **Purpose**: Asks clarifying questions against PRDs/requirement documents, using multi-round Q&A to define requirement boundaries, non-goals, and key flows, until the requirements are clear enough for a technical proposal.
 
+**How It Works**: Uses a "structured questioning" strategy — decomposes the requirement document along six dimensions (roles, scenarios, flows, boundaries, exceptions, non-goals), checks each for vague wording, undefined concepts, or contradictions, and generates targeted questions for each gap. Dialogue continues until all dimensions are unambiguous, then outputs a clarification record as input for `f2s-req-backend`. It turns unstructured PRDs into structured, actionable requirement constraints.
+
 **Use Cases**:
 - First step after receiving a PRD, ensuring correct understanding
 - When requirement boundaries are fuzzy or acceptance criteria are missing
@@ -190,6 +204,8 @@
 ### `f2s-req-backend`
 
 **Purpose**: Based on clarified requirements and the project knowledge base, generates a backend technical proposal document including API design, data models, flow descriptions, error codes, etc.
+
+**How It Works**: Centered on "knowledge base constraints + template-driven" authoring — first pull a constraint summary for the current project from `topics/stock-docs` (architecture conventions, API style, data model norms, etc.), then fill the backend technical proposal template (APIs / models / flows / errors / config / migrations) chapter by chapter against the clarified requirements so the proposal matches the existing architecture. Output is persisted under `req-docs/` as the coding contract for `implement-tech-design`.
 
 **Use Cases**:
 - After `f2s-req-clarify` completes, output a proposal based on clarification results
@@ -220,6 +236,8 @@
 
 **Purpose**: Starting from a technical proposal or requirement description, **always creates a task checklist**, then implements the code accordingly. Does not depend on the `changeTracking` configuration; represents the user's explicit need for traceable task management.
 
+**How It Works**: Runs a five-phase closed loop: parse → plan → confirm → implement → archive. (1) Parse the technical proposal for implementation points; (2) split into executable tasks at module/feature granularity and write to `.task/`; (3) show the draft to the user, lock the checklist after confirmation; (4) implement item by item, checking off `task.md` immediately when each item completes; (5) archive when all are done. Unlike the `implement-tech-design` rule, `req-plan` always carries task tracking and can parallelize implementation with sub-agents for large work; the rule path is lightweight, single-threaded coding.
+
 **Use Cases**:
 - A technical proposal document exists and needs to be broken down into a task list before implementation
 - The requirement description is complex and the user wants to confirm the checklist before starting work
@@ -248,6 +266,8 @@
 ### `f2s-git-commit`
 
 **Purpose**: Executes a Git commit after code is written. Automatically checks changed files, compares knowledge base coverage, prompts the user about capabilities not yet imported, and performs the commit after the commit message is confirmed.
+
+**How It Works**: Layers a "knowledge base coverage gate" on top of `git commit` — infer touched capability areas from `git diff`, cross-check against `.Knowledge/topics/` and `stock-docs/`, and decide whether changed capabilities are documented in the knowledge base. If not covered, block and offer three choices (document first / skip / cancel) to avoid silent drift where "code exists but the knowledge base does not know." Commit messages use emoji + Conventional Commits for consistent, machine-friendly `git log`.
 
 **Use Cases**:
 - Committing code after each feature implementation or bug fix
@@ -283,6 +303,8 @@
 
 **Purpose**: Fixes code based on implementation or rule errors reported by the user, and **by default automatically syncs** the knowledge base documents and index.
 
+**How It Works**: Three steps: locate → fix → sync. From the user's description, locate context and code via the knowledge routing path (manifest → topic → stock-docs) and confirm root cause; after fixing code, automatically check whether related descriptions in `topics/stock-docs/matchers` need updates and revise in place if so (current truth only, no stacked historical negation). "Fix code, sync docs" is the core principle to prevent knowledge drift.
+
 **Use Cases**:
 - Code implementation does not match the technical proposal
 - Rule understanding errors need correction
@@ -316,6 +338,8 @@
 ### `f2s-kb-feat`
 
 **Purpose**: When adding a new capability, completes both the implementation and the knowledge base; if the capability is already implemented, only syncs the knowledge base.
+
+**How It Works**: Three phases: assess → implement → ingest. First assess whether the described capability is not implemented, partially implemented, or already implemented in code; if not or partial, complete the code first; then sync the knowledge base: write a capability description in `stock-docs`, generate or update `topics` summaries, register routing in `manifest-routing` and `matchers`. Unlike `f2s-kb-fix`, `kb-feat` targets **new** work; `kb-fix` targets **correcting existing** work.
 
 **Use Cases**:
 - New feature development
@@ -381,6 +405,8 @@
 
 **Purpose**: Resolves editor context conflicts after Git merges. An optional conflict file path can be provided.
 
+**How It Works**: Layered by file kind — split conflict files into "safe to auto-merge" (structured files such as index, manifest, matchers, using union or latest) vs "needs user judgment" (implementation code, business rules, and other semantic files). Auto-resolve the former; for the latter, produce a comparison table (ours/theirs summary + recommendation) and list differences for the user to decide item by item. Design idea: knowledge-base metadata can be automated; business semantics must not be decided unilaterally.
+
 **Use Cases**:
 - Context conflicts arise after a Git merge/rebase
 - Knowledge base file conflicts caused by multi-person collaboration
@@ -406,6 +432,8 @@
 ### `f2s-kb-migrate`
 
 **Purpose**: Migrates an old-format knowledge base (`docs-index.md` + `rules/` pattern) into the `.Knowledge/` structure organized by topic.
+
+**How It Works**: Uses the legacy `docs-index.md` and `rules/main.md(c)` as index clues, recursively finds all referenced business rules and skill files, and reorganizes by topic into `.Knowledge/` (`topics` / `stock-docs` / `req-docs`). After migration, persist `migration-report.md` (mapping table + proposed deletion paths), then clean up old files after user confirmation. A one-time structural merge of scattered rules/docs into one knowledge base.
 
 **Use Cases**:
 - Upgrading an old project to the new Flow2Spec version
@@ -441,6 +469,8 @@
 
 **Purpose**: Knowledge base template upgrade. Aligns manifest-routing and matchers shards.
 
+**How It Works**: Uses "version branching + delegated init" — detect whether the current knowledge base is V1 (legacy structure, migrate first) or V2+ (already has `.Knowledge`): V1 runs migrate then init; V2+ runs `flow2spec init` directly for incremental package alignment (new templates, manifest schema upgrades, matcher shard format alignment). After upgrade, re-read SKILL.md to see if certain steps must be re-run. Unlike a standalone `init`, `kb-upgrade` includes version routing and re-run logic; `init` alone is a one-shot structural fill-in.
+
 **Use Cases**:
 - After a `flow2spec` package version upgrade, upgrade the project knowledge base template
 - Upgrade an old project to the latest structure
@@ -472,11 +502,23 @@
 
 The following are not skill commands but rules activated by trigger words to guide Agent behavior.
 
+### `f2s-karpathy-guidelines`
+
+**Trigger Words**: `alwaysApply` (always on; no explicit trigger needed)
+
+**Purpose**: Flow2Spec's built-in Karpathy-style coding discipline to improve the quality of agent coding decisions.
+
+**How It Works**: Four behavioral constraints distilled from Andrej Karpathy's observations on common LLM coding mistakes, applied as an `alwaysApply` rule that implicitly governs all `f2s-*` skill runs: (1) think before coding (state assumptions; ask when unsure); (2) simplicity first (minimum code to solve the problem); (3) surgical edits (touch only what must change; match existing style); (4) goal-driven execution (define verifiable success criteria, then iterate). When these guidelines conflict with mandatory `f2s-*` steps, the `f2s-*` steps win.
+
+---
+
 ### `f2s-task`
 
 **Trigger Words**: changeTracking, change tracking, task tracking, continuation, continue last task
 
 **Purpose**: Change tracking rules (`alwaysApply`). When the corresponding skill's `changeTracking.*` is set to `true`, automatically creates, progressively updates, and finally archives task checklists under `.task/` before and after skill execution, supporting cross-session continuation.
+
+**How It Works**: Cross-session persistence via "disk checkpoints + keyword matching" — each active task records progress with checkboxes (`[ ]` / `[x]`) in `.task/active/<name>/task.md`, with `todo.json` as the active-task index. At the start of a new session, the rule fuzzy-matches the user's first message to each task's `keywords`; on a match, it loads the remaining steps in `task.md` and the skill file for `linkedSkill`, restoring full execution context. Completed tasks move to `completed/`. Design: the file system, not chat memory, is the source of truth so interrupted sessions do not lose progress.
 
 **Scope**:
 
@@ -498,6 +540,8 @@ The following are not skill commands but rules activated by trigger words to gui
 
 **Purpose**: Distinguishes the boundary between the knowledge archival directory and the requirements implementation directory.
 
+**How It Works**: "Purpose isolation" to avoid mixing folders — `stock-docs/` holds archived existing knowledge (architecture, final drafts), consumed by `ctx-build` for ingestion into the knowledge base and **must not** be used directly as coding input; `req-docs/` holds implementation-facing requirements and technical proposals, consumed by the `implement-tech-design` rule to drive coding. Writers and readers are fully separated so "stock descriptions are not mistaken for coding contracts" and "implementation proposals are not mistaken for capability archival."
+
 **Directory Division**:
 
 | Directory | Purpose | When It Is Written |
@@ -516,6 +560,8 @@ The following are not skill commands but rules activated by trigger words to gui
 **Trigger Words**: implement according to technical proposal, implement-tech-design, implement per proposal
 
 **Purpose**: Implements runnable code based on technical proposal documents in `req-docs/`.
+
+**How It Works**: "Proposal as contract" — the agent treats the technical proposal in `req-docs/` as the sole coding contract and must follow the mandatory six-step pipeline: understand proposal → output task list → ask clarifying questions before coding → implement step by step → output remaining work and post-implementation reminders. The task list and pre-implementation Q&A are non-skippable gates so coding does not start on a misunderstood spec. Unlike `f2s-req-plan`, this rule is lightweight single-threaded coding and does not force `.task/` tracking unless `changeTracking.implement: true`.
 
 **Change Tracking**: If `changeTracking.implement: true`, after outputting the task list in Step 2.5, synchronously writes to `.task/active/<task-name>/task.md`; archives the task in Step 5 during wrap-up.
 
@@ -548,7 +594,7 @@ Controlled via `flow2spec.config.json` at the project root (all fields default t
 
 ### How Different Products "See" the Configuration (use with the field table below)
 
-`subAgent` and similar fields are written to the **on-disk JSON**; products do not guarantee automatic file opening. Therefore, multi-layered hints are provided via **Cursor rules / Claude hooks / Codex AGENTS snapshot table / knowledge base `config-precheck` summary**, but **the authoritative source remains `Read("flow2spec.config.json")`** (design rationale at [design-principles.en.md Sec. 4.5.1](./design-principles.en.md)). **The full path and table are maintained in one place**: [usage-guide.en.md Sec. 1, `f2s-*` and `flow2spec.config.json`](./usage-guide.en.md).
+`subAgent` and similar fields are written to the **on-disk JSON**; products do not guarantee automatic file opening. Therefore, multi-layered hints are provided via **Cursor rules / Claude hooks / Codex AGENTS snapshot table / knowledge base `config-precheck` summary**, but **the authoritative source remains `Read("flow2spec.config.json")`** (design rationale in [design-principles.en.md — Agent Orchestration § 5.1](./design-principles.en.md); talk / deck pacing in [intro deck HTML](../presentations/flow2spec-intro-public-en/index.html), config section). **The full path and table are maintained in one place**: [usage-guide.en.md Sec. 1, `f2s-*` and `flow2spec.config.json`](./usage-guide.en.md).
 
 ### `subAgent` Field
 
