@@ -11,11 +11,20 @@
 
 ## 核心结构
 
-- `cli.js`：命令入口，解析子命令、交互问答、flags（`--reset-knowledge`、`--yes`）。
+- `cli.js`：命令入口，解析子命令（`init`、`config`、`version`、`update`）、交互问答、flags（`--reset-knowledge`、`--yes`）。
 - `lib/agents.js`：agent 列表（cursor / claude / codex）、目录常量、参数归一化。
 - `lib/init.js`：目录准备、模板复制、manifest 校验、多 agent 落盘；接收 `configValues` 参数并传给 `ensureFlow2specProjectConfig`。
 - `lib/flow2specConfig.js`：配置读写；含 `CONFIG_FIELDS`（字段元数据，迭代维护的唯一入口）、`getMissingConfigFields()`、`loadFlow2specConfig()`、`ensureFlow2specProjectConfig()`。
 - `templates/`：规则、技能、知识模板源，`init` 时写入目标仓库。
+
+## CLI 子命令
+
+| 子命令 | 说明 |
+| --- | --- |
+| `init [agent…] [--reset-knowledge] [--yes]` | 初始化/对齐项目结构 |
+| `config` | 打印解析后的 `flow2spec.config.json` |
+| `version` / `--version` / `-v` | 输出当前安装的 flow2spec 版本号 |
+| `update` | 检查并更新到最新版（`npm install -g @ctrip/flow2spec@latest`） |
 
 ## init 初始化行为
 
