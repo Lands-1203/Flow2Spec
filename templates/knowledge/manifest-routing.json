@@ -7,6 +7,9 @@
   "topicDependencies": {
     "implement-tech-design": [
       "stock-docs-vs-req-docs"
+    ],
+    "f2s-req-plan": [
+      "f2s-task"
     ]
   },
   "topicPaths": {
