@@ -7,6 +7,9 @@
   "topicDependencies": {
     "implement-tech-design": [
       "stock-docs-vs-req-docs"
+    ],
+    "f2s-req-plan": [
+      "f2s-task"
     ]
   },
   "topicPaths": {
@@ -15,7 +18,9 @@
     "fallback-triage": ".Knowledge/topics/f2s-fallback-triage.md",
     "config-precheck": ".Knowledge/topics/f2s-config-precheck.md",
     "f2s-task": ".Knowledge/topics/f2s-task.md",
-    "f2s-req-plan": ".Knowledge/topics/f2s-req-plan.md"
+    "f2s-req-plan": ".Knowledge/topics/f2s-req-plan.md",
+    "flow2spec-presentations": ".Knowledge/topics/f2s-flow2spec-presentations.md",
+    "flow2spec-milestones": ".Knowledge/topics/f2s-flow2spec-milestones.md"
   },
   "taskToTopicRules": [
     {
@@ -57,6 +62,22 @@
       "matcherPath": ".Knowledge/matchers/m-req-plan.json",
       "topics": [
         "f2s-req-plan"
+      ]
+    },
+    {
+      "task": "flow2spec-presentations",
+      "matcherId": "m-flow2spec-presentations",
+      "matcherPath": ".Knowledge/matchers/m-flow2spec-presentations.json",
+      "topics": [
+        "flow2spec-presentations"
+      ]
+    },
+    {
+      "task": "flow2spec-milestones",
+      "matcherId": "m-flow2spec-milestones",
+      "matcherPath": ".Knowledge/matchers/m-flow2spec-milestones.json",
+      "topics": [
+        "flow2spec-milestones"
       ]
     }
   ]

@@ -133,9 +133,7 @@ if (sub === "init") {
       return defaultSelected.length ? defaultSelected : [items[0].value];
     }
 
-    const selected = new Set(
-      defaultSelected.length ? defaultSelected : [items[0].value],
-    );
+    const selected = new Set(defaultSelected.length ? defaultSelected : [items[0].value]);
     let cursor = 0;
     let rendered = 0;
 
@@ -197,7 +195,9 @@ if (sub === "init") {
   async function promptBooleanKey(question, defaultValue = false) {
     if (!process.stdin.isTTY || skipPrompts) return defaultValue;
 
-    const hint = defaultValue ? "\x1b[2m[Y/n]\x1b[0m" : "\x1b[2m[y/N]\x1b[0m";
+    const hint = defaultValue
+      ? "\x1b[2m[Y/n]\x1b[0m"
+      : "\x1b[2m[y/N]\x1b[0m";
     process.stdout.write(`  ${question} ${hint} `);
 
     return new Promise((resolve) => {
@@ -289,42 +289,34 @@ if (sub === "init") {
     .then(({ configValues, chosenAgents }) =>
       runInit(cwd, chosenAgents, { overwriteKnowledge, configValues }),
     )
-    .then(
-      ({
-        ids,
-        knowledgeResult,
-        routingUpgrade,
-        indexSnapshot,
-        projectConfig,
-        claudeHooksResult,
-      }) => {
-        const lines = ids.map((id) => {
-          const { root, label } = AGENTS[id];
-          if (id === "codex")
-            return `  - ${root}/：（${label}）AGENTS.md、skills/`;
-          if (id === "claude") {
-            const hookLine = claudeHooksResult?.settingsChanged
-              ? "rules/、skills/、hooks/f2s-config-inject.js、settings.json（已写入 f2s PreToolUse hook）"
-              : "rules/、skills/（settings.json 中 f2s hook 已存在，跳过）";
-            return `  - ${root}/：（${label}）${hookLine}`;
-          }
-          return `  - ${root}/：（${label}）rules/、skills/`;
-        });
-        const knowledgeLine = overwriteKnowledge
-          ? "  - .Knowledge/：已按 --reset-knowledge 强制覆盖模板"
-          : `  - .Knowledge/：保留已有内容，补齐缺失模板（新增 ${knowledgeResult?.written || 0}，跳过 ${knowledgeResult?.skipped || 0}）`;
-        const routingLine = overwriteKnowledge
-          ? "  - .Knowledge/manifest-routing.json + .Knowledge/matchers/*：已随 reset 覆盖到模板版本（不再写入 manifest-matchers.json）"
-          : routingUpgrade?.upgraded
-            ? "  - 路由清单已与模板增量对齐"
-            : "  - 路由清单已是最新能力路由，无需变更";
-        const indexLine =
-          indexSnapshot?.written === false
-            ? `  - .Knowledge/template/index.template.md：未复制（${indexSnapshot?.reason || "skip"}）`
-            : "  - .Knowledge/template/index.template.md：已从包内 templates/knowledge/index.md 复制（与 .Knowledge/index.md 对照见 f2s-kb-upgrade 技能）";
-        const pc = projectConfig || {};
-        const configLine = `  - ${CONFIG_FILENAME}：subAgent=${Boolean(pc.subAgent)}, switchAgentVerification=${Boolean(pc.switchAgentVerification)}`;
-        console.log(`
+    .then(({ ids, knowledgeResult, routingUpgrade, indexSnapshot, projectConfig, claudeHooksResult }) => {
+      const lines = ids.map((id) => {
+        const { root, label } = AGENTS[id];
+        if (id === "codex")
+          return `  - ${root}/：（${label}）AGENTS.md、skills/`;
+        if (id === "claude") {
+          const hookLine = claudeHooksResult?.settingsChanged
+            ? "rules/、skills/、hooks/f2s-config-inject.js、settings.json（已写入 f2s PreToolUse hook）"
+            : "rules/、skills/（settings.json 中 f2s hook 已存在，跳过）";
+          return `  - ${root}/：（${label}）${hookLine}`;
+        }
+        return `  - ${root}/：（${label}）rules/、skills/`;
+      });
+      const knowledgeLine = overwriteKnowledge
+        ? "  - .Knowledge/：已按 --reset-knowledge 强制覆盖模板"
+        : `  - .Knowledge/：保留已有内容，补齐缺失模板（新增 ${knowledgeResult?.written || 0}，跳过 ${knowledgeResult?.skipped || 0}）`;
+      const routingLine = overwriteKnowledge
+        ? "  - .Knowledge/manifest-routing.json + .Knowledge/matchers/*：已随 reset 覆盖到模板版本（不再写入 manifest-matchers.json）"
+        : routingUpgrade?.upgraded
+          ? "  - 路由清单已与模板增量对齐"
+          : "  - 路由清单已是最新能力路由，无需变更";
+      const indexLine =
+        indexSnapshot?.written === false
+          ? `  - .Knowledge/template/index.template.md：未复制（${indexSnapshot?.reason || "skip"}）`
+          : "  - .Knowledge/template/index.template.md：已从包内 templates/knowledge/index.md 复制（与 .Knowledge/index.md 对照见 f2s-kb-upgrade 技能）";
+      const pc = projectConfig || {};
+      const configLine = `  - ${CONFIG_FILENAME}：subAgent=${Boolean(pc.subAgent)}, switchAgentVerification=${Boolean(pc.switchAgentVerification)}`;
+      console.log(`
 ✓ Flow2Spec init 完成
 ${knowledgeLine}
 ${routingLine}
@@ -334,8 +326,7 @@ ${lines.join("\n")}
 
 建议阅读 README 或 docs/Flow2Spec使用说明.md，按「规则在配置根、文档在 .Knowledge」的方式使用。
 `);
-      },
-    )
+    })
     .catch((e) => {
       console.error(e.message || e);
       process.exit(1);
