@@ -16,7 +16,9 @@
     "implement-tech-design": ".Knowledge/topics/f2s-implement-tech-design.md",
     "stock-docs-vs-req-docs": ".Knowledge/topics/f2s-stock-docs-vs-req-docs.md",
     "fallback-triage": ".Knowledge/topics/f2s-fallback-triage.md",
-    "config-precheck": ".Knowledge/topics/f2s-config-precheck.md"
+    "config-precheck": ".Knowledge/topics/f2s-config-precheck.md",
+    "f2s-task": ".Knowledge/topics/f2s-task.md",
+    "f2s-req-plan": ".Knowledge/topics/f2s-req-plan.md"
   },
   "taskToTopicRules": [
     {
@@ -42,6 +44,22 @@
       "matcherPath": ".Knowledge/matchers/m-doc-routing.json",
       "topics": [
         "stock-docs-vs-req-docs"
+      ]
+    },
+    {
+      "task": "change-tracking",
+      "matcherId": "m-change-tracking",
+      "matcherPath": ".Knowledge/matchers/m-change-tracking.json",
+      "topics": [
+        "f2s-task"
+      ]
+    },
+    {
+      "task": "req-plan",
+      "matcherId": "m-req-plan",
+      "matcherPath": ".Knowledge/matchers/m-req-plan.json",
+      "topics": [
+        "f2s-req-plan"
       ]
     }
   ]
