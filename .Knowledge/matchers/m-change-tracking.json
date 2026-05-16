@@ -1,5 +1,4 @@
 {
-  "id": "m-change-tracking",
   "includeAny": [
     "changeTracking",
     "变更追踪",
@@ -13,5 +12,6 @@
     "f2s-task",
     "任务清单归档",
     "跨会话"
-  ]
+  ],
+  "id": "m-change-tracking"
 }

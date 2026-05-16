@@ -1,5 +1,4 @@
 {
-  "id": "m-req-plan",
   "includeAny": [
     "f2s-req-plan",
     "任务规划",
@@ -11,5 +10,6 @@
     "需求实现",
     "按需求实现",
     "按方案规划"
-  ]
+  ],
+  "id": "m-req-plan"
 }

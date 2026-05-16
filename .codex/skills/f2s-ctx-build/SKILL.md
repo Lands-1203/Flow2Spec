@@ -1,6 +1,7 @@
 ---
 name: f2s-ctx-build
 description: 根据 .Knowledge/stock-docs 文档生成知识路由主题与索引；触发：生成项目上下文、f2s-ctx-build、终稿生成上下文
+---
 
 > 执行口径：本技能只维护 `.Knowledge`（`topics/index/manifest-routing/matchers` 分片），不改配置根 `rules/skills`。不再维护 `.Knowledge/manifest-matchers.json`（已废弃聚合文件；`flow2spec init` 会删除遗留副本）。
 

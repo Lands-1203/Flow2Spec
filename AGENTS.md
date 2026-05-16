@@ -18,7 +18,13 @@
 
 执行任意 **`f2s-*` 技能**前，必须读取 `./flow2spec.config.json` 中的布尔字段（缺省或文件不存在均视为 `false`）。下表由 **最近一次 `flow2spec init`** 根据当时配置写入，**以磁盘上的文件为准**。
 
-{{FLOW2SPEC_PROJECT_CONFIG}}
+| 配置项 | 当前值 | 说明 |
+| --- | --- | --- |
+| `subAgent` | true | 技能规定用子 agent 的步骤：`true` 执行，`false` 全在主会话。用户「动态判断谁用子 agent」**仅当本项为 true** 时有效，否则该说明失效。各 f2s 阶段细则见技能正文（模板未统一写死）。 |
+| `switchAgentVerification` | true | **切换 agent 校验**：`false` 时落盘侧同会话内验（子写子验、主写主验）。`true` 且技能写明依赖本项时交叉验：子落盘→主验，主落盘→子验；无子 agent（如 `subAgent` false）则主落盘→子验不发生、全主验。旧键 `subAgentVerification` 仍可被解析。 |
+| `changeTracking.feat` | true | `true` → `f2s-kb-feat` **步骤 0** 必须创建/续作 `.task/active/` 变更追踪任务；`false` → 跳过，不创建 `.task/` 目录。 |
+| `changeTracking.fix` | true | `true` → `f2s-kb-fix` **步骤 0** 必须创建/续作 `.task/active/` 变更追踪任务；`false` → 跳过。 |
+| `changeTracking.implement` | true | `true` → `f2s-implement-tech-design` **步骤 2.5** 写入任务清单、**步骤 5** 归档完成；`false` → 跳过。 |
 
 ### `subAgent` 与 `switchAgentVerification`（语义与上表一致；以磁盘配置为准）
 
@@ -95,4 +101,21 @@
 
 ## 可用 Flow2Spec 技能（自动生成）
 
-{{FLOW2SPEC_CODEX_SKILLS_SUMMARY}}
+- `f2s-ctx-build`：根据 .Knowledge/stock-docs 文档生成知识路由主题与索引；触发：生成项目上下文、f2s-ctx-build、终稿生成上下文
+- `f2s-ctx-rm`：删除某 stock-docs 文档对应的知识主题与索引映射；触发：删除项目上下文、f2s-ctx-rm
+- `f2s-doc-add`：工作中把已落地能力解析进知识库（多文件聚合）：初稿→终稿→topics/index/manifest；触发：f2s-doc-add、已有能力进知识库、多文件生成上下文
+- `f2s-doc-arch`：根据用户说明或文档（或扫描代码）生成项目架构说明初稿，无固定格式，描述清楚即可；触发：项目架构说明、f2s-doc-arch、架构初稿
+- `f2s-doc-final`：将 PDF 或 MD 转为《终稿模版》规范格式，便于后续用 f2s-ctx-build 同步 topics/index/manifest；触发：f2s-doc-final、转成概述模板、终稿模版
+- `f2s-doc-pdf`：将 PDF 技术方案转为 Markdown 并保存到 req-docs，可补全流程说明；触发：PDF转MD、按方案实现前的 PDF
+- `f2s-git-commit`：代码写完后提交 Git：检查变更与知识库覆盖；生成带 emoji 首行的提交说明后**可直接 commit**（须在当条回复展示首行，不要求用户单独确认 commit）；**git pull 类拉取须用户先确认**。触发：f2s-git-commit、提交代码、git commit、帮我提交
+- `f2s-karpathy-guidelines`：Flow2Spec 内置的 Karpathy 式编码纪律：澄清假设、极简实现、手术式修改、可验证目标。默认由同名 topic 规则 alwaysApply 随 init 落盘；显式调用本技能时重申四条。
+- `f2s-kb-feat`：新增能力时补全实现与知识库；已实现则仅同步知识库；触发：f2s-kb-feat、新增能力
+- `f2s-kb-fix`：根据用户指出的实现或规则错误修正代码，并默认同步知识库；触发：f2s-kb-fix、修正实现规则
+- `f2s-kb-merge`：解决 Git 合并后编辑器上下文冲突；可选传入冲突文件；实现侧冲突仅罗列待用户确认；触发：合并上下文冲突、f2s-kb-merge
+- `f2s-kb-migrate`：旧版知识库一次性迁到 `.Knowledge`：以配置根 `docs-index.md` + 规则统一入口（旧版 `rules/main.md(c)` 或新版包 `rules/f2s-flow2spec-unified-entry.md(c)`）为主索引线索，全量处理业务 `rules/` 与业务 `skills/`（排除 `f2s-*` 包技能），并全量迁移 `stock-docs`/`req-docs`；**迁移验收后必选**落盘 `.Knowledge/migration-report.md`（迁移对照表 + 拟删除路径列表）；**收尾必选**删除已迁旧的 `rules/`、已迁业务 `skills/`、旧版 `docs-index.md`/`index-doc.md`；用户只**核对/修订删除清单（排除项）**；触发：f2s-kb-migrate、知识库迁移、旧版迁移
+- `f2s-kb-sync`：可显式给出能力或零输入推断；先输出知识库更新大纲，确认后写入 topics/index/manifest；触发：f2s-kb-sync、全局同步、知识库同步、已实现能力
+- `f2s-kb-upgrade`：知识库模板升级技能（仅指本 SKILL）：**流程分流 V1** 须先 f2s-kb-migrate 再在流程内代跑 flow2spec init；**现行库（流程代号 V2+，含已用 .Knowledge 的 Flow2Spec npm v3.x 等项目）** 则代跑 init 以对齐 manifest-routing + matchers 分片（包内 `manifest-matchers.json` 仅作 init 合并种子，不落盘 .Knowledge）。触发：f2s-kb-upgrade、一键升级迁移、旧项目升级、知识库模板升级。注意：不要把单独的 flow2spec init 称作「升级命令」；**V1/V2+ 为技能内分流代号，不等于 npm 包主版本号**。
+- `f2s-req-backend`：根据澄清后的需求基于项目知识库/Skills/Rules 生成后端技术文档；触发：生成后端技术文档、后端技术方案
+- `f2s-req-clarify`：针对 PRD/需求反问直到清楚，再可用 f2s-req-backend 出技术方案；触发：需求澄清、PRD 澄清
+- `f2s-req-plan`：根据技术方案/需求描述/变更描述规划并实现任务；始终按 f2s-task 维护 .task/；支持子 agent 并行实现；触发：f2s-req-plan、创建任务、任务规划、我需要任务清单
+- `stock-docs-vs-req-docs`：文档目录 stock-docs 与 req-docs 分工；触发词：stock-docs、req-docs、f2s-ctx-build、f2s-doc-arch、f2s-doc-add、已落地能力、技术方案放哪、PDF 终稿
