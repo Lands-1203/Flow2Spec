@@ -61,6 +61,11 @@ graph LR
 
 ### 3. 技能维护闭环
 
+<p><img src="./images/flow-1.png" alt="技能维护闭环" style="max-width:100%;" /></p>
+
+<details>
+<summary>Mermaid 源码</summary>
+
 ```mermaid
 graph LR
     K[".Knowledge/"] --> AI["下次会话\n的 AI"]
@@ -83,13 +88,6 @@ graph LR
 
     GIT["Git 合并后"] -->|f2s-kb-merge| K
 ```
-
-<details>
-<summary>排版参考（备用 PNG）</summary>
-
-GitHub 等环境的 Mermaid 排版可能与 IDE 不一致。下图与上文 Mermaid 源码对应；改流程请先改上方代码块，再导出替换 docs/images/流程1.png。
-
-![技能维护闭环](./images/流程1.png)
 
 </details>
 

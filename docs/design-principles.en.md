@@ -63,6 +63,11 @@ graph LR
 
 ### 3. Skill Maintenance Loop
 
+<p><img src="./images/process-1.png" alt="Skill maintenance loop" style="max-width:100%;" /></p>
+
+<details>
+<summary>Mermaid source</summary>
+
 ```mermaid
 graph LR
     K[".Knowledge/"] --> AI["Next Session\nAI"]
@@ -85,13 +90,6 @@ graph LR
 
     GIT["After Git Merge"] -->|f2s-kb-merge| K
 ```
-
-<details>
-<summary>Layout reference (fallback PNG)</summary>
-
-Mermaid layout on GitHub and other hosts may differ from your IDE. The figure below matches the Mermaid block above; edit the block first, then re-export to docs/images/Process 1.png.
-
-![Skill maintenance loop](./images/Process%201.png)
 
 </details>
 
