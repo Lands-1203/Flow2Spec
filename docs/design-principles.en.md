@@ -63,16 +63,21 @@ graph LR
 
 ### 3. Skill Maintenance Loop
 
+<p><img src="./images/process-1.png" alt="Skill maintenance loop" style="max-width:100%;" /></p>
+
+<details>
+<summary>Mermaid source</summary>
+
 ```mermaid
 graph LR
     K[".Knowledge/"] --> AI["Next Session\nAI"]
-    AI --> C["Code\nChanges"]
+    AI --> C["Feature iteration"]
 
     C -->|"Fix Bug"| FIX["f2s-kb-fix"] --> K
     C -->|"New Capability"| FEAT["f2s-kb-feat"] --> K
     C -->|"Session End"| SYNC["f2s-kb-sync"] --> K
     C -->|"Commit Code"| CMT["f2s-git-commit\nGate Check"]
-    CMT -->|"Not in KB, remind\n→ kb-sync/kb-feat"| K
+    CMT -->|"Not in KB, remind\n-> kb-sync/kb-feat"| K
 
     D1["Architecture Docs"] -->|f2s-doc-arch| FIN["f2s-doc-final"]
     D2["PDF Proposal"] -->|f2s-doc-pdf| FIN
@@ -81,10 +86,12 @@ graph LR
     OLD["Existing Code/Docs"] -->|f2s-doc-add| K
 
     NR["New Requirement"] --> CL["f2s-req-clarify"] --> BE["f2s-req-backend"]
-    BE --> IMPL["implement-tech-design"] -->|f2s-kb-feat| K
+    BE --> IMPL["Implement xxx technical design"] -->|auto-trigger implement-tech-design rule| K
 
     GIT["After Git Merge"] -->|f2s-kb-merge| K
 ```
+
+</details>
 
 Seven entry points  ·  `f2s-git-commit` is the knowledge discipline gate at commit time  ·  `.Knowledge/` is the single convergence point  ·  Knowledge drives AI, AI drives the next development cycle
 

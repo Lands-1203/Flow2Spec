@@ -61,16 +61,21 @@ graph LR
 
 ### 3. 技能维护闭环
 
+<p><img src="./images/flow-1.png" alt="技能维护闭环" style="max-width:100%;" /></p>
+
+<details>
+<summary>Mermaid 源码</summary>
+
 ```mermaid
 graph LR
     K[".Knowledge/"] --> AI["下次会话\n的 AI"]
-    AI --> C["代码\n变更"]
+    AI --> C["功能迭代"]
 
     C -->|"修复 Bug"| FIX["f2s-kb-fix"] --> K
     C -->|"新增能力"| FEAT["f2s-kb-feat"] --> K
     C -->|"会话结束"| SYNC["f2s-kb-sync"] --> K
     C -->|"提交代码"| CMT["f2s-git-commit\n收口检查"]
-    CMT -->|"未入库则提醒\n→ kb-sync/kb-feat"| K
+    CMT -->|"未入库则提醒\n-> kb-sync/kb-feat"| K
 
     D1["架构文档"] -->|f2s-doc-arch| FIN["f2s-doc-final"]
     D2["PDF 方案"] -->|f2s-doc-pdf| FIN
@@ -79,10 +84,12 @@ graph LR
     OLD["存量代码/文档"] -->|f2s-doc-add| K
 
     NR["新需求"] --> CL["f2s-req-clarify"] --> BE["f2s-req-backend"]
-    BE --> IMPL["implement-tech-design"] -->|f2s-kb-feat| K
+    BE --> IMPL["实现xxx技术方案"] -->|自动触发implement-tech-design规则| K
 
     GIT["Git 合并后"] -->|f2s-kb-merge| K
 ```
+
+</details>
 
 七条入口  ·  `f2s-git-commit` 是提交时的知识纪律收口  ·  `.Knowledge/` 是唯一汇聚点  ·  知识驱动 AI，AI 驱动下轮开发
 
