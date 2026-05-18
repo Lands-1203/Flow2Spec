@@ -4,7 +4,7 @@
 > **维护**：大版本或对外渠道变更后，增量修订对应里程碑行，并更新文首「当前版本」表。  
 > **索源**：`flow2spec架构说明_终稿.md`、`Flow2Spec-任务清单与变更追踪.md`、`Flow2Spec-对外介绍演示.md` + 双仓 `git log`。
 
-**当前包版本**（两仓 `package.json` 已对齐）：**3.0.10**
+**当前包版本**（两仓 `package.json` 已对齐）：**3.0.13**
 
 ---
 
@@ -47,6 +47,10 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | M7b 开源对外 | 2026-05-13~14 | 3.0.8–3.0.9 | 双语 PPT、英文文档、公网 Pages | ○ 合并 | ● |
 | M7c Cursor 插件 | 2026-05-14~ | 插件 3.0.8 | cursor.directory 提交流 | — | ● |
 | M8 CLI 运维 | 2026-05-15 | 3.0.10 | version / update | ● | ● |
+| M9 路由补强 | 2026-05-15 | 3.0.11–3.0.12 | f2s-task + f2s-req-plan 包模板路由 | ● | ● |
+| M10 Codex 入口 | 2026-05-16 | 3.0.13 | 根 `AGENTS.md` 自动发现 | ● | ● |
+| M11 单仓里程碑 | 2026-05-18 | — | `f2s-doc-milestone` + `项目里程碑模版`（工作区变更中） | ● | ● |
+| M12 文档打磨 | 2026-05-16 | 3.0.13 | 设计说明 / README 优化（无新版本号） | ● | ● |
 
 图例：**●** 主交付仓；**○** 跟随合并/同步。
 
@@ -179,14 +183,57 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 
 ---
 
-## M8 · CLI 运维与当前态（2026-05-15）
+## M8 · CLI 运维（2026-05-15）
 
 | 项 | 内容 |
 | --- | --- |
-| **版本** | **3.0.10**（双仓一致） |
+| **版本** | **3.0.10** |
 | **提交锚点** | `6e9e456` feat(cli): `version` / `update` |
 | **交付** | `init` / `config` / `version` / `update` |
 | **双仓** | 内部 `@ctrip/flow2spec`、开源 `@double-codeing/flow2spec` 同步发版 |
+
+---
+
+## M9 · 包模板路由补强（2026-05-15）
+
+| 项 | 内容 |
+| --- | --- |
+| **版本** | **3.0.11–3.0.12** |
+| **提交锚点** | `43d1136` · `a1b7bc6` · `4b428fc`（内网）/ `bbf71d2` · `554fb8f`（开源） |
+| **交付** | `templates/knowledge/manifest-routing.json` 补齐 **f2s-req-plan** → **f2s-task** 依赖；产品仓 Agent 修包边界 stock-doc |
+| **双仓** | ● ● |
+
+---
+
+## M10 · Codex 根 AGENTS（2026-05-16）
+
+| 项 | 内容 |
+| --- | --- |
+| **版本** | **3.0.13**（tag `V3.0.13`） |
+| **提交锚点** | `da7cab4`（内网）/ `508eef2`（开源） |
+| **交付** | **init** 写入完整根 **`AGENTS.md`**；**.codex/AGENTS.md** 仅指针 |
+| **双仓** | ● ● |
+
+---
+
+## M11 · 单仓四源里程碑技能（2026-05-18）
+
+| 项 | 内容 |
+| --- | --- |
+| **版本** | 工作区变更中（尚未单独发版） |
+| **交付** | 技能 **`f2s-doc-milestone`**；模版 **`项目里程碑模版.md`**；生成物 **`stock-docs/项目里程碑.md`**（各仓按本仓 git/`.task` 生成，勿与本文 M0–M12 混读） |
+| **双仓** | ● ●（`templates/skills` 已对齐；manifest matcher 待补） |
+
+---
+
+## M12 · 文档打磨（2026-05-16）
+
+| 项 | 内容 |
+| --- | --- |
+| **版本** | **3.0.13**（无新版本号跃迁） |
+| **提交锚点** | `727a583` · `303be6b` · `183d07d`（内网）/ `d9b7f62` · `4fa1eee`（开源） |
+| **交付** | 设计说明、README 与文档链路优化 |
+| **双仓** | ● ● |
 
 ---
 
@@ -202,6 +249,10 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | Cursor 生态 | init cursor、插件分支 | M7c | **仅开源仓** |
 | 国际化 | README.en、docs/*.en.md | M7b | **开源仓为主** |
 | CLI 运维 | version、update | M8 | 双仓 |
+| 包模板路由 | f2s-task、f2s-req-plan 依赖 | M9 | 双仓 |
+| Codex 发现 | 根 AGENTS.md | M10 | 双仓 |
+| 单仓里程碑 | f2s-doc-milestone | M11 | 生成物见各仓 `stock-docs/项目里程碑.md` |
+| 文档维护 | README、设计说明 | M12 | 双仓 |
 
 ---
 
@@ -224,6 +275,7 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | --- | --- | --- |
 | **须一致** | `templates/skills/`、`templates/rules/`、`templates/knowledge/`、`lib/`、`cli.js` | 任一侧改完 **merge/复制** 到另一侧 |
 | **须一致** | `.Knowledge/manifest-routing.json`、`matchers/`、`topics/`、`stock-docs/`（产品文档） | 以内网仓或先完成的一侧为源，覆盖另一侧 |
+| **须一致** | `templates/skills/f2s-doc-milestone/`、`templates/knowledge/template/项目里程碑模版.md`、`.Knowledge/template/项目里程碑模版.md` | 技能与模版双仓一致；各仓 **`stock-docs/项目里程碑.md`** 由技能按本仓四源生成，可内容不同 |
 | **Agent 约定（仅 KB）** | `stock-docs/Flow2Spec-产品仓-Agent修包边界.md` | 约束 Agent **勿改配置根**；**不**写入 `templates/` |
 | **刻意分叉** | `package.json` | 仅 `name` / `homepage` / `publishConfig` 等不同 |
 | **刻意分叉** | `presentations/`、`scripts/sync-*-pages.sh`、Cursor 插件分支 | 见上文「双仓分工」表 |
@@ -240,3 +292,4 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | 2026-05-15 | 增补双仓分工、M7a/b/c（内网 Pages / 开源双语 PPT / Cursor 插件） |
 | 2026-05-15 | 增补 **M2b OpenSpec 移除**（opsx 命令与 openspec 技能退场、M3 替代关系） |
 | 2026-05-15 | 增补 **双仓同步清单**；开源仓对齐 templates / .Knowledge / lib / cli |
+| 2026-05-18 | 当前版本 **3.0.13**；增补 M9–M12、`f2s-doc-milestone` 与单仓 `项目里程碑.md` 分工 |
