@@ -21,14 +21,38 @@
 .tpl-flow2spec-intro .slide.is-compact{padding:72px 88px 64px;justify-content:flex-start}
 
 /* 可上下滚动的 slide（用于超长内容） */
-.tpl-flow2spec-intro .slide.is-scroll{overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;justify-content:flex-start;padding:64px 88px 96px;scrollbar-width:thin;scrollbar-color:var(--fx-cyan) rgba(126,246,255,.08)}
+.tpl-flow2spec-intro .slide.is-scroll{overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;justify-content:flex-start;padding:64px 88px 56px;scrollbar-width:thin;scrollbar-color:var(--fx-cyan) rgba(126,246,255,.08)}
 .tpl-flow2spec-intro .slide.is-scroll::-webkit-scrollbar{width:8px}
 .tpl-flow2spec-intro .slide.is-scroll::-webkit-scrollbar-track{background:rgba(126,246,255,.06);border-radius:4px}
 .tpl-flow2spec-intro .slide.is-scroll::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--fx-cyan),var(--fx-magenta));border-radius:4px;box-shadow:0 0 10px rgba(126,246,255,.4)}
 /* 滚动页内 fx-footer 改为随内容流动到底部，不再 absolute */
-.tpl-flow2spec-intro .slide.is-scroll .fx-footer{position:static !important;margin-top:28px;padding-top:18px;border-top:1px solid rgba(150,170,255,.16)}
-/* 滚动提示（右下角悬浮 hint） */
-.tpl-flow2spec-intro .slide.is-scroll::after{content:'↕ scroll';position:sticky;bottom:12px;right:20px;display:block;margin-left:auto;width:fit-content;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--fx-cyan);background:rgba(14,16,32,.88);border:1px solid rgba(126,246,255,.35);padding:5px 10px;border-radius:4px;pointer-events:none;z-index:10;box-shadow:0 0 12px rgba(126,246,255,.25);animation:fxScrollHint 2.4s ease-in-out infinite}
+.tpl-flow2spec-intro .slide.is-scroll .fx-footer{position:static !important;margin-top:16px;padding-top:12px;margin-bottom:0;border-top:1px solid rgba(150,170,255,.16)}
+/* scroll hint: fixed — does not contribute to slide scrollHeight */
+.tpl-flow2spec-intro .slide.is-scroll::after{content:'↕ scroll';position:fixed;bottom:12px;right:20px;display:block;margin:0;width:fit-content;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--fx-cyan);background:rgba(14,16,32,.88);border:1px solid rgba(126,246,255,.35);padding:5px 10px;border-radius:4px;pointer-events:none;z-index:10;box-shadow:0 0 12px rgba(126,246,255,.25);animation:fxScrollHint 2.4s ease-in-out infinite}
+/* slide transform makes fixed relative to slide; negative offsets still inflate is-scroll scrollHeight */
+.tpl-flow2spec-intro .slide.is-scroll > .fx-glow-cyan,
+.tpl-flow2spec-intro .slide.is-scroll > .fx-glow-magenta,
+.tpl-flow2spec-intro .slide.is-scroll > .fx-glow-purple{
+  position:absolute !important;
+  contain:paint;
+  transform:none;
+}
+.tpl-flow2spec-intro .slide.is-scroll > .fx-glow-cyan{
+  left:0;top:0;right:auto;bottom:auto;
+  width:min(58vw,580px);height:min(58vh,580px);
+  background:radial-gradient(circle at 28% 28%,rgba(126,246,255,.32) 0%,transparent 65%);
+}
+.tpl-flow2spec-intro .slide.is-scroll > .fx-glow-magenta{
+  right:0;bottom:0;left:auto;top:auto;
+  width:min(58vw,580px);height:min(58vh,580px);
+  background:radial-gradient(circle at 72% 72%,rgba(255,120,214,.32) 0%,transparent 65%);
+}
+.tpl-flow2spec-intro .slide.is-scroll > .fx-glow-purple{
+  right:12%;top:0;left:auto;bottom:auto;
+  width:min(50vw,500px);height:min(48vh,480px);
+  background:radial-gradient(circle at 50% 18%,rgba(187,160,255,.24) 0%,transparent 65%);
+}
+.tpl-flow2spec-intro .slide.is-scroll > .fx-arch{flex:0 0 auto}
 @keyframes fxScrollHint{0%,100%{transform:translateY(0);opacity:.85}50%{transform:translateY(-3px);opacity:1}}
 .tpl-flow2spec-intro .slide.is-compact .fx-h1{font-size:50px;margin:8px 0 6px}
 .tpl-flow2spec-intro .slide.is-compact .fx-lede{font-size:15px;line-height:1.55}
@@ -186,6 +210,32 @@
 .tpl-flow2spec-intro .fx-memcoding .rings .ring{display:inline-flex;align-items:center;width:fit-content;max-width:100%;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.35;padding:6px 11px;border:1px solid var(--fx-border);border-radius:6px;color:var(--fx-ink2);background:rgba(130,150,255,.04)}
 .tpl-flow2spec-intro .fx-memcoding .rings .ring b{color:var(--fx-cyan);font-weight:600;margin-right:5px;flex-shrink:0}
 .tpl-flow2spec-intro .fx-memcoding + .fx-arch{margin-top:20px}
+
+/* === Knowledge ring multi-layer (slides 5–7) === */
+.tpl-flow2spec-intro .fx-kb-layers{margin-top:12px;padding:10px 14px;border:1px dashed rgba(126,246,255,.28);border-radius:8px;background:rgba(126,246,255,.04)}
+.tpl-flow2spec-intro .fx-kb-layers .title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--fx-cyan);margin-bottom:8px;text-transform:uppercase}
+.tpl-flow2spec-intro .fx-kb-layers .stack{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.tpl-flow2spec-intro .fx-kb-layers .stack > * + *{margin-top:0}
+.tpl-flow2spec-intro .fx-kb-layers .layer{font-family:'JetBrains Mono',monospace;font-size:9.5px;padding:4px 9px;border-radius:5px;border:1px solid var(--fx-border);color:var(--fx-ink2);background:rgba(130,150,255,.04)}
+.tpl-flow2spec-intro .fx-kb-layers .layer b{color:var(--fx-ink);font-weight:600;margin-right:3px}
+.tpl-flow2spec-intro .fx-kb-layers .sep{font-family:'JetBrains Mono',monospace;color:var(--fx-cyan);opacity:.75;font-size:11px}
+.tpl-flow2spec-intro .fx-kb-layers .hint{display:block;margin-top:7px;font-size:10.5px;color:var(--fx-ink2);font-family:'Inter','PingFang SC',sans-serif;line-height:1.45}
+.tpl-flow2spec-intro .fx-kb-layers .hint .hl{color:var(--fx-purple);font-weight:600}
+
+/* === Slide 5: vertical layout; spacing/overflow only, no font shrink === */
+.tpl-flow2spec-intro .slide.is-arch-slide .fx-h1{font-size:48px;margin:4px 0 8px;line-height:1.08}
+.tpl-flow2spec-intro .slide.is-arch-slide .fx-lede{font-size:15px;line-height:1.5;margin-bottom:0}
+.tpl-flow2spec-intro .slide.is-arch-slide .fx-memcoding{margin-top:10px;padding:11px 15px}
+.tpl-flow2spec-intro .slide.is-arch-slide .fx-memcoding + .fx-arch{margin-top:16px;gap:16px;align-items:stretch}
+.tpl-flow2spec-intro .slide.is-arch-slide .fx-arch-layer{padding:26px 30px 28px;display:flex;flex-direction:column;box-sizing:border-box;height:auto;overflow:visible}
+.tpl-flow2spec-intro .slide.is-arch-slide .fx-arch-layer.top{flex:0 0 auto;min-height:0;padding-bottom:24px}
+.tpl-flow2spec-intro .slide.is-arch-slide .fx-arch-layer .sub{margin-bottom:10px;flex-shrink:0}
+.tpl-flow2spec-intro .slide.is-arch-slide .fx-arch-stack{margin-top:10px;display:flex;flex-direction:column;gap:12px;flex:none;min-height:unset;width:100%}
+.tpl-flow2spec-intro .slide.is-arch-slide .fx-arch-stack .pills{margin-top:0;padding-top:0;flex-shrink:0}
+.tpl-flow2spec-intro .slide.is-arch-slide .fx-arch-stack .fx-kb-layers{margin-top:0;padding:12px 16px 14px;flex-shrink:0;width:100%;box-sizing:border-box}
+.tpl-flow2spec-intro .slide.is-arch-slide .fx-arch-layer.bot{flex:0 0 auto;min-height:0}
+.tpl-flow2spec-intro .slide.is-arch-slide .fx-arch-layer.bot .pills{margin-top:8px;padding-top:0}
+.tpl-flow2spec-intro .slide.is-arch-slide .fx-arch-link{padding:4px 0;flex-shrink:0}
 
 /* === 水平流程（Slide 5） === */
 .tpl-flow2spec-intro .fx-flow{display:flex;align-items:center;gap:14px;margin-top:28px;flex-wrap:wrap}

@@ -2,8 +2,11 @@
 
 ## 核心边界
 
-- `.Knowledge/`：只放业务知识文档与索引
-- `配置根`（`.cursor/.claude/.codex`）：放规则与技能入口
+- `.Knowledge/`：**知识环**——业务知识文档与机读路由（见 [README-体系与原理 §2 多层记忆](./README-体系与原理.md)）
+- `.task/`：**任务环**——变更追踪与跨会话续作（不在 `.Knowledge/` 内）
+- `配置根`（`.cursor/.claude/.codex`）：**规则环 + 技能环**入口
+
+Memory Coding 四环总览见 [README-体系与原理 §1](./README-体系与原理.md)。
 
 ---
 
@@ -11,13 +14,13 @@
 
 | 路径 | 职责 |
 | --- | --- |
-| `.Knowledge/stock-docs/` | 架构、终稿、沉淀文档 |
-| `.Knowledge/req-docs/` | 需求澄清、技术方案 |
-| `.Knowledge/topics/` | 主题路由文档（用于规则与流程执行） |
+| `.Knowledge/stock-docs/` | **L3** 架构、终稿、沉淀长文档 |
+| `.Knowledge/req-docs/` | **L3** 需求澄清、技术方案长文档 |
+| `.Knowledge/topics/` | **L2** 主题摘要（硬约束、边界、路由指针） |
 | `.Knowledge/template/` | 终稿/技术方案模板 |
 | `.Knowledge/index.md` | 人类可读索引 |
-| `.Knowledge/manifest-routing.json` | 机器可读路由骨架（task/topic/dependencies） |
-| `.Knowledge/matchers/*.json` | 关键词分片（`id/includeAny`），由 `manifest-routing.taskToTopicRules[].matcherPath` 直链指向 |
+| `.Knowledge/manifest-routing.json` | **L0** 机读路由骨架（task/topic/`topicDependencies`） |
+| `.Knowledge/matchers/*.json` | **L1** 关键词分片（`id/includeAny`），由 `matcherPath` 直链；**match** 只读一片 |
 | `.Knowledge/migration-report.md` | `f2s-kb-migrate` 落盘的迁移对照表与拟删除路径列表 |
 | `.task/` | 变更追踪任务清单目录（`active/` 进行中，`completed/` 已归档且目录名为 **`<YYYYMMDD>-<task-name>`**（日期在前），`todo.json` 活跃任务索引）；仅当 `changeTracking.*` 为 `true` 或显式调用 `f2s-req-plan` 时创建 |
 | `配置根/rules/` | 规则文件（Cursor `.mdc`，Claude `.md`） |

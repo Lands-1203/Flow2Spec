@@ -359,7 +359,7 @@
       </section>
 
       <!-- ======= Slide 5 · Big Picture: Two Layers ======= -->
-      <section class="slide">
+      <section class="slide is-scroll is-arch-slide">
         <div class="fx-grid"></div>
         <div class="fx-glow-cyan"></div>
         <div class="fx-glow-magenta"></div>
@@ -412,12 +412,30 @@
             <div class="sub">
               Routing + topics + stock/req docs — the <strong>knowledge ring</strong> of Memory Coding, not the whole story.
             </div>
-            <div class="pills">
-              <span class="pill">manifest-routing.json</span>
-              <span class="pill">matchers/*.json</span>
-              <span class="pill">topics/*.md</span>
-              <span class="pill">stock-docs/*.md</span>
-              <span class="pill">req-docs/*.md</span>
+            <div class="fx-arch-stack">
+              <div class="pills">
+                <span class="pill">manifest-routing.json</span>
+                <span class="pill">matchers/*.json</span>
+                <span class="pill">topics/*.md</span>
+                <span class="pill">stock-docs/*.md</span>
+                <span class="pill">req-docs/*.md</span>
+              </div>
+              <div class="fx-kb-layers">
+              <div class="title">Knowledge ring · multi-layer memory</div>
+              <div class="stack">
+                <span class="layer"><b>L0</b> manifest</span>
+                <span class="sep">→</span>
+                <span class="layer"><b>L1</b> matchers</span>
+                <span class="sep">→</span>
+                <span class="layer"><b>L2</b> topics</span>
+                <span class="sep">→</span>
+                <span class="layer"><b>L3</b> stock / req</span>
+              </div>
+              <span class="hint"
+                >Horizontal: <span class="hl">match → expand → verify → act</span> (slide 6)
+                · Vertical: <span class="hl">topicDependencies</span> (slide 7)</span
+              >
+              </div>
             </div>
           </div>
 
@@ -453,7 +471,7 @@
           <span class="page">05 / 14</span>
         </div>
         <div class="notes">
-          Memory Coding: four rings in the repo — knowledge / task / rules / skills. KB is the knowledge ring only. Arrow: skills ring up, rules ring read &amp; act down. Task ring (.task/) sits alongside, not inside .Knowledge/. Flow2Spec is not KB-only. vs model Memory and bare RAG.
+          Memory Coding four rings + knowledge-ring layers (L0 manifest → L3 docs; horizontal match/act, vertical topicDependencies). Flow2Spec is not KB-only.
         </div>
       </section>
 
@@ -476,7 +494,7 @@
           Progressive Loading · <span class="accent">Check the Index First</span>, Then Open the Book
         </h2>
         <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
-          User says "modify the batch rescore for the review template library" — Flow2Spec walks through four steps:
+          <strong>Horizontal narrowing</strong> on the knowledge ring: user says "modify the batch rescore for the review template library" — four steps:
         </p>
 
         <div class="fx-flow" data-anim="fade-up" style="animation-delay: 0.32s">
@@ -549,8 +567,7 @@
           One Sentence · <span class="accent">4-Layer Dependencies</span> Auto-Expanded
         </h2>
         <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
-          You only said "product review" — the AI already knows to first read common conventions → subdomain boundaries → C-side
-          whitelist, then the domain-specific rules.
+          <strong>Knowledge ring L2 vertical chain</strong>: you only said "product review" — <code>topicDependencies</code> already pulls common conventions → subdomain boundaries → C-side whitelist → domain rules.
         </p>
 
         <div class="fx-tree" data-anim="fade-up" style="animation-delay: 0.3s">

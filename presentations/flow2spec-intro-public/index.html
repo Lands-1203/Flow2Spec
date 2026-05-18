@@ -373,7 +373,7 @@
       </section>
 
       <!-- ======= Slide 5 · 全景一图：两层 ======= -->
-      <section class="slide">
+      <section class="slide is-scroll is-arch-slide">
         <div class="fx-grid"></div>
         <div class="fx-glow-cyan"></div>
         <div class="fx-glow-magenta"></div>
@@ -426,12 +426,30 @@
             <div class="sub">
               路由 + 主题 + 存量/需求文档 —— Memory Coding 的<strong>一环</strong>，不是全部。
             </div>
-            <div class="pills">
-              <span class="pill">manifest-routing.json</span>
-              <span class="pill">matchers/*.json</span>
-              <span class="pill">topics/*.md</span>
-              <span class="pill">stock-docs/*.md</span>
-              <span class="pill">req-docs/*.md</span>
+            <div class="fx-arch-stack">
+              <div class="pills">
+                <span class="pill">manifest-routing.json</span>
+                <span class="pill">matchers/*.json</span>
+                <span class="pill">topics/*.md</span>
+                <span class="pill">stock-docs/*.md</span>
+                <span class="pill">req-docs/*.md</span>
+              </div>
+              <div class="fx-kb-layers">
+              <div class="title">知识环 · 多层记忆</div>
+              <div class="stack">
+                <span class="layer"><b>L0</b> manifest</span>
+                <span class="sep">→</span>
+                <span class="layer"><b>L1</b> matchers</span>
+                <span class="sep">→</span>
+                <span class="layer"><b>L2</b> topics</span>
+                <span class="sep">→</span>
+                <span class="layer"><b>L3</b> stock / req</span>
+              </div>
+              <span class="hint"
+                >横读：<span class="hl">match → expand → verify → act</span>（第 6
+                页）· 纵链：<span class="hl">topicDependencies</span>（第 7 页）</span
+              >
+              </div>
             </div>
           </div>
 
@@ -467,7 +485,7 @@
           <span class="page">05 / 14</span>
         </div>
         <div class="notes">
-          Memory Coding 先定性：仓内四环（勿说成三环：知识/任务/规则+技能）。规则环与技能环分列。箭头：技能环维护上、规则环读与做下。.task 是任务环，不在 .Knowledge。Flow2Spec ≠ 只做 RAG。
+          Memory Coding 四环 + 知识环多层（L0 manifest → L3 长文档；横读 match/act、纵链 topicDependencies）。勿说三环。Flow2Spec ≠ 只做 RAG。
         </div>
       </section>
 
@@ -490,7 +508,8 @@
           渐进式读取 · <span class="accent">先查目录</span>，再翻书
         </h2>
         <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
-          用户说一句「改评价模板文案库的批量重评分」，Flow2Spec 走四步：
+          在<strong>知识环</strong>上横读收窄：用户说一句「改评价模板文案库的批量重评分」，Flow2Spec
+          走四步：
         </p>
 
         <div class="fx-flow" data-anim="fade-up" style="animation-delay: 0.32s">
@@ -540,12 +559,7 @@
           <span class="page">06 / 14</span>
         </div>
         <div class="notes">
-          核心机制：渐进式读取。用户说一句话，框架走四步。match
-          命中关键词分片，只读一个文件；expand
-          自动拉齐依赖主题——通用约定、子域边界、白名单；verify
-          做缺口检查，置信度不够就向用户澄清，不瞎猜；act
-          确认后才改代码。金句：4.7 MB 变 300 行，不是让 AI
-          更聪明，是把噪声切掉。
+          知识环横读四步 match/expand/verify/act。金句：4.7 MB 变 300 行是 L0–L2 收窄，不是模型变聪明。
         </div>
       </section>
 
@@ -568,8 +582,10 @@
           一句话 · <span class="accent">4 层依赖</span>自动展开
         </h2>
         <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
-          你只说了「商品评价」三个字，AI 已经知道要先读通用约定 → 子域边界 → C
-          端白名单，再读本域细则。
+          <strong>知识环 L2 纵链</strong>：你只说了「商品评价」三个字，<code
+            >topicDependencies</code
+          >
+          已拉齐通用约定 → 子域边界 → C 端白名单 → 本域细则。
         </p>
 
         <div class="fx-tree" data-anim="fade-up" style="animation-delay: 0.3s">
@@ -628,9 +644,7 @@
           <span class="page">07 / 14</span>
         </div>
         <div class="notes">
-          一句话触发四层依赖。用户只说「商品评价」，AI 实际读了四层：从通用 ctx
-          规范到子域边界，从白名单到本域细则，加起来 264
-          行。关键设计：依赖挂在主题级，挂一次所有任务共享。新增任务不用重复声明前置约束，漏了也不会静默失效。
+          知识环纵链：topicDependencies 四层 topics。主题级依赖挂一次、所有任务共享，漏了不静默失效。
         </div>
       </section>
 

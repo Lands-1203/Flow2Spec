@@ -1,22 +1,61 @@
 # 体系与原理
 
-Flow2Spec 的目标是把"业务知识沉淀"与"Agent 能力加载"拆开：
+Flow2Spec 的目标是把"业务知识沉淀"与"Agent 能力加载"拆开，并在仓库里用 **Memory Coding（记忆编码）** 把「要记住的东西」落盘为可 diff、可评审的 Git 资产。
 
-- **知识层**：`.Knowledge`（文档与索引）
-- **执行层**：配置根 `rules/skills`（供各工具原生加载）
+- **知识环**（`.Knowledge/`）：业务文档与机读路由（见下文多层结构）
+- **任务环**（`.task/`）：跨会话续作清单
+- **规则环**（各工具 `rules` / `AGENTS.md`）：规定 Agent **怎么读、怎么做**
+- **技能环**（`f2s-*`）：维护知识、触发流程
+
+> Flow2Spec ≠ 只有知识库；上述四环同属 Memory Coding，下文「两层结构」描述的是**知识环 vs 工具侧执行落点**的生命周期分工。
 
 ---
 
-## 1. 两层结构
+## 1. Memory Coding 与仓内四环
+
+**Memory Coding**：把必须长期记住的上下文**编码进可提交仓库**——不押在模型私有 Memory、不只在聊天里重复，也不靠全仓向量概率猜。
+
+仓内拆成 **四环**（勿说成「三环」把规则与技能合并）：
+
+| 环 | 落点 | 记什么 |
+| --- | --- | --- |
+| **知识环** | `.Knowledge/` | 路由、主题、存量/需求文档（见 §2 多层） |
+| **任务环** | `.task/` | `todo.json`、checklist、用户代办 |
+| **规则环** | `.cursor/.claude/.codex` 下 rules、`AGENTS.md` | 读取顺序、缺口闸门、实现约束 |
+| **技能环** | 配置根 `skills/*/SKILL.md` | `f2s-kb-feat/fix/sync` 等维护与触发 |
+
+与「两层结构」的关系：**知识环**对应「随项目走」的知识层；**规则环 + 技能环**落在各工具配置根，随工具升级迭代；**任务环**与 `.Knowledge/` 并列于仓内，不属于 `.Knowledge/` 目录。
+
+---
+
+## 2. 知识环内的多层记忆结构
+
+`.Knowledge/` 不是扁平「一堆 Markdown」，而是 **横读（渐进式路由）+ 纵链（主题依赖）** 的多层记忆：
+
+| 层级 | 路径 / 机制 | 记什么 | 典型读法 |
+| --- | --- | --- | --- |
+| **L0 路由索引** | `manifest-routing.json` | task→topic、`topicDependencies`、`topicPaths` | 会话首读（机读事实源） |
+| **L1 关键词分片** | `matchers/<id>.json` | `includeAny` 触发词 | **match**：只打开命中的一个分片 |
+| **L2 主题摘要** | `topics/<topic>.md` | 硬约束摘要、边界、下一步指针 | **expand**：拉齐依赖主题 |
+| **L3 长文档** | `stock-docs/`、`req-docs/` | 架构终稿、技术方案全文 | 按需下钻背景 |
+| **纵链（横切）** | `topicDependencies` | 通用约定 → 子域 → 白名单 → 本域细则 | **expand** 时按依赖顺序叠层 |
+
+**渐进式读取**（`match → expand → verify → act`）作用在 L0–L2（必要时再到 L3）：先收窄入口，再展开依赖与缺口检查，最后才改代码。主题级依赖挂一次、所有任务共享，避免每个任务重复声明前置约束。
+
+人读导航：`index.md` 仅作语义边界校验，**不**替代 `manifest-routing` 机读链。
+
+---
+
+## 3. 知识层与执行层（两层结构）
 
 | 层 | 位置 | 作用 |
 | --- | --- | --- |
-| 知识层 | `.Knowledge/` | 保存业务文档、索引、路由 |
-| 执行层 | `.cursor/.claude/.codex` | 保存规则与技能入口 |
+| 知识层（知识环） | `.Knowledge/` | 保存业务文档、索引、路由（§2 多层） |
+| 执行层（规则环 + 技能环） | `.cursor/.claude/.codex` | 保存规则与技能入口 |
 
 ---
 
-## 2. 渐进式读取
+## 4. 渐进式读取
 
 统一建议顺序：
 
@@ -33,7 +72,7 @@ Flow2Spec 的目标是把"业务知识沉淀"与"Agent 能力加载"拆开：
 
 ---
 
-## 3. 关键链路
+## 5. 关键链路
 
 - 文档沉淀链：`f2s-doc-arch` → `f2s-doc-final` → `f2s-ctx-build`
 - 实现链：`.Knowledge/req-docs/*.md` → `implement-tech-design` → 代码
@@ -44,13 +83,13 @@ Flow2Spec 的目标是把"业务知识沉淀"与"Agent 能力加载"拆开：
 
 ---
 
-## 4. Agent 执行模型
+## 6. Agent 执行模型
 
 Flow2Spec 通过项目根 `flow2spec.config.json` 的 `subAgent`、`switchAgentVerification` 两个字段控制执行行为。
 
 **Agent 如何读到上述真值**：多端提示 + **Read** 权威，见 [Flow2Spec使用说明 § 一（唯一详表）](./Flow2Spec使用说明.md)；设计归纳见 [Flow2Spec-设计说明 § 四、5.1](./Flow2Spec-设计说明.md)。
 
-### 4.1 主/子 Agent 职责划分原则
+### 6.1 主/子 Agent 职责划分原则
 
 **`subAgent: false`（默认）**：全部 `f2s-*` 技能在主 agent 内顺序完成，无并行拆分。
 
@@ -63,7 +102,7 @@ Flow2Spec 通过项目根 `flow2spec.config.json` 的 `subAgent`、`switchAgentV
 
 子 agent 的拆分边界由各 `f2s-*` 技能正文逐步约定（如模块数、文档数、代码行数等门槛），**当前尚未在模板层给出统一阶段表**，以技能正文为准。
 
-### 4.2 验证归属原则
+### 6.2 验证归属原则
 
 **默认（谁落盘谁验）**：落盘或变更后的验证在落盘侧 agent 内完成。子 agent 落盘则子 agent 自验，主 agent 落盘则主 agent 自验。
 
@@ -81,7 +120,7 @@ Flow2Spec 通过项目根 `flow2spec.config.json` 的 `subAgent`、`switchAgentV
 
 设计意图：交叉验证引入外部视角，降低落盘侧的自验盲区，但增加执行开销，因此设为显式 opt-in 而非默认行为。
 
-### 4.3 变更追踪（changeTracking）
+### 6.3 变更追踪（changeTracking）
 
 `changeTracking` 是独立于 `subAgent` / `switchAgentVerification` 的第三个维度，控制技能执行时是否自动创建可跨会话续作的任务清单。
 
@@ -102,7 +141,7 @@ Flow2Spec 通过项目根 `flow2spec.config.json` 的 `subAgent`、`switchAgentV
 
 ---
 
-## 5. 设计收益
+## 7. 设计收益
 
 1. 跨工具共享同一业务知识源
 2. 不破坏 Claude/Cursor/Codex 的规则加载习惯
@@ -112,7 +151,7 @@ Flow2Spec 通过项目根 `flow2spec.config.json` 的 `subAgent`、`switchAgentV
 
 ---
 
-## 6. 相关文档
+## 8. 相关文档
 
 - [Flow2Spec使用说明](./Flow2Spec使用说明.md)
 - [README-命令说明](./README-命令说明.md)
