@@ -43,29 +43,40 @@
           <p class="fx-sub" data-anim="fade-up" style="animation-delay: 0.35s">
             <span class="brand">Flow2Spec</span> · 让 AI 一直知道你在做什么
           </p>
-          <p class="fx-desc" data-anim="fade-up" style="animation-delay: 0.45s">
-            AI 协作框架 —— <span class="hl">跨设备会话</span>记住项目上下文 ·
-            内部<span class="hl">路由清单</span>设计让 AI
-            不翻仓库、只拿该拿的 · <span class="hl">f2s-* 技能</span>
-            改代码顺手更新知识、始终最新不腐化
+          <p class="fx-desc-lead" data-anim="fade-up" style="animation-delay: 0.45s">
+            AI 协作框架 · <span class="hl">Memory Coding</span>（知识库只是一环）
           </p>
+          <ul
+            class="fx-desc-points"
+            data-anim="fade-up"
+            style="animation-delay: 0.52s">
+            <li>
+              <span class="hl">跨设备会话</span>记住项目上下文
+            </li>
+            <li>
+              内部 <span class="hl">路由清单</span>让 AI 不翻仓库、只拿该拿的
+            </li>
+            <li>
+              <span class="hl">f2s-* 技能</span>改代码顺手更新知识、始终最新不腐化
+            </li>
+          </ul>
           <div
             class="fx-meta"
             data-anim="fade-up"
-            style="animation-delay: 0.55s">
+            style="animation-delay: 0.62s">
             兰涛<span>·</span>2026.05<span>·</span>前端组
           </div>
         </div>
 
         <div class="fx-footer">
           <span class="brand">flow2spec-intro</span>
-          <span class="page">01 / 13</span>
+          <span class="page">01 / 14</span>
         </div>
         <div class="notes">
           你们的 AI
-          失忆了吗？每次开新会话都不记得上一轮说了什么，不知道项目结构，不记得约束。Flow2Spec
-          就干三件事：第一，跨设备会话记住项目上下文；第二，内部路由清单设计让 AI
-          不翻仓库、只拿该拿的；第三，f2s-星技能改代码顺手更新知识，知识始终最新不腐化。今天从痛点讲起，再聊怎么做到的，最后说怎么上手。
+          失忆了吗？先点 Memory Coding：记忆编码进仓、四环（知识 .Knowledge / 任务 .task /
+          规则环 / 技能环——规则与技能分列，别说成三环「规则+技能」）。知识库只是知识环。Flow2Spec
+          仍干三件事（个数别和四环混）——跨设备续作、路由清单收窄、f2s-* 改代码更知识。第 5 页展开四环架构。
         </div>
       </section>
 
@@ -131,7 +142,7 @@
 
         <div class="fx-footer">
           <span class="brand">flow2spec-intro</span>
-          <span class="page">02 / 13</span>
+          <span class="page">02 / 14</span>
         </div>
         <div class="notes">
           看这张对比图。同一句话「改一下评价模板文案库的批量重评分」，左边没框架的
@@ -224,7 +235,7 @@
             >某大型互联网公司业务后端 · trn-fe-ops-commerce-api · 2026-05-09 ~
             05-13</span
           >
-          <span class="page">03 / 13</span>
+          <span class="page">03 / 14</span>
         </div>
         <div class="notes">
           不是概念，是日常。这个仓库 416 个接口、796 个文件、10
@@ -285,7 +296,7 @@
           <div class="fx-rival">
             <div class="n">Claude Memory</div>
             <div class="y">省得反复自我介绍</div>
-            <div class="x">× 绑模型 · 不可团队共享</div>
+            <div class="x">× 绑模型 · 非 Memory Coding（未落盘仓）</div>
           </div>
         </div>
 
@@ -350,7 +361,7 @@
 
         <div class="fx-footer">
           <span class="brand">flow2spec-intro · market-diff</span>
-          <span class="page">04 / 13</span>
+          <span class="page">04 / 14</span>
         </div>
         <div class="notes">
           横向对比。上半五家：OpenSpec 格式严但单向不反哺；Superpowers
@@ -382,16 +393,38 @@
           知识层随项目走 · 规则层随工具走 · 生命周期不同，分开是最基本的决策。
         </p>
 
+
+        <div
+          class="fx-memcoding"
+          data-anim="fade-up"
+          style="animation-delay: 0.26s">
+          <span class="term">Memory Coding</span>
+          <span class="def"
+            >把要记住的东西<strong>编码进可提交的仓</strong>，可 diff、可协作——不是押在模型或聊天里。下面两层图里，<code
+              >.Knowledge/</code
+            >
+            是<strong>知识环（一环）</strong>；进度、读法、维护由任务环、规则环、技能环分担。</span
+          >
+          <span class="rings">
+            <span class="ring"><b>知识环</b> .Knowledge/ · manifest</span>
+            <span class="ring"><b>任务环</b> .task/ · 续作清单</span>
+            <span class="ring"><b>规则环</b> rules · 怎么读 · 怎么做</span>
+            <span class="ring"><b>技能环</b> f2s-* · 维护与触发</span>
+          </span>
+          <span class="vs"
+            >≠ 模型 Memory（私有） · ≠ 裸 RAG（概率猜） · Flow2Spec ≠ 只有知识库</span
+          >
+        </div>
+
         <div class="fx-arch">
           <div
             class="fx-arch-layer top"
             data-anim="fade-up"
             style="animation-delay: 0.3s">
-            <div class="lbl">KNOWLEDGE LAYER · 随项目</div>
+            <div class="lbl">KNOWLEDGE LAYER · Memory Coding 知识环</div>
             <div class="title">.Knowledge/</div>
             <div class="sub">
-              业务主题路由 · 存量文档 · 需求澄清 · 终稿方案 ·
-              一份，只在这里写一次。
+              路由 + 主题 + 存量/需求文档 —— Memory Coding 的<strong>一环</strong>，不是全部。
             </div>
             <div class="pills">
               <span class="pill">manifest-routing.json</span>
@@ -407,7 +440,7 @@
             data-anim="fade-up"
             style="animation-delay: 0.42s">
             <div class="bar"></div>
-            <div class="txt">f2s-* 技能 · 维护 ↑ · 触发 ↓</div>
+            <div class="txt">技能环维护 ↑ · 规则环读与做 ↓</div>
             <div class="bar"></div>
           </div>
 
@@ -415,10 +448,10 @@
             class="fx-arch-layer bot"
             data-anim="fade-up"
             style="animation-delay: 0.54s">
-            <div class="lbl">RULES LAYER · 随工具</div>
+            <div class="lbl">RULES LAYER · 规则环 + 技能环</div>
             <div class="title">.cursor/ · .claude/ · .codex/</div>
             <div class="sub">
-              各工具按自己原生方式加载规则和技能 · 知识层统一，执行层各自独立。
+              <strong>规则环</strong>规定怎么读、怎么做；<strong>技能环</strong>（f2s-*）维护知识、触发流程；<code>.task/</code> 任务环在仓内并列。
             </div>
             <div class="pills">
               <span class="pill">.cursor/rules/*.mdc</span>
@@ -431,14 +464,10 @@
 
         <div class="fx-footer">
           <span class="brand">architecture · knowledge × rules</span>
-          <span class="page">05 / 13</span>
+          <span class="page">05 / 14</span>
         </div>
         <div class="notes">
-          架构图。上面知识层随项目走——manifest 路由、matcher 关键词、topic
-          主题知识、存量需求文档，一份只写一次。下面规则层随工具走——Cursor、Claude、Codex
-          各用自己的原生方式加载。中间一根箭头：f2s-星技能维护上面、触发下面。为什么要分开？因为团队里有人用
-          Cursor、有人用 Claude、CI 用
-          Codex，知识在一个地方写，规则各自适配，不做搬运工。
+          Memory Coding 先定性：仓内四环（勿说成三环：知识/任务/规则+技能）。规则环与技能环分列。箭头：技能环维护上、规则环读与做下。.task 是任务环，不在 .Knowledge。Flow2Spec ≠ 只做 RAG。
         </div>
       </section>
 
@@ -455,7 +484,7 @@
         </div>
 
         <p class="fx-prompt" data-anim="fade-up">
-          cat match &amp;&amp; expand &amp;&amp; verify &amp;&amp; act
+          cat match·匹配 &amp;&amp; expand·展开 &amp;&amp; verify·校验 &amp;&amp; act·执行
         </p>
         <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
           渐进式读取 · <span class="accent">先查目录</span>，再翻书
@@ -466,25 +495,25 @@
 
         <div class="fx-flow" data-anim="fade-up" style="animation-delay: 0.32s">
           <div class="fx-flow-node n1">
-            <div class="lbl">match</div>
+            <div class="lbl">match · 匹配</div>
             <div class="val">m-product-review-<br />template-library</div>
             <div class="sub">命中 matcher，只读这一个分片</div>
           </div>
           <div class="fx-flow-arrow">→</div>
           <div class="fx-flow-node n2">
-            <div class="lbl">expand</div>
+            <div class="lbl">expand · 展开</div>
             <div class="val">+3 依赖 topic</div>
             <div class="sub">common / platform / toClient 自动拉齐</div>
           </div>
           <div class="fx-flow-arrow">→</div>
           <div class="fx-flow-node n3">
-            <div class="lbl">verify</div>
+            <div class="lbl">verify · 校验</div>
             <div class="val">缺口检查</div>
             <div class="sub">置信度不足 → 先向用户澄清</div>
           </div>
           <div class="fx-flow-arrow">→</div>
           <div class="fx-flow-node n4">
-            <div class="lbl">act</div>
+            <div class="lbl">act · 执行</div>
             <div class="val">开始改代码</div>
             <div class="sub">预计 3 处文件 · 带硬约束</div>
           </div>
@@ -508,7 +537,7 @@
 
         <div class="fx-footer">
           <span class="brand">feature · progressive-load · product-review</span>
-          <span class="page">06 / 13</span>
+          <span class="page">06 / 14</span>
         </div>
         <div class="notes">
           核心机制：渐进式读取。用户说一句话，框架走四步。match
@@ -596,7 +625,7 @@
 
         <div class="fx-footer">
           <span class="brand">feature · dependency-expansion</span>
-          <span class="page">07 / 13</span>
+          <span class="page">07 / 14</span>
         </div>
         <div class="notes">
           一句话触发四层依赖。用户只说「商品评价」，AI 实际读了四层：从通用 ctx
@@ -699,7 +728,7 @@
 
         <div class="fx-footer">
           <span class="brand">case · groupon × coupon · real-constraints</span>
-          <span class="page">08 / 13</span>
+          <span class="page">08 / 14</span>
         </div>
         <div class="notes">
           上一页讲了知识库的广度，这一页看密度。拼团的同事务双写限流、通用券的
@@ -808,7 +837,7 @@
 
         <div class="fx-footer">
           <span class="brand">feature · resume · article-publish-flow</span>
-          <span class="page">09 / 13</span>
+          <span class="page">09 / 14</span>
         </div>
         <div class="notes">
           跨会话续作。左边是一个横跨三端、9
@@ -821,7 +850,114 @@
         </div>
       </section>
 
-      <!-- ======= Slide 10 · 知识库渐进式创建（消解心智负担） ======= -->
+      <!-- ======= Slide 10 · 命令能力总览 ======= -->
+      <section class="slide is-compact">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>skills · command-map</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up" style="margin-top: 20px">
+          f2s skills --list
+        </p>
+        <h1 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          命令能力<span class="accent">总览</span>
+        </h1>
+        <p
+          class="fx-lede"
+          data-anim="fade-up"
+          style="animation-delay: 0.18s; margin-top: 4px">
+          按阶段选 <code>f2s-*</code>，不必记全表；
+          <code>flow2spec init</code> 落盘模板与路由，日常在对话里点名技能即可。
+        </p>
+
+        <div
+          class="fx-cmd-map"
+          data-anim="fade-up"
+          style="animation-delay: 0.28s">
+          <div class="grid">
+            <div class="dom">
+              <span class="id">① 接入</span>
+              <span class="k">落盘与迁移</span>
+              <span class="cmds"
+                >flow2spec init · f2s-kb-migrate · f2s-kb-upgrade</span
+              >
+              <span class="v">新仓对齐模板；旧库一次性迁到 .Knowledge</span>
+            </div>
+            <div class="dom">
+              <span class="id">② 需求</span>
+              <span class="k">澄清 → 技术方案</span>
+              <span class="cmds">f2s-req-clarify · f2s-req-backend</span>
+              <span class="v">PRD 问清、出后端/技术方案文档（不必经过 req-plan）</span>
+            </div>
+            <div class="dom">
+              <span class="id">③ 文档入库</span>
+              <span class="k">方案 / 终稿 / 架构 / 里程碑</span>
+              <span class="cmds"
+                >f2s-doc-pdf · f2s-doc-final · f2s-doc-arch ·
+                f2s-doc-milestone</span
+              >
+              <span class="v"
+                >req-docs 与 stock-docs 沉淀；里程碑由四源生成并落盘</span
+              >
+            </div>
+            <div class="dom">
+              <span class="id">④ 迭代同步</span>
+              <span class="k">规划（可选）· 实现 · 同步</span>
+              <span class="cmds"
+                >f2s-req-plan · f2s-kb-feat · f2s-kb-fix · f2s-kb-sync</span
+              >
+              <span class="v"
+                >req-plan 独立可选；feat/fix 按技术方案改代码（可带
+                .task）；sync 回写知识库</span
+              >
+            </div>
+            <div class="dom">
+              <span class="id">⑤ 收尾</span>
+              <span class="k">提交与合并</span>
+              <span class="cmds">f2s-git-commit · f2s-kb-merge</span>
+              <span class="v">带知识库检查的 commit；合并后上下文冲突处理</span>
+            </div>
+            <div class="dom">
+              <span class="id">⑥ 知识维护</span>
+              <span class="k">路由与已有能力</span>
+              <span class="cmds">f2s-ctx-build · f2s-ctx-rm · f2s-doc-add</span>
+              <span class="v">stock-docs ↔ topics/manifest；多文件解析进知识库</span>
+            </div>
+          </div>
+        </div>
+
+        <p
+          class="fx-cmd-foot"
+          data-anim="fade-up"
+          style="animation-delay: 0.38s">
+          按技术方案写代码走规则
+          <code>implement-tech-design</code>（非单独 f2s 技能名）；多文件已有能力用
+          <code>f2s-doc-add</code> 一条龙入库。
+        </p>
+
+        <div class="fx-footer">
+          <span class="brand">init · req-plan · doc-milestone</span>
+          <span class="page">10 / 14</span>
+        </div>
+        <div class="notes">
+          这一页是「命令地图」：六块能力域覆盖从接入到知识维护的主路径。听众不用背二十几个技能名——记阶段即可：接入用
+          init/migrate/upgrade，需求只用 clarify/backend，迭代用
+          req-plan（可选独立）+ feat/fix（按方案实现、可 .task）+ sync，文档用
+          pdf/final/arch/milestone，收尾 commit/merge，维护用
+          ctx-build/ctx-rm/doc-add。强调 init
+          只落模板与路由，业务知识靠后续 f2s 流程维护；implement-tech-design
+          是规则专题不是 f2s-* 前缀。
+        </div>
+      </section>
+
+      <!-- ======= Slide 11 · 知识库渐进式创建（消解心智负担） ======= -->
       <section class="slide is-scroll">
         <div class="fx-grid"></div>
         <div class="fx-glow-cyan"></div>
@@ -986,7 +1122,7 @@
 
         <div class="fx-footer">
           <span>progressive · pay-as-you-grow</span>
-          <span class="page">10 / 13</span>
+          <span class="page">11 / 14</span>
         </div>
         <div class="notes">
           很多同事以为上知识库等于先写两周文档，恰恰相反。最小可用集只要一条路由、一个关键词、一份主题。init
@@ -997,7 +1133,7 @@
         </div>
       </section>
 
-      <!-- ======= Slide 11 · 现场 Demo 路书 ======= -->
+      <!-- ======= Slide 12 · 现场 Demo 路书 ======= -->
       <section class="slide is-scroll">
         <div class="fx-grid"></div>
         <div class="fx-glow-magenta"></div>
@@ -1533,7 +1669,7 @@
 
         <div class="fx-footer">
           <span class="brand">live · demo · end-to-end</span>
-          <span class="page">11 / 13</span>
+          <span class="page">12 / 14</span>
         </div>
         <div class="notes">
           端到端全景。评价模板文案库从零到 17
@@ -1545,7 +1681,7 @@
         </div>
       </section>
 
-      <!-- ======= Slide 12 · 什么时候不要用 ======= -->
+      <!-- ======= Slide 13 · 什么时候不要用 ======= -->
       <section class="slide">
         <div class="fx-grid"></div>
         <div class="fx-vignette"></div>
@@ -1595,7 +1731,7 @@
 
         <div class="fx-footer">
           <span class="brand">honest · limits</span>
-          <span class="page">12 / 13</span>
+          <span class="page">13 / 14</span>
         </div>
         <div class="notes">
           说清楚什么时候不要用，比夸什么时候好用更可信。三种场景别硬上：一次性脚本写完就删的，直接丢文档给
@@ -1604,7 +1740,7 @@
         </div>
       </section>
 
-      <!-- ======= Slide 13 · 收束呼应 ======= -->
+      <!-- ======= Slide 14 · 收束呼应 ======= -->
       <section class="slide">
         <div class="fx-grid"></div>
         <div class="fx-glow-cyan"></div>
@@ -1631,16 +1767,20 @@
             <div>
               install<span>·</span>npx @double-codeing/flow2spec@latest init
             </div>
+            <div>
+              upgrade<span>·</span>对话点名 <code>f2s-kb-upgrade</code>（知识库模板升级，≠
+              单独 init）
+            </div>
             <div>contact<span>·</span>兰涛</div>
           </div>
         </div>
 
         <div class="fx-footer">
           <span class="brand">flow2spec · let's talk</span>
-          <span class="page">13 / 13</span>
+          <span class="page">14 / 14</span>
         </div>
         <div class="notes">
-          回到开场的问题。不是让 AI 更聪明——如果只是模型问题，为什么同一个 AI 有时候靠谱有时候不靠谱？差别在于它知不知道上下文。所以答案不是等更好的模型，是让 AI 一直知道你在做什么。仓库和安装命令都在这里，有问题随时找我。
+          收束呼应。差别在上下文不在模型更聪明。收束页补一句：已在用 Flow2Spec 的老项目，对话里用 f2s-kb-upgrade 做知识库模板/版本对齐，勿把单独 init 当升级。仓库、init、upgrade、联系方式。
         </div>
       </section>
     </div>
