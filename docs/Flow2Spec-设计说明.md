@@ -19,6 +19,67 @@
 
 ## 核心设计
 
+### 0. Memory Coding 与仓内四环
+
+**Memory Coding**：把必须长期记住的上下文**编码进可提交仓库**（可 PR、可 review），而不是押在模型 Memory 或聊天里。
+
+仓内 **四环**（规则环与技能环分列，勿合并为「规则+技能」）：
+
+| 环 | 落点 | 职责 |
+| --- | --- | --- |
+| 知识环 | `.Knowledge/` | 路由 + 主题 + 存量/需求文档 |
+| 任务环 | `.task/` | 跨会话续作、用户代办 |
+| 规则环 | 各工具 `rules` / `AGENTS.md` | 怎么读、怎么做（缺口闸门、路由顺序） |
+| 技能环 | `f2s-*` / `skills/` | 维护知识、触发 feat/fix/sync 等 |
+
+```mermaid
+graph TB
+    subgraph MC["Memory Coding · 仓内四环"]
+        KR["知识环 .Knowledge/"]
+        TR["任务环 .task/"]
+        RR["规则环 rules"]
+        SR["技能环 f2s-*"]
+    end
+    SR -->|"维护 ↑"| KR
+    RR -->|"读与做 ↓"| KR
+    TR -.->|"并列，不在 .Knowledge 内"| KR
+```
+
+Flow2Spec 提供的是 **Memory Coding 的落盘与维护闭环**，不是「又一个 RAG 知识库」。
+
+### 0.1 知识环：多层记忆结构
+
+知识环内部是 **横读 + 纵链** 的多层结构（与下文「渐进式路由」「topicDependencies」对应）：
+
+```mermaid
+graph TB
+    subgraph H["横读 · 渐进式收窄"]
+        L0["L0 manifest-routing"]
+        L1["L1 matchers 分片"]
+        L2["L2 topics 摘要"]
+        L3["L3 stock-docs / req-docs"]
+        L0 --> L1 --> L2 --> L3
+    end
+    subgraph V["纵链 · topicDependencies"]
+        T1["通用约定"]
+        T2["子域边界"]
+        T3["端上白名单"]
+        T4["本域细则"]
+        T1 --> T2 --> T3 --> T4
+    end
+    L2 --- V
+```
+
+| 层级 | 路径 | 作用 |
+| --- | --- | --- |
+| L0 | `manifest-routing.json` | 机读路由、依赖声明 |
+| L1 | `matchers/*.json` | 关键词命中，**match** 只读一片 |
+| L2 | `topics/*.md` | 硬约束摘要；**expand** 拉依赖 |
+| L3 | `stock-docs/`、`req-docs/` | 长文档，按需下钻 |
+| 纵链 | `topicDependencies` | 主题级前置，所有任务共享 |
+
+读取流水线：`match → expand → verify → act`（详见 [README-体系与原理 §4](./README-体系与原理.md)）。
+
 ### 1. 知识与规则分离
 
 ```mermaid

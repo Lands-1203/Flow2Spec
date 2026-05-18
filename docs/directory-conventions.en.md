@@ -4,8 +4,11 @@
 
 ## Core Boundary
 
-- `.Knowledge/`: Business knowledge documents and index only
-- `Config Root` (`.cursor/.claude/.codex`): Rules and skill entry points
+- `.Knowledge/`: **Knowledge ring** — business docs and machine-readable routing ([architecture.en.md §2](./architecture.en.md))
+- `.task/`: **Task ring** — change tracking (not inside `.Knowledge/`)
+- `Config Root` (`.cursor/.claude/.codex`): **Rules ring + skills ring**
+
+See [architecture.en.md §1](./architecture.en.md) for Memory Coding four rings.
 
 ---
 
@@ -13,13 +16,13 @@
 
 | Path | Responsibility |
 | --- | --- |
-| `.Knowledge/stock-docs/` | Architecture, final drafts, reference documents |
-| `.Knowledge/req-docs/` | Requirement clarification, technical proposals |
-| `.Knowledge/topics/` | Topic routing documents (for rules and workflow execution) |
+| `.Knowledge/stock-docs/` | **L3** Architecture, final drafts, reference documents |
+| `.Knowledge/req-docs/` | **L3** Requirement clarification, technical proposals |
+| `.Knowledge/topics/` | **L2** Topic summaries (hard constraints, boundaries, pointers) |
 | `.Knowledge/template/` | Templates for final drafts / technical proposals |
 | `.Knowledge/index.md` | Human-readable index |
-| `.Knowledge/manifest-routing.json` | Machine-readable routing skeleton (task/topic/dependencies) |
-| `.Knowledge/matchers/*.json` | Keyword fragments (`id/includeAny`), directly linked by `manifest-routing.taskToTopicRules[].matcherPath` |
+| `.Knowledge/manifest-routing.json` | **L0** Machine-readable routing skeleton (task/topic/`topicDependencies`) |
+| `.Knowledge/matchers/*.json` | **L1** Keyword fragments (`id/includeAny`); **match** reads one shard via `matcherPath` |
 | `.Knowledge/migration-report.md` | Migration comparison table and deletion path list written by `f2s-kb-migrate` |
 | `.task/` | Change tracking task directory (`active/` for in-progress, `completed/` for archived with directory name in the format **`<YYYYMMDD>-<task-name>`** (date first), `todo.json` for active task index); created only when `changeTracking.*` is `true` or `f2s-req-plan` is explicitly invoked |
 | `Config Root/rules/` | Rule files (Cursor `.mdc`, Claude `.md`) |

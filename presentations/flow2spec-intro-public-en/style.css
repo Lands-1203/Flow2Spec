@@ -187,6 +187,16 @@
 .tpl-flow2spec-intro .fx-memcoding .rings .ring b{color:var(--fx-cyan);font-weight:600;margin-right:5px;flex-shrink:0}
 .tpl-flow2spec-intro .fx-memcoding + .fx-arch{margin-top:20px}
 
+/* === Knowledge ring multi-layer (slides 5–7) === */
+.tpl-flow2spec-intro .fx-kb-layers{margin-top:12px;padding:10px 14px;border:1px dashed rgba(126,246,255,.28);border-radius:8px;background:rgba(126,246,255,.04)}
+.tpl-flow2spec-intro .fx-kb-layers .title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--fx-cyan);margin-bottom:8px;text-transform:uppercase}
+.tpl-flow2spec-intro .fx-kb-layers .stack{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.tpl-flow2spec-intro .fx-kb-layers .layer{font-family:'JetBrains Mono',monospace;font-size:9.5px;padding:4px 9px;border-radius:5px;border:1px solid var(--fx-border);color:var(--fx-ink2);background:rgba(130,150,255,.04)}
+.tpl-flow2spec-intro .fx-kb-layers .layer b{color:var(--fx-ink);font-weight:600;margin-right:3px}
+.tpl-flow2spec-intro .fx-kb-layers .sep{font-family:'JetBrains Mono',monospace;color:var(--fx-cyan);opacity:.75;font-size:11px}
+.tpl-flow2spec-intro .fx-kb-layers .hint{display:block;margin-top:7px;font-size:10.5px;color:var(--fx-ink2);font-family:'Inter','PingFang SC',sans-serif;line-height:1.45}
+.tpl-flow2spec-intro .fx-kb-layers .hint .hl{color:var(--fx-purple);font-weight:600}
+
 /* === 水平流程（Slide 5） === */
 .tpl-flow2spec-intro .fx-flow{display:flex;align-items:center;gap:14px;margin-top:28px;flex-wrap:wrap}
 .tpl-flow2spec-intro .fx-flow-node{flex:1;min-width:180px;background:var(--fx-surface);border:1px solid var(--fx-border);border-radius:10px;padding:16px 18px;position:relative}

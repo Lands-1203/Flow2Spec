@@ -2,23 +2,60 @@
 
 # Architecture & Principles
 
-Flow2Spec's goal is to separate "business knowledge curation" from "Agent capability loading":
+Flow2Spec separates "business knowledge curation" from "Agent capability loading", and uses **Memory Coding** to persist "what must be remembered" as versioned Git assets.
 
-- **Knowledge layer**: `.Knowledge` (documents and index)
-- **Execution layer**: config root `rules/skills` (natively loaded by each tool)
+- **Knowledge ring** (`.Knowledge/`): documents and machine-readable routing (multi-layer, see below)
+- **Task ring** (`.task/`): cross-session task checklists
+- **Rules ring** (tool `rules` / `AGENTS.md`): how to **read** and **act**
+- **Skills ring** (`f2s-*`): maintain knowledge and trigger workflows
+
+> Flow2Spec is not "just a knowledge base." All four rings are Memory Coding; the two-layer table below is the **knowledge ring vs tool-side execution** lifecycle split.
 
 ---
 
-## 1. Two-Layer Structure
+## 1. Memory Coding and Four Rings
+
+**Memory Coding**: encode durable context into the **committed repo**—not private model memory, not chat-only repetition, not whole-repo vector guessing.
+
+Four rings in the repo (do not collapse rules + skills into a single "third ring"):
+
+| Ring | Location | Stores |
+| --- | --- | --- |
+| **Knowledge** | `.Knowledge/` | Routing, topics, stock/req docs (§2 layers) |
+| **Task** | `.task/` | `todo.json`, checklists, user todos |
+| **Rules** | `.cursor/.claude/.codex` rules, `AGENTS.md` | Read order, gap gates, execution constraints |
+| **Skills** | config root `skills/*/SKILL.md` | `f2s-kb-feat/fix/sync`, etc. |
+
+---
+
+## 2. Multi-Layer Memory Inside the Knowledge Ring
+
+`.Knowledge/` is not a flat pile of Markdown. It combines **horizontal narrowing** (progressive routing) and **vertical chaining** (topic dependencies):
+
+| Layer | Path / mechanism | Stores | Typical read |
+| --- | --- | --- | --- |
+| **L0 routing** | `manifest-routing.json` | task→topic, `topicDependencies`, `topicPaths` | First read (machine source of truth) |
+| **L1 matcher shard** | `matchers/<id>.json` | `includeAny` triggers | **match**: one shard only |
+| **L2 topic summary** | `topics/<topic>.md` | Hard constraints, boundaries, pointers | **expand**: pull dependency topics |
+| **L3 long docs** | `stock-docs/`, `req-docs/` | Architecture finals, tech specs | Drill down on demand |
+| **Vertical chain** | `topicDependencies` | Common → subdomain → whitelist → domain rules | **expand** stacks layers |
+
+The pipeline `match → expand → verify → act` operates on L0–L2 (and L3 when needed). Topic-level dependencies are declared once and shared by all tasks.
+
+`index.md` is human navigation only; it does not replace the machine-readable chain.
+
+---
+
+## 3. Knowledge Layer vs Execution Layer (Two Layers)
 
 | Layer | Location | Role |
 | --- | --- | --- |
-| Knowledge layer | `.Knowledge/` | Stores business documents, index, routing |
-| Execution layer | `.cursor/.claude/.codex` | Stores rules and skill entry points |
+| Knowledge layer (knowledge ring) | `.Knowledge/` | Business docs, index, routing (§2 layers) |
+| Execution layer (rules + skills rings) | `.cursor/.claude/.codex` | Rules and skill entry points |
 
 ---
 
-## 2. Progressive Reading
+## 4. Progressive Reading
 
 The recommended unified order:
 
@@ -35,7 +72,7 @@ Codex does not read the `rules/` directory; execution constraints are carried th
 
 ---
 
-## 3. Key Chains
+## 5. Key Chains
 
 - Documentation curation chain: `f2s-doc-arch` -> `f2s-doc-final` -> `f2s-ctx-build`
 - Implementation chain: `.Knowledge/req-docs/*.md` -> `implement-tech-design` -> code
@@ -46,13 +83,13 @@ Codex does not read the `rules/` directory; execution constraints are carried th
 
 ---
 
-## 4. Agent Execution Model
+## 6. Agent Execution Model
 
 Flow2Spec controls execution behavior through two fields in the project root `flow2spec.config.json`: `subAgent` and `switchAgentVerification`.
 
 **How the Agent reads the above truth values**: multi-end prompts + **Read** as authority, see [usage-guide.en.md § 1 (the only detailed table)](./usage-guide.en.md); design summary see [design-principles.en.md § 4, 5.1](./design-principles.en.md).
 
-### 4.1 Primary/Sub Agent Responsibility Division Principle
+### 6.1 Primary/Sub Agent Responsibility Division Principle
 
 **`subAgent: false` (default)**: All `f2s-*` skills execute sequentially within the primary agent, no parallel decomposition.
 
@@ -65,7 +102,7 @@ Flow2Spec controls execution behavior through two fields in the project root `fl
 
 The decomposition boundaries for sub-agents are progressively defined by each `f2s-*` skill body (e.g., thresholds for module count, document count, code line count). **There is currently no unified stage table at the template layer**; the skill body takes precedence.
 
-### 4.2 Verification Ownership Principle
+### 6.2 Verification Ownership Principle
 
 **Default (whoever writes to disk verifies)**: Verification after write-to-disk or changes is performed within the agent that wrote to disk. If a sub-agent wrote, the sub-agent self-verifies; if the primary agent wrote, the primary agent self-verifies.
 
@@ -83,7 +120,7 @@ Cross-verification rules:
 
 Design intent: Cross-verification introduces an external perspective, reducing the blind spots in the writer's self-verification, but increases execution overhead. It is therefore an explicit opt-in rather than the default behavior.
 
-### 4.3 Change Tracking (changeTracking)
+### 6.3 Change Tracking (changeTracking)
 
 `changeTracking` is a third dimension independent of `subAgent` / `switchAgentVerification`. It controls whether the skill automatically creates a task checklist that can be continued across sessions during execution.
 
@@ -104,7 +141,7 @@ Design intent: Cross-verification introduces an external perspective, reducing t
 
 ---
 
-## 5. Design Benefits
+## 7. Design Benefits
 
 1. Share the same business knowledge source across tools
 2. Does not break the rule loading conventions of Claude/Cursor/Codex
@@ -114,7 +151,7 @@ Design intent: Cross-verification introduces an external perspective, reducing t
 
 ---
 
-## 6. Related Documents
+## 8. Related Documents
 
 - [Usage Guide](./usage-guide.en.md)
 - [Commands Reference](./commands-reference.en.md)

@@ -21,6 +21,25 @@ Team experience         ──┘    reinterpreted  ├── topics/
 
 ## Core Design
 
+### 0. Memory Coding and Four Rings
+
+**Memory Coding**: encode durable context into the **committed repository** (PR-reviewable), not private model memory or chat-only context.
+
+Four rings in the repo (rules ring and skills ring are separate—do not merge):
+
+| Ring | Location | Role |
+| --- | --- | --- |
+| Knowledge | `.Knowledge/` | Routing, topics, stock/req docs |
+| Task | `.task/` | Cross-session continuation, user todos |
+| Rules | Tool `rules` / `AGENTS.md` | How to read and act |
+| Skills | `f2s-*` / `skills/` | Maintain KB, trigger workflows |
+
+Flow2Spec delivers the **Memory Coding persistence and maintenance loop**, not "another RAG knowledge base."
+
+### 0.1 Knowledge Ring: Multi-Layer Memory
+
+Inside the knowledge ring: **horizontal narrowing** (L0 manifest → L1 matchers → L2 topics → L3 long docs) plus **vertical chaining** (`topicDependencies`: common → subdomain → whitelist → domain). The `match → expand → verify → act` pipeline operates on these layers; see [architecture.en.md §4](./architecture.en.md).
+
 ### 1. Separation of Knowledge and Rules
 
 ```mermaid
