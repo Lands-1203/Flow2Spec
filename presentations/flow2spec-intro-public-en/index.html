@@ -43,28 +43,37 @@
           <p class="fx-sub" data-anim="fade-up" style="animation-delay: 0.35s">
             <span class="brand">Flow2Spec</span> · Keep Your AI Always in Context
           </p>
-          <p class="fx-desc" data-anim="fade-up" style="animation-delay: 0.45s">
-            An AI collaboration framework —
-            <span class="hl">cross-device sessions</span> that remember project context ·
-            Internal <span class="hl">routing manifest</span> design so AI
-            doesn't rummage through the repo, only fetches what it needs ·
-            <span class="hl">f2s-* skills</span>
-            update knowledge alongside code changes, always fresh, never stale
+          <p class="fx-desc-lead" data-anim="fade-up" style="animation-delay: 0.45s">
+            An AI collaboration framework · <span class="hl">Memory Coding</span> (knowledge ring is one of four)
           </p>
+          <ul
+            class="fx-desc-points"
+            data-anim="fade-up"
+            style="animation-delay: 0.52s">
+            <li>
+              <span class="hl">Cross-device sessions</span> remember project context
+            </li>
+            <li>
+              Internal <span class="hl">routing manifest</span> — AI fetches only what it needs
+            </li>
+            <li>
+              <span class="hl">f2s-* skills</span> update knowledge as you code, always fresh
+            </li>
+          </ul>
           <div
             class="fx-meta"
             data-anim="fade-up"
-            style="animation-delay: 0.55s">
+            style="animation-delay: 0.62s">
             Lan Tao<span>·</span>2026.05<span>·</span>Frontend Team
           </div>
         </div>
 
         <div class="fx-footer">
           <span class="brand">flow2spec-intro</span>
-          <span class="page">01 / 13</span>
+          <span class="page">01 / 14</span>
         </div>
         <div class="notes">
-          Has your AI lost its memory? Every new session, it forgets what was discussed last time, doesn't know the project structure, and can't recall constraints. Flow2Spec does three things: first, cross-device sessions that remember project context; second, an internal routing manifest design so AI doesn't rummage through the repo, only fetches what it needs; third, f2s-* skills update knowledge alongside code changes, keeping it always fresh and never stale. Today we'll start with the pain points, discuss how it works, and finish with how to get started.
+          Has your AI lost its memory? Memory Coding = four rings in the repo (knowledge .Knowledge / task .task / rules ring / skills ring — do not collapse to three by merging rules+skills). KB is only the knowledge ring. Flow2Spec still does three product things (do not confuse count with four rings). Slide 5 expands all four rings.
         </div>
       </section>
 
@@ -130,7 +139,7 @@
 
         <div class="fx-footer">
           <span class="brand">flow2spec-intro</span>
-          <span class="page">02 / 13</span>
+          <span class="page">02 / 14</span>
         </div>
         <div class="notes">
           Look at this comparison. Same request: "Modify the batch rescore for the review template library." On the left, without the framework, AI asks where the table is, whether it's sync or async, what the lock is — scanning all 416 endpoints before it dares to start. On the right, with Flow2Spec, the matcher hits instantly — Redis lock key, error codes, batch limits all already known. The difference isn't a smarter model; it's more precise context. Same model, different data in, different output.
@@ -220,7 +229,7 @@
             >A major internet company backend · trn-fe-ops-commerce-api · 2026-05-09 ~
             05-13</span
           >
-          <span class="page">03 / 13</span>
+          <span class="page">03 / 14</span>
         </div>
         <div class="notes">
           Not a concept — it's daily reality. This repo has 416 endpoints, 796 files, 100K lines of code. Flow2Spec loads only 300 lines of matched topics each time, cutting 99% of noise. In the last 4 days: 17 endpoints delivered, 14 archived tasks, across B-side, C-side, and API layer — three repos in parallel. Without a knowledge base for context support, one person can't sustain this pace.
@@ -278,7 +287,7 @@
           <div class="fx-rival">
             <div class="n">Claude Memory</div>
             <div class="y">No repeated introductions</div>
-            <div class="x">× Model-locked · Not team-shareable</div>
+            <div class="x">× Model-locked · Not Memory Coding (not in repo)</div>
           </div>
         </div>
 
@@ -342,7 +351,7 @@
 
         <div class="fx-footer">
           <span class="brand">flow2spec-intro · market-diff</span>
-          <span class="page">04 / 13</span>
+          <span class="page">04 / 14</span>
         </div>
         <div class="notes">
           Side-by-side comparison. Top half, five players: OpenSpec has strict format but one-way, no feedback; Superpowers is plug-and-play but locked to one tool with no project knowledge; RAG has full indexing but probabilistic hits — can't enforce hard constraints; Spec Kit is PM-friendly but one-shot; Claude Memory saves introductions but is model-locked and not shareable. Bottom half: Flow2Spec's five capabilities — multi-platform, route narrowing, two-way sync, native agent, change tracking. Honest note: stop using the skills and the knowledge base decays just the same, but the difference is the gap gate calls it out — no silent drift.
@@ -370,16 +379,38 @@
           Knowledge layer follows the project · Rules layer follows the tool · Different lifecycles, keeping them separate is the most fundamental decision.
         </p>
 
+
+        <div
+          class="fx-memcoding"
+          data-anim="fade-up"
+          style="animation-delay: 0.26s">
+          <span class="term">Memory Coding</span>
+          <span class="def"
+            >Encode what must be remembered into the <strong>committed repo</strong> — not the model or chat. In the diagram below, <code
+              >.Knowledge/</code
+            >
+            is the <strong>knowledge ring</strong>; the <strong>task ring</strong>, <strong>rules ring</strong>, and <strong>skills ring</strong> share the rest.</span
+          >
+          <span class="rings">
+            <span class="ring"><b>Knowledge ring</b> .Knowledge/ · manifest</span>
+            <span class="ring"><b>Task ring</b> .task/ · resume</span>
+            <span class="ring"><b>Rules ring</b> rules · read · act</span>
+            <span class="ring"><b>Skills ring</b> f2s-* · maintain &amp; trigger</span>
+          </span>
+          <span class="vs"
+            >≠ model Memory · ≠ bare RAG · Flow2Spec ≠ KB-only</span
+          >
+        </div>
+
         <div class="fx-arch">
           <div
             class="fx-arch-layer top"
             data-anim="fade-up"
             style="animation-delay: 0.3s">
-            <div class="lbl">KNOWLEDGE LAYER · Follows the Project</div>
+            <div class="lbl">KNOWLEDGE LAYER · Memory Coding · Knowledge ring</div>
             <div class="title">.Knowledge/</div>
             <div class="sub">
-              Business topic routing · existing docs · requirement clarification · finalized specs —
-              one copy, written once, right here.
+              Routing + topics + stock/req docs — the <strong>knowledge ring</strong> of Memory Coding, not the whole story.
             </div>
             <div class="pills">
               <span class="pill">manifest-routing.json</span>
@@ -395,7 +426,7 @@
             data-anim="fade-up"
             style="animation-delay: 0.42s">
             <div class="bar"></div>
-            <div class="txt">f2s-* skills · maintain ↑ · trigger ↓</div>
+            <div class="txt">skills ring ↑ · rules ring read &amp; act ↓</div>
             <div class="bar"></div>
           </div>
 
@@ -403,10 +434,10 @@
             class="fx-arch-layer bot"
             data-anim="fade-up"
             style="animation-delay: 0.54s">
-            <div class="lbl">RULES LAYER · Follows the Tool</div>
+            <div class="lbl">RULES LAYER · Rules ring + Skills ring</div>
             <div class="title">.cursor/ · .claude/ · .codex/</div>
             <div class="sub">
-              Each tool loads rules and skills in its own native way · Knowledge unified, execution independent.
+              <strong>Rules ring</strong> — how to read &amp; act; <strong>Skills ring</strong> (f2s-*) — maintain KB &amp; trigger flows; <strong>Task ring</strong> <code>.task/</code> alongside in the repo.
             </div>
             <div class="pills">
               <span class="pill">.cursor/rules/*.mdc</span>
@@ -419,10 +450,10 @@
 
         <div class="fx-footer">
           <span class="brand">architecture · knowledge × rules</span>
-          <span class="page">05 / 13</span>
+          <span class="page">05 / 14</span>
         </div>
         <div class="notes">
-          Architecture diagram. Top: knowledge layer follows the project — manifest routing, matcher keywords, topic knowledge, existing and requirement docs — one copy, written once. Bottom: rules layer follows the tool — Cursor, Claude, Codex each load in their own native way. One arrow in the middle: f2s-* skills maintain the top, trigger the bottom. Why separate them? Because some team members use Cursor, others use Claude, CI uses Codex. Knowledge in one place, rules adapted per tool — no manual copying.
+          Memory Coding: four rings in the repo — knowledge / task / rules / skills. KB is the knowledge ring only. Arrow: skills ring up, rules ring read &amp; act down. Task ring (.task/) sits alongside, not inside .Knowledge/. Flow2Spec is not KB-only. vs model Memory and bare RAG.
         </div>
       </section>
 
@@ -492,7 +523,7 @@
 
         <div class="fx-footer">
           <span class="brand">feature · progressive-load · product-review</span>
-          <span class="page">06 / 13</span>
+          <span class="page">06 / 14</span>
         </div>
         <div class="notes">
           Core mechanism: progressive loading. User says one sentence, the framework walks four steps. Match hits the keyword shard, reads only one file; expand auto-resolves dependency topics — common conventions, subdomain boundaries, whitelists; verify runs gap checks — low confidence triggers clarification instead of guessing; act only starts coding after confirmation. Key quote: 4.7 MB becomes 300 lines — it's not about making AI smarter, it's about cutting the noise.
@@ -575,7 +606,7 @@
 
         <div class="fx-footer">
           <span class="brand">feature · dependency-expansion</span>
-          <span class="page">07 / 13</span>
+          <span class="page">07 / 14</span>
         </div>
         <div class="notes">
           One sentence triggers four layers of dependencies. The user only says "product review," but the AI actually reads four layers: from common ctx conventions to subdomain boundaries, from whitelists to domain-specific rules — 264 lines total. Key design: dependencies are attached at the topic level — declare once, shared by all tasks. New tasks don't need to re-declare prerequisites, and missing ones won't silently fail.
@@ -675,7 +706,7 @@
 
         <div class="fx-footer">
           <span class="brand">case · groupon × coupon · real-constraints</span>
-          <span class="page">08 / 13</span>
+          <span class="page">08 / 14</span>
         </div>
         <div class="notes">
           Previous slide showed the breadth of the knowledge base; this one shows its density. Groupon's same-transaction dual-write constraint, coupon's status priority — these are things AI can never guess from reading code alone. They were all discovered during development, and written into topics via f2s-kb-fix on the spot. A topic's full lifecycle: code changes, hit a pitfall, fix the bug, write a topic, future AI gets blocked from repeating the mistake. That's the knowledge base's generation logic.
@@ -757,7 +788,7 @@
           class="fx-dirtree"
           data-anim="fade-up"
           style="animation-delay: 0.5s">
-          <div class="fx-dirtree-title">// .task/ directory structure</div>
+          <div class="fx-dirtree-title">// .task/ · task ring</div>
           <pre class="fx-dirtree-pre"><span class="cm">.task/</span>
 ├── <span class="hl">todo.json</span>              ← Task index · keyword match to resume
 ├── active/
@@ -780,14 +811,115 @@
 
         <div class="fx-footer">
           <span class="brand">feature · resume · article-publish-flow</span>
-          <span class="page">09 / 13</span>
+          <span class="page">09 / 14</span>
         </div>
         <div class="notes">
           Cross-session resume. On the left is a real task spanning three layers, 9 steps, completed across multiple sessions. Every time you shut down for the day, next time just say "continue" — todo.json matches keywords, AI reads remaining steps and resumes from the breakpoint. The directory structure at the bottom is also clear: todo.json as index, active for in-progress tasks, completed for archived ones. There's also a detail — user-todos.md persists things like running DDL, flipping switches, and deploying — things AI can't do — so they're not just mentioned in conversation and lost.
         </div>
       </section>
 
-      <!-- ======= Slide 10 · Progressive Knowledge Base Creation (Reducing Mental Overhead) ======= -->
+      <!-- ======= Slide 10 · Command capability map ======= -->
+      <section class="slide is-compact">
+        <div class="fx-grid"></div>
+        <div class="fx-glow-cyan"></div>
+        <div class="fx-glow-magenta"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-scanlines"></div>
+
+        <div class="fx-chrome">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>skills · command-map</div>
+        </div>
+
+        <p class="fx-prompt" data-anim="fade-up" style="margin-top: 20px">
+          f2s skills --list
+        </p>
+        <h1 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
+          Command <span class="accent">map</span>
+        </h1>
+        <p
+          class="fx-lede"
+          data-anim="fade-up"
+          style="animation-delay: 0.18s; margin-top: 4px">
+          Pick <code>f2s-*</code> by lifecycle stage — not from a flat cheat sheet.
+          <code>flow2spec init</code> lays down templates and routing; day to day, name the skill in chat.
+        </p>
+
+        <div
+          class="fx-cmd-map"
+          data-anim="fade-up"
+          style="animation-delay: 0.28s">
+          <div class="grid">
+            <div class="dom">
+              <span class="id">① Bootstrap</span>
+              <span class="k">Scaffold & migrate</span>
+              <span class="cmds"
+                >flow2spec init · f2s-kb-migrate · f2s-kb-upgrade</span
+              >
+              <span class="v">Align new repos; one-shot legacy KB → .Knowledge</span>
+            </div>
+            <div class="dom">
+              <span class="id">② Requirements</span>
+              <span class="k">clarify → tech spec</span>
+              <span class="cmds">f2s-req-clarify · f2s-req-backend</span>
+              <span class="v">PRD Q&A and tech docs — no req-plan required</span>
+            </div>
+            <div class="dom">
+              <span class="id">③ Docs in</span>
+              <span class="k">spec / final / arch / milestone</span>
+              <span class="cmds"
+                >f2s-doc-pdf · f2s-doc-final · f2s-doc-arch ·
+                f2s-doc-milestone</span
+              >
+              <span class="v"
+                >Specs & stock-docs; milestones generated from four sources</span
+              >
+            </div>
+            <div class="dom">
+              <span class="id">④ Iterate</span>
+              <span class="k">plan (opt.) · ship · sync</span>
+              <span class="cmds"
+                >f2s-req-plan · f2s-kb-feat · f2s-kb-fix · f2s-kb-sync</span
+              >
+              <span class="v"
+                >req-plan optional; feat/fix from tech design (may use .task); sync
+                KB</span
+              >
+            </div>
+            <div class="dom">
+              <span class="id">⑤ Wrap-up</span>
+              <span class="k">Commit & merge</span>
+              <span class="cmds">f2s-git-commit · f2s-kb-merge</span>
+              <span class="v">Commit with KB checks; post-merge context conflicts</span>
+            </div>
+            <div class="dom">
+              <span class="id">⑥ Knowledge upkeep</span>
+              <span class="k">routing & existing code</span>
+              <span class="cmds">f2s-ctx-build · f2s-ctx-rm · f2s-doc-add</span>
+              <span class="v">stock-docs ↔ topics/manifest; multi-file KB ingest</span>
+            </div>
+          </div>
+        </div>
+
+        <p
+          class="fx-cmd-foot"
+          data-anim="fade-up"
+          style="animation-delay: 0.38s">
+          Implement from tech design via rule
+          <code>implement-tech-design</code> (not an <code>f2s-*</code> skill name); bulk existing
+          capabilities → <code>f2s-doc-add</code>.
+        </p>
+
+        <div class="fx-footer">
+          <span class="brand">init · req-plan · doc-milestone</span>
+          <span class="page">10 / 14</span>
+        </div>
+        <div class="notes">
+          Command map slide: six lifecycle buckets from bootstrap through knowledge upkeep. Remember stages: init/migrate/upgrade; clarify/backend only for requirements; iterate with optional req-plan plus feat/fix (tech-design implementation, may use .task) and sync; docs pdf/final/arch/milestone; commit/merge; ctx-build/ctx-rm/doc-add. implement-tech-design is a rule topic, not f2s-* prefixed.
+        </div>
+      </section>
+
+      <!-- ======= Slide 11 · Progressive Knowledge Base Creation (Reducing Mental Overhead) ======= -->
       <section class="slide is-scroll">
         <div class="fx-grid"></div>
         <div class="fx-glow-cyan"></div>
@@ -952,14 +1084,14 @@
 
         <div class="fx-footer">
           <span>progressive · pay-as-you-grow</span>
-          <span class="page">10 / 13</span>
+          <span class="page">11 / 14</span>
         </div>
         <div class="notes">
           Many colleagues assume adopting a knowledge base means writing docs for two weeks first. It's the opposite. The minimum viable set is just one route, one keyword, and one topic. Init scaffolds the skeleton in one minute and you're ready to go; first use — feed an architecture doc, AI generates the first topic; daily development uses f2s-kb-feat and fix to record knowledge alongside code, then f2s-git-commit auto-checks topic coverage before committing; maintenance phase uses kb-sync to backfill after implementation and kb-merge to handle knowledge conflicts after merges. The principle is simple: next requirement hits a module, write that module — no need to migrate everything at once.
         </div>
       </section>
 
-      <!-- ======= Slide 11 · Live Demo Roadmap ======= -->
+      <!-- ======= Slide 12 · Live Demo Roadmap ======= -->
       <section class="slide is-scroll">
         <div class="fx-grid"></div>
         <div class="fx-glow-magenta"></div>
@@ -1496,14 +1628,14 @@
 
         <div class="fx-footer">
           <span class="brand">live · demo · end-to-end</span>
-          <span class="page">11 / 13</span>
+          <span class="page">12 / 14</span>
         </div>
         <div class="notes">
           End-to-end walkthrough. The review template library from zero to 17 endpoints, four intermittent days, in six steps: clarification phase — AI asks in batches, you answer, it cross-checks the KB for gaps and follows up — two rounds to finalize; spec phase — four-layer dependencies auto-expanded, producing a tech spec plus five DDLs; implementation phase — say "continue" and AI auto-splits into an 8-step checklist; feat phase — deliver a requirement and it auto-enters the KB; fix phase — every bug fix also updates the topic; finally the commit gate passes all three checks. This isn't a demo scenario — it's this week's actual work.
         </div>
       </section>
 
-      <!-- ======= Slide 12 · When NOT to Use It ======= -->
+      <!-- ======= Slide 13 · When NOT to Use It ======= -->
       <section class="slide">
         <div class="fx-grid"></div>
         <div class="fx-vignette"></div>
@@ -1553,14 +1685,14 @@
 
         <div class="fx-footer">
           <span class="brand">honest · limits</span>
-          <span class="page">12 / 13</span>
+          <span class="page">13 / 14</span>
         </div>
         <div class="notes">
           Being clear about when not to use it is more credible than hyping when it's great. Three scenarios to avoid: throwaway scripts — just toss docs at AI, it's faster; solo small projects — one CLAUDE.md is enough, sharding overhead exceeds the benefit; teams that won't sync the knowledge base — tools can't replace discipline. Simply put: don't force it when the ROI doesn't make sense.
         </div>
       </section>
 
-      <!-- ======= Slide 13 · Closing Callback ======= -->
+      <!-- ======= Slide 14 · Closing Callback ======= -->
       <section class="slide">
         <div class="fx-grid"></div>
         <div class="fx-glow-cyan"></div>
@@ -1587,16 +1719,19 @@
             <div>
               install<span>·</span>npx @double-codeing/flow2spec@latest init
             </div>
+            <div>
+              upgrade<span>·</span>say <code>f2s-kb-upgrade</code> in chat (KB template upgrade, not init alone)
+            </div>
             <div>contact<span>·</span>Lan Tao</div>
           </div>
         </div>
 
         <div class="fx-footer">
           <span class="brand">flow2spec · let's talk</span>
-          <span class="page">13 / 13</span>
+          <span class="page">14 / 14</span>
         </div>
         <div class="notes">
-          Back to the opening question. It's not about making AI smarter — if it were just about the model, why does the same AI sometimes deliver and sometimes flop? The difference is whether it knows the context. So the answer isn't waiting for a better model — it's keeping AI always aware of what you're working on. The repo and install command are right here. Questions? Come find me anytime.
+          Closing callback: context beats a smarter model. Mention f2s-kb-upgrade for KB template/version alignment on existing projects — not init alone. Repo, install, upgrade hint, contact.
         </div>
       </section>
     </div>
