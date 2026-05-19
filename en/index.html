@@ -73,7 +73,12 @@
           <span class="page">01 / 14</span>
         </div>
         <div class="notes">
-          Has your AI lost its memory? Memory Coding = four rings in the repo (knowledge .Knowledge / task .task / rules ring / skills ring — do not collapse to three by merging rules+skills). KB is only the knowledge ring. Flow2Spec still does three product things (do not confuse count with four rings). Slide 5 expands all four rings.
+          <ul>
+          <li>Opening: Has your AI lost its memory?</li>
+          <li><strong>Memory Coding</strong>: encode memory in the repo; <strong>four rings</strong> (knowledge / task / rules / skills) — do not collapse to three</li>
+          <li>The KB is only the knowledge ring; Flow2Spec <strong>three product things</strong>: resume context, routed reads, f2s keeps code + KB in sync (do not mix counts with four rings)</li>
+          <li>Slide 5: two-layer architecture</li>
+          </ul>
         </div>
       </section>
 
@@ -142,7 +147,12 @@
           <span class="page">02 / 14</span>
         </div>
         <div class="notes">
-          Look at this comparison. Same request: "Modify the batch rescore for the review template library." On the left, without the framework, AI asks where the table is, whether it's sync or async, what the lock is — scanning all 416 endpoints before it dares to start. On the right, with Flow2Spec, the matcher hits instantly — Redis lock key, error codes, batch limits all already known. The difference isn't a smarter model; it's more precise context. Same model, different data in, different output.
+          <ul>
+          <li>Same ask: product-review template library · batch re-score</li>
+          <li>Left: no framework → table? sync? locks? often scans the whole API surface</li>
+          <li>Right: matcher hit → Redis keys, error codes, limits already in topics</li>
+          <li>Line: not a smarter model — <strong>better context</strong></li>
+          </ul>
         </div>
       </section>
 
@@ -232,7 +242,12 @@
           <span class="page">03 / 14</span>
         </div>
         <div class="notes">
-          Not a concept — it's daily reality. This repo has 416 endpoints, 796 files, 100K lines of code. Flow2Spec loads only 300 lines of matched topics each time, cutting 99% of noise. In the last 4 days: 17 endpoints delivered, 14 archived tasks, across B-side, C-side, and API layer — three repos in parallel. Without a knowledge base for context support, one person can't sustain this pace.
+          <ul>
+          <li>416 APIs · 796 files · ~100k LOC — real scale</li>
+          <li>~300 lines of matched topics per turn, most noise cut</li>
+          <li>Last ~4 days: 17 APIs, 14 archived tasks, three repos in parallel</li>
+          <li>Hard to sustain this pace without a KB backbone</li>
+          </ul>
         </div>
       </section>
 
@@ -354,7 +369,12 @@
           <span class="page">04 / 14</span>
         </div>
         <div class="notes">
-          Side-by-side comparison. Top half, five players: OpenSpec has strict format but one-way, no feedback; Superpowers is plug-and-play but locked to one tool with no project knowledge; RAG has full indexing but probabilistic hits — can't enforce hard constraints; Spec Kit is PM-friendly but one-shot; Claude Memory saves introductions but is model-locked and not shareable. Bottom half: Flow2Spec's five capabilities — multi-platform, route narrowing, two-way sync, native agent, change tracking. Honest note: stop using the skills and the knowledge base decays just the same, but the difference is the gap gate calls it out — no silent drift.
+          <ul>
+          <li>Top row: five alternatives — what each does / does not do (quick scan)</li>
+          <li>OpenSpec one-way; Superpowers tool-bound; RAG probabilistic; Spec Kit one-shot; Claude Memory not in your repo</li>
+          <li>Bottom: Flow2Spec five capabilities (multi-IDE, routing, two-way sync, native agents, traceability)</li>
+          <li>Honest: KB still rots without f2s — but <strong>gap gates</strong> surface it</li>
+          </ul>
         </div>
       </section>
 
@@ -471,7 +491,13 @@
           <span class="page">05 / 14</span>
         </div>
         <div class="notes">
-          Memory Coding four rings + knowledge-ring layers (L0 manifest → L3 docs; horizontal match/act, vertical topicDependencies). Flow2Spec is not KB-only.
+          <ul>
+          <li><strong>Memory Coding</strong>: durable, reviewable memory in git</li>
+          <li>Four rings: knowledge <code>.Knowledge/</code> · task <code>.task/</code> · rules ring · skills ring (<strong>separate</strong> rules vs skills)</li>
+          <li>Two layers: knowledge follows the project · rules follow the tool; arrow: skills maintain ↑ · rules read/act ↓</li>
+          <li>L0→L3 horizontal; <code>topicDependencies</code> vertical (slide 7)</li>
+          <li>Flow2Spec ≠ RAG-only product</li>
+          </ul>
         </div>
       </section>
 
@@ -544,7 +570,12 @@
           <span class="page">06 / 14</span>
         </div>
         <div class="notes">
-          Core mechanism: progressive loading. User says one sentence, the framework walks four steps. Match hits the keyword shard, reads only one file; expand auto-resolves dependency topics — common conventions, subdomain boundaries, whitelists; verify runs gap checks — low confidence triggers clarification instead of guessing; act only starts coding after confirmation. Key quote: 4.7 MB becomes 300 lines — it's not about making AI smarter, it's about cutting the noise.
+          <ul>
+          <li>Horizontal read on knowledge ring: <strong>match → expand → verify → act</strong></li>
+          <li>One matcher shard at a time — no whole-repo grep by default</li>
+          <li>Clarify when confidence is low</li>
+          <li>Line: MB-scale repo → hundreds of lines of topics — cut noise, not magic IQ</li>
+          </ul>
         </div>
       </section>
 
@@ -626,7 +657,11 @@
           <span class="page">07 / 14</span>
         </div>
         <div class="notes">
-          One sentence triggers four layers of dependencies. The user only says "product review," but the AI actually reads four layers: from common ctx conventions to subdomain boundaries, from whitelists to domain-specific rules — 264 lines total. Key design: dependencies are attached at the topic level — declare once, shared by all tasks. New tasks don't need to re-declare prerequisites, and missing ones won't silently fail.
+          <ul>
+          <li>Vertical chain: <code>topicDependencies</code> expands four topic layers</li>
+          <li>Dependencies at <strong>topic</strong> level: declare once, every task inherits</li>
+          <li>No silent failure when a dependency is missing</li>
+          </ul>
         </div>
       </section>
 
@@ -726,7 +761,12 @@
           <span class="page">08 / 14</span>
         </div>
         <div class="notes">
-          Previous slide showed the breadth of the knowledge base; this one shows its density. Groupon's same-transaction dual-write constraint, coupon's status priority — these are things AI can never guess from reading code alone. They were all discovered during development, and written into topics via f2s-kb-fix on the spot. A topic's full lifecycle: code changes, hit a pitfall, fix the bug, write a topic, future AI gets blocked from repeating the mistake. That's the knowledge base's generation logic.
+          <ul>
+          <li>Last slide: breadth; this slide: <strong>density</strong></li>
+          <li>Groupon dual-write throttling, coupon status priority — not guessable from code</li>
+          <li>Pitfall → <code>f2s-kb-fix</code> → topic → block the next mistake</li>
+          <li>KB <strong>grows</strong> with delivery, not a two-week doc dump upfront</li>
+          </ul>
         </div>
       </section>
 
@@ -831,7 +871,12 @@
           <span class="page">09 / 14</span>
         </div>
         <div class="notes">
-          Cross-session resume. On the left is a real task spanning three layers, 9 steps, completed across multiple sessions. Every time you shut down for the day, next time just say "continue" — todo.json matches keywords, AI reads remaining steps and resumes from the breakpoint. The directory structure at the bottom is also clear: todo.json as index, active for in-progress tasks, completed for archived ones. There's also a detail — user-todos.md persists things like running DDL, flipping switches, and deploying — things AI can't do — so they're not just mentioned in conversation and lost.
+          <ul>
+          <li>Real task: three repos · 9 steps · multiple sessions</li>
+          <li>Say “continue” → <code>todo.json</code> match → resume <code>task.md</code></li>
+          <li><code>user-todos.md</code> for DDL, flags, release — human-only items on disk</li>
+          <li>Task ring is part of Memory Coding</li>
+          </ul>
         </div>
       </section>
 
@@ -932,7 +977,15 @@
           <span class="page">10 / 14</span>
         </div>
         <div class="notes">
-          Command map slide: six lifecycle buckets from bootstrap through knowledge upkeep. Remember stages: init/migrate/upgrade; clarify/backend only for requirements; iterate with optional req-plan plus feat/fix (tech-design implementation, may use .task) and sync; docs pdf/final/arch/milestone; commit/merge; ctx-build/ctx-rm/doc-add. implement-tech-design is a rule topic, not f2s-* prefixed.
+          <ul>
+          <li>Command map — remember <strong>stages</strong>, not twenty skill names</li>
+          <li>① Onboard: init / migrate / upgrade</li>
+          <li>② Requirements: clarify / backend (req-plan optional)</li>
+          <li>③ Docs: pdf / final / arch / milestone</li>
+          <li>④ Iterate: req-plan + feat / fix / sync; implement via <strong>implement-tech-design</strong></li>
+          <li>⑤ Ship: git-commit / kb-merge · ⑥ Maintain: ctx-build / ctx-rm / doc-add</li>
+          <li>init lays scaffolding; business KB grows through f2s flows</li>
+          </ul>
         </div>
       </section>
 
@@ -1104,7 +1157,12 @@
           <span class="page">11 / 14</span>
         </div>
         <div class="notes">
-          Many colleagues assume adopting a knowledge base means writing docs for two weeks first. It's the opposite. The minimum viable set is just one route, one keyword, and one topic. Init scaffolds the skeleton in one minute and you're ready to go; first use — feed an architecture doc, AI generates the first topic; daily development uses f2s-kb-feat and fix to record knowledge alongside code, then f2s-git-commit auto-checks topic coverage before committing; maintenance phase uses kb-sync to backfill after implementation and kb-merge to handle knowledge conflicts after merges. The principle is simple: next requirement hits a module, write that module — no need to migrate everything at once.
+          <ul>
+          <li>You do not need two weeks of docs first</li>
+          <li>Minimum: one route + one matcher + one topic</li>
+          <li>init in ~1 min; feat/fix daily; commit checks KB coverage</li>
+          <li>Write the slice you hit next — no big-bang migration</li>
+          </ul>
         </div>
       </section>
 
@@ -1648,7 +1706,14 @@
           <span class="page">12 / 14</span>
         </div>
         <div class="notes">
-          End-to-end walkthrough. The review template library from zero to 17 endpoints, four intermittent days, in six steps: clarification phase — AI asks in batches, you answer, it cross-checks the KB for gaps and follows up — two rounds to finalize; spec phase — four-layer dependencies auto-expanded, producing a tech spec plus five DDLs; implementation phase — say "continue" and AI auto-splits into an 8-step checklist; feat phase — deliver a requirement and it auto-enters the KB; fix phase — every bug fix also updates the topic; finally the commit gate passes all three checks. This isn't a demo scenario — it's this week's actual work.
+          <ul>
+          <li>Case: review template library → 17 APIs / ~4 days (scroll; pick highlights)</li>
+          <li>① <code>f2s-req-clarify</code>: batch Q → answers → gap check → second round</li>
+          <li>② <code>f2s-req-backend</code>: four-layer deps + tech doc + 5 DDL files</li>
+          <li>③ Implement: “continue” → implement-tech-design + 8-step checklist</li>
+          <li>④ <code>f2s-kb-feat</code> / ⑤ <code>f2s-kb-fix</code>: code + topics stay aligned</li>
+          <li>⑥ <code>f2s-git-commit</code>: three checks; no auto push</li>
+          </ul>
         </div>
       </section>
 
@@ -1705,7 +1770,12 @@
           <span class="page">13 / 14</span>
         </div>
         <div class="notes">
-          Being clear about when not to use it is more credible than hyping when it's great. Three scenarios to avoid: throwaway scripts — just toss docs at AI, it's faster; solo small projects — one CLAUDE.md is enough, sharding overhead exceeds the benefit; teams that won't sync the knowledge base — tools can't replace discipline. Simply put: don't force it when the ROI doesn't make sense.
+          <ul>
+          <li>Saying when <strong>not</strong> to use it builds trust</li>
+          <li>① One-off scripts</li>
+          <li>② Solo tiny repo — one CLAUDE.md may be enough</li>
+          <li>③ Team will not maintain <code>.Knowledge/</code> — discipline beats tooling</li>
+          </ul>
         </div>
       </section>
 
@@ -1748,7 +1818,12 @@
           <span class="page">14 / 14</span>
         </div>
         <div class="notes">
-          Closing callback: context beats a smarter model. Mention f2s-kb-upgrade for KB template/version alignment on existing projects — not init alone. Repo, install, upgrade hint, contact.
+          <ul>
+          <li>Close: context, not a smarter model</li>
+          <li>github.com/Lands-1203/Flow2Spec · <code>npx @double-codeing/flow2spec@latest init</code></li>
+          <li>Existing projects: <code>f2s-kb-upgrade</code> for template alignment — init is not upgrade</li>
+          <li>Try it · issues · chat after the talk</li>
+          </ul>
         </div>
       </section>
     </div>

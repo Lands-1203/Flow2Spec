@@ -73,10 +73,12 @@
           <span class="page">01 / 14</span>
         </div>
         <div class="notes">
-          你们的 AI
-          失忆了吗？先点 Memory Coding：记忆编码进仓、四环（知识 .Knowledge / 任务 .task /
-          规则环 / 技能环——规则与技能分列，别说成三环「规则+技能」）。知识库只是知识环。Flow2Spec
-          仍干三件事（个数别和四环混）——跨设备续作、路由清单收窄、f2s-* 改代码更知识。第 5 页展开四环架构。
+          <ul>
+          <li>开场：你的 AI 失忆了吗？</li>
+          <li><strong>Memory Coding</strong>：记忆编码进仓；<strong>四环</strong>（知识 / 任务 / 规则 / 技能），别说三环</li>
+          <li>知识库只是知识环；Flow2Spec <strong>三件事</strong>：续作、路由收窄、f2s 改代码更知识（个数别和四环混）</li>
+          <li>第 5 页展开两层架构</li>
+          </ul>
         </div>
       </section>
 
@@ -145,10 +147,12 @@
           <span class="page">02 / 14</span>
         </div>
         <div class="notes">
-          看这张对比图。同一句话「改一下评价模板文案库的批量重评分」，左边没框架的
-          AI 先问表在哪、再问同步异步、再问锁——翻遍 416 个接口才敢动手。右边有
-          Flow2Spec 的 AI，matcher 一命中，Redis 锁的
-          key、错误码、条数限制全部已知。差别不是模型变强了，是它拿到的上下文变准了。同样的模型，喂什么数据给什么活。
+          <ul>
+          <li>同一句需求：评价模板文案库 · 批量重评分</li>
+          <li>左：没框架 → 问表 / 同步 / 锁，常要翻遍接口</li>
+          <li>右：matcher 命中 → Redis key、错误码、条数已在 topic</li>
+          <li>金句：不是模型变强，是<strong>上下文变准</strong></li>
+          </ul>
         </div>
       </section>
 
@@ -238,10 +242,12 @@
           <span class="page">03 / 14</span>
         </div>
         <div class="notes">
-          不是概念，是日常。这个仓库 416 个接口、796 个文件、10
-          万行代码。Flow2Spec 每次只加载 300 行命中的 topic，噪声切掉 99%。最近
-          4 天产出 17 个接口、14 个归档任务，跨 B 端、C
-          端、接口端三个仓库同步推进。没有知识库做上下文支撑，一个人扛不住这个节奏。
+          <ul>
+          <li>416 接口 · 796 文件 · 10 万行 — 真实规模</li>
+          <li>每次约 300 行命中 topic，噪声砍掉绝大部分</li>
+          <li>近 4 天：17 接口、14 归档任务，B/C/接口三仓并行</li>
+          <li>无知识库托住，一人难扛这个节奏</li>
+          </ul>
         </div>
       </section>
 
@@ -364,11 +370,12 @@
           <span class="page">04 / 14</span>
         </div>
         <div class="notes">
-          横向对比。上半五家：OpenSpec 格式严但单向不反哺；Superpowers
-          即插即用但绑工具无项目知识；RAG 全量索引但概率命中，硬约束拿不住；Spec
-          Kit PM 友好但一次性；Claude Memory 省自我介绍但绑模型不能共享。下半是
-          Flow2Spec 五条能力——多端复用、路由收窄、双向同步、原生
-          agent、变更留痕。老实话：停用技能知识库一样会腐化，但差别是腐化会被缺口闸门喊出来，不会静默跑偏。
+          <ul>
+          <li>上半：五家各做什么、不做什么（快扫即可）</li>
+          <li>OpenSpec 单向不反哺；Superpowers 绑工具；RAG 概率命中；Spec Kit 一次性；Claude Memory 非公仓</li>
+          <li>下半：Flow2Spec 五条能力（多端 / 路由 / 双向同步 / 原生 agent / 留痕）</li>
+          <li>老实话：停用 f2s 库仍会腐化，但<strong>缺口闸门</strong>会喊出来</li>
+          </ul>
         </div>
       </section>
 
@@ -485,7 +492,13 @@
           <span class="page">05 / 14</span>
         </div>
         <div class="notes">
-          Memory Coding 四环 + 知识环多层（L0 manifest → L3 长文档；横读 match/act、纵链 topicDependencies）。勿说三环。Flow2Spec ≠ 只做 RAG。
+          <ul>
+          <li><strong>Memory Coding</strong>：要记住的编进可提交仓，可 PR / review</li>
+          <li>四环：知识环 <code>.Knowledge/</code> · 任务环 <code>.task/</code> · 规则环 · 技能环（<strong>分列</strong>，勿说三环）</li>
+          <li>两层：知识层随项目 · 规则层随工具；箭头：技能维护 ↑ · 规则读与做 ↓</li>
+          <li>L0→L3 横读；<code>topicDependencies</code> 纵链（第 7 页）</li>
+          <li>Flow2Spec ≠ 只做 RAG</li>
+          </ul>
         </div>
       </section>
 
@@ -559,7 +572,12 @@
           <span class="page">06 / 14</span>
         </div>
         <div class="notes">
-          知识环横读四步 match/expand/verify/act。金句：4.7 MB 变 300 行是 L0–L2 收窄，不是模型变聪明。
+          <ul>
+          <li>知识环横读：<strong>match → expand → verify → act</strong></li>
+          <li>只开一个 matcher 分片，不全仓 grep</li>
+          <li>置信度不够先澄清，不瞎猜</li>
+          <li>金句：几 MB 仓库 → 几百行 topic，是切噪声不是变聪明</li>
+          </ul>
         </div>
       </section>
 
@@ -644,7 +662,12 @@
           <span class="page">07 / 14</span>
         </div>
         <div class="notes">
-          知识环纵链：topicDependencies 四层 topics。主题级依赖挂一次、所有任务共享，漏了不静默失效。
+          <ul>
+          <li>纵链：<code>topicDependencies</code> 四层 topic 自动展开</li>
+          <li>依赖挂在<strong>主题级</strong>：挂一次，全任务共享</li>
+          <li>新任务不必每次手写前置约束</li>
+          <li>漏了不会静默失效</li>
+          </ul>
         </div>
       </section>
 
@@ -745,11 +768,12 @@
           <span class="page">08 / 14</span>
         </div>
         <div class="notes">
-          上一页讲了知识库的广度，这一页看密度。拼团的同事务双写限流、通用券的
-          status 优先级——这些约束 AI 看代码绝对猜不出来，都是开发中踩了坑，用
-          f2s-kb-fix 顺手写进 topic 的。一条 topic
-          的完整生命周期：改代码、踩坑、修 bug、落 topic、后续 AI
-          直接挡掉。这就是知识库的生成逻辑。
+          <ul>
+          <li>上一页广度，本页<strong>密度</strong></li>
+          <li>拼团双写限流、券 status 优先级 — AI 看代码猜不出</li>
+          <li>踩坑 → <code>f2s-kb-fix</code> 写进 topic → 后续直接挡错</li>
+          <li>知识库是<strong>长出来</strong>的，不是先堆两周文档</li>
+          </ul>
         </div>
       </section>
 
@@ -854,13 +878,12 @@
           <span class="page">09 / 14</span>
         </div>
         <div class="notes">
-          跨会话续作。左边是一个横跨三端、9
-          步、分多次完成的真实任务。每次下班关机，下次只说一句「继续」，todo.json
-          命中关键词，AI
-          读出剩余步骤、从断点继续。底部的目录结构也很清晰：todo.json
-          做索引、active 放进行中的、completed
-          归档已完成的。还有个细节——user-todos.md 把跑 DDL、开开关、发版这类 AI
-          干不了的事也落盘交接，不会只在对话里吼一嗓子。
+          <ul>
+          <li>真实任务：三端 · 9 步 · 多次会话</li>
+          <li>只说「继续」→ <code>todo.json</code> 命中 → <code>task.md</code> 断点续作</li>
+          <li><code>user-todos.md</code>：DDL / 开关 / 发版 — Agent 干不了的落盘</li>
+          <li>任务环也是 Memory Coding 的一环</li>
+          </ul>
         </div>
       </section>
 
@@ -961,13 +984,15 @@
           <span class="page">10 / 14</span>
         </div>
         <div class="notes">
-          这一页是「命令地图」：六块能力域覆盖从接入到知识维护的主路径。听众不用背二十几个技能名——记阶段即可：接入用
-          init/migrate/upgrade，需求只用 clarify/backend，迭代用
-          req-plan（可选独立）+ feat/fix（按方案实现、可 .task）+ sync，文档用
-          pdf/final/arch/milestone，收尾 commit/merge，维护用
-          ctx-build/ctx-rm/doc-add。强调 init
-          只落模板与路由，业务知识靠后续 f2s 流程维护；implement-tech-design
-          是规则专题不是 f2s-* 前缀。
+          <ul>
+          <li>命令地图 — <strong>记阶段</strong>，不背二十几个技能名</li>
+          <li>① 接入：init / migrate / upgrade</li>
+          <li>② 需求：clarify / backend（不必经过 req-plan）</li>
+          <li>③ 文档：pdf / final / arch / milestone</li>
+          <li>④ 迭代：req-plan（可选）+ feat / fix / sync；按方案走 <strong>implement-tech-design</strong></li>
+          <li>⑤ 收尾：git-commit / kb-merge · ⑥ 维护：ctx-build / ctx-rm / doc-add</li>
+          <li>init 只落模板，业务知识要靠 f2s 流程长出来</li>
+          </ul>
         </div>
       </section>
 
@@ -1139,11 +1164,12 @@
           <span class="page">11 / 14</span>
         </div>
         <div class="notes">
-          很多同事以为上知识库等于先写两周文档，恰恰相反。最小可用集只要一条路由、一个关键词、一份主题。init
-          一分钟拉骨架就能跑；首次接入喂一份架构 AI 生成首个 topic；日常开发用
-          f2s-kb-feat 和 fix 改代码记知识，再用 f2s-git-commit
-          提交前自动检查 topic 覆盖；维护阶段用 kb-sync
-          补录实现落地、kb-merge 处理合并后的知识冲突。方向很简单：下次需求命中哪块，写哪块，不用整块迁。
+          <ul>
+          <li>不必先写两周文档</li>
+          <li>最小集：1 条路由 + 1 个 matcher + 1 份 topic</li>
+          <li>init 一分钟拉骨架；feat/fix 日常记知识；commit 前检查覆盖</li>
+          <li>方向：下次需求命中哪块，写哪块</li>
+          </ul>
         </div>
       </section>
 
@@ -1686,12 +1712,14 @@
           <span class="page">12 / 14</span>
         </div>
         <div class="notes">
-          端到端全景。评价模板文案库从零到 17
-          个接口，四天断续跑完，分六步：澄清环节 AI
-          成批提问、你答完它对知识库查缺再追一轮，两轮定稿；方案环节四层依赖自动展开，产出技术方案加五份
-          DDL；实现环节说一句「继续」AI 自动拆八步 checklist；feat
-          环节需求交付自动入库；fix 环节每次修 bug 顺手更新 topic；最后 commit
-          闸门三查全过。这不是演示用例，就是本周工作。
+          <ul>
+          <li>案例：评价模板文案库 → 17 接口 / 约 4 天（可滚动，挑重点）</li>
+          <li>① <code>f2s-req-clarify</code>：成批问 → 你答 → 查缺 → 再追问，两轮定稿</li>
+          <li>② <code>f2s-req-backend</code>：四层依赖 + 技术方案 + 5 份 DDL</li>
+          <li>③ 实现：「继续」→ implement-tech-design + 8 步 checklist</li>
+          <li>④ <code>f2s-kb-feat</code> / ⑤ <code>f2s-kb-fix</code>：代码与 topic 同步</li>
+          <li>⑥ <code>f2s-git-commit</code>：三查通过；不自动 push</li>
+          </ul>
         </div>
       </section>
 
@@ -1748,9 +1776,12 @@
           <span class="page">13 / 14</span>
         </div>
         <div class="notes">
-          说清楚什么时候不要用，比夸什么时候好用更可信。三种场景别硬上：一次性脚本写完就删的，直接丢文档给
-          AI 更快；单人小项目一份 CLAUDE.md
-          就够，分片开销大于收益；团队不愿同步知识库的，工具不能替代纪律。简单说就是：投入产出比不划算的场合别硬来。
+          <ul>
+          <li>说清楚「什么时候不用」比夸好用更可信</li>
+          <li>① 一次性脚本写完就删</li>
+          <li>② 单人小项目一份 CLAUDE.md 够用</li>
+          <li>③ 团队不愿同步 <code>.Knowledge/</code> — 工具不能替代纪律</li>
+          </ul>
         </div>
       </section>
 
@@ -1794,7 +1825,12 @@
           <span class="page">14 / 14</span>
         </div>
         <div class="notes">
-          收束呼应。差别在上下文不在模型更聪明。收束页补一句：已在用 Flow2Spec 的老项目，对话里用 f2s-kb-upgrade 做知识库模板/版本对齐，勿把单独 init 当升级。仓库、init、upgrade、联系方式。
+          <ul>
+          <li>收束：差别在<strong>上下文</strong>，不在模型更聪明</li>
+          <li>github.com/Lands-1203/Flow2Spec · <code>npx @double-codeing/flow2spec@latest init</code></li>
+          <li>老项目：<code>f2s-kb-upgrade</code> 对齐模板；勿把单独 init 当升级</li>
+          <li>欢迎试用 / issue / 会后交流</li>
+          </ul>
         </div>
       </section>
     </div>
