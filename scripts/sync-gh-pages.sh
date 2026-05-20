@@ -44,6 +44,7 @@ trap 'rm -rf "$SNAP"' EXIT
 # 中文版 → 根
 cp "$PUB_DIR"/index.html "$PUB_DIR"/style.css "$SNAP/"
 [[ -f "$PUB_DIR"/market-compare.md ]] && cp "$PUB_DIR"/market-compare.md "$SNAP/"
+[[ -f presentations/scroll-hint.js ]] && cp presentations/scroll-hint.js "$SNAP/"
 cp -rL "$SKILL_ASSETS" "$SNAP/assets"
 
 # 英文版 → /en/
@@ -59,6 +60,7 @@ fi
 
 # 改中文版 index.html 资源路径: ../../.claude/skills/html-ppt/assets/ → assets/
 sed -i '' 's|\.\./\.\./\.claude/skills/html-ppt/assets/|assets/|g' "$SNAP/index.html"
+sed -i '' 's|src="../scroll-hint.js"|src="scroll-hint.js"|g' "$SNAP/index.html"
 
 ok "快照已准备: $SNAP"
 
