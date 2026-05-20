@@ -46,27 +46,23 @@ See [Directory Conventions](./directory-conventions.en.md) for the full director
 
 ## 3. Typical Workflows
 
-### Requirements Planning and Implementation
+### Change Tracking and Cross-Session Continuation (Recommended)
 
-```
-f2s-req-plan
-```
+Enable `changeTracking` per skill in `flow2spec.config.json` (each sub-field is independent):
 
-Provide a path to the technical design document or a requirements description. A draft task checklist is produced first and awaits confirmation. After confirmation, implementation proceeds according to the checklist. A `.task/` task checklist is always created — no `changeTracking` configuration is needed. Suitable for scenarios where you want to see the full picture before starting, or need cross-session progress tracking.
-
-### Change Tracking and Cross-Session Continuation
-
-```
-# Automatic mode: enabled by config (independent per skill)
-flow2spec.config.json → changeTracking.feat / fix / implement: true
-
-# Explicit mode: call f2s-req-plan (planning + implementation, no config dependency)
-f2s-req-plan
+```json
+{
+  "changeTracking": {
+    "feat": true,
+    "fix": true,
+    "implement": true
+  }
+}
 ```
 
-**Automatic mode**: When enabled, `f2s-kb-feat` / `f2s-kb-fix` / `f2s-implement-tech-design` automatically create a task checklist under `.task/active/`, check off steps progressively, and archive upon completion. In subsequent sessions, when describing related content, the `f2s-task` rule automatically matches and loads the remaining checklist — no need to re-explain the context.
+When enabled, `f2s-kb-feat` / `f2s-kb-fix` / `f2s-implement-tech-design` automatically create a checklist under `.task/active/`, check off steps, and archive on completion. In later sessions, the `f2s-task` rule matches related wording and resumes the remaining steps — no need to re-explain context.
 
-**Explicit mode**: Call `f2s-req-plan` directly — regardless of the `changeTracking` configuration, a task checklist is always created and code is implemented against it. Suitable for scenarios where you want to confirm the full picture before taking action.
+If **`changeTracking` is off** but you still need a `.task/` checklist temporarily, call `f2s-req-plan` explicitly (always creates a checklist, ignores config) — a **fallback**, not the default path. See [Commands Reference § f2s-req-plan](./commands-reference.en.md).
 
 ### New Feature Development
 
@@ -140,7 +136,7 @@ Controlled via the project root `flow2spec.config.json`. For complete field rule
 }
 ```
 
-If you prefer not to rely on configuration and want to explicitly plan tasks on demand, use `f2s-req-plan` directly.
+Use `f2s-req-plan` only when all `changeTracking` sub-fields are off and you still need a checklist (see § 3 footnote).
 
 ---
 
