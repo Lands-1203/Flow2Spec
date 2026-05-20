@@ -180,8 +180,8 @@
 /* === 市场对比混合版（Slide 4 · is-compact） === */
 .tpl-flow2spec-intro .fx-rivals{margin-top:18px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
 .tpl-flow2spec-intro .fx-rival{background:var(--fx-surface);border:1px solid var(--fx-border);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-height:110px}
-.tpl-flow2spec-intro .fx-rival .n{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--fx-ink);font-weight:700}
-.tpl-flow2spec-intro .fx-rival .n span{display:block;font-size:10px;color:var(--fx-ink2);font-weight:400;margin-top:2px}
+.tpl-flow2spec-intro .fx-rival .n{font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.35;color:var(--fx-ink);font-weight:700;white-space:nowrap}
+.tpl-flow2spec-intro .fx-rival .n span{display:inline;font-size:12px;color:var(--fx-ink2);font-weight:400}
 .tpl-flow2spec-intro .fx-rival .y{font-size:11.5px;color:var(--fx-green);line-height:1.45;font-family:'Inter','PingFang SC',sans-serif}
 .tpl-flow2spec-intro .fx-rival .x{font-size:11.5px;color:var(--fx-red);line-height:1.45;font-family:'Inter','PingFang SC',sans-serif;margin-top:auto}
 .tpl-flow2spec-intro .fx-capabilities{margin-top:18px;border:1px solid rgba(126,246,255,.25);border-radius:12px;padding:14px 18px;background:linear-gradient(180deg,rgba(126,246,255,.04),rgba(255,120,214,.03))}
@@ -255,7 +255,7 @@
 .tpl-flow2spec-intro .fx-arch-gap .rel{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.5;letter-spacing:.04em;color:var(--fx-ink2);text-align:center;max-width:min(560px,94vw)}
 .tpl-flow2spec-intro .fx-arch-gap .rel b{color:var(--fx-ink);font-weight:600}
 .tpl-flow2spec-intro .fx-arch-gap .rel--nowrap{white-space:nowrap}
-.tpl-flow2spec-intro .slide.is-arch-slide .fx-arch-gap .rel--nowrap{font-size:10px;letter-spacing:.03em}
+.tpl-flow2spec-intro .slide.is-arch-slide .fx-arch-gap .rel{white-space:nowrap;max-width:none;font-size:10px;letter-spacing:.02em}
 .tpl-flow2spec-intro .fx-arch-tool-row{display:grid;grid-template-columns:1fr minmax(100px,auto) 1fr;gap:12px;width:100%;align-items:stretch;flex-shrink:0}
 .tpl-flow2spec-intro .fx-arch-tool-row>.fx-arch-layer{min-width:0;height:100%;box-sizing:border-box}
 .tpl-flow2spec-intro .fx-arch-tool-divider{display:flex;align-items:center;justify-content:center;padding:10px 8px;border-left:1px dashed var(--fx-border);border-right:1px dashed var(--fx-border);box-sizing:border-box}
