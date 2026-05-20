@@ -77,7 +77,7 @@
           <li>开场：你的 AI 失忆了吗？</li>
           <li><strong>Memory Coding</strong>：记忆编码进仓；<strong>四环</strong>（知识 / 任务 / 规则 / 技能），别说三环</li>
           <li>知识库只是知识环；Flow2Spec <strong>三件事</strong>：续作、路由收窄、f2s 改代码更知识（个数别和四环混）</li>
-          <li>第 5 页展开两层架构</li>
+          <li>第 5 页 Memory Coding 四环架构</li>
           </ul>
         </div>
       </section>
@@ -379,7 +379,7 @@
         </div>
       </section>
 
-      <!-- ======= Slide 5 · 全景一图：两层 ======= -->
+      <!-- ======= Slide 5 · 全景一图：Memory Coding 四环 ======= -->
       <section class="slide is-scroll is-arch-slide">
         <div class="fx-grid"></div>
         <div class="fx-glow-cyan"></div>
@@ -389,12 +389,12 @@
 
         <div class="fx-chrome">
           <div class="dots"><span></span><span></span><span></span></div>
-          <div>architecture · two-layer · one-arrow</div>
+          <div>architecture · memory-coding · four rings</div>
         </div>
 
         <p class="fx-prompt" data-anim="fade-up">tree -L 1 -d</p>
         <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
-          一张图 · <span class="accent">两层</span> · 一根箭头
+          一张图 · <span class="accent">Memory Coding</span> · 四环协同
         </h2>
         <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
           知识层随项目走 · 规则层随工具走 · 生命周期不同，分开是最基本的决策。
@@ -407,7 +407,7 @@
           style="animation-delay: 0.26s">
           <span class="term">Memory Coding</span>
           <span class="def"
-            >把要记住的东西<strong>编码进可提交的仓</strong>，可 diff、可协作——不是押在模型或聊天里。下面两层图里，<code
+            >把要记住的东西<strong>编码进可提交的仓</strong>，可 diff、可协作——不是押在模型或聊天里。下面这张图里，<code
               >.Knowledge/</code
             >
             是<strong>知识环（一环）</strong>；进度、读法、维护由任务环、规则环、技能环分担。</span
@@ -442,7 +442,10 @@
                 <span class="pill">req-docs/*.md</span>
               </div>
               <div class="fx-kb-layers">
-              <div class="title">知识环 · 多层记忆</div>
+              <div class="title">
+                知识环 · 多层记忆
+                <span class="title-tag">按需递进 · 够则停</span>
+              </div>
               <div class="stack">
                 <span class="layer"><b>L0</b> manifest</span>
                 <span class="sep">→</span>
@@ -452,37 +455,68 @@
                 <span class="sep">→</span>
                 <span class="layer"><b>L3</b> stock / req</span>
               </div>
-              <span class="hint"
-                >横读：<span class="hl">match → expand → verify → act</span>（第 6
-                页）· 纵链：<span class="hl">topicDependencies</span>（第 7 页）</span
-              >
+              <p class="hint">
+                命中主题 ≠ 必读文档；读完文档 ≠ 不看代码。由 AI 判断<strong>当前步是否已够</strong>，<span class="hl">缺口再精准扩一层</span>——最小量级加载，非命中即全开。
+              </p>
               </div>
             </div>
           </div>
 
-          <div
-            class="fx-arch-link"
-            data-anim="fade-up"
-            style="animation-delay: 0.42s">
-            <div class="bar"></div>
-            <div class="txt">技能环维护 ↑ · 规则环读与做 ↓</div>
-            <div class="bar"></div>
+          <div class="fx-arch-gap" data-anim="fade-up" style="animation-delay: 0.36s">
+            <span class="rel rel--nowrap"><b>规则→知识</b> manifest 规定读库顺序 · <b>技能→知识</b> f2s 维护 topics / manifest</span>
+          </div>
+
+          <div class="fx-arch-tool-row" data-anim="fade-up" style="animation-delay: 0.38s">
+            <div
+              class="fx-arch-layer mid rules"
+              data-anim="fade-up"
+              style="animation-delay: 0.4s">
+              <div class="lbl">RULES RING · Memory Coding · 规则环</div>
+              <div class="title">.cursor/ · .claude/ · .codex/</div>
+              <div class="sub">随工具走 · 规定<strong>怎么读、怎么做</strong>（路由、缺口闸门、执行约束）</div>
+              <div class="pills">
+                <span class="pill">.cursor/rules/*.mdc</span>
+                <span class="pill">.claude/rules/*.md</span>
+                <span class="pill">.codex/AGENTS.md</span>
+                <span class="pill">AGENTS.md</span>
+              </div>
+            </div>
+            <div class="fx-arch-tool-divider" aria-label="规则环与技能环关系">
+              <span class="rel"><b>规则↔技能</b> 边界内触发 f2s-* · 步骤服从统一入口</span>
+            </div>
+            <div
+              class="fx-arch-layer mid skills"
+              data-anim="fade-up"
+              style="animation-delay: 0.42s">
+              <div class="lbl">SKILLS RING · Memory Coding · 技能环</div>
+              <div class="title">skills/ · f2s-*</div>
+              <div class="sub">随工具走 · <strong>维护知识、触发流程</strong>（feat / fix / sync）</div>
+              <div class="pills">
+                <span class="pill">.claude/skills/*/SKILL.md</span>
+                <span class="pill">.codex/skills/</span>
+                <span class="pill">f2s-kb-feat · fix · sync</span>
+                <span class="pill">f2s-git-commit</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="fx-arch-gap" data-anim="fade-up" style="animation-delay: 0.48s">
+            <span class="rel"><b>技能→任务</b> f2s-task 写清单与打钩</span>
           </div>
 
           <div
-            class="fx-arch-layer bot"
+            class="fx-arch-layer bot task"
             data-anim="fade-up"
-            style="animation-delay: 0.54s">
-            <div class="lbl">RULES LAYER · 规则环 + 技能环</div>
-            <div class="title">.cursor/ · .claude/ · .codex/</div>
-            <div class="sub">
-              <strong>规则环</strong>规定怎么读、怎么做；<strong>技能环</strong>（f2s-*）维护知识、触发流程；<code>.task/</code> 任务环在仓内并列。
-            </div>
+            style="animation-delay: 0.52s">
+            <div class="lbl">TASK RING · Memory Coding · 任务环</div>
+            <div class="title">.task/</div>
+            <div class="sub">随项目仓走 · 跨会话<strong>续作</strong> · todo 索引 · 清单 checkbox</div>
             <div class="pills">
-              <span class="pill">.cursor/rules/*.mdc</span>
-              <span class="pill">.claude/rules/*.md</span>
-              <span class="pill">.codex/AGENTS.md</span>
-              <span class="pill">skills/*/SKILL.md</span>
+              <span class="pill">todo.json</span>
+              <span class="pill">active/*/task.md</span>
+              <span class="pill">context.md</span>
+              <span class="pill">user-todos.md</span>
+              <span class="pill">completed/</span>
             </div>
           </div>
         </div>
@@ -495,8 +529,9 @@
           <ul>
           <li><strong>Memory Coding</strong>：要记住的编进可提交仓，可 PR / review</li>
           <li>四环：知识环 <code>.Knowledge/</code> · 任务环 <code>.task/</code> · 规则环 · 技能环（<strong>分列</strong>，勿说三环）</li>
-          <li>两层：知识层随项目 · 规则层随工具；箭头：技能维护 ↑ · 规则读与做 ↓</li>
-          <li>L0→L3 横读；<code>topicDependencies</code> 纵链（第 7 页）</li>
+          <li>多层记忆：<strong>按需递进·够则停</strong>；命中≠必读文档；AI 判断够再停，缺口精准扩层</li>
+          <li>规则环、技能环<strong>左右各一框</strong>，中间细栏写规则↔技能；无 ↑↓ 箭头</li>
+          <li>横读 + 纵链在第 7 页展开</li>
           <li>Flow2Spec ≠ 只做 RAG</li>
           </ul>
         </div>
@@ -521,8 +556,7 @@
           渐进式读取 · <span class="accent">先查目录</span>，再翻书
         </h2>
         <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
-          在<strong>知识环</strong>上横读收窄：用户说一句「改评价模板文案库的批量重评分」，Flow2Spec
-          走四步：
+          用户说一句「改评价模板文案库的批量重评分」，Flow2Spec 走四步——先查目录，再翻书：
         </p>
 
         <div class="fx-flow" data-anim="fade-up" style="animation-delay: 0.32s">
@@ -573,7 +607,7 @@
         </div>
         <div class="notes">
           <ul>
-          <li>知识环横读：<strong>match → expand → verify → act</strong></li>
+          <li><strong>match → expand → verify → act</strong> 四步流程</li>
           <li>只开一个 matcher 分片，不全仓 grep</li>
           <li>置信度不够先澄清，不瞎猜</li>
           <li>金句：几 MB 仓库 → 几百行 topic，是切噪声不是变聪明</li>
@@ -581,8 +615,8 @@
         </div>
       </section>
 
-      <!-- ======= Slide 7 · 卖点三 · 依赖链自动展开 ======= -->
-      <section class="slide">
+      <!-- ======= Slide 7 · 横读 + 纵链 ======= -->
+      <section class="slide is-scroll is-read-chain-slide">
         <div class="fx-grid"></div>
         <div class="fx-glow-purple"></div>
         <div class="fx-vignette"></div>
@@ -590,35 +624,55 @@
 
         <div class="fx-chrome">
           <div class="dots"><span></span><span></span><span></span></div>
-          <div>feature · 02 / 03 · topicDependencies</div>
+          <div>knowledge ring · horizontal + vertical</div>
         </div>
 
         <p class="fx-prompt" data-anim="fade-up">
-          resolve topicDependencies('product-review-template-library')
+          match→act · resolve topicDependencies('product-review-template-library')
         </p>
         <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
-          一句话 · <span class="accent">4 层依赖</span>自动展开
+          <span class="accent">横读 + 纵链</span> · 先收窄再叠层
         </h2>
         <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
-          <strong>知识环 L2 纵链</strong>：你只说了「商品评价」三个字，<code
-            >topicDependencies</code
-          >
-          已拉齐通用约定 → 子域边界 → C 端白名单 → 本域细则。
+          知识环两道读法：<strong>横读</strong> L0→L3 走
+          <code>match → expand → verify → act</code>；<strong>纵链</strong>
+          <code>topicDependencies</code> 把通用约定叠到本域。
         </p>
 
-        <div class="fx-tree" data-anim="fade-up" style="animation-delay: 0.3s">
-          <div class="fx-tree-row l1">
+        <div class="fx-read-stack">
+          <div class="fx-read-col fx-read-col--horiz" data-anim="fade-up" style="animation-delay: 0.28s">
+            <div class="fx-read-col-title">横读 · L0 → L3</div>
+            <div class="fx-kb-layers fx-kb-layers--compact">
+              <div class="stack">
+                <span class="layer"><b>L0</b> manifest</span>
+                <span class="sep">→</span>
+                <span class="layer"><b>L1</b> matchers</span>
+                <span class="sep">→</span>
+                <span class="layer"><b>L2</b> topics</span>
+                <span class="sep">→</span>
+                <span class="layer"><b>L3</b> stock / req</span>
+              </div>
+            </div>
+            <div class="fx-read-steps">
+              <span class="hl">match</span> → <span class="hl">expand</span> →
+              <span class="hl">verify</span> → <span class="hl">act</span>
+            </div>
+            <p class="fx-read-cap">一句话只开一个 matcher 分片，不全仓 grep；置信度不够先澄清。</p>
+          </div>
+
+          <div class="fx-read-col fx-read-col--vert" data-anim="fade-up" style="animation-delay: 0.32s">
+            <div class="fx-read-col-title">纵链 · topicDependencies</div>
+            <p class="fx-read-cap fx-read-cap--lead">你只说了「商品评价」，manifest 已按依赖叠四层 topic：</p>
+            <div class="fx-tree fx-tree--in-col">
+          <div class="fx-tree-row l1" data-anim="fade-up" style="animation-delay: 0.36s">
             <span class="fx-tree-indent">└─</span>
             <div class="fx-tree-node">
               <span class="name">common-modules-context</span>
-              <span class="dsc"
-                >ctx · responseData · QMQ · getDb · DB 字段规范</span
-              >
+              <span class="dsc">ctx · responseData · QMQ · getDb · DB 字段规范</span>
               <span class="lines">79 行</span>
             </div>
           </div>
-
-          <div class="fx-tree-row l2">
+          <div class="fx-tree-row l2" data-anim="fade-up" style="animation-delay: 0.42s">
             <span class="fx-tree-indent">&nbsp;&nbsp;└─</span>
             <div class="fx-tree-node">
               <span class="name">social-media-platform-context</span>
@@ -626,43 +680,41 @@
               <span class="lines">79 行</span>
             </div>
           </div>
-
-          <div class="fx-tree-row l3">
+          <div class="fx-tree-row l3" data-anim="fade-up" style="animation-delay: 0.48s">
             <span class="fx-tree-indent">&nbsp;&nbsp;&nbsp;&nbsp;└─</span>
             <div class="fx-tree-node">
               <span class="name">social-media-toclient-whitelist</span>
-              <span class="dsc"
-                >C 端 checkUidAndWhiteList · UID 隔离 · 错误码</span
-              >
+              <span class="dsc">C 端 checkUidAndWhiteList · UID 隔离 · 错误码</span>
               <span class="lines">39 行</span>
             </div>
           </div>
-
-          <div class="fx-tree-row l4">
-            <span class="fx-tree-indent"
-              >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─</span
-            >
+          <div class="fx-tree-row l4" data-anim="fade-up" style="animation-delay: 0.54s">
+            <span class="fx-tree-indent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─</span>
             <div class="fx-tree-node">
               <span class="name">product-review-template-library</span>
               <span class="dsc">本域细则 · Redis 锁 · AI 评分 · 本域例外</span>
               <span class="lines">67 行</span>
             </div>
           </div>
+            </div>
+          </div>
         </div>
 
-        <div class="fx-task-aside" style="margin-top: 30px">
+
+        <div class="fx-task-aside" style="margin-top: 18px">
           <div class="quote" data-anim="fade-up" style="animation-delay: 0.5s">
-            依赖挂在<span style="color: var(--fx-cyan)">主题级</span
-            >，不是任务级 —— 新增任务无需重复声明前置，漏了也不会静默失效。
+            横读切噪声 · 纵链挂<span style="color: var(--fx-cyan)">主题级</span
+            >依赖 —— 新任务不必重复声明前置，漏了也不会静默失效。
           </div>
         </div>
 
         <div class="fx-footer">
-          <span class="brand">feature · dependency-expansion</span>
+          <span class="brand">feature · horizontal + vertical read</span>
           <span class="page">07 / 14</span>
         </div>
         <div class="notes">
           <ul>
+          <li>横读：L0→L3 + <strong>match → expand → verify → act</strong></li>
           <li>纵链：<code>topicDependencies</code> 四层 topic 自动展开</li>
           <li>依赖挂在<strong>主题级</strong>：挂一次，全任务共享</li>
           <li>新任务不必每次手写前置约束</li>
@@ -931,7 +983,7 @@
               <span class="id">② 需求</span>
               <span class="k">澄清 → 技术方案</span>
               <span class="cmds">f2s-req-clarify · f2s-req-backend</span>
-              <span class="v">PRD 问清、出后端/技术方案文档（不必经过 req-plan）</span>
+              <span class="v">PRD 问清、出后端/技术方案文档</span>
             </div>
             <div class="dom">
               <span class="id">③ 文档入库</span>
@@ -946,13 +998,13 @@
             </div>
             <div class="dom">
               <span class="id">④ 迭代同步</span>
-              <span class="k">规划（可选）· 实现 · 同步</span>
+              <span class="k">规划（可选）· 实现</span>
               <span class="cmds"
-                >f2s-req-plan · f2s-kb-feat · f2s-kb-fix · f2s-kb-sync</span
+                >f2s-req-plan · f2s-kb-feat · f2s-kb-fix</span
               >
               <span class="v"
                 >req-plan 独立可选；feat/fix 按技术方案改代码（可带
-                .task）；sync 回写知识库</span
+                .task）</span
               >
             </div>
             <div class="dom">
@@ -963,9 +1015,9 @@
             </div>
             <div class="dom">
               <span class="id">⑥ 知识维护</span>
-              <span class="k">路由与已有能力</span>
-              <span class="cmds">f2s-ctx-build · f2s-ctx-rm · f2s-doc-add</span>
-              <span class="v">stock-docs ↔ topics/manifest；多文件解析进知识库</span>
+              <span class="k">路由 · 同步 · 已有能力</span>
+              <span class="cmds">f2s-ctx-build · f2s-ctx-rm · f2s-doc-add · f2s-kb-sync</span>
+              <span class="v">stock-docs ↔ topics/manifest；多文件入库；kb-sync 补录能力到知识库</span>
             </div>
           </div>
         </div>
@@ -987,10 +1039,10 @@
           <ul>
           <li>命令地图 — <strong>记阶段</strong>，不背二十几个技能名</li>
           <li>① 接入：init / migrate / upgrade</li>
-          <li>② 需求：clarify / backend（不必经过 req-plan）</li>
+          <li>② 需求：clarify / backend</li>
           <li>③ 文档：pdf / final / arch / milestone</li>
-          <li>④ 迭代：req-plan（可选）+ feat / fix / sync；按方案走 <strong>implement-tech-design</strong></li>
-          <li>⑤ 收尾：git-commit / kb-merge · ⑥ 维护：ctx-build / ctx-rm / doc-add</li>
+          <li>④ 迭代：req-plan（可选）+ feat / fix；按方案走 <strong>implement-tech-design</strong></li>
+          <li>⑤ 收尾：git-commit / kb-merge · ⑥ 维护：ctx-build / ctx-rm / doc-add / kb-sync</li>
           <li>init 只落模板，业务知识要靠 f2s 流程长出来</li>
           </ul>
         </div>
@@ -1836,5 +1888,6 @@
     </div>
 
     <script src="assets/runtime.js"></script>
+    <script src="scroll-hint.js"></script>
   </body>
 </html>
