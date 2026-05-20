@@ -77,7 +77,7 @@
           <li>Opening: Has your AI lost its memory?</li>
           <li><strong>Memory Coding</strong>: encode memory in the repo; <strong>four rings</strong> (knowledge / task / rules / skills) — do not collapse to three</li>
           <li>The KB is only the knowledge ring; Flow2Spec <strong>three product things</strong>: resume context, routed reads, f2s keeps code + KB in sync (do not mix counts with four rings)</li>
-          <li>Slide 5: two-layer architecture</li>
+          <li>Slide 5: Memory Coding · four rings</li>
           </ul>
         </div>
       </section>
@@ -378,7 +378,7 @@
         </div>
       </section>
 
-      <!-- ======= Slide 5 · Big Picture: Two Layers ======= -->
+      <!-- ======= Slide 5 · Big Picture: Memory Coding · Four Rings ======= -->
       <section class="slide is-scroll is-arch-slide">
         <div class="fx-grid"></div>
         <div class="fx-glow-cyan"></div>
@@ -388,12 +388,12 @@
 
         <div class="fx-chrome">
           <div class="dots"><span></span><span></span><span></span></div>
-          <div>architecture · two-layer · one-arrow</div>
+          <div>architecture · memory-coding · four rings</div>
         </div>
 
         <p class="fx-prompt" data-anim="fade-up">tree -L 1 -d</p>
         <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
-          One Diagram · <span class="accent">Two Layers</span> · One Arrow
+          One Diagram · <span class="accent">Memory Coding</span> · Four Rings
         </h2>
         <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
           Knowledge layer follows the project · Rules layer follows the tool · Different lifecycles, keeping them separate is the most fundamental decision.
@@ -441,7 +441,10 @@
                 <span class="pill">req-docs/*.md</span>
               </div>
               <div class="fx-kb-layers">
-              <div class="title">Knowledge ring · multi-layer memory</div>
+              <div class="title">
+                Knowledge ring · layered memory
+                <span class="title-tag">progressive · stop when enough</span>
+              </div>
               <div class="stack">
                 <span class="layer"><b>L0</b> manifest</span>
                 <span class="sep">→</span>
@@ -451,37 +454,69 @@
                 <span class="sep">→</span>
                 <span class="layer"><b>L3</b> stock / req</span>
               </div>
-              <span class="hint"
-                >Horizontal: <span class="hl">match → expand → verify → act</span> (slide 6)
-                · Vertical: <span class="hl">topicDependencies</span> (slide 7)</span
-              >
+              <p class="hint">
+                Topic match ≠ read every doc · docs ≠ skip code. AI judges if context is <strong>enough for this step</strong>; <span class="hl">expand one precise layer</span> on gap — minimal load, not open everything.
+              </p>
               </div>
             </div>
           </div>
 
-          <div
-            class="fx-arch-link"
-            data-anim="fade-up"
-            style="animation-delay: 0.42s">
-            <div class="bar"></div>
-            <div class="txt">skills ring ↑ · rules ring read &amp; act ↓</div>
-            <div class="bar"></div>
+
+          <div class="fx-arch-gap" data-anim="fade-up" style="animation-delay: 0.36s">
+            <span class="rel rel--nowrap"><b>Rules→Knowledge</b> manifest routes reads · <b>Skills→Knowledge</b> f2s syncs topics / manifest</span>
+          </div>
+
+          <div class="fx-arch-tool-row" data-anim="fade-up" style="animation-delay: 0.38s">
+            <div
+              class="fx-arch-layer mid rules"
+              data-anim="fade-up"
+              style="animation-delay: 0.4s">
+              <div class="lbl">RULES RING · Memory Coding</div>
+              <div class="title">.cursor/ · .claude/ · .codex/</div>
+              <div class="sub">Follows the tool · <strong>how to read &amp; act</strong> (routing, gap gate, constraints)</div>
+              <div class="pills">
+                <span class="pill">.cursor/rules/*.mdc</span>
+                <span class="pill">.claude/rules/*.md</span>
+                <span class="pill">.codex/AGENTS.md</span>
+                <span class="pill">AGENTS.md</span>
+              </div>
+            </div>
+            <div class="fx-arch-tool-divider" aria-label="Rules and skills rings">
+              <span class="rel"><b>Rules↔Skills</b> f2s-* within bounds · steps follow unified entry</span>
+            </div>
+            <div
+              class="fx-arch-layer mid skills"
+              data-anim="fade-up"
+              style="animation-delay: 0.42s">
+              <div class="lbl">SKILLS RING · Memory Coding</div>
+              <div class="title">skills/ · f2s-*</div>
+              <div class="sub">Follows the tool · <strong>maintain KB &amp; trigger flows</strong></div>
+              <div class="pills">
+                <span class="pill">.claude/skills/*/SKILL.md</span>
+                <span class="pill">.codex/skills/</span>
+                <span class="pill">f2s-kb-feat · fix · sync</span>
+                <span class="pill">f2s-git-commit</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="fx-arch-gap" data-anim="fade-up" style="animation-delay: 0.48s">
+            <span class="rel"><b>Skills→Task</b> f2s-task</span>
           </div>
 
           <div
-            class="fx-arch-layer bot"
+            class="fx-arch-layer bot task"
             data-anim="fade-up"
-            style="animation-delay: 0.54s">
-            <div class="lbl">RULES LAYER · Rules ring + Skills ring</div>
-            <div class="title">.cursor/ · .claude/ · .codex/</div>
-            <div class="sub">
-              <strong>Rules ring</strong> — how to read &amp; act; <strong>Skills ring</strong> (f2s-*) — maintain KB &amp; trigger flows; <strong>Task ring</strong> <code>.task/</code> alongside in the repo.
-            </div>
+            style="animation-delay: 0.52s">
+            <div class="lbl">TASK RING · Memory Coding</div>
+            <div class="title">.task/</div>
+            <div class="sub">Follows the repo · cross-session <strong>resume</strong> · todo · checklist</div>
             <div class="pills">
-              <span class="pill">.cursor/rules/*.mdc</span>
-              <span class="pill">.claude/rules/*.md</span>
-              <span class="pill">.codex/AGENTS.md</span>
-              <span class="pill">skills/*/SKILL.md</span>
+              <span class="pill">todo.json</span>
+              <span class="pill">active/*/task.md</span>
+              <span class="pill">context.md</span>
+              <span class="pill">user-todos.md</span>
+              <span class="pill">completed/</span>
             </div>
           </div>
         </div>
@@ -494,8 +529,9 @@
           <ul>
           <li><strong>Memory Coding</strong>: durable, reviewable memory in git</li>
           <li>Four rings: knowledge <code>.Knowledge/</code> · task <code>.task/</code> · rules ring · skills ring (<strong>separate</strong> rules vs skills)</li>
-          <li>Two layers: knowledge follows the project · rules follow the tool; arrow: skills maintain ↑ · rules read/act ↓</li>
-          <li>L0→L3 horizontal; <code>topicDependencies</code> vertical (slide 7)</li>
+          <li>Layered memory: <strong>progressive · stop when enough</strong>; match ≠ read all docs; expand one layer on gap</li>
+          <li>Rules &amp; skills: <strong>side-by-side boxes</strong>, divider in the middle; no ↑↓ arrows</li>
+          <li>Horizontal + vertical read on slide 7</li>
           <li>Flow2Spec ≠ RAG-only product</li>
           </ul>
         </div>
@@ -520,7 +556,7 @@
           Progressive Loading · <span class="accent">Check the Index First</span>, Then Open the Book
         </h2>
         <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
-          <strong>Horizontal narrowing</strong> on the knowledge ring: user says "modify the batch rescore for the review template library" — four steps:
+          User says "modify the batch rescore for the review template library" — four steps: check the index first, then open the book:
         </p>
 
         <div class="fx-flow" data-anim="fade-up" style="animation-delay: 0.32s">
@@ -571,7 +607,7 @@
         </div>
         <div class="notes">
           <ul>
-          <li>Horizontal read on knowledge ring: <strong>match → expand → verify → act</strong></li>
+          <li><strong>match → expand → verify → act</strong> four-step flow</li>
           <li>One matcher shard at a time — no whole-repo grep by default</li>
           <li>Clarify when confidence is low</li>
           <li>Line: MB-scale repo → hundreds of lines of topics — cut noise, not magic IQ</li>
@@ -579,8 +615,8 @@
         </div>
       </section>
 
-      <!-- ======= Slide 7 · Feature 2 · Auto Dependency Expansion ======= -->
-      <section class="slide">
+      <!-- ======= Slide 7 · Horizontal + Vertical read ======= -->
+      <section class="slide is-scroll is-read-chain-slide">
         <div class="fx-grid"></div>
         <div class="fx-glow-purple"></div>
         <div class="fx-vignette"></div>
@@ -588,32 +624,55 @@
 
         <div class="fx-chrome">
           <div class="dots"><span></span><span></span><span></span></div>
-          <div>feature · 02 / 03 · topicDependencies</div>
+          <div>knowledge ring · horizontal + vertical</div>
         </div>
 
         <p class="fx-prompt" data-anim="fade-up">
-          resolve topicDependencies('product-review-template-library')
+          match→act · resolve topicDependencies('product-review-template-library')
         </p>
         <h2 class="fx-h1" data-anim="fade-up" style="animation-delay: 0.1s">
-          One Sentence · <span class="accent">4-Layer Dependencies</span> Auto-Expanded
+          <span class="accent">Horizontal + Vertical</span> · Narrow Then Stack
         </h2>
         <p class="fx-lede" data-anim="fade-up" style="animation-delay: 0.2s">
-          <strong>Knowledge ring L2 vertical chain</strong>: you only said "product review" — <code>topicDependencies</code> already pulls common conventions → subdomain boundaries → C-side whitelist → domain rules.
+          Two reads on the knowledge ring: <strong>horizontal</strong> L0→L3 via
+          <code>match → expand → verify → act</code>; <strong>vertical</strong>
+          <code>topicDependencies</code> stacks conventions to domain rules.
         </p>
 
-        <div class="fx-tree" data-anim="fade-up" style="animation-delay: 0.3s">
-          <div class="fx-tree-row l1">
+        <div class="fx-read-stack">
+          <div class="fx-read-col fx-read-col--horiz" data-anim="fade-up" style="animation-delay: 0.28s">
+            <div class="fx-read-col-title">Horizontal · L0 → L3</div>
+            <div class="fx-kb-layers fx-kb-layers--compact">
+              <div class="stack">
+                <span class="layer"><b>L0</b> manifest</span>
+                <span class="sep">→</span>
+                <span class="layer"><b>L1</b> matchers</span>
+                <span class="sep">→</span>
+                <span class="layer"><b>L2</b> topics</span>
+                <span class="sep">→</span>
+                <span class="layer"><b>L3</b> stock / req</span>
+              </div>
+            </div>
+            <div class="fx-read-steps">
+              <span class="hl">match</span> → <span class="hl">expand</span> →
+              <span class="hl">verify</span> → <span class="hl">act</span>
+            </div>
+            <p class="fx-read-cap">One matcher shard per utterance — no whole-repo grep; clarify when unsure.</p>
+          </div>
+
+          <div class="fx-read-col fx-read-col--vert" data-anim="fade-up" style="animation-delay: 0.32s">
+            <div class="fx-read-col-title">Vertical · topicDependencies</div>
+            <p class="fx-read-cap fx-read-cap--lead">You only said "product review" — manifest stacks four topic layers:</p>
+            <div class="fx-tree fx-tree--in-col">
+          <div class="fx-tree-row l1" data-anim="fade-up" style="animation-delay: 0.36s">
             <span class="fx-tree-indent">└─</span>
             <div class="fx-tree-node">
               <span class="name">common-modules-context</span>
-              <span class="dsc"
-                >ctx · responseData · QMQ · getDb · DB field conventions</span
-              >
+              <span class="dsc">ctx · responseData · QMQ · getDb · DB field conventions</span>
               <span class="lines">79 lines</span>
             </div>
           </div>
-
-          <div class="fx-tree-row l2">
+          <div class="fx-tree-row l2" data-anim="fade-up" style="animation-delay: 0.42s">
             <span class="fx-tree-indent">&nbsp;&nbsp;└─</span>
             <div class="fx-tree-node">
               <span class="name">social-media-platform-context</span>
@@ -621,39 +680,36 @@
               <span class="lines">79 lines</span>
             </div>
           </div>
-
-          <div class="fx-tree-row l3">
+          <div class="fx-tree-row l3" data-anim="fade-up" style="animation-delay: 0.48s">
             <span class="fx-tree-indent">&nbsp;&nbsp;&nbsp;&nbsp;└─</span>
             <div class="fx-tree-node">
               <span class="name">social-media-toclient-whitelist</span>
-              <span class="dsc"
-                >C-side checkUidAndWhiteList · UID isolation · error codes</span
-              >
+              <span class="dsc">C-side checkUidAndWhiteList · UID isolation · error codes</span>
               <span class="lines">39 lines</span>
             </div>
           </div>
-
-          <div class="fx-tree-row l4">
-            <span class="fx-tree-indent"
-              >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─</span
-            >
+          <div class="fx-tree-row l4" data-anim="fade-up" style="animation-delay: 0.54s">
+            <span class="fx-tree-indent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─</span>
             <div class="fx-tree-node">
               <span class="name">product-review-template-library</span>
               <span class="dsc">Domain rules · Redis lock · AI scoring · domain exceptions</span>
               <span class="lines">67 lines</span>
             </div>
           </div>
+            </div>
+          </div>
         </div>
 
-        <div class="fx-task-aside" style="margin-top: 30px">
+
+        <div class="fx-task-aside" style="margin-top: 18px">
           <div class="quote" data-anim="fade-up" style="animation-delay: 0.5s">
-            Dependencies are attached at the <span style="color: var(--fx-cyan)">topic level</span>,
-            not the task level — new tasks don't need to re-declare prerequisites, and missing ones won't silently fail.
+            Horizontal cuts noise · vertical deps at <span style="color: var(--fx-cyan)">topic level</span>
+            — declare once, no silent failure.
           </div>
         </div>
 
         <div class="fx-footer">
-          <span class="brand">feature · dependency-expansion</span>
+          <span class="brand">feature · horizontal + vertical read</span>
           <span class="page">07 / 14</span>
         </div>
         <div class="notes">
@@ -924,7 +980,7 @@
               <span class="id">② Requirements</span>
               <span class="k">clarify → tech spec</span>
               <span class="cmds">f2s-req-clarify · f2s-req-backend</span>
-              <span class="v">PRD Q&A and tech docs — no req-plan required</span>
+              <span class="v">PRD Q&A and tech docs</span>
             </div>
             <div class="dom">
               <span class="id">③ Docs in</span>
@@ -939,13 +995,12 @@
             </div>
             <div class="dom">
               <span class="id">④ Iterate</span>
-              <span class="k">plan (opt.) · ship · sync</span>
+              <span class="k">plan (opt.) · ship</span>
               <span class="cmds"
-                >f2s-req-plan · f2s-kb-feat · f2s-kb-fix · f2s-kb-sync</span
+                >f2s-req-plan · f2s-kb-feat · f2s-kb-fix</span
               >
               <span class="v"
-                >req-plan optional; feat/fix from tech design (may use .task); sync
-                KB</span
+                >req-plan optional; feat/fix from tech design (may use .task)</span
               >
             </div>
             <div class="dom">
@@ -956,9 +1011,9 @@
             </div>
             <div class="dom">
               <span class="id">⑥ Knowledge upkeep</span>
-              <span class="k">routing & existing code</span>
-              <span class="cmds">f2s-ctx-build · f2s-ctx-rm · f2s-doc-add</span>
-              <span class="v">stock-docs ↔ topics/manifest; multi-file KB ingest</span>
+              <span class="k">routing · sync · existing code</span>
+              <span class="cmds">f2s-ctx-build · f2s-ctx-rm · f2s-doc-add · f2s-kb-sync</span>
+              <span class="v">stock-docs ↔ topics/manifest; multi-file ingest; kb-sync backfills KB</span>
             </div>
           </div>
         </div>
@@ -980,10 +1035,10 @@
           <ul>
           <li>Command map — remember <strong>stages</strong>, not twenty skill names</li>
           <li>① Onboard: init / migrate / upgrade</li>
-          <li>② Requirements: clarify / backend (req-plan optional)</li>
+          <li>② Requirements: clarify / backend</li>
           <li>③ Docs: pdf / final / arch / milestone</li>
-          <li>④ Iterate: req-plan + feat / fix / sync; implement via <strong>implement-tech-design</strong></li>
-          <li>⑤ Ship: git-commit / kb-merge · ⑥ Maintain: ctx-build / ctx-rm / doc-add</li>
+          <li>④ Iterate: req-plan (optional) + feat / fix; implement via <strong>implement-tech-design</strong></li>
+          <li>⑤ Ship: git-commit / kb-merge · ⑥ Maintain: ctx-build / ctx-rm / doc-add / kb-sync</li>
           <li>init lays scaffolding; business KB grows through f2s flows</li>
           </ul>
         </div>
@@ -1829,5 +1884,6 @@
     </div>
 
     <script src="../../.claude/skills/html-ppt/assets/runtime.js"></script>
+    <script src="../scroll-hint.js"></script>
   </body>
 </html>
