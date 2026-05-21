@@ -67,7 +67,11 @@ If **`changeTracking` is off** but you still need a `.task/` checklist temporari
 ### New Feature Development
 
 ```
-f2s-req-clarify → f2s-req-backend → implement-tech-design → f2s-kb-feat
+f2s-req-clarify (one-line requirement or doc) → f2s-req-backend → implement <technical design> (strictly follows implement-tech-design rule)
+After implementation, new capability → f2s-kb-feat
+After implementation, bug fix → f2s-kb-fix
+After debugging → f2s-kb-sync
+Finally → f2s-git-commit
 ```
 
 When requirements are already clear, `f2s-req-clarify` can be skipped, starting directly from `f2s-req-backend`. After the technical design is written into `req-docs/`, the `implement-tech-design` rule drives coding.
