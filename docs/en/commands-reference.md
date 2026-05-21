@@ -17,7 +17,7 @@
 
 **Relationships**:
 - **Prerequisite**: None
-- **Next Step**: `f2s-doc-final` (normalized final draft) or direct use with `f2s-ctx-build`
+- **Next Step**: `f2s-doc-final` (normalized final draft) → `f2s-ctx-build` (**final draft input only**; do not run build on `_draft` / `_初稿` files)
 - **Output**: `.Knowledge/stock-docs/<Architecture Overview>_draft.md`
 
 **Sub-Agent Invocation**:
