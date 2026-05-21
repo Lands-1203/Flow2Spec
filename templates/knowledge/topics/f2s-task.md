@@ -1,7 +1,7 @@
 # f2s-task（路由摘要）
 
 > 长文见配置根 **`rules/f2s-task.*`**。  
-> 体系化设计说明（两种模式、目录、`todo.json`）：[Flow2Spec 任务清单与变更追踪](../stock-docs/Flow2Spec-任务清单与变更追踪.md)。
+> 体系化设计说明（可选）：在 `stock-docs/` 自建任务清单说明后，于本主题或 `index.md` 中链接，例如 `../stock-docs/<任务清单说明>.md`。
 
 ## 作用
 

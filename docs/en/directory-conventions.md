@@ -1,14 +1,14 @@
-[中文](./README-目录与路径约定.md) | [English](./directory-conventions.en.md)
+[中文](../目录与路径约定.md) | [English](./directory-conventions.md)
 
 # Directory and Path Conventions
 
 ## Core Boundary
 
-- `.Knowledge/`: **Knowledge ring** — business docs and machine-readable routing ([architecture.en.md §2](./architecture.en.md))
+- `.Knowledge/`: **Knowledge ring** — business docs and machine-readable routing ([architecture.md §2](./architecture.md))
 - `.task/`: **Task ring** — change tracking (not inside `.Knowledge/`)
 - `Config Root` (`.cursor/.claude/.codex`): **Rules ring + skills ring**
 
-See [architecture.en.md §1](./architecture.en.md) for Memory Coding four rings.
+See [architecture.md §1](./architecture.md) for Memory Coding four rings.
 
 ---
 
@@ -16,6 +16,8 @@ See [architecture.en.md §1](./architecture.en.md) for Memory Coding four rings.
 
 | Path | Responsibility |
 | --- | --- |
+| `docs/` | Product docs (**Chinese**): usage guide, commands reference, design principles, etc. |
+| `docs/en/` | Product docs (**English**): six paired documents; see [README.md](./README.md) |
 | `.Knowledge/stock-docs/` | **L3** Architecture, final drafts, reference documents |
 | `.Knowledge/req-docs/` | **L3** Requirement clarification, technical proposals |
 | `.Knowledge/topics/` | **L2** Topic summaries (hard constraints, boundaries, pointers) |
@@ -31,7 +33,7 @@ See [architecture.en.md §1](./architecture.en.md) for Memory Coding four rings.
 | `.codex/AGENTS.md` | Codex unified entry point and loading instructions |
 | `flow2spec.config.json` | Project root configuration, controls `subAgent`, `switchAgentVerification`, `changeTracking` (nested object with `feat` / `fix` / `implement` sub-items) |
 
-> See [Usage Guide Section 1](./usage-guide.en.md) for multi-platform references and path tables (detail maintained in a single table); **the authoritative source remains `Read(flow2spec.config.json)`**.
+> See [Usage Guide Section 1](./usage-guide.md) for multi-platform references and path tables (detail maintained in a single table); **the authoritative source remains `Read(flow2spec.config.json)`**.
 
 ---
 
@@ -46,7 +48,7 @@ See [architecture.en.md §1](./architecture.en.md) for Memory Coding four rings.
 
 ## Related Documents
 
-- [Usage Guide](./usage-guide.en.md)
-- [Commands Reference](./commands-reference.en.md)
-- [Architecture](./architecture.en.md)
-- [Usage Scenarios](./usage-scenarios.en.md)
+- [Usage Guide](./usage-guide.md)
+- [Commands Reference](./commands-reference.md)
+- [Architecture](./architecture.md)
+- [Usage Scenarios](./usage-scenarios.md)

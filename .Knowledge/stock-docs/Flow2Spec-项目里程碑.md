@@ -23,7 +23,7 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | **在线 PPT** | GitLab **Pages**（内网演示 URL，由 `scripts/sync-pages.sh` 从 draft 同步） | GitHub **Pages** 公网：[中文](https://lands-1203.github.io/Flow2Spec/) · [English](https://lands-1203.github.io/Flow2Spec/en/) |
 | **PPT 发布脚本** | `scripts/sync-pages.sh` → `pages` 分支 | `scripts/sync-gh-pages.sh` → `gh-pages` 分支（根目录中文、`/en/` 英文） |
 | **Cursor 插件** | 无独立提交流程（使用 init 落盘 rules/skills） | 分支 **`feat/cursor-directory-plugin`** + `scripts/sync-cursor-plugin.sh` → [cursor.directory](https://cursor.directory) 插件结构 |
-| **英文文档** | `docs/` 以中文为主；对外英文以开源仓为准 | `docs/*.en.md` 等 **6 篇英文文档** + 演示稿英文化 |
+| **英文文档** | `docs/` 以中文为主；对外英文以开源仓为准 | `docs/en/*.md` 等 **6 篇英文文档** + 演示稿英文化 |
 | **产品知识库** | 本仓 `.Knowledge/`（里程碑、架构终稿等 **产品自用**） | 开源仓亦有 `.Knowledge/`（对外协作者可读） |
 
 **关系一句话（中）**：内部仓负责携程场景下的 npm 发布与内网 Pages；开源仓负责 GitHub、公网演示、npm 公共包与 Cursor 插件目录提交。  
@@ -158,10 +158,10 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | | **English**：`presentations/flow2spec-intro-public-en/` → Pages **`/en/`** |
 | **在线地址** | [Demo 中文](https://lands-1203.github.io/Flow2Spec/) · [Live Demo EN](https://lands-1203.github.io/Flow2Spec/en/) |
 | **文档 — 中文 / English** | |
-| | **中文**：`README.md`、`docs/Flow2Spec使用说明.md` 等 |
-| | **English**：`README.en.md`、`docs/architecture.en.md`、`docs/directory-conventions.en.md` 等（约 6 篇）；修复触发词与 Demo 路径英文化 |
+| | **中文**：`README.md`、`docs/使用说明.md` 等 |
+| | **English**：`README.en.md`、`docs/en/architecture.md`、`docs/en/directory-conventions.md` 等（约 6 篇）；修复触发词与 Demo 路径英文化 |
 | **npm** | `@double-codeing/flow2spec` **public** 发布（`publishConfig.access: public`） |
-| **内部仓差异** | 保留 **draft** 与 **GitLab Pages**；README 公网链接指向开源 Pages；无 `flow2spec-intro-public-en` 目录（以外仓为准） |
+| **内部仓差异** | 中文源稿 **`flow2spec-intro-draft/`**（无重复的 `flow2spec-intro-public/`）；英文 **`flow2spec-intro-public-en/`**；GitLab Pages 中+en |
 
 **意义**：对外可分享、可英语路演、可 `npx @double-codeing/flow2spec` 零门槛试用。
 
@@ -247,7 +247,7 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | 对内演示 | flow2spec-presentations | M7a | 内部 draft + GitLab Pages |
 | 对外演示 | flow2spec-presentations、html-ppt | M7b | 开源 public + gh-pages 双语 |
 | Cursor 生态 | init cursor、插件分支 | M7c | **仅开源仓** |
-| 国际化 | README.en、docs/*.en.md | M7b | **开源仓为主** |
+| 国际化 | README.en、docs/en/*.md | M7b | **开源仓为主** |
 | CLI 运维 | version、update | M8 | 双仓 |
 | 包模板路由 | f2s-task、f2s-req-plan 依赖 | M9 | 双仓 |
 | Codex 发现 | 根 AGENTS.md | M10 | 双仓 |
@@ -280,7 +280,7 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | **刻意分叉** | `package.json` | 仅 `name` / `homepage` / `publishConfig` 等不同 |
 | **刻意分叉** | `presentations/`、`scripts/sync-*-pages.sh`、Cursor 插件分支 | 见上文「双仓分工」表 |
 
-**自检**：`diff -rq templates lib .Knowledge` 两仓应无意外差异（除 `package.json` 与 presentations）。
+**自检**：`diff -rq templates lib .Knowledge` 两仓应无意外差异（除 `package.json` 与 presentations）。内网仓可执行 **`./scripts/sync-dual-repos.sh`**（默认 `项目/ai/flow2spec` → `项目/个人/Flow2Spec`，可用 `FLOW2SPEC_OSS` 覆盖）。
 
 ---
 
@@ -293,3 +293,4 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | 2026-05-15 | 增补 **M2b OpenSpec 移除**（opsx 命令与 openspec 技能退场、M3 替代关系） |
 | 2026-05-15 | 增补 **双仓同步清单**；开源仓对齐 templates / .Knowledge / lib / cli |
 | 2026-05-18 | 当前版本 **3.0.13**；增补 M9–M12、`f2s-doc-milestone` 与单仓 `项目里程碑.md` 分工 |
+| 2026-05-21 | **M12 文档维护**：`docs/` 去 `README-`/`Flow2Spec-` 前缀；英文迁入 **`docs/en/`**（去掉 `.en` 后缀）；删除「PDF 直驱实现」叙述；**双仓同步** `templates/`、`lib/`、`cli.js`、`docs/`、`.Knowledge` 与 README（`f2s-kb-upgrade` 仍保留各仓 npm 包名；`presentations/`、`package.json` 刻意分叉） |

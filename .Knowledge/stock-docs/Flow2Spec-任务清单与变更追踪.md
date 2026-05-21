@@ -89,10 +89,10 @@
 
 ## 8. 信息来源（仓库内文档）
 
-- `docs/README-体系与原理.md` — 第 3 节链路、第 4.3 节变更追踪。
-- `docs/README-命令说明.md` — `f2s-req-plan`、`f2s-task`、`changeTracking` 字段说明。
-- `docs/README-目录与路径约定.md` — `.task/` 路径约定。
-- `docs/Flow2Spec使用说明.md` — 自动模式与显式模式产品说明。
+- `docs/体系与原理.md` — 第 3 节链路、第 4.3 节变更追踪。
+- `docs/命令说明.md` — `f2s-req-plan`、`f2s-task`、`changeTracking` 字段说明。
+- `docs/目录与路径约定.md` — `.task/` 路径约定。
+- `docs/使用说明.md` — 自动模式与显式模式产品说明。
 
 ---
 

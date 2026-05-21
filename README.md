@@ -5,12 +5,12 @@
 >
 > 🌐 **[English](./README.en.md)** · 中 / EN
 
-🎬 **[在线演示(中文)](https://lands-1203.github.io/Flow2Spec/)** | **[English Demo](https://lands-1203.github.io/Flow2Spec/en/)**（13 页 HTML PPT，`←` `→` 翻页，`S` 演讲者模式）
+🎬 **[在线演示](https://lands-1203.github.io/Flow2Spec/)**（13 页 HTML PPT，`←` `→` 翻页，`S` 演讲者模式）
 
 🔧 **快速体验**：
 
 ```bash
-npx @double-codeing/flow2spec@latest init
+npx @ctrip/flow2spec@latest init
 ```
 
 ---
@@ -69,7 +69,7 @@ topic 里，AI 不用从源码猜。
 **最小可用集是一个空骨架。**
 
 ```bash
-npx @double-codeing/flow2spec@latest init
+npx @ctrip/flow2spec@latest init
 ```
 
 1 分钟生成目录结构 + 路由配置，空的，直接跑。**下次需求命中哪块，写哪块**，不提前建设。
@@ -95,20 +95,20 @@ npx @double-codeing/flow2spec@latest init
 ## 详细文档
 
 ### 中文
-- [使用说明](./docs/Flow2Spec使用说明.md) — 技能链、配置详解
-- [命令说明](./docs/README-命令说明.md) — 所有 f2s-* 命令速查
-- [目录与路径约定](./docs/README-目录与路径约定.md)
-- [体系与原理](./docs/README-体系与原理.md)
-- [使用案例·模拟对话](./docs/Flow2Spec-使用案例-模拟对话.md)
-- [设计说明](./docs/Flow2Spec-设计说明.md)
+- [使用说明](./docs/使用说明.md) — 技能链、配置详解
+- [命令说明](./docs/命令说明.md) — 所有 f2s-* 命令速查
+- [目录与路径约定](./docs/目录与路径约定.md)
+- [体系与原理](./docs/体系与原理.md)
+- [使用案例·模拟对话](./docs/使用案例-模拟对话.md)
+- [设计说明](./docs/设计说明.md)
 
 ### English
-- [Usage Guide](./docs/usage-guide.en.md)
-- [Commands Reference](./docs/commands-reference.en.md)
-- [Directory Conventions](./docs/directory-conventions.en.md)
-- [Architecture & Principles](./docs/architecture.en.md)
-- [Usage Scenarios](./docs/usage-scenarios.en.md)
-- [Design Principles](./docs/design-principles.en.md)
+- [Usage Guide](./docs/en/usage-guide.md)
+- [Commands Reference](./docs/en/commands-reference.md)
+- [Directory Conventions](./docs/en/directory-conventions.md)
+- [Architecture & Principles](./docs/en/architecture.md)
+- [Usage Scenarios](./docs/en/usage-scenarios.md)
+- [Design Principles](./docs/en/design-principles.md)
 
 ## 协议
 

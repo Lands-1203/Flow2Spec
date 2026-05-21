@@ -5,12 +5,12 @@
 >
 > 🌐 **[中文](./README.md)** · 中 / EN
 
-🎬 **[Live Demo (English)](https://lands-1203.github.io/Flow2Spec/en/)** | **[中文演示](https://lands-1203.github.io/Flow2Spec/)** (13-slide HTML PPT, `←` `→` to navigate, `S` for presenter mode)
+🎬 **[Live Demo](https://lands-1203.github.io/Flow2Spec/)** (13-slide HTML PPT, `←` `→` to navigate, `S` for presenter mode)
 
 🔧 **Quick start**:
 
 ```bash
-npx @double-codeing/flow2spec@latest init
+npx @ctrip/flow2spec@latest init
 ```
 
 ---
@@ -68,7 +68,7 @@ Each task hits 1–4 topics, ~300 lines. Business constraints — Redis lock key
 **Minimum viable setup is an empty skeleton.**
 
 ```bash
-npx @double-codeing/flow2spec@latest init
+npx @ctrip/flow2spec@latest init
 ```
 
 1 minute generates the directory structure + routing config. Empty, ready to use. **Next requirement hits whichever area → you document that area.** No upfront investment needed.
@@ -94,20 +94,20 @@ Real data from a production repo running for 3 months:
 ## Documentation
 
 ### English
-- [Usage Guide](./docs/usage-guide.en.md) — skill chains, config details
-- [Commands Reference](./docs/commands-reference.en.md) — all f2s-* command reference
-- [Directory Conventions](./docs/directory-conventions.en.md)
-- [Architecture & Principles](./docs/architecture.en.md)
-- [Usage Scenarios](./docs/usage-scenarios.en.md)
-- [Design Principles](./docs/design-principles.en.md)
+- [Usage Guide](./docs/en/usage-guide.md) — skill chains, config details
+- [Commands Reference](./docs/en/commands-reference.md) — all f2s-* command reference
+- [Directory Conventions](./docs/en/directory-conventions.md)
+- [Architecture & Principles](./docs/en/architecture.md)
+- [Usage Scenarios](./docs/en/usage-scenarios.md)
+- [Design Principles](./docs/en/design-principles.md)
 
 ### 中文
-- [使用说明](./docs/Flow2Spec使用说明.md)
-- [命令说明](./docs/README-命令说明.md)
-- [目录与路径约定](./docs/README-目录与路径约定.md)
-- [体系与原理](./docs/README-体系与原理.md)
-- [使用案例·模拟对话](./docs/Flow2Spec-使用案例-模拟对话.md)
-- [设计说明](./docs/Flow2Spec-设计说明.md)
+- [使用说明](./docs/使用说明.md)
+- [命令说明](./docs/命令说明.md)
+- [目录与路径约定](./docs/目录与路径约定.md)
+- [体系与原理](./docs/体系与原理.md)
+- [使用案例·模拟对话](./docs/使用案例-模拟对话.md)
+- [设计说明](./docs/设计说明.md)
 
 ## License
 

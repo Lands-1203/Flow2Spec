@@ -1,4 +1,4 @@
-[中文](./Flow2Spec-使用案例-模拟对话.md) | [English](./usage-scenarios.en.md)
+[中文](../使用案例-模拟对话.md) | [English](./usage-scenarios.md)
 
 # Flow2Spec Usage Scenarios (Simulated Dialogues)
 
@@ -123,33 +123,7 @@ The following examples revolve around the same e-commerce project, covering the 
 
 ---
 
-## Scenario 4: PDF Design -> Implementation
-
-**You**
-
-> /f2s-doc-pdf /Users/me/Downloads/marketing-coupon-v2.pdf
-
-**Agent**
-
-> Converted and saved as `.Knowledge/req-docs/marketing-coupon-v2.md`. Filled in the idempotency handling flow description and error code explanations that were missing in the PDF.
-
-**You**
-
-> Implement according to `.Knowledge/req-docs/marketing-coupon-v2.md`
-
-**Agent**
-
-> I have read the design document. Task list for implementation:
->
-> 1. Create `CouponController` (coupon claim, redemption, and return endpoints)
-> 2. Create `CouponService` with inventory deduction and idempotency checks
-> 3. ...
->
-> Before proceeding, I need to confirm: is the coupon inventory managed via Redis or database row locks?
-
----
-
-## Scenario 5: Post-Implementation Knowledge Base Recording
+## Scenario 4: Post-Implementation Knowledge Base Recording
 
 **You**
 
@@ -177,7 +151,7 @@ The following examples revolve around the same e-commerce project, covering the 
 
 ---
 
-## Scenario 6: Non-compliant Implementation Found, Fix and Sync Knowledge Base
+## Scenario 5: Non-compliant Implementation Found, Fix and Sync Knowledge Base
 
 **You**
 
@@ -191,7 +165,7 @@ The following examples revolve around the same e-commerce project, covering the 
 
 ---
 
-## Scenario 7: Knowledge Base Conflicts After Git Merge
+## Scenario 6: Knowledge Base Conflicts After Git Merge
 
 **You**
 
@@ -216,7 +190,7 @@ The following examples revolve around the same e-commerce project, covering the 
 
 ## Related Documentation
 
-- [Usage Guide](./usage-guide.en.md)
-- [Commands Reference](./commands-reference.en.md)
-- [Directory Conventions](./directory-conventions.en.md)
-- [Architecture](./architecture.en.md)
+- [Usage Guide](./usage-guide.md)
+- [Commands Reference](./commands-reference.md)
+- [Directory Conventions](./directory-conventions.md)
+- [Architecture](./architecture.md)

@@ -64,15 +64,17 @@ flow2spec/
 │       ├── f2s-kb-merge/           # 合并冲突
 │       ├── f2s-kb-upgrade/         # 知识库模板升级
 │       └── f2s-kb-migrate/         # 旧版迁移
-├── docs/                           # 项目说明文档（面向用户）
-│   ├── Flow2Spec使用说明.md
-│   ├── README-命令说明.md
-│   ├── README-目录与路径约定.md
-│   ├── README-体系与原理.md
-│   ├── Flow2Spec-使用案例-模拟对话.md
-│   ├── f2s-subagent-orchestration-checklist.md
-│   ├── claude对Flow2Spec的可行性分析.md
-│   └── cursor对Flow2Spec的可行性分析.md
+├── docs/                           # 项目说明文档（面向用户，中文）
+│   ├── 使用说明.md
+│   ├── 命令说明.md
+│   ├── 目录与路径约定.md
+│   ├── 体系与原理.md
+│   ├── 使用案例-模拟对话.md
+│   ├── 设计说明.md
+│   └── en/                         # 英文文档（与上表一一对应）
+│       ├── usage-guide.md
+│       ├── commands-reference.md
+│       └── …
 ├── .Knowledge/                     # 业务知识库（由 init 初始化，技能流程维护）
 │   ├── stock-docs/                 # 存量上下文源（架构说明、终稿等）
 │   ├── req-docs/                   # 需求与技术方案（按方案实现代码的直接输入）

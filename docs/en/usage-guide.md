@@ -1,4 +1,4 @@
-[中文](./Flow2Spec使用说明.md) | [English](./usage-guide.en.md)
+[中文](../使用说明.md) | [English](./usage-guide.md)
 
 # Flow2Spec Usage Guide
 
@@ -32,7 +32,7 @@ Before executing any **`f2s-*` skill**, the Agent needs to obtain the actual val
 | **Codex** | `.codex/AGENTS.md` top-level mandatory step + `{{FLOW2SPEC_PROJECT_CONFIG}}` expansion table | **Read** is a hard requirement; the config table is a **snapshot from the last `flow2spec init`** — when it differs from disk, **Read** takes precedence. The adjacent **`.codex/topics/f2s-config-check.md`** shares its origin with the Cursor rule (including the **changeTracking** detail table); open it **as needed** — it does not need to be grouped with the three "topic long-form" examples as required reading. |
 | **Knowledge Base (optional)** | When `.Knowledge/manifest-routing` hits **`config-precheck`** | `.Knowledge/topics/f2s-config-precheck.md` is a **routing summary** that links to the Codex long-form article; Flow2Spec does **not** maintain a second full copy in `.Knowledge`, nor does it replace a `Read` of the JSON. |
 
-For field semantics and default value rules, see [Commands Reference § 6) Sub-Agent Configuration](./commands-reference.en.md). For the design perspective, see [Design Principles § 4.5.1](./design-principles.en.md).
+For field semantics and default value rules, see [Commands Reference § 6) Sub-Agent Configuration](./commands-reference.md). For the design perspective, see [Design Principles § 4.5.1](./design-principles.md).
 
 ---
 
@@ -40,7 +40,7 @@ For field semantics and default value rules, see [Commands Reference § 6) Sub-A
 
 Core distinction: `stock-docs/` holds solidified documents (driving knowledge routing), `req-docs/` holds technical designs (driving coding implementation); they are not interchangeable.
 
-See [Directory Conventions](./directory-conventions.en.md) for the full directory description.
+See [Directory Conventions](./directory-conventions.md) for the full directory description.
 
 ---
 
@@ -62,7 +62,7 @@ Enable `changeTracking` per skill in `flow2spec.config.json` (each sub-field is 
 
 When enabled, `f2s-kb-feat` / `f2s-kb-fix` / `f2s-implement-tech-design` automatically create a checklist under `.task/active/`, check off steps, and archive on completion. In later sessions, the `f2s-task` rule matches related wording and resumes the remaining steps — no need to re-explain context.
 
-If **`changeTracking` is off** but you still need a `.task/` checklist temporarily, call `f2s-req-plan` explicitly (always creates a checklist, ignores config) — a **fallback**, not the default path. See [Commands Reference § f2s-req-plan](./commands-reference.en.md).
+If **`changeTracking` is off** but you still need a `.task/` checklist temporarily, call `f2s-req-plan` explicitly (always creates a checklist, ignores config) — a **fallback**, not the default path. See [Commands Reference § f2s-req-plan](./commands-reference.md).
 
 ### New Feature Development
 
@@ -76,18 +76,10 @@ When requirements are already clear, `f2s-req-clarify` can be skipped, starting 
 
 ```
 New architecture document ingestion: f2s-doc-arch → f2s-doc-final → f2s-ctx-build
-PDF document ingestion:          f2s-doc-pdf  → f2s-doc-final → f2s-ctx-build
+PDF/draft ingestion:               f2s-doc-final → f2s-ctx-build
 ```
 
-Integrate architecture descriptions or PDF technical designs into the knowledge routing (generates topics/matchers/manifest-routing).
-
-### PDF-Based Implementation
-
-```
-f2s-doc-pdf → implement-tech-design
-```
-
-Convert a PDF technical design to Markdown and place it in `req-docs/`, then let the `implement-tech-design` rule drive coding.
+Integrate architecture descriptions or PDF final drafts into knowledge routing (generates topics/matchers/manifest-routing). To ingest a PDF into the knowledge base, use `f2s-doc-final` then `f2s-ctx-build`. `f2s-doc-pdf` only converts a PDF to Markdown under `req-docs/` for editing; it is **not** the recommended path for "PDF straight to coding."
 
 ### Backfilling Existing Capabilities
 
@@ -118,7 +110,7 @@ f2s-kb-upgrade (Current V2+: already has .Knowledge; includes npm v3.x projects,
 
 ## 4. Agent Execution Configuration
 
-Controlled via the project root `flow2spec.config.json`. For complete field rules, see [Commands Reference § 6) Sub-Agent Configuration](./commands-reference.en.md). **How each client is reminded to read the config, and why `Read` remains authoritative** — see **§ 1** (this § only explains **when** to toggle each switch).
+Controlled via the project root `flow2spec.config.json`. For complete field rules, see [Commands Reference § 6) Sub-Agent Configuration](./commands-reference.md). **How each client is reminded to read the config, and why `Read` remains authoritative** — see **§ 1** (this § only explains **when** to toggle each switch).
 
 **When to enable `subAgent: true`**: When the task is large (multi-module parallel implementation, batch document ingestion, large-scale migration). When enabled, each skill decides whether to actually split based on its own size threshold; tasks below the threshold are still completed within the main agent.
 
@@ -155,7 +147,7 @@ Skills are triggered by matching `name` and `description`. Files are located und
 
 ## 7. Related Documents
 
-- [Commands Reference](./commands-reference.en.md)
-- [Directory Conventions](./directory-conventions.en.md)
-- [Architecture](./architecture.en.md)
-- [Usage Scenarios](./usage-scenarios.en.md)
+- [Commands Reference](./commands-reference.md)
+- [Directory Conventions](./directory-conventions.md)
+- [Architecture](./architecture.md)
+- [Usage Scenarios](./usage-scenarios.md)

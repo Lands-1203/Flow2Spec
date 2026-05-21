@@ -1,4 +1,4 @@
-[中文](./Flow2Spec-设计说明.md) | [English](./design-principles.en.md)
+[中文](../设计说明.md) | [English](./design-principles.md)
 
 # Flow2Spec Design Principles
 
@@ -38,7 +38,7 @@ Flow2Spec delivers the **Memory Coding persistence and maintenance loop**, not "
 
 ### 0.1 Knowledge Ring: Multi-Layer Memory
 
-Inside the knowledge ring: **horizontal narrowing** (L0 manifest → L1 matchers → L2 topics → L3 long docs) plus **vertical chaining** (`topicDependencies`: common → subdomain → whitelist → domain). The `match → expand → verify → act` pipeline operates on these layers; see [architecture.en.md §4](./architecture.en.md).
+Inside the knowledge ring: **horizontal narrowing** (L0 manifest → L1 matchers → L2 topics → L3 long docs) plus **vertical chaining** (`topicDependencies`: common → subdomain → whitelist → domain). The `match → expand → verify → act` pipeline operates on these layers; see [architecture.md §4](./architecture.md).
 
 ### 1. Separation of Knowledge and Rules
 
@@ -99,7 +99,7 @@ graph LR
     CMT -->|"Not in KB, remind\n-> kb-sync/kb-feat"| K
 
     D1["Architecture Docs"] -->|f2s-doc-arch| FIN["f2s-doc-final"]
-    D2["PDF Proposal"] -->|f2s-doc-pdf| FIN
+    D2["PDF/draft"] -->|f2s-doc-final| FIN
     FIN --> CTX["f2s-ctx-build"] --> K
 
     OLD["Existing Code/Docs"] -->|f2s-doc-add| K
@@ -482,7 +482,7 @@ Session context itself is an information source  ·  no need for users to organi
 | **Codex `AGENTS.md` + `renderProjectConfigBlock`** | Top-level **Read** hard constraint + **init snapshot table** (if inconsistent with disk, Read takes precedence). |
 | **Knowledge base `config-precheck` topic** | When routing hits, provides only **summary** and a pointer to the Codex full text, **not** a substitute for Read JSON. |
 
-**Authority remains** the **Read** result of the project-root JSON; each layer is a prompt, not a second source of truth. For the complete operational table and paths, see **[Usage Guide § 1. `f2s-*` and `flow2spec.config.json`](./usage-guide.en.md)**.
+**Authority remains** the **Read** result of the project-root JSON; each layer is a prompt, not a second source of truth. For the complete operational table and paths, see **[Usage Guide § 1. `f2s-*` and `flow2spec.config.json`](./usage-guide.md)**.
 
 #### 6. Skills don't restate unified entry rules, only reference them
 
@@ -612,7 +612,7 @@ Best suited when: has scale · long-term iteration · multi-tool or multi-person
 
 ## Related Documents
 
-- [Usage Guide](./usage-guide.en.md)
-- [Commands Reference](./commands-reference.en.md)
-- [Architecture](./architecture.en.md)
-- [Usage Scenarios](./usage-scenarios.en.md)
+- [Usage Guide](./usage-guide.md)
+- [Commands Reference](./commands-reference.md)
+- [Architecture](./architecture.md)
+- [Usage Scenarios](./usage-scenarios.md)

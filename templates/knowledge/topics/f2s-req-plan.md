@@ -2,7 +2,7 @@
 
 > 长文见配置根 **`skills/f2s-req-plan/SKILL.md`**。  
 > **`.task/` 真值源**：配置根 **`rules/f2s-task.*`**（Codex：`.codex/topics/f2s-task.md`）。  
-> 设计背景：[Flow2Spec 任务清单与变更追踪](../stock-docs/<任务清单说明>.md)（可选）。
+> 设计背景（可选）：[任务清单与变更追踪](../stock-docs/<任务清单说明>.md)。
 
 ## 依赖
 

@@ -1,2 +1,3 @@
 .agents/
 .DS_Store
+docs/*.json

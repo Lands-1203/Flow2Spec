@@ -1,4 +1,4 @@
-[中文](./README-体系与原理.md) | [English](./architecture.en.md)
+[中文](../体系与原理.md) | [English](./architecture.md)
 
 # Architecture & Principles
 
@@ -87,7 +87,7 @@ Codex does not read the `rules/` directory; execution constraints are carried th
 
 Flow2Spec controls execution behavior through two fields in the project root `flow2spec.config.json`: `subAgent` and `switchAgentVerification`.
 
-**How the Agent reads the above truth values**: multi-end prompts + **Read** as authority, see [usage-guide.en.md § 1 (the only detailed table)](./usage-guide.en.md); design summary see [design-principles.en.md § 4, 5.1](./design-principles.en.md).
+**How the Agent reads the above truth values**: multi-end prompts + **Read** as authority, see [usage-guide.md § 1 (the only detailed table)](./usage-guide.md); design summary see [design-principles.md § 4, 5.1](./design-principles.md).
 
 ### 6.1 Primary/Sub Agent Responsibility Division Principle
 
@@ -153,7 +153,7 @@ Design intent: Cross-verification introduces an external perspective, reducing t
 
 ## 8. Related Documents
 
-- [Usage Guide](./usage-guide.en.md)
-- [Commands Reference](./commands-reference.en.md)
-- [Directory Conventions](./directory-conventions.en.md)
-- [Usage Scenarios](./usage-scenarios.en.md)
+- [Usage Guide](./usage-guide.md)
+- [Commands Reference](./commands-reference.md)
+- [Directory Conventions](./directory-conventions.md)
+- [Usage Scenarios](./usage-scenarios.md)

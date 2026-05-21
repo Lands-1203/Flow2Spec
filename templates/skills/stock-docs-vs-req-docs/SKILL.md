@@ -32,4 +32,4 @@ description: 文档目录 stock-docs 与 req-docs 分工；触发词：stock-doc
 
 ## 详细约定
 
-见 Flow2Spec 包内 **`docs/README-目录与路径约定.md`**；技能顺序与 **f2s-doc-arch** / **f2s-doc-add** 见 **`docs/README-命令说明.md`**。具体步骤以配置根 **`skills/<技能名>/SKILL.md`**（如 **f2s-ctx-build**、**f2s-doc-add**）为准。
+以本技能对照表与配置根 **`skills/<技能名>/SKILL.md`**（如 **f2s-ctx-build**、**f2s-doc-add**、**f2s-doc-arch**）为准；`.Knowledge/topics/f2s-stock-docs-vs-req-docs.md` 为路由摘要。

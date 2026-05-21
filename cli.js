@@ -58,7 +58,7 @@ init 会:
   5. 每次 init 将包内 templates/knowledge/index.md 复制到 .Knowledge/template/index.template.md，供 f2s-kb-upgrade 技能与 .Knowledge/index.md 对照；不自动改写 index.md。（「知识库升级」指 f2s-kb-upgrade 技能，init 本身不是升级命令。）
   6. 规则与技能在各 agent 配置根加载；其他模版类文件在 .Knowledge/template/ 等目录。
 
-更多说明见 README.md 或 docs/Flow2Spec使用说明.md
+更多说明见 README.md 或 docs/使用说明.md
 `;
 
 if (sub === "--help" || sub === "-h" || !sub) {
@@ -324,7 +324,7 @@ ${indexLine}
 ${configLine}
 ${lines.join("\n")}
 
-建议阅读 README 或 docs/Flow2Spec使用说明.md，按「规则在配置根、文档在 .Knowledge」的方式使用。
+建议阅读 README 或 docs/使用说明.md，按「规则在配置根、文档在 .Knowledge」的方式使用。
 `);
     })
     .catch((e) => {

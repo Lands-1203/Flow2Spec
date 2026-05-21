@@ -1,4 +1,4 @@
-[中文](./README-命令说明.md) | [English](./commands-reference.en.md)
+[中文](../命令说明.md) | [English](./commands-reference.md)
 
 # Workflow and Skill Reference
 
@@ -153,19 +153,17 @@
 
 **Purpose**: Converts PDF technical proposals to Markdown format, saves to `req-docs/`, and can supplement the process description.
 
-**How It Works**: Targets the step before "implement from a proposal" — extracts structured content from the PDF (API definitions, data models, sequence flows, etc.) into Markdown under `req-docs/`. Unlike `f2s-doc-final`, the destination and use differ: `doc-pdf` writes to `req-docs/` for consumption by the `implement-tech-design` rule to drive coding; `doc-final` writes to `stock-docs/` for ingestion via `ctx-build`.
+**How It Works**: Extracts structured content from the PDF (API definitions, data models, sequence flows, etc.) into Markdown under `req-docs/` for editing and follow-up with `f2s-req-clarify` / `f2s-req-backend`. Unlike `f2s-doc-final`, `doc-pdf` writes to `req-docs/`; `doc-final` writes to `stock-docs/` for `ctx-build`. **Not recommended** as a shortcut for "PDF straight to coding" without clarification and a backend technical proposal.
 
 **Use Cases**:
-- A PDF technical proposal needs to be implemented
-- Historical PDF documents need to be managed
-- Cross-team deliverables are in PDF format and need conversion
+- Cross-team deliverables are in PDF format and need conversion to editable Markdown
+- Historical PDF proposals need to live under `req-docs/`
+- Provide a readable draft before `f2s-req-clarify` / `f2s-req-backend`
 
 **Relationships**:
 - **Prerequisite**: PDF document
 - **Output**: `.Knowledge/req-docs/<Proposal>.md`
-- **Next Step**:
-  - 1. If it is a requirement to implement: provide the converted proposal path with instructions "implement according to the technical proposal", driven by the `implement-tech-design` rule
-  - 2. If it is for knowledge base archival: follow the final-draft conversion flow `f2s-doc-final` -> `f2s-ctx-build`
+- **Next Step** (recommended): `f2s-req-clarify` → `f2s-req-backend` → implement from the technical proposal MD via `implement-tech-design`; for knowledge base archival use `f2s-doc-final` → `f2s-ctx-build`
 
 **Sub-Agent Invocation**:
 - `subAgent: false` (default): The main agent completes the full workflow
@@ -594,7 +592,7 @@ Controlled via `flow2spec.config.json` at the project root (all fields default t
 
 ### How Different Products "See" the Configuration (use with the field table below)
 
-`subAgent` and similar fields are written to the **on-disk JSON**; products do not guarantee automatic file opening. Therefore, multi-layered hints are provided via **Cursor rules / Claude hooks / Codex AGENTS snapshot table / knowledge base `config-precheck` summary**, but **the authoritative source remains `Read("flow2spec.config.json")`** (design rationale in [design-principles.en.md — Agent Orchestration § 5.1](./design-principles.en.md); talk / deck pacing in [intro deck HTML](../presentations/flow2spec-intro-public-en/index.html), config section). **The full path and table are maintained in one place**: [usage-guide.en.md Sec. 1, `f2s-*` and `flow2spec.config.json`](./usage-guide.en.md).
+`subAgent` and similar fields are written to the **on-disk JSON**; products do not guarantee automatic file opening. Therefore, multi-layered hints are provided via **Cursor rules / Claude hooks / Codex AGENTS snapshot table / knowledge base `config-precheck` summary**, but **the authoritative source remains `Read("flow2spec.config.json")`** (design rationale in [design-principles.md — Agent Orchestration § 5.1](./design-principles.md); talk / deck pacing in [intro deck HTML](../../presentations/flow2spec-intro-public-en/index.html) (internal); Chinese source in `flow2spec-intro-draft`, config section). **The full path and table are maintained in one place**: [usage-guide.md Sec. 1, `f2s-*` and `flow2spec.config.json`](./usage-guide.md).
 
 ### `subAgent` Field
 
@@ -632,20 +630,20 @@ A nested object, with each skill independently controlled:
 
 > `f2s-req-plan` is not constrained by this configuration; it always creates a task checklist. Legacy boolean values (`"changeTracking": true/false`) are backward-compatible and automatically expand to all three sub-fields on/off.
 
-For full principles and design intent, see [architecture.en.md Sec. 4. Agent Execution Model](./architecture.en.md).
+For full principles and design intent, see [architecture.md Sec. 4. Agent Execution Model](./architecture.md).
 
 ---
 
 ## 7) Quick Reference
 
-For typical work scenarios and full workflows, see [Usage Guide § 3. Typical Workflows](./usage-guide.en.md).
+For typical work scenarios and full workflows, see [Usage Guide § 3. Typical Workflows](./usage-guide.md).
 
-For a complete directory description, see [Directory Conventions](./directory-conventions.en.md).
+For a complete directory description, see [Directory Conventions](./directory-conventions.md).
 
 ---
 
 Related Documents:
-- [Usage Guide](./usage-guide.en.md)
-- [Directory Conventions](./directory-conventions.en.md)
-- [Architecture](./architecture.en.md)
-- [Usage Scenarios](./usage-scenarios.en.md)
+- [Usage Guide](./usage-guide.md)
+- [Directory Conventions](./directory-conventions.md)
+- [Architecture](./architecture.md)
+- [Usage Scenarios](./usage-scenarios.md)
