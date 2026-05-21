@@ -16,8 +16,6 @@ See [architecture.md §1](./architecture.md) for Memory Coding four rings.
 
 | Path | Responsibility |
 | --- | --- |
-| `docs/` | Product docs (**Chinese**): usage guide, commands reference, design principles, etc. |
-| `docs/en/` | Product docs (**English**): six paired documents; see [README.md](./README.md) |
 | `.Knowledge/stock-docs/` | **L3** Architecture, final drafts, reference documents |
 | `.Knowledge/req-docs/` | **L3** Requirement clarification, technical proposals |
 | `.Knowledge/topics/` | **L2** Topic summaries (hard constraints, boundaries, pointers) |
