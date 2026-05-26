@@ -10,7 +10,7 @@
 🔧 **快速体验**：
 
 ```bash
-npx @ctrip/flow2spec@latest init
+npx @double-codeing/flow2spec@latest init
 ```
 
 ---
