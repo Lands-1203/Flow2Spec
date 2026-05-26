@@ -68,7 +68,7 @@ Each task hits 1–4 topics, ~300 lines. Business constraints — Redis lock key
 **Minimum viable setup is an empty skeleton.**
 
 ```bash
-npx @ctrip/flow2spec@latest init
+npx @double-codeing/flow2spec@latest init
 ```
 
 1 minute generates the directory structure + routing config. Empty, ready to use. **Next requirement hits whichever area → you document that area.** No upfront investment needed.
@@ -88,7 +88,7 @@ Real data from a production repo running for 3 months:
 ### Step 1: Initialize (one-time)
 
 ```bash
-npx @ctrip/flow2spec@latest init
+npx @double-codeing/flow2spec@latest init
 ```
 
 Follow the prompts to completion — generates the `.Knowledge/` directory structure and routing config skeleton.
