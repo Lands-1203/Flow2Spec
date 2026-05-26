@@ -10,7 +10,7 @@
 🔧 **Quick start**:
 
 ```bash
-npx @ctrip/flow2spec@latest init
+npx @double-codeing/flow2spec@latest init
 ```
 
 ---
