@@ -69,7 +69,7 @@ topic 里，AI 不用从源码猜。
 **最小可用集是一个空骨架。**
 
 ```bash
-npx @ctrip/flow2spec@latest init
+npx @double-codeing/flow2spec@latest init
 ```
 
 1 分钟生成目录结构 + 路由配置，空的，直接跑。**下次需求命中哪块，写哪块**，不提前建设。
@@ -89,7 +89,7 @@ npx @ctrip/flow2spec@latest init
 ### 第一步：初始化（一次性）
 
 ```bash
-npx @ctrip/flow2spec@latest init
+npx @double-codeing/flow2spec@latest init
 ```
 
 跟着提示走完，生成 `.Knowledge/` 目录结构和路由配置骨架。
