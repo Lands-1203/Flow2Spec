@@ -84,6 +84,72 @@ npx @ctrip/flow2spec@latest init
 
 ---
 
+## 使用流程
+
+### 第一步：初始化（一次性）
+
+```bash
+npx @ctrip/flow2spec@latest init
+```
+
+跟着提示走完，生成 `.Knowledge/` 目录结构和路由配置骨架。
+
+---
+
+### 第二步：建知识库（一次性）
+
+在 Agent 工具（Cursor / Claude Code）中执行：
+
+1. `/f2s-doc-arch` — 扫描项目架构，生成架构说明初稿，跟着流程走直到生成主题（topics）
+
+> 这一步只做一次，之后日常开发不需要重复。
+
+2. `/f2s-doc-add <文件夹路径>` — 把还没入库的功能模块路径补进来
+
+> 这一步在进入开发前，发现没有某个模块能力的知识的时候选择性的去做
+
+---
+
+### 第三步：日常开发（每次需求）
+
+**大需求：**
+
+```
+/f2s-req-clarify  一句话需求或粘贴 PRD    ← 需求澄清
+/f2s-req-backend                          ← 生成技术方案
+自然语言：实现上面的技术方案              ← AI 开始实现
+（调试验证）
+/f2s-kb-feat  新增 xxx 能力               ← 功能缺失时补能力
+/f2s-kb-fix   修复 xxx                    ← 有 BUG 时修复
+/f2s-kb-sync                              ← 同步知识库
+/f2s-git-commit                           ← 检查并提交
+```
+
+**小需求 / 日常改动：**
+
+```
+/f2s-kb-feat  新增 xxx 能力               ← 功能缺失
+/f2s-kb-fix   修复 xxx                    ← 改 BUG
+```
+
+---
+
+## 常用命令速查
+
+| 命令 | 用途 |
+|---|---|
+| `/f2s-req-clarify` | 需求澄清 |
+| `/f2s-req-backend` | 生成技术方案 |
+| `/f2s-kb-feat` | 新增小功能 |
+| `/f2s-kb-fix` | 改 BUG |
+| `/f2s-kb-sync` | 同步知识库 |
+| `/f2s-git-commit` | 提交代码 |
+| `/f2s-doc-add <路径>` | 接口模块入知识库 |
+
+更多命令详见 [使用说明](./docs/使用说明.md) · [命令说明](./docs/命令说明.md)
+
+---
+
 ## 什么时候别用
 
 - **一次性脚本** — 写完就删的东西，直接丢几个 Markdown 给 AI 更快

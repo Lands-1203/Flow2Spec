@@ -83,6 +83,72 @@ Real data from a production repo running for 3 months:
 
 ---
 
+## Usage Flow
+
+### Step 1: Initialize (one-time)
+
+```bash
+npx @ctrip/flow2spec@latest init
+```
+
+Follow the prompts to completion — generates the `.Knowledge/` directory structure and routing config skeleton.
+
+---
+
+### Step 2: Build the Knowledge Base (one-time)
+
+In your Agent tool (Cursor / Claude Code):
+
+1. `/f2s-doc-arch` — Scan your project architecture, generate an architecture draft, and follow the flow until topics are created
+
+> This step is done once. You won't need to repeat it for daily development.
+
+2. `/f2s-doc-add <folder path>` — Import any feature modules that haven't been added yet
+
+> Do this selectively before starting development when you notice a module's knowledge is missing from the knowledge base.
+
+---
+
+### Step 3: Daily Development (every feature or fix)
+
+**Large features:**
+
+```
+/f2s-req-clarify  one-line description or paste PRD    ← clarify requirements
+/f2s-req-backend                                       ← generate technical proposal
+natural language: implement the proposal above         ← AI starts coding
+(debug and verify)
+/f2s-kb-feat  add xxx capability                       ← if something's missing
+/f2s-kb-fix   fix xxx                                  ← if there's a bug
+/f2s-kb-sync                                           ← sync knowledge base
+/f2s-git-commit                                        ← check and commit
+```
+
+**Small changes / quick fixes:**
+
+```
+/f2s-kb-feat  add xxx capability                       ← missing feature
+/f2s-kb-fix   fix xxx                                  ← bug fix
+```
+
+---
+
+## Quick Command Reference
+
+| Command | Purpose |
+|---|---|
+| `/f2s-req-clarify` | Clarify requirements |
+| `/f2s-req-backend` | Generate technical proposal |
+| `/f2s-kb-feat` | Add a new capability |
+| `/f2s-kb-fix` | Fix a bug |
+| `/f2s-kb-sync` | Sync knowledge base |
+| `/f2s-git-commit` | Commit code |
+| `/f2s-doc-add <path>` | Import API module into knowledge base |
+
+For the full command list, see [Usage Guide](./docs/en/usage-guide.md) · [Commands Reference](./docs/en/commands-reference.md)
+
+---
+
 ## When NOT to Use
 
 - **One-off scripts** — throwaway code is faster with a few Markdown files for AI context

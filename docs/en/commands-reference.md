@@ -2,6 +2,29 @@
 
 # Workflow and Skill Reference
 
+## Command Quick Reference
+
+| Command | Purpose | Category |
+|---|---|---|
+| `/f2s-doc-arch` | Scan project, generate architecture draft | Doc Curation |
+| `/f2s-doc-final` | Convert PDF / draft to standardized final-draft format | Doc Curation |
+| `/f2s-ctx-build` | Sync final drafts into knowledge base routing (topics / matchers / manifest) | Doc Curation |
+| `/f2s-doc-add <path>` | Aggregate multi-file implemented capabilities into knowledge base | Doc Curation |
+| `/f2s-ctx-rm` | Remove knowledge topic and index mapping for a stock-docs document | Doc Curation |
+| `/f2s-doc-pdf` | Convert PDF technical proposal to Markdown, save to req-docs | Doc Curation |
+| `/f2s-req-clarify` | Clarify requirements via multi-round Q&A | Requirements |
+| `/f2s-req-backend` | Generate backend technical proposal from clarified requirements | Requirements |
+| `/f2s-req-plan` | Break a technical proposal into a task checklist and implement (always creates tasks, regardless of `changeTracking.*` config) | Requirements |
+| `/f2s-git-commit` | Commit code with automatic knowledge base coverage check | Commit |
+| `/f2s-kb-feat` | Add new capability + sync knowledge base | KB Maintenance |
+| `/f2s-kb-fix` | Fix a bug + auto-sync knowledge base | KB Maintenance |
+| `/f2s-kb-sync` | Sink implemented capabilities from the conversation into the knowledge base | KB Maintenance |
+| `/f2s-kb-merge` | Resolve knowledge base conflicts after a Git merge | KB Maintenance |
+| `/f2s-kb-migrate` | One-time migration of a legacy knowledge base to `.Knowledge/` | KB Maintenance |
+| `/f2s-kb-upgrade` | Upgrade knowledge base template, align manifest + matchers shards | KB Maintenance |
+
+---
+
 ## 1) Document Curation (stock-docs Pipeline)
 
 ### `f2s-doc-arch`
@@ -233,6 +256,8 @@
 ### `f2s-req-plan`
 
 **Purpose**: Starting from a technical proposal or requirement description, **always creates a task checklist**, then implements the code accordingly. Does not depend on the `changeTracking` configuration; represents the user's explicit need for traceable task management.
+
+> **About task checklists**: Task checklists are not exclusive to `/f2s-req-plan`. `/f2s-kb-feat`, `/f2s-kb-fix`, and `implement-tech-design` also create task checklists automatically when the corresponding `changeTracking.*` field is set to `true` in `flow2spec.config.json`. The distinction of `/f2s-req-plan` is that it **always creates a checklist regardless of any config** — suited for large features where the user explicitly wants to track progress across sessions.
 
 **How It Works**: Runs a five-phase closed loop: parse → plan → confirm → implement → archive. (1) Parse the technical proposal for implementation points; (2) split into executable tasks at module/feature granularity and write to `.task/`; (3) show the draft to the user, lock the checklist after confirmation; (4) implement item by item, checking off `task.md` immediately when each item completes; (5) archive when all are done. Unlike the `implement-tech-design` rule, `req-plan` always carries task tracking and can parallelize implementation with sub-agents for large work; the rule path is lightweight, single-threaded coding.
 
