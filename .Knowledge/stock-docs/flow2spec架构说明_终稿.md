@@ -1,6 +1,6 @@
 # Flow2Spec 架构说明（终稿）
 
-> 适用：Flow2Spec 包本身（`@ctrip/flow2spec v3.0.1-beta.1`）。
+> 适用：Flow2Spec 包本身（`@double-codeing/flow2spec v3.0.1-beta.1`）。
 > 本终稿由 `f2s-doc-final` 从初稿转换而来，可用于 `f2s-ctx-build` 同步知识路由。
 
 ---
@@ -9,7 +9,7 @@
 
 | 概念 | 说明 |
 | --- | --- |
-| **Flow2Spec** | CLI 工具包（`@ctrip/flow2spec`），用于在业务仓库初始化并维护一套可持续的 AI 协作结构。Node.js >= 16，零外部运行时依赖。 |
+| **Flow2Spec** | CLI 工具包（`@double-codeing/flow2spec`），用于在业务仓库初始化并维护一套可持续的 AI 协作结构。Node.js >= 16，零外部运行时依赖。 |
 | **`.Knowledge/`** | 业务知识库根目录，统一承载 `stock-docs`（存量文档）、`req-docs`（需求/技术方案）、`topics`（主题路由摘要）、`matchers`（匹配词分片）、`index.md`（人读导航）、`manifest-routing.json`（机读路由事实源）。 |
 | **配置根** | 各 AI 工具原生配置目录：`.cursor/`（Cursor）、`.claude/`（Claude Code）、`.codex/`（Codex）。保留 `rules/` 或 `skills/`，不破坏原生加载机制。 |
 | **Agent** | 支持的 AI 工具类型：cursor、claude、codex；由 `lib/agents.js` 定义其目录结构与格式差异。 |
@@ -47,9 +47,9 @@
 
 ## 关键流程
 
-### 流程一：项目初始化（推荐 `npx @ctrip/flow2spec@latest init`）
+### 流程一：项目初始化（推荐 `npx @double-codeing/flow2spec@latest init`）
 
-在业务仓库根执行 **`npx @ctrip/flow2spec@latest init [cursor|claude|codex …] [--reset-knowledge]`**；若已 **`npm install -g @ctrip/flow2spec@latest`**，可使用等价的 **`flow2spec init …`**。
+在业务仓库根执行 **`npx @double-codeing/flow2spec@latest init [cursor|claude|codex …] [--reset-knowledge]`**；若已 **`npm install -g @double-codeing/flow2spec@latest`**，可使用等价的 **`flow2spec init …`**。
 
 1. **补齐配置**：若项目根不存在 `flow2spec.config.json`，从包模板补齐（默认 `subAgent=false`, `switchAgentVerification=false`）；已存在则不覆盖。
 2. **创建知识库目录**：创建 `.Knowledge/` 及其子目录（`stock-docs`、`req-docs`、`matchers` 等）。
@@ -86,7 +86,7 @@
 | 新增能力（补全实现 + 知识库） | `f2s-kb-feat` |
 | 全局同步已实现能力 | `f2s-kb-sync` |
 | 解决合并后上下文冲突 | `f2s-kb-merge` |
-| 知识库模板升级 | `f2s-kb-upgrade`（其中一步代跑 `npx @ctrip/flow2spec@latest init`，或已全局安装时的 `flow2spec init`） |
+| 知识库模板升级 | `f2s-kb-upgrade`（其中一步代跑 `npx @double-codeing/flow2spec@latest init`，或已全局安装时的 `flow2spec init`） |
 | 旧版一次性迁移 | `f2s-kb-migrate` |
 
 ### 流程五：任务路由与执行（`match → expand → verify → act`）
@@ -102,7 +102,7 @@
 
 | 命令 | 说明 | 入口 |
 | --- | --- | --- |
-| `npx @ctrip/flow2spec@latest init [agent ...] [--reset-knowledge]`（全局安装后可用 `flow2spec init …`） | 初始化 `.Knowledge/` 与各 agent 配置根 | `cli.js` |
+| `npx @double-codeing/flow2spec@latest init [agent ...] [--reset-knowledge]`（全局安装后可用 `flow2spec init …`） | 初始化 `.Knowledge/` 与各 agent 配置根 | `cli.js` |
 | `flow2spec config` | 打印合并缺省后的配置解析结果 | `cli.js` |
 | `flow2spec --help` | 显示帮助信息 | `cli.js` |
 
@@ -138,7 +138,7 @@
 
 ### 新项目接入方式
 
-1. 在目标业务仓库执行：`npx @ctrip/flow2spec@latest init [cursor|claude|codex]`
+1. 在目标业务仓库执行：`npx @double-codeing/flow2spec@latest init [cursor|claude|codex]`
 2. 检查项目根 `flow2spec.config.json`，按需调整 `subAgent` / `switchAgentVerification`
 3. 使用 `f2s-doc-arch` → `f2s-doc-final` → `f2s-ctx-build` 沉淀项目上下文
 4. 使用 `f2s-req-clarify` → `f2s-req-backend` 生成技术方案，再由 `implement-tech-design` 执行编码
