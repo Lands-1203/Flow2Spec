@@ -81,6 +81,15 @@ Codex does not read the `rules/` directory; execution constraints are carried th
 - Change tracking chain: `changeTracking.*` config -> `f2s-task` rules (automatic) -> `.task/` task checklist -> cross-session continuation
 - Package template/routing shape alignment with config root: `f2s-kb-upgrade` (**do not** equate running `flow2spec init` alone with "knowledge base upgrade"); migrate legacy repo structure into `.Knowledge`: `f2s-kb-migrate`
 
+The documentation curation chain produces two document types:
+
+| | Draft (初稿) | Final (终稿) |
+|--|------|------|
+| Nature | Raw extraction from source files | Structured knowledge for AI/knowledge base consumption |
+| Structure | Source list, per-module summary, pending items | Core concepts, business rules, key flows, interfaces |
+| Perspective | "What I read" | "What the AI needs to know" |
+| Uncertain content | Retained, explicitly marked "pending" | Cleaned up or absorbed after confirmation |
+
 ---
 
 ## 6. Agent Execution Model
