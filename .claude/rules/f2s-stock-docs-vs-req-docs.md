@@ -12,4 +12,4 @@ paths:
 - **`.Knowledge/stock-docs/`**：PDF/初稿/终稿/架构说明等**存量源文档**；`f2s-ctx-build`、`f2s-doc-final`、`f2s-doc-arch`、`f2s-doc-add` 的文档落盘优先在此。`sourceDoc` 统一写 `.Knowledge/stock-docs/<文件名>.md`。
 - **`.Knowledge/req-docs/`**：需求澄清、技术方案（前后端/数据/任务等）、`f2s-doc-pdf` 输出的「按方案实现」MD；`implement-tech-design` 的触发范围为 `.Knowledge/req-docs/**/*.md`。
 
-完整约定与链接表见仓库 **`docs/目录与路径约定.md`**（包内说明；用户项目无此目录时以 init 写入的 **skills** 与 **rules** 为准）。
+完整约定见本规则与 **`skills/stock-docs-vs-req-docs/SKILL.md`**；`.Knowledge/topics/f2s-stock-docs-vs-req-docs.md` 为路由摘要。

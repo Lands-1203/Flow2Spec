@@ -137,12 +137,12 @@ description: >
 # <任务名> 上下文
 
 ## 涉及文件
-- `src/payment/callback.js`
-- `src/payment/retry.js`
+- `src/<模块>/callback.js`
+- `src/<模块>/retry.js`
 
 ## 相关资料
-- `.Knowledge/req-docs/payment-spec.md`
-- `.Knowledge/stock-docs/payment-arch.md`
+- `.Knowledge/req-docs/<能力>-spec.md`
+- `.Knowledge/stock-docs/<能力>-arch.md`
 
 ## 用户代办清单
 - 见同目录 `user-todos.md`（须用户执行的项统一写在该文件，勿仅在对话中罗列）
@@ -174,7 +174,7 @@ description: >
 
 ## 2026-05-09
 
-- [ ] 在预发 MySQL 执行：`.Knowledge/req-docs/xxx.sql`（先备份）
+- [ ] 在目标环境执行：`.Knowledge/req-docs/xxx.sql`（先备份）
 - [ ] 在配置中心打开功能开关 `feature.foo.enabled`
 
 ## 2026-05-10

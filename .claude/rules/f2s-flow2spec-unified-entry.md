@@ -80,6 +80,7 @@ description: Flow2Spec 统一知识库入口，按 .Knowledge 渐进式读取
 
 ## 禁止项
 
+- **`templates/` 可下发约束**（经 `init` 会克隆到任意业务仓）：技能/规则/知识模板正文中的示例须**中性**——勿写特定业务域名称、单一组织 npm 包名、仅 Flow2Spec 产品仓存在的 `docs/` 路径；用 `<能力>`、`src/<模块>/` 等占位。
 - 使用 `git worktree` 或隔离目录跑子任务后，**禁止**在未 `git worktree remove` / 未交接删除命令的情况下结束会话（见上文「Git worktree 与子任务工作目录卫生」）。
 - 未查看 `.Knowledge/manifest-routing.json` 前，禁止进行全仓无范围扫描；`.Knowledge/index.md` 在需确认主题语义时再读，禁止与 manifest 交替重复读取以代替决策。
 - 禁止把 `stock-docs` 作为直接编码输入文档；按方案实现应使用 `req-docs`。

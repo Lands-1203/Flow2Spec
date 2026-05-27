@@ -23,7 +23,7 @@
 | `subAgent` | true | 技能规定用子 agent 的步骤：`true` 执行，`false` 全在主会话。用户「动态判断谁用子 agent」**仅当本项为 true** 时有效，否则该说明失效。各 f2s 阶段细则见技能正文（模板未统一写死）。 |
 | `switchAgentVerification` | true | **切换 agent 校验**：`false` 时落盘侧同会话内验（子写子验、主写主验）。`true` 且技能写明依赖本项时交叉验：子落盘→主验，主落盘→子验；无子 agent（如 `subAgent` false）则主落盘→子验不发生、全主验。旧键 `subAgentVerification` 仍可被解析。 |
 | `changeTracking.feat` | true | `true` → `f2s-kb-feat` **步骤 0** 必须创建/续作 `.task/active/` 变更追踪任务；`false` → 跳过，不创建 `.task/` 目录。 |
-| `changeTracking.fix` | true | `true` → `f2s-kb-fix` **步骤 0** 必须创建/续作 `.task/active/` 变更追踪任务；`false` → 跳过。 |
+| `changeTracking.fix` | false | `true` → `f2s-kb-fix` **步骤 0** 必须创建/续作 `.task/active/` 变更追踪任务；`false` → 跳过。 |
 | `changeTracking.implement` | true | `true` → `f2s-implement-tech-design` **步骤 2.5** 写入任务清单、**步骤 5** 归档完成；`false` → 跳过。 |
 
 ### `subAgent` 与 `switchAgentVerification`（语义与上表一致；以磁盘配置为准）
