@@ -137,6 +137,11 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 3. 对 `topicPaths` 中缺少 metadata 的主题做分类分析：**必须 Read 对应 `.Knowledge/topics/<id>.md` 正文**，禁止仅凭 topicId 名称推断。证据明确则写入 `inferred`；证据不足时**不写 metadata**，但须在摘要中列出推断方向与依据（如「建议 policy，正文含多处强制约束」），供用户确认后手动补写 `manual`。
 4. 分类判断以 `f2s-topic-authoring` 准则第 3 节为准，Agent 基于 topic 正文判断主要性质，写 `primary`；同时覆盖多个性质时其余写 `tags`（可选）。
 5. 禁止因为补分类创建、重命名或拆分 topic。
+6. **主题粒度审计**（不阻断升级，仅列入摘要）：逐项检查，命中任一信号时在步骤 5 摘要中列为「建议拆分」：
+   - 对应 stock-doc 超过 **300–500 行**；
+   - `includeAny` 词数超过 **12 个**；
+   - topic 正文包含超过 **3 个不相干职责域**的二级标题；
+   - 该 topic 同时被多种不相干任务类型频繁命中（可从 `taskToTopicRules` 和 matcher 词宽度判断）。
 
 ### 步骤 3b：`index.md` 融合与 `template/index.template.md`（必须执行）
 

@@ -24,7 +24,9 @@ alwaysApply: false
 - **文件名**：`.Knowledge/topics/<topic-id>.md`；若该 topic 与同名 `f2s-*` 技能 / 规则强绑定（如 `f2s-task` / `f2s-req-plan`），文件名可加 `f2s-` 前缀以示同源。
 - **不要**：版本后缀（`-v2` / `-new`）、个人花名、与 `index.md` 行级标题冲突的同义词。
 
-## 2. topic 正文骨架
+## 2. topic 定位与正文骨架
+
+**topic 的定位**：可执行路由摘要 + 关键边界。topic 可以包含必要的边界说明、关键流程步骤、禁止项、配置摘要——Agent 读完即可执行或判断是否需要继续下钻；**不应承载**完整实现细节、长文背景或可在 stock-doc 里查的原始内容。stock-doc 承载完整背景与长文细节，topic 指向它。
 
 每个 topic 至少包含：
 
@@ -70,13 +72,36 @@ alwaysApply: false
 
 - 仅术语相邻（都谈"知识库"）→ 不写依赖，靠 `index.md` 语义边界即可。
 - 跨主题信息互查（A 想"了解一下" B）→ 不写依赖，靠 `taskToTopicRules` 次高候选 + `expand` 补召回。
+- **概述 → 详情导航**：大功能主 topic 与其子模块 topic 之间是"关联/导航"关系，不是强前置依赖——子模块 topic 通过各自的 matcher 独立命中，不写 `A → B`；主 topic 正文里写子模块 stock-doc 的可点击链接作为导航入口。
 - **传递依赖不重复声明**：若 `A→B`、`B→C` 已成立，禁止再写 `A→C`（读 B 时会自然带上 C）。
 
 **DAG 与最小化**：`topicDependencies` 必须是 DAG，禁止环；保持最小边集。
 
 **判定时机**：终稿与新 / 改 topic 落盘后，扫正文中**反引号引用的其他 topic id 与规则文件名**，逐个套四问；命中即写入 `manifest-routing.topicDependencies`，**并在新 topic 正文显式写依赖声明**（见骨架第 4 条）。
 
-## 5. rule 是否需新建对应 topic
+## 5. 大功能拆分策略
+
+当一个业务功能体量较大时，推荐「主 topic + 子 topic」结构，而非单个大 topic。
+
+**何时拆分（软约束，满足任一评估是否需拆）**：
+
+- 对应 stock-doc 超过 **300–500 行**：建议评估拆分，不强制阻断；
+- matcher `includeAny` 超过 **12 个**：主题过宽信号；
+- topic 正文包含超过 **3 个不相干职责域**的二级标题；
+- `f2s-kb-upgrade` 审计时发现同一 topic 被多种不相干任务类型反复命中。
+
+**拆分方式**：
+
+- **主 topic**（`primary: feature`）：写业务闭环、入口边界、子模块索引，正文里用可点击 stock-doc 链接指向各细节文档；不写子模块的实现细节。
+- **子模块 topic**：按实际语义各自写 `feature` / `module` / `config` / `policy`，不预设类型；各自拥有独立 matcher，通过细分触发词独立命中。
+- **stock-doc**：允许长文；超过阈值时建议拆成多份 focused stock-doc（如 `<功能名>-业务规则_终稿.md`、`<功能名>-数据模型_终稿.md`），每份对应一个子 topic。
+
+**不要做的事**：
+
+- 不用 `topicDependencies` 表达"概述 → 详情"导航关系（见第 4 节反向排除）；
+- 不为拆分而强行制造子 topic，若子模块本身不会被独立路由命中，不必建 topic。
+
+## 6. rule 是否需新建对应 topic
 
 判据：**该 rule 是否会作为用户任务路由命中**。
 
@@ -85,7 +110,7 @@ alwaysApply: false
 
 误区：「重要的规则就该有 topic」——重要不等于"用户路由命中"；让消费方 SKILL 在正文里直接 `Read rules/<id>.*` 全文即可，无需走 manifest 路由。
 
-## 6. 写盘权属（指针）
+## 7. 写盘权属（指针）
 
 `manifest-routing.json` / `.Knowledge/index.md` / `.Knowledge/topics/*.md` 的写权约束**以 `f2s-flow2spec-unified-entry` 与各 SKILL 内「写权硬约束」为准**，本条不复述；遇分歧以统一入口与对应 SKILL 为准。
 
