@@ -1,7 +1,6 @@
 # Flow2Spec Knowledge Index
 
-> **读前区分（本仓库）**：本文件与同级目录 **`.Knowledge/`** 属于 **Flow2Spec 产品开发 Git 仓库**自用：用于**追踪与记录 Flow2Spec 作为产品**的能力说明、路由样例、`stock-docs` 终稿等（人读 + 本仓 `manifest-routing`）。**随包发布、并由 `flow2spec init` 写入各业务仓的默认索引与规则骨架**来自仓库 **`templates/`** 与 **`lib/`**（源代码与模板），二者是 **交付物**，不是本 `.Knowledge/` 的另一套「正文副本」；在业务仓内工作时，以该仓根目录 `.Knowledge/` 与 `init` 落盘为准。  
-> **Agent 修包边界（本仓专用）**：在本**产品开发仓**内让 Agent 改 f2s 能力 / 规则 / CLI 时，**只改** `templates/`、`lib/` 等交付物，**禁止改** `.cursor/`、`.claude/`、`.codex/`（init 落盘副本，避免 diff 看不清真值变更）。细则见 [产品仓 Agent 修包边界](stock-docs/Flow2Spec-产品仓-Agent修包边界.md)。**不**写入包内 `templates/skills`。
+> **路径约定**：下文 **`.Knowledge/`**、**`manifest-routing.json`** 等路径均相对于**本仓库根目录**（即已运行 `flow2spec init` 的当前项目）。
 
 本文件是 **人读导航**：主题说明、关联文档摘要、语义边界。  
 **机读事实源** 以 `.Knowledge/manifest-routing.json` + `taskToTopicRules[].matcherPath` 指向的 `.Knowledge/matchers/*.json` 分片为准（不再使用 `.Knowledge/manifest-matchers.json`）。
@@ -66,9 +65,9 @@
 
 | 情况 | 你怎么做 |
 | --- | --- |
-| 有文档但没配到（1a） | 维护侧：`f2s-kb-build` / `f2s-kb-sync` / `f2s-kb-add` 补路由与 `includeAny`。执行侧：分诊主题澄清任务类型，**不**用全仓扫替代 manifest。 |
+| 有文档但没配到（1a） | 维护侧：`f2s-ctx-build` / `f2s-kb-sync` / `f2s-doc-add` 补路由与 `includeAny`。执行侧：分诊主题澄清任务类型，**不**用全仓扫替代 manifest。 |
 | 配到了但不够（1b） | 走依赖与次高候选 → `verify` 点名缺哪篇文档；仍缺则向用户要路径或补 `req-docs`。 |
 | 库里没有（2） | 承认缺口 → 代码下钻或请用户补需求/方案文档。 |
 | 反复读 manifest 费 token（2a） | 同一任务线内 routing 只当快照；只读命中项的单个 matcher；不遍历整个 `matchers/` 目录枚举；`index.md` 勿与 routing 循环互刷。 |
 
-**说明**：「路由/知识已更新」指 `f2s-*`（如 `f2s-kb-build`、`f2s-kb-sync`、`f2s-kb-add`、`f2s-kb-fix` 等）产出或手改 `manifest-routing` / `matchers` 分片；**`flow2spec init` 不撰写业务文档**，以模板补齐与配置根落盘为主，勿与知识库内容更新混为一谈。
+**说明**：「路由/知识已更新」指 `f2s-*`（如 `f2s-ctx-build`、`f2s-kb-sync`、`f2s-doc-add`、`f2s-kb-fix` 等）产出或手改 `manifest-routing` / `matchers` 分片；**`flow2spec init` 不撰写业务文档**，以模板补齐与配置根落盘为主，勿与知识库内容更新混为一谈。

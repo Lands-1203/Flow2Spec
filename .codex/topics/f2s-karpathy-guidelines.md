@@ -1,6 +1,6 @@
 # Karpathy 式编码行为准则
 
-> 与项目内 Flow2Spec / `f2s-*` 规则**并行**；若某条与 f2s 强制步骤冲突，**以 f2s 与项目约定为准**。
+> 来源与同步：[forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills)（MIT），思想来自 [Andrej Karpathy 对 LLM 写代码常见问题的观察](https://x.com/karpathy/status/2015883857489522876)。与项目内 Flow2Spec / `f2s-*` 规则**并行**；若某条与 f2s 强制步骤冲突，**以 f2s 与项目约定为准**。
 
 用于减少常见「模型写代码」失误的行为约定。
 

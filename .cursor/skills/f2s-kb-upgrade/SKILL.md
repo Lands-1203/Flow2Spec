@@ -11,8 +11,8 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 ## 边界（避免误区）
 
-- **`flow2spec init` 不写业务知识**：不替代 `f2s-kb-add`、`f2s-kb-fix`、`f2s-kb-feat`、`f2s-kb-sync`、`f2s-kb-build` 等对 `stock-docs` / `req-docs` / `topics` 正文与业务向路由词条的维护。
-- 本技能跑通的是 **包版本下的目录、模板占位、路由结构对齐**；用户若说「把新能力写进知识库」，应引导 **`f2s-kb-sync` / `f2s-kb-add`** 等，而非仅 `f2s-kb-upgrade`。
+- **`flow2spec init` 不写业务知识**：不替代 `f2s-doc-add`、`f2s-kb-fix`、`f2s-kb-feat`、`f2s-kb-sync`、`f2s-ctx-build` 等对 `stock-docs` / `req-docs` / `topics` 正文与业务向路由词条的维护。
+- 本技能跑通的是 **包版本下的目录、模板占位、路由结构对齐**；用户若说「把新能力写进知识库」，应引导 **`f2s-kb-sync` / `f2s-doc-add`** 等，而非仅 `f2s-kb-upgrade`。
 
 ## 编排（主 / 子 agent）
 
@@ -111,23 +111,23 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 **本技能步骤 2** `flow2spec init` 成功后，先执行「旧文件清理 + 引用修复」：
 
-> **skill 目录自动对齐**：`flow2spec init` 现已自动删除配置根 `skills/` 中不再存在于 `templates/skills/` 的旧目录（重命名/删除的 skill 如 `f2s-ctx-build`、`f2s-doc-add`、`f2s-rule-capture`、`stock-docs-vs-req-docs` 等），**无需 Agent 手动清理**。
-
-1. 清理旧命名主题文件（仅在文件存在时删除，均为无 `f2s-` 前缀的旧版遗留）：
+1. 清理旧主题文件（仅在文件存在时删除）：
    - `.Knowledge/topics/flow2spec-architecture.md`
    - `.Knowledge/topics/implement-tech-design.md`
+   - `.Knowledge/topics/stock-docs-vs-req-docs.md`
    - `templates/knowledge/topics/implement-tech-design.md`
+   - `templates/knowledge/topics/stock-docs-vs-req-docs.md`
 2. 修复引用（仅在文件存在时更新；**`.Knowledge/index.md` 正文不由 init 改写**，见步骤 3b）：
    - `templates/knowledge/index.md`
    - `templates/knowledge/manifest-routing.json`
    - `.Knowledge/index.md`（按需人工或技能侧改路径/段落）
    - `.Knowledge/manifest-routing.json`
-3. 引用更新目标（确认使用新名）：
+3. 引用更新目标：
    - `.Knowledge/topics/f2s-flow2spec-architecture.md`
    - `.Knowledge/topics/f2s-implement-tech-design.md`
    - `.Knowledge/topics/f2s-stock-docs-vs-req-docs.md`
 
-> 口径：只清理”旧命名主题文件”，不删除带 `f2s-` 前缀的现行主题文件。
+> 口径：只清理“旧命名主题文件”，不删除带 `f2s-` 前缀的新主题文件。
 
 ### 步骤 3b：`index.md` 融合与 `template/index.template.md`（必须执行）
 
