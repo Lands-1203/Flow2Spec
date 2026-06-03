@@ -525,14 +525,8 @@
 
 The following are not skill commands but rules activated by trigger words to guide Agent behavior.
 
-### `f2s-coding-guide`
 
-**Trigger Words**: `alwaysApply` (always on; no explicit trigger needed)
-
-**Purpose**: Flow2Spec's built-in Karpathy-style coding discipline to improve the quality of agent coding decisions.
-
-**How It Works**: Four behavioral constraints distilled from Andrej Karpathy's observations on common LLM coding mistakes, applied as an `alwaysApply` rule that implicitly governs all `f2s-*` skill runs: (1) think before coding (state assumptions; ask when unsure); (2) simplicity first (minimum code to solve the problem); (3) surgical edits (touch only what must change; match existing style); (4) goal-driven execution (define verifiable success criteria, then iterate). When these guidelines conflict with mandatory `f2s-*` steps, the `f2s-*` steps win.
-
+---
 ---
 
 ### `f2s-task`
