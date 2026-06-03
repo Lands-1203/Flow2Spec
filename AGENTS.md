@@ -120,4 +120,3 @@
 - `f2s-req-clarify`：针对 PRD/需求反问直到清楚，再可用 f2s-req-backend 出技术方案；触发：需求澄清、PRD 澄清
 - `f2s-req-plan`：根据技术方案/需求描述/变更描述规划并实现任务；始终按 f2s-task 维护 .task/；支持子 agent 并行实现；触发：f2s-req-plan、创建任务、任务规划、我需要任务清单
 - `f2s-kb-addRules`：把用户口述的规则沉淀进知识库，自动判定「新建主题 / 并入存量主题」并同步路由；不写代码、不创建 .task/；触发：f2s-kb-addRules、新增规则、口述规则、把这条记到知识库
-- `f2s-doc-routing`：文档目录 stock-docs 与 req-docs 分工；触发词：stock-docs、req-docs、f2s-kb-build、f2s-doc-arch、f2s-kb-add、已落地能力、技术方案放哪、PDF 终稿

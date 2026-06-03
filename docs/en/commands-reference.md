@@ -557,25 +557,8 @@ The following are not skill commands but rules activated by trigger words to gui
 
 ---
 
-### `f2s-doc-routing`
 
-**Trigger Words**: stock-docs, req-docs, implemented capability, where to put the technical proposal, PDF final draft
-
-**Purpose**: Distinguishes the boundary between the knowledge archival directory and the requirements implementation directory.
-
-**How It Works**: "Purpose isolation" to avoid mixing folders — `stock-docs/` holds archived existing knowledge (architecture, final drafts), consumed by `ctx-build` for ingestion into the knowledge base and **must not** be used directly as coding input; `req-docs/` holds implementation-facing requirements and technical proposals, consumed by the `implement-tech-design` rule to drive coding. Writers and readers are fully separated so "stock descriptions are not mistaken for coding contracts" and "implementation proposals are not mistaken for capability archival."
-
-**Directory Division**:
-
-| Directory | Purpose | When It Is Written |
-|-----------|---------|-------------------|
-| `stock-docs/` | Archival of existing knowledge (architecture, final drafts) | `f2s-doc-arch`, `f2s-doc-final`, `f2s-kb-build` |
-| `req-docs/` | Requirements and technical proposals (driving implementation) | `f2s-req-backend`, `f2s-doc-pdf`, manual placement |
-
-**Use Cases**:
-- Unsure where a document should go
-- Need to clarify the division of labor between stock-docs and req-docs
-
+---
 ---
 
 ### `implement-tech-design`
