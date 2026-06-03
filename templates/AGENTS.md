@@ -30,6 +30,7 @@
 1. **必须先读机器索引**：优先读取 **`./.Knowledge/manifest-routing.json`** 做主题路由；按需依据 `taskToTopicRules[].matcherPath` 读取对应 matcher 分片（单文件，路径形如 **`./.Knowledge/matchers/<id>.json`**）取匹配词；无法命中时进入补召回阶段。
    - 若存在 `taskToTopicRules`，优先按任务规则路由主题。
    - 若命中主题含 `topicDependencies`，先读依赖主题再读主主题。
+   - 若存在 `topicMetadata`，仅将其中 `primary` / `tags` 作为阅读预期：`config` 关注配置项 / 开关 / 默认值；`policy` 关注正文中的必须 / 禁止 / 门禁 / 流程约束；`feature` 作为已落地能力背景；`module` 作为目录 / 包 / 模块边界背景。`topicMetadata` 不参与 matcher 命中，不决定是否读取 topic，不改变执行强制性；无明确分类证据时不写 metadata，并在摘要列为待确认。
    - `manifest` 仅通过 `f2s-*` 技能流程维护，不假设存在额外 CLI 命令。
 2. **人工索引按需读取**：仅在需要校验主题语义与边界时读取 **`./.Knowledge/index.md`**。
    - `index.md` 不是机读事实源，仅承担人读导航与语义边界说明。
@@ -49,7 +50,7 @@
    - 用户明确要求“全量检查/不要遗漏”。
 9. **禁止项**：
    - 禁止跳过 **`./.Knowledge/manifest-routing.json`**、按需 `matcherPath` 分片与 **`./.Knowledge/topics/`** 直接全仓检索或直接编码；**`./.Knowledge/index.md`** 按需读取，不可替代上述机读链。
-   - 同一任务线内避免重复全文读取 **`./.Knowledge/manifest-routing.json`**（除非用户说明已通过 `f2s-ctx-build` / `f2s-kb-sync` / `f2s-doc-add` 等更新路由或知识、或手动改了 manifest；**勿将**仅执行 `flow2spec init` 当作业务知识库已更新）；禁止为枚举而遍历整个 **`./.Knowledge/matchers/`**；禁止 **`./.Knowledge/index.md`** 与 routing 交替「刷清单」。
+   - 同一任务线内避免重复全文读取 **`./.Knowledge/manifest-routing.json`**（除非用户说明已通过 `f2s-kb-build` / `f2s-kb-sync` / `f2s-kb-add` 等更新路由或知识、或手动改了 manifest；**勿将**仅执行 `flow2spec init` 当作业务知识库已更新）；禁止为枚举而遍历整个 **`./.Knowledge/matchers/`**；禁止 **`./.Knowledge/index.md`** 与 routing 交替「刷清单」。
    - 禁止把 **`./.Knowledge/stock-docs/`** 作为“按方案实现代码”的直接输入文档。
    - Flow2Spec 执行条令以 **`./AGENTS.md`**（完整）、**`./.codex/topics/f2s-*.md`** 与 **`./.codex/skills/`** 为准；**`.codex/AGENTS.md`** 仅为目录指针，不可替代根 `AGENTS.md`；勿使用仓库内 **非上述路径** 的同名条令文件作为执行依据，以免口径分叉。
    - 禁止把 `fallbackTopic` 当作最终命中直接实施改动；`fallbackTopic` 仅作安全兜底与澄清前置上下文。
@@ -61,7 +62,7 @@
 1. `./.Knowledge/manifest-routing.json`
 2. `./.Knowledge/matchers/<matcher>.json`（按需：通过 `taskToTopicRules[].matcherPath` 定位具体文件）
 3. `./.Knowledge/index.md`（按需，用于语义校验）
-4. `./.Knowledge/topics/<topic>.md`（摘要；涉及统一入口、路由细则、`implement-tech-design` / `stock-docs-vs-req-docs` 等时，按需续读下文 **「专题长文」** 所列 `./.codex/topics/f2s-*.md`）
+4. `./.Knowledge/topics/<topic>.md`（摘要；涉及统一入口、路由细则、`implement-tech-design` / `f2s-doc-routing` 等时，按需续读下文 **「专题长文」** 所列 `./.codex/topics/f2s-*.md`）
 5. `./.Knowledge/stock-docs/<doc>.md`（按需）
 6. 业务代码（按需；路径以仓库内实际目录为准）
 
@@ -74,7 +75,7 @@
 ## 可用主题
 
 - 不在此处维护静态主题列表，避免与知识库演进漂移。
-- 每次任务均以 **`./.Knowledge/manifest-routing.json`** 的 `topicPaths`、`taskToTopicRules`、`fallbackTopic` 为唯一路由事实，并按每条规则的 `matcherPath` 读取 matcher 分片。
+- 每次任务均以 **`./.Knowledge/manifest-routing.json`** 的 `topicPaths`、`taskToTopicRules`、`fallbackTopic` 为唯一路由事实，并按每条规则的 `matcherPath` 读取 matcher 分片；`topicMetadata` 只作治理与阅读预期，不是路由事实源。
 - 若路由清单与 **`./.Knowledge/index.md`** 语义不一致，以路由清单为准并提示用户同步修正。
 
 ## 专题长文（`./.codex/topics/`）
@@ -83,13 +84,12 @@
 
 - **统一入口**：`./.codex/topics/f2s-flow2spec-unified-entry.md`
 - **implement-tech-design**：`./.codex/topics/f2s-implement-tech-design.md`
-- **stock-docs-vs-req-docs**：`./.codex/topics/f2s-stock-docs-vs-req-docs.md`
+- **f2s-doc-routing**：`./.codex/topics/f2s-stock-docs-vs-req-docs.md`
 
 同目录下另有：
 
 - **`./.codex/topics/f2s-knowledge-preflight.md`**：**普通提问**也须先 `Read` **`./.Knowledge/manifest-routing.json`** 再下钻代码；与统一入口并行时以本条「首工具调用」为准。
 - **`./.codex/topics/f2s-config-check.md`**：内容与上文「先 Read **`./flow2spec.config.json`**」一致并含 **changeTracking** 细表；**仅**在需核对细表时按需打开，不必与上列三条并列必读。
-- **`./.codex/topics/f2s-karpathy-guidelines.md`**：通用编码行为准则（先澄清、极简、手术式修改、可验证目标）；与 f2s 路由/任务条令**并行**，硬冲突时以 **f2s 条令**为准。
 
 执行 Flow2Spec 相关任务时，先读本文件（**`./AGENTS.md`**）与 **`./.Knowledge/manifest-routing.json`**，再按需打开上列 **`./.codex/topics/*.md`** 文件。
 

@@ -1,7 +1,6 @@
 # Flow2Spec Knowledge Index
 
-> **读前区分（本仓库）**：本文件与同级目录 **`.Knowledge/`** 属于 **Flow2Spec 产品开发 Git 仓库**自用：用于**追踪与记录 Flow2Spec 作为产品**的能力说明、路由样例、`stock-docs` 终稿等（人读 + 本仓 `manifest-routing`）。**随包发布、并由 `flow2spec init` 写入各业务仓的默认索引与规则骨架**来自仓库 **`templates/`** 与 **`lib/`**（源代码与模板），二者是 **交付物**，不是本 `.Knowledge/` 的另一套「正文副本」；在业务仓内工作时，以该仓根目录 `.Knowledge/` 与 `init` 落盘为准。  
-> **Agent 修包边界（本仓专用）**：在本**产品开发仓**内让 Agent 改 f2s 能力 / 规则 / CLI 时，**只改** `templates/`、`lib/` 等交付物，**禁止改** `.cursor/`、`.claude/`、`.codex/`（init 落盘副本，避免 diff 看不清真值变更）。细则见 [产品仓 Agent 修包边界](stock-docs/Flow2Spec-产品仓-Agent修包边界.md)。**不**写入包内 `templates/skills`。
+> **路径约定**：下文 **`.Knowledge/`**、**`manifest-routing.json`** 等路径均相对于**本仓库根目录**（即已运行 `flow2spec init` 的当前项目）。
 
 本文件是 **人读导航**：主题说明、关联文档摘要、语义边界。  
 **机读事实源** 以 `.Knowledge/manifest-routing.json` + `taskToTopicRules[].matcherPath` 指向的 `.Knowledge/matchers/*.json` 分片为准（不再使用 `.Knowledge/manifest-matchers.json`）。
@@ -24,16 +23,17 @@
 | 主题 | 路径 | 适用场景 | 关联文档（摘要） |
 | --- | --- | --- | --- |
 | implement-tech-design | `.Knowledge/topics/f2s-implement-tech-design.md` | 按技术方案实现代码 | req：[技术方案](.Knowledge/req-docs/<技术方案>.md)（必填） |
-| stock-docs-vs-req-docs | `.Knowledge/topics/f2s-stock-docs-vs-req-docs.md` | stock-docs / req-docs 目录分工 | stock：[目录边界说明](.Knowledge/stock-docs/<目录边界说明>.md)（可选） |
+| f2s-doc-routing | `.Knowledge/topics/f2s-stock-docs-vs-req-docs.md` | stock-docs / req-docs 目录分工 | stock：[目录边界说明](.Knowledge/stock-docs/<目录边界说明>.md)（可选） |
 | fallback-triage | `.Knowledge/topics/f2s-fallback-triage.md` | 未命中或低置信度：分诊与澄清 | stock：[路由分诊说明](.Knowledge/stock-docs/<分诊说明>.md)（可选） |
 | config-precheck | `.Knowledge/topics/f2s-config-precheck.md` | 执行 `f2s-*` 前读 `flow2spec.config.json` / 编排开关 | Codex 长文：仓库根 `.codex/topics/f2s-config-check.md`；[路由摘要](topics/f2s-config-precheck.md) |
 | f2s-task | `.Knowledge/topics/f2s-task.md` | 变更追踪、`.task/` 任务清单与跨会话续作 | stock：[任务清单与变更追踪](stock-docs/Flow2Spec-任务清单与变更追踪.md)；长文：`rules/f2s-task.*` |
 | f2s-req-plan | `.Knowledge/topics/f2s-req-plan.md` | 需求/方案规划与实现；始终维护 `.task/` | 技能：`skills/f2s-req-plan/SKILL.md`；依赖 `f2s-task` |
 | flow2spec-presentations | `.Knowledge/topics/f2s-flow2spec-presentations.md` | 本仓对外介绍 HTML 演示稿路径与维护约定 | stock：[对外介绍演示](stock-docs/Flow2Spec-对外介绍演示.md) |
 | flow2spec-milestones | `.Knowledge/topics/f2s-flow2spec-milestones.md` | 版本演进；含内部仓 vs 开源仓、双语 PPT、Cursor 插件 | stock：[项目里程碑](stock-docs/Flow2Spec-项目里程碑.md) |
+| skill-authoring | `.Knowledge/topics/skill-authoring.md` | 新增 / 重构 `f2s-*` SKILL 时的骨架与命名约定（仅本仓，不下发） | 参考实现：`templates/skills/f2s-kb-addRules/SKILL.md` |
 
 每主题保留 **1–3 条** 可点击摘要链接；全量路径对照写入 `.Knowledge/migration-report.md`（迁移场景）。  
-其中 **`implement-tech-design`**、**`stock-docs-vs-req-docs`**、**`config-precheck`**、**`f2s-task`** 在 `topics/` 内为**路由摘要**；执行长文见配置根 **`rules/f2s-*.md(c)`**；使用 Codex 时见 **`.codex/AGENTS.md`**、**`.codex/topics/f2s-*.md`**（`f2s-config-check` 与 `AGENTS` 前置同源，按需打开）。
+其中 **`implement-tech-design`**、**`f2s-doc-routing`**、**`config-precheck`**、**`f2s-task`** 在 `topics/` 内为**路由摘要**；执行长文见配置根 **`rules/f2s-*.md(c)`**；使用 Codex 时见 **`.codex/AGENTS.md`**、**`.codex/topics/f2s-*.md`**（`f2s-config-check` 与 `AGENTS` 前置同源，按需打开）。
 
 ---
 

@@ -9,7 +9,7 @@
 
 当用户询问「对外路演幻灯在哪」「介绍 Flow2Spec 的 deck」「presentations 目录做什么」时，命中本主题后：
 
-1. 指向仓库内 `presentations/flow2spec-intro-draft/` 与主入口 `index.html`。
+1. 指向仓库内 `presentations/flow2spec-intro-public/`（中文）与 `presentations/flow2spec-intro-public-en/`（英文），主入口均为 `index.html`。
 2. 说明其依赖 `.claude/skills/html-ppt/assets/` 的相对引用关系，避免误迁路径导致断链。
 3. 需要架构级背景时，可再读 `f2s-flow2spec-architecture` 主题。
 

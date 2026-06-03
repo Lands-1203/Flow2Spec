@@ -88,6 +88,41 @@
 2. 执行层：配置根（`.cursor/.claude/.codex`），承载 `rules/skills` 或 `AGENTS.md`。
 3. 默认 `init` 仅补齐 `.Knowledge` 缺失模板；传 `--reset-knowledge` 时强制覆盖。
 
+## topicMetadata
+
+`manifest-routing.json` 的顶层可选字段，key 必须存在于 `topicPaths`。用于治理、审计和阅读预期；不参与路由命中，不改变执行强制性。
+
+```json
+"topicMetadata": {
+  "<topicId>": {
+    "primary": "config | policy | feature | module",
+    "tags": ["policy"],
+    "confidence": "manual | inferred"
+  }
+}
+```
+
+- `primary`：取 topic 最核心的性质，读正文后写入。
+- `tags`：可选，次要性质，不得与 `primary` 重复。
+- `confidence`：`manual`（人工确认）/ `inferred`（有明确证据推断）；证据不足时不写，摘要列为待确认。
+- `init` 合并时模板优先：template 的 metadata 覆盖业务仓同 topicId 的条目；业务仓自建 topicId 的 metadata 保留。
+
+## 知识库主题粒度
+
+**topic 的定位**：可执行路由摘要 + 关键边界。topic 可包含必要的边界说明、关键流程步骤、禁止项、配置摘要；不承载完整实现细节，细节住在 `stock-docs`。
+
+**大功能拆分信号**（满足任一建议拆分，不强制）：
+- 对应 stock-doc 超过 300–500 行
+- matcher `includeAny` 词数超过 12 个
+- topic 正文包含 3 个以上不相干职责域的二级标题
+
+**主/子 topic 结构**：
+- **主 topic**（`primary: feature`）：写业务闭环、入口边界、子模块导航链接，不写实现细节
+- **子模块 topic**：按实际语义各自写 `feature/module/config/policy`，通过各自 matcher 独立命中
+- **不用** `topicDependencies` 表达"概述 → 详情"导航关系；依赖边只在"缺 B 必出错"时声明
+
+详细判定准则见配置根 `rules/f2s-topic-authoring.*` 第 4–5 节。
+
 ## 回答原则
 
 - 先解释"知识层 vs 执行层"分工，再展开到具体文件职责。

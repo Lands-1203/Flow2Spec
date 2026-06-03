@@ -1,7 +1,7 @@
 # Flow2Spec 架构说明（终稿）
 
-> 适用：Flow2Spec 包本身（`@double-codeing/flow2spec v3.0.1-beta.1`）。
-> 本终稿由 `f2s-doc-final` 从初稿转换而来，可用于 `f2s-ctx-build` 同步知识路由。
+> 适用：Flow2Spec 包本身。
+> 本终稿由 `f2s-doc-final` 从初稿转换而来，可用于 `f2s-kb-build` 同步知识路由。
 
 ---
 
@@ -13,10 +13,10 @@
 | **`.Knowledge/`** | 业务知识库根目录，统一承载 `stock-docs`（存量文档）、`req-docs`（需求/技术方案）、`topics`（主题路由摘要）、`matchers`（匹配词分片）、`index.md`（人读导航）、`manifest-routing.json`（机读路由事实源）。 |
 | **配置根** | 各 AI 工具原生配置目录：`.cursor/`（Cursor）、`.claude/`（Claude Code）、`.codex/`（Codex）。保留 `rules/` 或 `skills/`，不破坏原生加载机制。 |
 | **Agent** | 支持的 AI 工具类型：cursor、claude、codex；由 `lib/agents.js` 定义其目录结构与格式差异。 |
-| **`f2s-*` 技能** | 14 个知识库维护技能（如 `f2s-doc-arch`、`f2s-kb-sync`、`f2s-ctx-build` 等），以 `SKILL.md` 形式存在于 `templates/skills/` 与各配置根 `skills/` 中。 |
+| **`f2s-*` 技能** | 14 个知识库维护技能（如 `f2s-doc-arch`、`f2s-kb-sync`、`f2s-kb-build` 等），以 `SKILL.md` 形式存在于 `templates/skills/` 与各配置根 `skills/` 中。 |
 | **机读路由** | `.Knowledge/manifest-routing.json` + `matchers/*.json` 分片，是任务路由的第一优先级事实源；`index.md` 仅作人读导航，不替代机读链。 |
 | **`flow2spec.config.json`** | 项目根配置文件，含 `subAgent`（是否允许拆子 agent）与 `switchAgentVerification`（是否交叉校验）两个布尔开关，供所有 `f2s-*` 技能读取。 |
-| **终稿** | 经 `f2s-doc-final` 转换后的规范格式文档，存放于 `.Knowledge/stock-docs/<方案名>_终稿.md`，便于 `f2s-ctx-build` 同步到 `topics/index/manifest`。 |
+| **终稿** | 经 `f2s-doc-final` 转换后的规范格式文档，存放于 `.Knowledge/stock-docs/<方案名>_终稿.md`，便于 `f2s-kb-build` 同步到 `topics/index/manifest`。 |
 
 ---
 
@@ -66,9 +66,9 @@
 
 1. **架构初稿**：`f2s-doc-arch` 生成 `.Knowledge/stock-docs/<方案名>_初稿.md`
 2. **终稿转换**：`f2s-doc-final` 将初稿转为规范格式 `.Knowledge/stock-docs/<方案名>_终稿.md`
-3. **知识同步**：`f2s-ctx-build` 将终稿同步到 `.Knowledge/topics/`、`index.md`，并更新路由清单
+3. **知识同步**：`f2s-kb-build` 将终稿同步到 `.Knowledge/topics/`、`index.md`，并更新路由清单
 
-**入口**：用户执行 `/f2s-doc-arch` → `/f2s-doc-final` → `/f2s-ctx-build`
+**入口**：用户执行 `/f2s-doc-arch` → `/f2s-doc-final` → `/f2s-kb-build`
 
 ### 流程三：按方案实现工作流
 
@@ -85,6 +85,7 @@
 | 修正实现/规则错误 | `f2s-kb-fix` |
 | 新增能力（补全实现 + 知识库） | `f2s-kb-feat` |
 | 全局同步已实现能力 | `f2s-kb-sync` |
+| 从 stock-docs 生成主题路由（含拆分评估） | `f2s-kb-build`（stock-doc > 300–500 行或覆盖 3+ 职责域时提示拆分） |
 | 解决合并后上下文冲突 | `f2s-kb-merge` |
 | 知识库模板升级 | `f2s-kb-upgrade`（其中一步代跑 `npx @double-codeing/flow2spec@latest init`，或已全局安装时的 `flow2spec init`） |
 | 旧版一次性迁移 | `f2s-kb-migrate` |
@@ -92,7 +93,7 @@
 ### 流程五：任务路由与执行（`match → expand → verify → act`）
 
 1. **match**：读取 `manifest-routing.json`，按 `taskToTopicRules` 与 `matcherPath` 的 `includeAny` 命中主候选主题
-2. **expand**：展开 `topicDependencies`（如 `implement-tech-design` 依赖 `stock-docs-vs-req-docs`），保留次高候选做补充校验
+2. **expand**：展开 `topicDependencies`（如 `implement-tech-design` 依赖 `f2s-doc-routing`），保留次高候选做补充校验
 3. **verify**：执行前缺口检查（关键主题、边界条件、上下文文档是否缺失）
 4. **act**：仅当置信度足够时执行；低置信度必须先澄清
 
@@ -140,9 +141,9 @@
 
 1. 在目标业务仓库执行：`npx @double-codeing/flow2spec@latest init [cursor|claude|codex]`
 2. 检查项目根 `flow2spec.config.json`，按需调整 `subAgent` / `switchAgentVerification`
-3. 使用 `f2s-doc-arch` → `f2s-doc-final` → `f2s-ctx-build` 沉淀项目上下文
+3. 使用 `f2s-doc-arch` → `f2s-doc-final` → `f2s-kb-build` 沉淀项目上下文
 4. 使用 `f2s-req-clarify` → `f2s-req-backend` 生成技术方案，再由 `implement-tech-design` 执行编码
-5. 使用 `f2s-kb-sync` / `f2s-doc-add` 维护已落地能力
+5. 使用 `f2s-kb-sync` / `f2s-kb-add` 维护已落地能力
 
 ---
 

@@ -6,7 +6,8 @@
   "fallbackTopic": "fallback-triage",
   "topicDependencies": {
     "implement-tech-design": [
-      "stock-docs-vs-req-docs"
+      "stock-docs-vs-req-docs",
+      "f2s-doc-routing"
     ],
     "f2s-req-plan": [
       "f2s-task"
@@ -19,8 +20,10 @@
     "config-precheck": ".Knowledge/topics/f2s-config-precheck.md",
     "f2s-task": ".Knowledge/topics/f2s-task.md",
     "f2s-req-plan": ".Knowledge/topics/f2s-req-plan.md",
+    "f2s-doc-routing": ".Knowledge/topics/f2s-stock-docs-vs-req-docs.md",
     "flow2spec-presentations": ".Knowledge/topics/f2s-flow2spec-presentations.md",
-    "flow2spec-milestones": ".Knowledge/topics/f2s-flow2spec-milestones.md"
+    "flow2spec-milestones": ".Knowledge/topics/f2s-flow2spec-milestones.md",
+    "skill-authoring": ".Knowledge/topics/skill-authoring.md"
   },
   "taskToTopicRules": [
     {
@@ -37,7 +40,8 @@
       "matcherPath": ".Knowledge/matchers/m-implement-from-spec.json",
       "topics": [
         "stock-docs-vs-req-docs",
-        "implement-tech-design"
+        "implement-tech-design",
+        "f2s-doc-routing"
       ]
     },
     {
@@ -45,7 +49,8 @@
       "matcherId": "m-doc-routing",
       "matcherPath": ".Knowledge/matchers/m-doc-routing.json",
       "topics": [
-        "stock-docs-vs-req-docs"
+        "stock-docs-vs-req-docs",
+        "f2s-doc-routing"
       ]
     },
     {
@@ -79,6 +84,55 @@
       "topics": [
         "flow2spec-milestones"
       ]
+    },
+    {
+      "task": "skill-authoring",
+      "matcherId": "m-skill-authoring",
+      "matcherPath": ".Knowledge/matchers/m-skill-authoring.json",
+      "topics": [
+        "skill-authoring"
+      ]
     }
-  ]
+  ],
+  "topicMetadata": {
+    "implement-tech-design": {
+      "primary": "policy",
+      "confidence": "manual"
+    },
+    "f2s-doc-routing": {
+      "primary": "policy",
+      "confidence": "manual"
+    },
+    "fallback-triage": {
+      "primary": "policy",
+      "confidence": "manual"
+    },
+    "config-precheck": {
+      "primary": "config",
+      "confidence": "manual",
+      "tags": [
+        "policy"
+      ]
+    },
+    "f2s-task": {
+      "primary": "policy",
+      "confidence": "manual"
+    },
+    "f2s-req-plan": {
+      "primary": "policy",
+      "confidence": "manual"
+    },
+    "flow2spec-presentations": {
+      "primary": "feature",
+      "confidence": "inferred"
+    },
+    "flow2spec-milestones": {
+      "primary": "feature",
+      "confidence": "inferred"
+    },
+    "skill-authoring": {
+      "primary": "policy",
+      "confidence": "inferred"
+    }
+  }
 }

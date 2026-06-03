@@ -68,7 +68,7 @@ Each task hits 1–4 topics, ~300 lines. Business constraints — Redis lock key
 When `changeTracking` is enabled, skills like `f2s-kb-feat` / `f2s-kb-fix` automatically create a `task.md` with checkboxes. Each step is checked off immediately to disk. New sessions auto-load the remaining checklist — no relying on memory. User-side todos (run SQL, set env vars, click approvals) go into `user-todos.md`, separate from AI steps.
 
 **⑥ Document-driven: PDF / MD straight into the knowledge base**  
-`/f2s-doc-add` aggregates source files into draft → final → topics. `/f2s-doc-final` converts any PDF or MD into the canonical final-draft format. External docs and legacy proposals all become routable knowledge.
+`/f2s-kb-add` aggregates source files into draft → final → topics. `/f2s-doc-final` converts any PDF or MD into the canonical final-draft format. External docs and legacy proposals all become routable knowledge.
 
 ---
 
@@ -112,7 +112,7 @@ In your Agent tool (Cursor / Claude Code):
 
 > This step is done once. You won't need to repeat it for daily development.
 
-2. `/f2s-doc-add <folder path>` — Import any feature modules that haven't been added yet
+2. `/f2s-kb-add <folder path>` — Import any feature modules that haven't been added yet
 
 > Do this selectively before starting development when you notice a module's knowledge is missing from the knowledge base.
 
@@ -152,7 +152,7 @@ natural language: implement the proposal above         ← AI starts coding (tas
 | `/f2s-kb-fix` | Fix a bug |
 | `/f2s-kb-sync` | Sync knowledge base |
 | `/f2s-git-commit` | Commit code |
-| `/f2s-doc-add <path>` | Import API module into knowledge base |
+| `/f2s-kb-add <path>` | Import API module into knowledge base |
 
 For the full command list, see [Usage Guide](./docs/en/usage-guide.md) · [Commands Reference](./docs/en/commands-reference.md)
 

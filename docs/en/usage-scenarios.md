@@ -73,7 +73,7 @@ The following examples revolve around the same e-commerce project, covering the 
 
 **You**
 
-> f2s-ctx-build .Knowledge/stock-docs/order-service-architecture-final.md
+> f2s-kb-build .Knowledge/stock-docs/order-service-architecture-final.md
 
 **Agent**
 

@@ -34,7 +34,7 @@ Four rings in the repo (do not collapse rules + skills into a single "third ring
 
 | Layer | Path / mechanism | Stores | Typical read |
 | --- | --- | --- | --- |
-| **L0 routing** | `manifest-routing.json` | task→topic, `topicDependencies`, `topicPaths` | First read (machine source of truth) |
+| **L0 routing** | `manifest-routing.json` | task→topic, `topicDependencies`, `topicPaths`, `topicMetadata` | First read (machine source of truth) |
 | **L1 matcher shard** | `matchers/<id>.json` | `includeAny` triggers | **match**: one shard only |
 | **L2 topic summary** | `topics/<topic>.md` | Hard constraints, boundaries, pointers | **expand**: pull dependency topics |
 | **L3 long docs** | `stock-docs/`, `req-docs/` | Architecture finals, tech specs | Drill down on demand |
@@ -74,7 +74,7 @@ Codex does not read the `rules/` directory; execution constraints are carried th
 
 ## 5. Key Chains
 
-- Documentation curation chain: `f2s-doc-arch` -> `f2s-doc-final` -> `f2s-ctx-build`
+- Documentation curation chain: `f2s-doc-arch` -> `f2s-doc-final` -> `f2s-kb-build`
 - Implementation chain: `.Knowledge/req-docs/*.md` -> `implement-tech-design` -> code
 - Maintenance chain: `f2s-kb-fix` / `f2s-kb-feat` / `f2s-kb-sync` / `f2s-kb-merge`
 - Requirements planning chain: `f2s-req-plan` (planning + implementation, always creates task checklist)

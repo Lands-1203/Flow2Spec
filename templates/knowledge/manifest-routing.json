@@ -6,15 +6,44 @@
   "fallbackTopic": "fallback-triage",
   "topicDependencies": {
     "implement-tech-design": [
-      "stock-docs-vs-req-docs"
+      "f2s-doc-routing"
     ],
     "f2s-req-plan": [
       "f2s-task"
     ]
   },
+  "topicMetadata": {
+    "implement-tech-design": {
+      "primary": "policy",
+      "confidence": "manual"
+    },
+    "f2s-doc-routing": {
+      "primary": "policy",
+      "confidence": "manual"
+    },
+    "fallback-triage": {
+      "primary": "policy",
+      "confidence": "manual"
+    },
+    "config-precheck": {
+      "primary": "config",
+      "tags": [
+        "policy"
+      ],
+      "confidence": "manual"
+    },
+    "f2s-task": {
+      "primary": "policy",
+      "confidence": "manual"
+    },
+    "f2s-req-plan": {
+      "primary": "policy",
+      "confidence": "manual"
+    }
+  },
   "topicPaths": {
     "implement-tech-design": ".Knowledge/topics/f2s-implement-tech-design.md",
-    "stock-docs-vs-req-docs": ".Knowledge/topics/f2s-stock-docs-vs-req-docs.md",
+    "f2s-doc-routing": ".Knowledge/topics/f2s-stock-docs-vs-req-docs.md",
     "fallback-triage": ".Knowledge/topics/f2s-fallback-triage.md",
     "config-precheck": ".Knowledge/topics/f2s-config-precheck.md",
     "f2s-task": ".Knowledge/topics/f2s-task.md",
@@ -34,7 +63,7 @@
       "matcherId": "m-implement-from-spec",
       "matcherPath": ".Knowledge/matchers/m-implement-from-spec.json",
       "topics": [
-        "stock-docs-vs-req-docs",
+        "f2s-doc-routing",
         "implement-tech-design"
       ]
     },
@@ -43,7 +72,7 @@
       "matcherId": "m-doc-routing",
       "matcherPath": ".Knowledge/matchers/m-doc-routing.json",
       "topics": [
-        "stock-docs-vs-req-docs"
+        "f2s-doc-routing"
       ]
     },
     {
