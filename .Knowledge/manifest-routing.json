@@ -20,7 +20,8 @@
     "f2s-task": ".Knowledge/topics/f2s-task.md",
     "f2s-req-plan": ".Knowledge/topics/f2s-req-plan.md",
     "flow2spec-presentations": ".Knowledge/topics/f2s-flow2spec-presentations.md",
-    "flow2spec-milestones": ".Knowledge/topics/f2s-flow2spec-milestones.md"
+    "flow2spec-milestones": ".Knowledge/topics/f2s-flow2spec-milestones.md",
+    "skill-authoring": ".Knowledge/topics/skill-authoring.md"
   },
   "taskToTopicRules": [
     {
@@ -78,6 +79,14 @@
       "matcherPath": ".Knowledge/matchers/m-flow2spec-milestones.json",
       "topics": [
         "flow2spec-milestones"
+      ]
+    },
+    {
+      "task": "skill-authoring",
+      "matcherId": "m-skill-authoring",
+      "matcherPath": ".Knowledge/matchers/m-skill-authoring.json",
+      "topics": [
+        "skill-authoring"
       ]
     }
   ]

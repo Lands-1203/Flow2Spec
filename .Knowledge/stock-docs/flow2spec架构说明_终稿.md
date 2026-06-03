@@ -1,6 +1,6 @@
 # Flow2Spec 架构说明（终稿）
 
-> 适用：Flow2Spec 包本身（`@double-codeing/flow2spec v3.0.1-beta.1`）。
+> 适用：Flow2Spec 包本身。
 > 本终稿由 `f2s-doc-final` 从初稿转换而来，可用于 `f2s-ctx-build` 同步知识路由。
 
 ---
