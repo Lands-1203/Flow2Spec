@@ -1,11 +1,11 @@
 ---
-name: f2s-kb-capture
-description: 把用户口述的规则沉淀进知识库，自动判定「新建主题 / 并入存量主题」并同步路由；不写代码、不创建 .task/；触发：f2s-kb-capture、新增规则、口述规则、把这条记到知识库
+name: f2s-kb-addRules
+description: 把用户口述的规则沉淀进知识库，自动判定「新建主题 / 并入存量主题」并同步路由；不写代码、不创建 .task/；触发：f2s-kb-addRules、新增规则、口述规则、把这条记到知识库
 ---
 
 > 执行口径：本技能只维护 `.Knowledge`（`topics/index/manifest-routing/matchers` 分片），不改配置根 `rules/skills`，不动业务代码，不创建 `.task/`（口述规则属于元配置变更，不是业务变更追踪）。
 
-# f2s-kb-capture：用户口述规则进知识库
+# f2s-kb-addRules：用户口述规则进知识库
 
 ## 与既有技能的边界
 
