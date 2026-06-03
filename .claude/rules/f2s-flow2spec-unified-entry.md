@@ -87,6 +87,10 @@ description: Flow2Spec 统一知识库入口，按 .Knowledge 渐进式读取
 
 **例外（应显式否定）**：A、B 两种做法在逻辑上均正确，但项目已做出**排他性选择**时，须写出「不用 B」——不说清楚，读者无法判断 B 是否仍可选。
 
+## 主题创作（Topic Authoring）指针
+
+新增或修改 `.Knowledge/topics/<topic>.md`、调整 `manifest-routing.topicDependencies`、删除 / 迁移 topic 时，**创作侧** 准则以 **`rules/f2s-topic-authoring.*`** 为单一事实源（**Cursor/Claude**：`rules/f2s-topic-authoring.md`；**Codex**：`.codex/topics/f2s-topic-authoring.md`）。本入口为**消费侧**（如何按已有 topic 路由 / 读取 / 兜底），与之并存；硬冲突时以本入口为准。`f2s-ctx-build` / `f2s-doc-add` / `f2s-kb-feat` / `f2s-kb-fix` / `f2s-kb-sync` / `f2s-kb-migrate` / `f2s-ctx-rm` 在涉及 topic 落盘前须 Read 该条全文。
+
 ## 禁止项
 
 - **`templates/` 可下发约束**（经 `init` 会克隆到任意业务仓）：技能/规则/知识模板正文中的示例须**中性**——勿写特定业务域名称、单一组织 npm 包名、仅 Flow2Spec 产品仓存在的 `docs/` 路径；用 `<能力>`、`src/<模块>/` 等占位。
