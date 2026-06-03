@@ -13,6 +13,7 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 - **`flow2spec init` 不写业务知识**：不替代 `f2s-kb-add`、`f2s-kb-fix`、`f2s-kb-feat`、`f2s-kb-sync`、`f2s-kb-build` 等对 `stock-docs` / `req-docs` / `topics` 正文与业务向路由词条的维护。
 - 本技能跑通的是 **包版本下的目录、模板占位、路由结构对齐**；用户若说「把新能力写进知识库」，应引导 **`f2s-kb-sync` / `f2s-kb-add`** 等，而非仅 `f2s-kb-upgrade`。
+- 本技能负责存量 `topicMetadata` 审计：`primary` / `tags` 仅用于治理、审计、盘点和阅读预期，不参与路由命中或执行强制性；执行强制性仍以 `AGENTS.md`、rules、skills 与 topic 正文为准。
 
 ## 编排（主 / 子 agent）
 
@@ -129,6 +130,14 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 > 口径：只清理”旧命名主题文件”，不删除带 `f2s-` 前缀的现行主题文件。
 
+### 步骤 3a：`topicMetadata` 存量审计（必须执行）
+
+1. 读取 `.Knowledge/manifest-routing.json`，以 `topicPaths` 为主题全集。
+2. 校验 `topicMetadata`：key 必须存在于 `topicPaths`；`primary` 仅允许 `feature` / `module` / `config` / `policy`；`tags` 若存在须为数组，元素取值同 `primary` 且不得与 `primary` 重复；`confidence` 仅允许 `manual` / `inferred`。
+3. 对 `topicPaths` 中缺少 metadata 的主题做分类分析：**必须 Read 对应 `.Knowledge/topics/<id>.md` 正文**，禁止仅凭 topicId 名称推断。证据明确则写入 `inferred`；证据不足时**不写 metadata**，但须在摘要中列出推断方向与依据（如「建议 policy，正文含多处强制约束」），供用户确认后手动补写 `manual`。
+4. 分类判断以 `f2s-topic-authoring` 准则第 3 节为准，Agent 基于 topic 正文判断主要性质，写 `primary`；同时覆盖多个性质时其余写 `tags`（可选）。
+5. 禁止因为补分类创建、重命名或拆分 topic。
+
 ### 步骤 3b：`index.md` 融合与 `template/index.template.md`（必须执行）
 
 > **范围**：本条「融合」**仅在本技能内由 Agent 落盘 `.Knowledge/index.md`**；**不要求、也不假设**修改 Flow2Spec 包内 **`cli.js` / `lib/init.js`** 等 JS。`init` 行为仍以仓库现行为准（仅复制快照等）。
@@ -196,6 +205,7 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 - 旧主题文件：`已清理` / `无需清理`
 - 引用修复：`已更新` / `已一致`
 - **index（快照 + 融合）**：`快照已复制` / `index.md 已融合` / `待处理（见备注）`
+- **topicMetadata（存量审计）**：`已补齐` / `待用户确认`；列出新增 / 修正 / 删除的 topicId
 - **f2s-kb-upgrade SKILL**：`init 后无变化` / `已按新版重跑 N 轮` / `待确认`
 - manifest-routing / matchers 分片：`已与模板对齐` / `已是最新` / `reset 覆盖`
 - topics.path：`全部存在` / `存在缺失（见下）`
@@ -219,7 +229,8 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 3. 是否已实际执行 shell 命令（而非只给建议）。
 4. 是否明确标注增量 or reset 模式。
 5. 是否已处理旧主题文件清理与 `index/manifest` 引用修复。
-6. 是否已执行 **步骤 3b**：**融合** `index.md`（**主题一览**节起至命中与执行前为项目维护区，其余同包版），并核对 `topicPaths`。
-7. 是否输出了 manifest 与关键路径校验结果。
-8. 若失败，是否给出下一步具体命令建议。
-9. 步骤 3b 的 `index.md` 融合由主 agent 完成并落盘，无子 agent 越权写入。
+6. 是否已执行 **步骤 3a**：审计 `topicMetadata`，确保无孤儿 key / 非法 primary / 非法 confidence；缺失旧主题已按证据补 `inferred` 或列为待确认。
+7. 是否已执行 **步骤 3b**：**融合** `index.md`（**主题一览**节起至命中与执行前为项目维护区，其余同包版），并核对 `topicPaths`。
+8. 是否输出了 manifest 与关键路径校验结果。
+9. 若失败，是否给出下一步具体命令建议。
+10. 步骤 3b 的 `index.md` 融合由主 agent 完成并落盘，无子 agent 越权写入。

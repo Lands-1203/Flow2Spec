@@ -88,6 +88,25 @@
 2. 执行层：配置根（`.cursor/.claude/.codex`），承载 `rules/skills` 或 `AGENTS.md`。
 3. 默认 `init` 仅补齐 `.Knowledge` 缺失模板；传 `--reset-knowledge` 时强制覆盖。
 
+## topicMetadata
+
+`manifest-routing.json` 的顶层可选字段，key 必须存在于 `topicPaths`。用于治理、审计和阅读预期；不参与路由命中，不改变执行强制性。
+
+```json
+"topicMetadata": {
+  "<topicId>": {
+    "primary": "config | policy | feature | module",
+    "tags": ["policy"],
+    "confidence": "manual | inferred"
+  }
+}
+```
+
+- `primary`：取 topic 最核心的性质，读正文后写入。
+- `tags`：可选，次要性质，不得与 `primary` 重复。
+- `confidence`：`manual`（人工确认）/ `inferred`（有明确证据推断）；证据不足时不写，摘要列为待确认。
+- `init` 合并时模板优先：template 的 metadata 覆盖业务仓同 topicId 的条目；业务仓自建 topicId 的 metadata 保留。
+
 ## 回答原则
 
 - 先解释"知识层 vs 执行层"分工，再展开到具体文件职责。

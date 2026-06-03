@@ -164,10 +164,10 @@ description: 旧版知识库一次性迁到 `.Knowledge`：以配置根 `docs-in
 2. 生成或更新 `.Knowledge/topics/<topic>.md`：
    - 正文表述统一为新架构口径（`.Knowledge` 分层、`manifest` 路由、`stock-docs`/`req-docs` 分工）。
    - 去除旧版独有路径/术语（如旧 `docs-index` 根路径、旧散落目录名），改为指向 `.Knowledge/...` 或相对 `.Knowledge` 的稳定路径。
-   - **创作侧准则**：本步生成 / 重写 topic 或调整 `topicDependencies`，须先 Read `rules/f2s-topic-authoring.*` 全文（**Cursor/Claude**：`rules/f2s-topic-authoring.mdc`；**Codex**：`.codex/topics/f2s-topic-authoring.md`），再落盘。
+   - **创作侧准则**：本步生成 / 重写 topic 或调整 `topicMetadata` / `topicDependencies`，须先 Read `rules/f2s-topic-authoring.*` 全文（**Cursor/Claude**：`rules/f2s-topic-authoring.mdc`；**Codex**：`.codex/topics/f2s-topic-authoring.md`），再落盘。
 3. 更新 `.Knowledge/index.md` 的主题索引行，并同步维护“关联文档（摘要）”列（每主题 1-3 条关键 `stock-docs/req-docs` **可点击 Markdown 链接**，格式：`[标题](相对路径)`）。
 4. 按需更新路由清单：
-   - `.Knowledge/manifest-routing.json`：`topicPaths`、`taskToTopicRules[]`、`topicDependencies`、`fallbackTopic`
+   - `.Knowledge/manifest-routing.json`：`topicPaths`、`taskToTopicRules[]`、`topicDependencies`、`topicMetadata`、`fallbackTopic`
    - `.Knowledge/matchers/<matcherId>.json`：`includeAny`（与 `manifest-routing.taskToTopicRules[].matcherPath` 一致）
 5. 输出本主题迁移摘要并**暂停**，提示用户：
    - 回复“继续”迁移下一个主题
@@ -346,12 +346,13 @@ description: 旧版知识库一次性迁到 `.Knowledge`：以配置根 `docs-in
 1. 主题总数是否与旧映射总数对齐（允许用户显式跳过）。
 2. `manifest.topics[].path` 是否都存在。
 3. `index` 是否可定位到每个已迁移主题。
-4. `.Knowledge/stock-docs`、`.Knowledge/req-docs` 是否与确认迁移清单一致。
-5. 待人工确认清单是否已清空；未清空则禁止删除旧文档目录。
-6. 旧业务 `rules/`、**非 `f2s-*`** 的旧业务 `skills/`、旧版索引及（若列入清单）旧文档目录是否已按**最终删除清单**执行删除；基线保留清单中的 3 个 `f2s-*` 根规则是否仍保留。
-7. 旧版入口 `docs-index.md` / `index-doc.md` 与 `rules/main.md(c)` 是否已按清单删除（且 `.Knowledge` 已可替代其职责），或是否因用户排除而**明确保留**并写入 `notes[]`。
-8. 状态文件是否与迁移结果一致（完成则删除，暂停则保留且 `status=paused`）。
-9. `.Knowledge/index.md` 是否已为每个主题同步“关联文档（摘要）”列（可写“无”，但不得留空）。
-10. `skills/f2s-*` 是否未被误删、未被写入 `.Knowledge`。
-11. `.Knowledge/migration-report.md` 是否已落盘且包含 **迁移对照表**、**拟删除路径清单**；若已执行删除，是否已追加 **「删除执行记录」** 并与实际磁盘状态一致。
-12. 状态机文件与删除执行记录未被子 agent 越权写入；manifest / index 由主 agent 单点落盘。
+4. `topicMetadata` 是否只引用 `topicPaths` 已存在 topicId；`primary` / `tags` / `confidence` 是否合法。
+5. `.Knowledge/stock-docs`、`.Knowledge/req-docs` 是否与确认迁移清单一致。
+6. 待人工确认清单是否已清空；未清空则禁止删除旧文档目录。
+7. 旧业务 `rules/`、**非 `f2s-*`** 的旧业务 `skills/`、旧版索引及（若列入清单）旧文档目录是否已按**最终删除清单**执行删除；基线保留清单中的 3 个 `f2s-*` 根规则是否仍保留。
+8. 旧版入口 `docs-index.md` / `index-doc.md` 与 `rules/main.md(c)` 是否已按清单删除（且 `.Knowledge` 已可替代其职责），或是否因用户排除而**明确保留**并写入 `notes[]`。
+9. 状态文件是否与迁移结果一致（完成则删除，暂停则保留且 `status=paused`）。
+10. `.Knowledge/index.md` 是否已为每个主题同步“关联文档（摘要）”列（可写“无”，但不得留空）。
+11. `skills/f2s-*` 是否未被误删、未被写入 `.Knowledge`。
+12. `.Knowledge/migration-report.md` 是否已落盘且包含 **迁移对照表**、**拟删除路径清单**；若已执行删除，是否已追加 **「删除执行记录」** 并与实际磁盘状态一致。
+13. 状态机文件与删除执行记录未被子 agent 越权写入；manifest / index 由主 agent 单点落盘。

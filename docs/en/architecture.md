@@ -34,7 +34,7 @@ Four rings in the repo (do not collapse rules + skills into a single "third ring
 
 | Layer | Path / mechanism | Stores | Typical read |
 | --- | --- | --- | --- |
-| **L0 routing** | `manifest-routing.json` | task→topic, `topicDependencies`, `topicPaths` | First read (machine source of truth) |
+| **L0 routing** | `manifest-routing.json` | task→topic, `topicDependencies`, `topicPaths`, `topicMetadata` | First read (machine source of truth) |
 | **L1 matcher shard** | `matchers/<id>.json` | `includeAny` triggers | **match**: one shard only |
 | **L2 topic summary** | `topics/<topic>.md` | Hard constraints, boundaries, pointers | **expand**: pull dependency topics |
 | **L3 long docs** | `stock-docs/`, `req-docs/` | Architecture finals, tech specs | Drill down on demand |

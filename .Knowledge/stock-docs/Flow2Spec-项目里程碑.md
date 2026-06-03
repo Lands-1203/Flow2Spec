@@ -4,7 +4,7 @@
 > **维护**：大版本或对外渠道变更后，增量修订对应里程碑行，并更新文首「当前版本」表。  
 > **索源**：`flow2spec架构说明_终稿.md`、`Flow2Spec-任务清单与变更追踪.md`、`Flow2Spec-对外介绍演示.md` + 双仓 `git log`。
 
-**当前包版本**（两仓 `package.json` 已对齐）：**3.0.19**
+**当前包版本**（两仓 `package.json` 已对齐）：**3.1.0**
 
 ---
 
@@ -57,6 +57,7 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | M11 单仓里程碑 | 2026-05-18 | — | `f2s-doc-milestone` + `项目里程碑模版`（工作区变更中） | ● | ● |
 | M12 文档打磨 | 2026-05-16 | 3.0.13 | 设计说明 / README 优化（无新版本号） | ● | ● |
 | M13 知识工程规范 | 2026-06-03 | 3.0.14–3.0.19 | `skill-authoring` 骨架规范、`f2s-kb-addRules`、`f2s-topic-authoring` 创作侧准则 | ● | ● |
+| M14 主题分类 | 2026-06-03 | 3.1.0 | `topicMetadata`（`primary`/`tags`/`confidence`）、`init` 合并校验、skill 重命名规范 | ● | ● |
 
 图例：**●** 主交付仓；**○** 跟随合并/同步。
 
@@ -253,6 +254,16 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 
 ---
 
+## M14 · 主题分类（2026-06-03）
+
+| 项 | 内容 |
+| --- | --- |
+| **版本** | **3.1.0** |
+| **交付** | `manifest-routing.json` 新增 **`topicMetadata`** 字段（`primary` / `tags` / `confidence`）；`lib/init.js` 支持合并、校验、模板优先覆盖；`f2s-topic-authoring` 补 `topicMetadata` 判定准则；`f2s-kb-upgrade` 步骤 3a 存量审计；skill 命名规范：`f2s-ctx-build→f2s-kb-build`、`f2s-doc-add→f2s-kb-add`、`f2s-rule-capture→f2s-kb-addRules`、`f2s-karpathy-guidelines→f2s-coding-guide`、`stock-docs-vs-req-docs→f2s-doc-routing`；`init` 自动删除旧 skill 目录 |
+| **双仓** | ● ● |
+
+---
+
 ## 能力域与主题对照
 
 | 能力域 | 主题 / 技能 | 里程碑 | 备注 |
@@ -270,6 +281,7 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | 单仓里程碑 | f2s-doc-milestone | M11 | 生成物见各仓 `stock-docs/项目里程碑.md` |
 | 文档维护 | README、设计说明 | M12 | 双仓 |
 | 知识工程规范 | skill-authoring、f2s-kb-addRules、f2s-topic-authoring | M13 | 双仓 |
+| 主题分类 | topicMetadata、init 合并校验、skill 重命名 | M14 | 双仓 |
 
 ---
 
@@ -312,3 +324,4 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | 2026-05-18 | 当前版本 **3.0.13**；增补 M9–M12、`f2s-doc-milestone` 与单仓 `项目里程碑.md` 分工 |
 | 2026-05-21 | **M12 文档维护**：`docs/` 去 `README-`/`Flow2Spec-` 前缀；英文迁入 **`docs/en/`**（去掉 `.en` 后缀）；删除「PDF 直驱实现」叙述；**双仓同步** `templates/`、`lib/`、`cli.js`、`docs/`、`.Knowledge` 与 README（`f2s-kb-upgrade` 仍保留各仓 npm 包名；`presentations/`、`package.json` 刻意分叉） |
 | 2026-06-03 | **M13 知识工程规范**：`skill-authoring` topic + matcher（SKILL 骨架约定）、`f2s-kb-addRules` 技能（口述规则进 KB）、`f2s-topic-authoring` 创作侧规则（topic 命名/骨架/依赖判定/DAG）；各 SKILL 新增创作侧准则引用注释；**双仓同步** |
+| 2026-06-03 | **M14 主题分类**：`topicMetadata`（`primary`/`tags`/`confidence`）、`init` 合并校验与模板优先策略、skill 重命名规范（`kb-build`/`kb-add`/`kb-addRules` 等）、`init` 自动清理旧 skill 目录；版本 **3.1.0**；**双仓同步** |

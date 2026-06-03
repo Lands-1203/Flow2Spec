@@ -58,6 +58,7 @@ alwaysApply: true
 - `taskToTopicRules[].matcherPath`：匹配词分片直链路径，按需读取单个 matcher 文件。
 - `taskToTopicRules[].matcherId`：matcher 的稳定标识，需与 matcher 分片内 `id` 一致。
 - `topicDependencies`：主主题命中后先加载依赖主题。
+- `topicMetadata`：主题治理元数据，只影响阅读预期，不参与 matcher 命中，不决定是否读取 topic，不改变执行强制性；执行强制性始终以 `AGENTS.md`、rules、skills 与 topic 正文中的明确要求为准。读到 `topicMetadata[topicId].primary` / `tags` 时：`config` 关注配置项、开关、默认值、初始化参数；`policy` 优先检查正文中的必须/禁止/门禁/流程约束；`feature` 作为已落地业务/产品能力背景；`module` 作为目录、包、模块边界与工程结构背景。`confidence` 仅允许 `manual` / `inferred`；无明确分类证据时不写 metadata。
 - `matcherPath(includeAny)`：任务关键词匹配词表。
 - `fallbackTopic`：任务与关键词都未命中时必须读取，但仅作低置信度兜底，不是最终执行依据。
 - `.Knowledge/manifest-routing.json + matcherPath 分片文件` 是机读事实源（关键词仅在 `matchers/*.json`）。

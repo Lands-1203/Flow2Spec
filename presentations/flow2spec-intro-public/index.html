@@ -477,8 +477,7 @@
                   <span><b>policy</b>流程/规则/门禁</span>
                 </div>
                 <p>
-                  `workflow` / `rule` / `decision` 归并为
-                  <b>policy</b>；分类只做盘点与审计，不驱动文件命名。
+                  元数据包含 <b>primary</b>、可选 <b>tags</b> 与 <b>confidence</b>；只影响盘点、审计与阅读预期，不改变执行强制性。
                 </p>
               </div>
             </div>
@@ -590,7 +589,7 @@
             </li>
             <li>
               主题分类：<strong>feature / module / config / policy</strong>；
-              policy 覆盖流程、规则、门禁；分类不改 topicId / 文件名
+              type 只影响阅读预期；执行强制性仍以正文为准
             </li>
             <li>
               间隙：<strong>技能→知识→实现</strong>（f2s 维护库 · manifest

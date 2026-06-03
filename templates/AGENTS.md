@@ -30,6 +30,7 @@
 1. **必须先读机器索引**：优先读取 **`./.Knowledge/manifest-routing.json`** 做主题路由；按需依据 `taskToTopicRules[].matcherPath` 读取对应 matcher 分片（单文件，路径形如 **`./.Knowledge/matchers/<id>.json`**）取匹配词；无法命中时进入补召回阶段。
    - 若存在 `taskToTopicRules`，优先按任务规则路由主题。
    - 若命中主题含 `topicDependencies`，先读依赖主题再读主主题。
+   - 若存在 `topicMetadata`，仅将其中 `primary` / `tags` 作为阅读预期：`config` 关注配置项 / 开关 / 默认值；`policy` 关注正文中的必须 / 禁止 / 门禁 / 流程约束；`feature` 作为已落地能力背景；`module` 作为目录 / 包 / 模块边界背景。`topicMetadata` 不参与 matcher 命中，不决定是否读取 topic，不改变执行强制性；无明确分类证据时不写 metadata，并在摘要列为待确认。
    - `manifest` 仅通过 `f2s-*` 技能流程维护，不假设存在额外 CLI 命令。
 2. **人工索引按需读取**：仅在需要校验主题语义与边界时读取 **`./.Knowledge/index.md`**。
    - `index.md` 不是机读事实源，仅承担人读导航与语义边界说明。
@@ -74,7 +75,7 @@
 ## 可用主题
 
 - 不在此处维护静态主题列表，避免与知识库演进漂移。
-- 每次任务均以 **`./.Knowledge/manifest-routing.json`** 的 `topicPaths`、`taskToTopicRules`、`fallbackTopic` 为唯一路由事实，并按每条规则的 `matcherPath` 读取 matcher 分片。
+- 每次任务均以 **`./.Knowledge/manifest-routing.json`** 的 `topicPaths`、`taskToTopicRules`、`fallbackTopic` 为唯一路由事实，并按每条规则的 `matcherPath` 读取 matcher 分片；`topicMetadata` 只作治理与阅读预期，不是路由事实源。
 - 若路由清单与 **`./.Knowledge/index.md`** 语义不一致，以路由清单为准并提示用户同步修正。
 
 ## 专题长文（`./.codex/topics/`）
