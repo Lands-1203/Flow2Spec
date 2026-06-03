@@ -55,7 +55,7 @@
    - 用户明确要求“全量检查/不要遗漏”。
 9. **禁止项**：
    - 禁止跳过 **`./.Knowledge/manifest-routing.json`**、按需 `matcherPath` 分片与 **`./.Knowledge/topics/`** 直接全仓检索或直接编码；**`./.Knowledge/index.md`** 按需读取，不可替代上述机读链。
-   - 同一任务线内避免重复全文读取 **`./.Knowledge/manifest-routing.json`**（除非用户说明已通过 `f2s-ctx-build` / `f2s-kb-sync` / `f2s-doc-add` 等更新路由或知识、或手动改了 manifest；**勿将**仅执行 `flow2spec init` 当作业务知识库已更新）；禁止为枚举而遍历整个 **`./.Knowledge/matchers/`**；禁止 **`./.Knowledge/index.md`** 与 routing 交替「刷清单」。
+   - 同一任务线内避免重复全文读取 **`./.Knowledge/manifest-routing.json`**（除非用户说明已通过 `f2s-kb-build` / `f2s-kb-sync` / `f2s-kb-add` 等更新路由或知识、或手动改了 manifest；**勿将**仅执行 `flow2spec init` 当作业务知识库已更新）；禁止为枚举而遍历整个 **`./.Knowledge/matchers/`**；禁止 **`./.Knowledge/index.md`** 与 routing 交替「刷清单」。
    - 禁止把 **`./.Knowledge/stock-docs/`** 作为“按方案实现代码”的直接输入文档。
    - Flow2Spec 执行条令以 **`./AGENTS.md`**（完整）、**`./.codex/topics/f2s-*.md`** 与 **`./.codex/skills/`** 为准；**`.codex/AGENTS.md`** 仅为目录指针，不可替代根 `AGENTS.md`；勿使用仓库内 **非上述路径** 的同名条令文件作为执行依据，以免口径分叉。
    - 禁止把 `fallbackTopic` 当作最终命中直接实施改动；`fallbackTopic` 仅作安全兜底与澄清前置上下文。
@@ -67,7 +67,7 @@
 1. `./.Knowledge/manifest-routing.json`
 2. `./.Knowledge/matchers/<matcher>.json`（按需：通过 `taskToTopicRules[].matcherPath` 定位具体文件）
 3. `./.Knowledge/index.md`（按需，用于语义校验）
-4. `./.Knowledge/topics/<topic>.md`（摘要；涉及统一入口、路由细则、`implement-tech-design` / `stock-docs-vs-req-docs` 等时，按需续读下文 **「专题长文」** 所列 `./.codex/topics/f2s-*.md`）
+4. `./.Knowledge/topics/<topic>.md`（摘要；涉及统一入口、路由细则、`implement-tech-design` / `f2s-doc-routing` 等时，按需续读下文 **「专题长文」** 所列 `./.codex/topics/f2s-*.md`）
 5. `./.Knowledge/stock-docs/<doc>.md`（按需）
 6. 业务代码（按需；路径以仓库内实际目录为准）
 
@@ -89,27 +89,27 @@
 
 - **统一入口**：`./.codex/topics/f2s-flow2spec-unified-entry.md`
 - **implement-tech-design**：`./.codex/topics/f2s-implement-tech-design.md`
-- **stock-docs-vs-req-docs**：`./.codex/topics/f2s-stock-docs-vs-req-docs.md`
+- **f2s-doc-routing**：`./.codex/topics/f2s-stock-docs-vs-req-docs.md`
 
 同目录下另有：
 
 - **`./.codex/topics/f2s-knowledge-preflight.md`**：**普通提问**也须先 `Read` **`./.Knowledge/manifest-routing.json`** 再下钻代码；与统一入口并行时以本条「首工具调用」为准。
 - **`./.codex/topics/f2s-config-check.md`**：内容与上文「先 Read **`./flow2spec.config.json`**」一致并含 **changeTracking** 细表；**仅**在需核对细表时按需打开，不必与上列三条并列必读。
-- **`./.codex/topics/f2s-karpathy-guidelines.md`**：通用编码行为准则（先澄清、极简、手术式修改、可验证目标）；与 f2s 路由/任务条令**并行**，硬冲突时以 **f2s 条令**为准。
+- **`./.codex/topics/f2s-coding-guide.md`**：通用编码行为准则（先澄清、极简、手术式修改、可验证目标）；与 f2s 路由/任务条令**并行**，硬冲突时以 **f2s 条令**为准。
 
 执行 Flow2Spec 相关任务时，先读本文件（**`./AGENTS.md`**）与 **`./.Knowledge/manifest-routing.json`**，再按需打开上列 **`./.codex/topics/*.md`** 文件。
 
 ## 可用 Flow2Spec 技能（自动生成）
 
-- `f2s-ctx-build`：根据 .Knowledge/stock-docs 文档生成知识路由主题与索引；触发：生成项目上下文、f2s-ctx-build、终稿生成上下文
-- `f2s-ctx-rm`：删除某 stock-docs 文档对应的知识主题与索引映射；触发：删除项目上下文、f2s-ctx-rm
-- `f2s-doc-add`：工作中把已落地能力解析进知识库（多文件聚合）：初稿→终稿→topics/index/manifest；触发：f2s-doc-add、已有能力进知识库、多文件生成上下文
+- `f2s-kb-build`：根据 .Knowledge/stock-docs 文档生成知识路由主题与索引；触发：生成项目上下文、f2s-kb-build、终稿生成上下文
+- `f2s-kb-rm`：删除某 stock-docs 文档对应的知识主题与索引映射；触发：删除项目上下文、f2s-kb-rm
+- `f2s-kb-add`：工作中把已落地能力解析进知识库（多文件聚合）：初稿→终稿→topics/index/manifest；触发：f2s-kb-add、已有能力进知识库、多文件生成上下文
 - `f2s-doc-arch`：根据用户说明或文档（或扫描代码）生成项目架构说明初稿，无固定格式，描述清楚即可；触发：项目架构说明、f2s-doc-arch、架构初稿
-- `f2s-doc-final`：将 PDF 或 MD 转为《终稿模版》规范格式，便于后续用 f2s-ctx-build 同步 topics/index/manifest；触发：f2s-doc-final、转成概述模板、终稿模版
+- `f2s-doc-final`：将 PDF 或 MD 转为《终稿模版》规范格式，便于后续用 f2s-kb-build 同步 topics/index/manifest；触发：f2s-doc-final、转成概述模板、终稿模版
 - `f2s-doc-milestone`：据 req-docs、git log、.task 与知识库主题语义生成里程碑（《项目里程碑模版》）；触发：f2s-doc-milestone、生成项目里程碑、里程碑。命令后可附语义化范围。本技能固定子 agent 生成、主 agent 验证，不受 flow2spec.config 编排开关影响
 - `f2s-doc-pdf`：将 PDF 技术方案转为 Markdown 并保存到 req-docs，可补全流程说明；触发：PDF转MD、按方案实现前的 PDF
 - `f2s-git-commit`：代码写完后提交 Git：检查变更与知识库覆盖；生成带 emoji 首行的提交说明后**可直接 commit**（须在当条回复展示首行，不要求用户单独确认 commit）；**git pull 类拉取须用户先确认**。触发：f2s-git-commit、提交代码、git commit、帮我提交
-- `f2s-karpathy-guidelines`：Flow2Spec 内置的 Karpathy 式编码纪律：澄清假设、极简实现、手术式修改、可验证目标。默认由同名 topic 规则 alwaysApply 随 init 落盘；显式调用本技能时重申四条。
+- `f2s-coding-guide`：Flow2Spec 内置的 Karpathy 式编码纪律：澄清假设、极简实现、手术式修改、可验证目标。默认由同名 topic 规则 alwaysApply 随 init 落盘；显式调用本技能时重申四条。
 - `f2s-kb-feat`：新增能力时补全实现与知识库；已实现则仅同步知识库；触发：f2s-kb-feat、新增能力
 - `f2s-kb-fix`：根据用户指出的实现或规则错误修正代码，并默认同步知识库；触发：f2s-kb-fix、修正实现规则
 - `f2s-kb-merge`：解决 Git 合并后编辑器上下文冲突；可选传入冲突文件；实现侧冲突仅罗列待用户确认；触发：合并上下文冲突、f2s-kb-merge
@@ -119,5 +119,5 @@
 - `f2s-req-backend`：根据澄清后的需求基于项目知识库/Skills/Rules 生成后端技术文档；触发：生成后端技术文档、后端技术方案
 - `f2s-req-clarify`：针对 PRD/需求反问直到清楚，再可用 f2s-req-backend 出技术方案；触发：需求澄清、PRD 澄清
 - `f2s-req-plan`：根据技术方案/需求描述/变更描述规划并实现任务；始终按 f2s-task 维护 .task/；支持子 agent 并行实现；触发：f2s-req-plan、创建任务、任务规划、我需要任务清单
-- `f2s-rule-capture`：把用户口述的规则沉淀进知识库，自动判定「新建主题 / 并入存量主题」并同步路由；不写代码、不创建 .task/；触发：f2s-rule-capture、新增规则、口述规则、把这条记到知识库
-- `stock-docs-vs-req-docs`：文档目录 stock-docs 与 req-docs 分工；触发词：stock-docs、req-docs、f2s-ctx-build、f2s-doc-arch、f2s-doc-add、已落地能力、技术方案放哪、PDF 终稿
+- `f2s-kb-capture`：把用户口述的规则沉淀进知识库，自动判定「新建主题 / 并入存量主题」并同步路由；不写代码、不创建 .task/；触发：f2s-kb-capture、新增规则、口述规则、把这条记到知识库
+- `f2s-doc-routing`：文档目录 stock-docs 与 req-docs 分工；触发词：stock-docs、req-docs、f2s-kb-build、f2s-doc-arch、f2s-kb-add、已落地能力、技术方案放哪、PDF 终稿

@@ -38,7 +38,7 @@ See [architecture.md §1](./architecture.md) for Memory Coding four rings.
 ## Path Constraints
 
 1. `.Knowledge/topics` is the knowledge routing topic layer; it is allowed and encouraged to be maintained via `f2s-*` skills.
-2. `f2s-ctx-build` reads from `.Knowledge/stock-docs` and updates `.Knowledge/topics`, `.Knowledge/index.md`, `.Knowledge/manifest-routing.json`, `.Knowledge/matchers/*.json`.
+2. `f2s-kb-build` reads from `.Knowledge/stock-docs` and updates `.Knowledge/topics`, `.Knowledge/index.md`, `.Knowledge/manifest-routing.json`, `.Knowledge/matchers/*.json`.
 3. Implementation tasks uniformly read from `.Knowledge/req-docs/*.md`.
 4. `manifest-routing.json` and `matchers/*.json` are maintained by `f2s-*` skill workflows; `.Knowledge/manifest-matchers.json` is no longer used (`flow2spec init` will delete legacy files).
 

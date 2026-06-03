@@ -66,7 +66,7 @@ AI: 开始改，预计 3 处文件。
 开启 `changeTracking` 配置后，`f2s-kb-feat` / `f2s-kb-fix` 等技能执行时自动创建带 checkbox 的 `task.md`，每步完成立即打钩落盘。新会话续作时自动加载剩余清单，不靠记忆、不靠口头，任务进度永远在磁盘上。用户侧的代办（执行 SQL、配环境变量、点审批）单独写入 `user-todos.md`，不混在 AI 步骤里。
 
 **⑥ 文档驱动：PDF / MD 一键入知识库**  
-`/f2s-doc-add` 把已落地能力的源码聚合成初稿 → 终稿 → topics，`/f2s-doc-final` 把 PDF 或任意 MD 转成规范终稿格式。外部文档、历史方案都能变成可路由的知识。
+`/f2s-kb-add` 把已落地能力的源码聚合成初稿 → 终稿 → topics，`/f2s-doc-final` 把 PDF 或任意 MD 转成规范终稿格式。外部文档、历史方案都能变成可路由的知识。
 
 ---
 
@@ -110,7 +110,7 @@ npx @double-codeing/flow2spec@latest init
 
 > 这一步只做一次，之后日常开发不需要重复。
 
-2. `/f2s-doc-add <文件夹路径>` — 把还没入库的功能模块路径补进来
+2. `/f2s-kb-add <文件夹路径>` — 把还没入库的功能模块路径补进来
 
 > 这一步在进入开发前，发现没有某个模块能力的知识的时候选择性的去做
 
@@ -150,7 +150,7 @@ npx @double-codeing/flow2spec@latest init
 | `/f2s-kb-fix` | 改 BUG |
 | `/f2s-kb-sync` | 同步知识库 |
 | `/f2s-git-commit` | 提交代码 |
-| `/f2s-doc-add <路径>` | 接口模块入知识库 |
+| `/f2s-kb-add <路径>` | 接口模块入知识库 |
 
 更多命令详见 [使用说明](./docs/使用说明.md) · [命令说明](./docs/命令说明.md)
 

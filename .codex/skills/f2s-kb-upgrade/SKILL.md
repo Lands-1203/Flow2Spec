@@ -11,8 +11,8 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 ## 边界（避免误区）
 
-- **`flow2spec init` 不写业务知识**：不替代 `f2s-doc-add`、`f2s-kb-fix`、`f2s-kb-feat`、`f2s-kb-sync`、`f2s-ctx-build` 等对 `stock-docs` / `req-docs` / `topics` 正文与业务向路由词条的维护。
-- 本技能跑通的是 **包版本下的目录、模板占位、路由结构对齐**；用户若说「把新能力写进知识库」，应引导 **`f2s-kb-sync` / `f2s-doc-add`** 等，而非仅 `f2s-kb-upgrade`。
+- **`flow2spec init` 不写业务知识**：不替代 `f2s-kb-add`、`f2s-kb-fix`、`f2s-kb-feat`、`f2s-kb-sync`、`f2s-kb-build` 等对 `stock-docs` / `req-docs` / `topics` 正文与业务向路由词条的维护。
+- 本技能跑通的是 **包版本下的目录、模板占位、路由结构对齐**；用户若说「把新能力写进知识库」，应引导 **`f2s-kb-sync` / `f2s-kb-add`** 等，而非仅 `f2s-kb-upgrade`。
 
 ## 编排（主 / 子 agent）
 
@@ -114,9 +114,9 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 1. 清理旧主题文件（仅在文件存在时删除）：
    - `.Knowledge/topics/flow2spec-architecture.md`
    - `.Knowledge/topics/implement-tech-design.md`
-   - `.Knowledge/topics/stock-docs-vs-req-docs.md`
+   - `.Knowledge/topics/f2s-doc-routing.md`
    - `templates/knowledge/topics/implement-tech-design.md`
-   - `templates/knowledge/topics/stock-docs-vs-req-docs.md`
+   - `templates/knowledge/topics/f2s-doc-routing.md`
 2. 修复引用（仅在文件存在时更新；**`.Knowledge/index.md` 正文不由 init 改写**，见步骤 3b）：
    - `templates/knowledge/index.md`
    - `templates/knowledge/manifest-routing.json`

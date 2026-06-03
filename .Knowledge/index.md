@@ -24,17 +24,17 @@
 | 主题 | 路径 | 适用场景 | 关联文档（摘要） |
 | --- | --- | --- | --- |
 | implement-tech-design | `.Knowledge/topics/f2s-implement-tech-design.md` | 按技术方案实现代码 | req：[技术方案](.Knowledge/req-docs/<技术方案>.md)（必填） |
-| stock-docs-vs-req-docs | `.Knowledge/topics/f2s-stock-docs-vs-req-docs.md` | stock-docs / req-docs 目录分工 | stock：[目录边界说明](.Knowledge/stock-docs/<目录边界说明>.md)（可选） |
+| f2s-doc-routing | `.Knowledge/topics/f2s-stock-docs-vs-req-docs.md` | stock-docs / req-docs 目录分工 | stock：[目录边界说明](.Knowledge/stock-docs/<目录边界说明>.md)（可选） |
 | fallback-triage | `.Knowledge/topics/f2s-fallback-triage.md` | 未命中或低置信度：分诊与澄清 | stock：[路由分诊说明](.Knowledge/stock-docs/<分诊说明>.md)（可选） |
 | config-precheck | `.Knowledge/topics/f2s-config-precheck.md` | 执行 `f2s-*` 前读 `flow2spec.config.json` / 编排开关 | Codex 长文：仓库根 `.codex/topics/f2s-config-check.md`；[路由摘要](topics/f2s-config-precheck.md) |
 | f2s-task | `.Knowledge/topics/f2s-task.md` | 变更追踪、`.task/` 任务清单与跨会话续作 | stock：[任务清单与变更追踪](stock-docs/Flow2Spec-任务清单与变更追踪.md)；长文：`rules/f2s-task.*` |
 | f2s-req-plan | `.Knowledge/topics/f2s-req-plan.md` | 需求/方案规划与实现；始终维护 `.task/` | 技能：`skills/f2s-req-plan/SKILL.md`；依赖 `f2s-task` |
 | flow2spec-presentations | `.Knowledge/topics/f2s-flow2spec-presentations.md` | 本仓对外介绍 HTML 演示稿路径与维护约定 | stock：[对外介绍演示](stock-docs/Flow2Spec-对外介绍演示.md) |
 | flow2spec-milestones | `.Knowledge/topics/f2s-flow2spec-milestones.md` | 版本演进；含内部仓 vs 开源仓、双语 PPT、Cursor 插件 | stock：[项目里程碑](stock-docs/Flow2Spec-项目里程碑.md) |
-| skill-authoring | `.Knowledge/topics/skill-authoring.md` | 新增 / 重构 `f2s-*` SKILL 时的骨架与命名约定（仅本仓，不下发） | 参考实现：`templates/skills/f2s-rule-capture/SKILL.md` |
+| skill-authoring | `.Knowledge/topics/skill-authoring.md` | 新增 / 重构 `f2s-*` SKILL 时的骨架与命名约定（仅本仓，不下发） | 参考实现：`templates/skills/f2s-kb-capture/SKILL.md` |
 
 每主题保留 **1–3 条** 可点击摘要链接；全量路径对照写入 `.Knowledge/migration-report.md`（迁移场景）。  
-其中 **`implement-tech-design`**、**`stock-docs-vs-req-docs`**、**`config-precheck`**、**`f2s-task`** 在 `topics/` 内为**路由摘要**；执行长文见配置根 **`rules/f2s-*.md(c)`**；使用 Codex 时见 **`.codex/AGENTS.md`**、**`.codex/topics/f2s-*.md`**（`f2s-config-check` 与 `AGENTS` 前置同源，按需打开）。
+其中 **`implement-tech-design`**、**`f2s-doc-routing`**、**`config-precheck`**、**`f2s-task`** 在 `topics/` 内为**路由摘要**；执行长文见配置根 **`rules/f2s-*.md(c)`**；使用 Codex 时见 **`.codex/AGENTS.md`**、**`.codex/topics/f2s-*.md`**（`f2s-config-check` 与 `AGENTS` 前置同源，按需打开）。
 
 ---
 
@@ -66,9 +66,9 @@
 
 | 情况 | 你怎么做 |
 | --- | --- |
-| 有文档但没配到（1a） | 维护侧：`f2s-ctx-build` / `f2s-kb-sync` / `f2s-doc-add` 补路由与 `includeAny`。执行侧：分诊主题澄清任务类型，**不**用全仓扫替代 manifest。 |
+| 有文档但没配到（1a） | 维护侧：`f2s-kb-build` / `f2s-kb-sync` / `f2s-kb-add` 补路由与 `includeAny`。执行侧：分诊主题澄清任务类型，**不**用全仓扫替代 manifest。 |
 | 配到了但不够（1b） | 走依赖与次高候选 → `verify` 点名缺哪篇文档；仍缺则向用户要路径或补 `req-docs`。 |
 | 库里没有（2） | 承认缺口 → 代码下钻或请用户补需求/方案文档。 |
 | 反复读 manifest 费 token（2a） | 同一任务线内 routing 只当快照；只读命中项的单个 matcher；不遍历整个 `matchers/` 目录枚举；`index.md` 勿与 routing 循环互刷。 |
 
-**说明**：「路由/知识已更新」指 `f2s-*`（如 `f2s-ctx-build`、`f2s-kb-sync`、`f2s-doc-add`、`f2s-kb-fix` 等）产出或手改 `manifest-routing` / `matchers` 分片；**`flow2spec init` 不撰写业务文档**，以模板补齐与配置根落盘为主，勿与知识库内容更新混为一谈。
+**说明**：「路由/知识已更新」指 `f2s-*`（如 `f2s-kb-build`、`f2s-kb-sync`、`f2s-kb-add`、`f2s-kb-fix` 等）产出或手改 `manifest-routing` / `matchers` 分片；**`flow2spec init` 不撰写业务文档**，以模板补齐与配置根落盘为主，勿与知识库内容更新混为一谈。

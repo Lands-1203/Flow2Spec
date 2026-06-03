@@ -100,9 +100,9 @@ graph LR
 
     D1["Architecture Docs"] -->|f2s-doc-arch| FIN["f2s-doc-final"]
     D2["PDF/draft"] -->|f2s-doc-final| FIN
-    FIN --> CTX["f2s-ctx-build"] --> K
+    FIN --> CTX["f2s-kb-build"] --> K
 
-    OLD["Existing Code/Docs"] -->|f2s-doc-add| K
+    OLD["Existing Code/Docs"] -->|f2s-kb-add| K
 
     NR["New Requirement"] --> CL["f2s-req-clarify"] --> BE["f2s-req-backend"]
     BE --> IMPL["Implement xxx technical design"] -->|auto-trigger implement-tech-design rule| K
@@ -259,7 +259,7 @@ git log .Knowledge/
 
   a3f1c2  f2s-kb-feat: add refund state machine routing
   b7e9d1  f2s-kb-fix: fix RestTemplate injection conventions
-  c2a8f0  f2s-ctx-build: onboard order service architecture docs
+  c2a8f0  f2s-kb-build: onboard order service architecture docs
   d5b3e9  f2s-kb-sync: consolidate payment retry queue design
 
   Code changes  +  Knowledge changes  →  same commit or adjacent commits
@@ -521,7 +521,7 @@ The same `.Knowledge/` drives all tools  ·  adding/removing tools does not affe
 ```
 Adding a topic                         Removing a topic
 ─────────────────────               ─────────────────────
-1. Write topics/xxx.md               f2s-ctx-rm stock-docs/xxx.md
+1. Write topics/xxx.md               f2s-kb-rm stock-docs/xxx.md
 2. Write matchers/m-xxx.json                  ↓
 3. Register in manifest-routing       Automatically cleans up topics/ + manifest
                                        + index references

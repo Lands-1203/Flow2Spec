@@ -8,9 +8,9 @@
 |---|---|---|
 | `/f2s-doc-arch` | Scan project, generate architecture draft | Doc Curation |
 | `/f2s-doc-final` | Convert PDF / draft to standardized final-draft format | Doc Curation |
-| `/f2s-ctx-build` | Sync final drafts into knowledge base routing (topics / matchers / manifest) | Doc Curation |
-| `/f2s-doc-add <path>` | Aggregate multi-file implemented capabilities into knowledge base | Doc Curation |
-| `/f2s-ctx-rm` | Remove knowledge topic and index mapping for a stock-docs document | Doc Curation |
+| `/f2s-kb-build` | Sync final drafts into knowledge base routing (topics / matchers / manifest) | Doc Curation |
+| `/f2s-kb-add <path>` | Aggregate multi-file implemented capabilities into knowledge base | Doc Curation |
+| `/f2s-kb-rm` | Remove knowledge topic and index mapping for a stock-docs document | Doc Curation |
 | `/f2s-doc-pdf` | Convert PDF technical proposal to Markdown, save to req-docs | Doc Curation |
 | `/f2s-req-clarify` | Clarify requirements via multi-round Q&A | Requirements |
 | `/f2s-req-backend` | Generate backend technical proposal from clarified requirements | Requirements |
@@ -40,7 +40,7 @@
 
 **Relationships**:
 - **Prerequisite**: None
-- **Next Step**: `f2s-doc-final` (normalized final draft) → `f2s-ctx-build` (**final draft input only**; do not run build on `_draft` / `_初稿` files)
+- **Next Step**: `f2s-doc-final` (normalized final draft) → `f2s-kb-build` (**final draft input only**; do not run build on `_draft` / `_初稿` files)
 - **Output**: `.Knowledge/stock-docs/<Architecture Overview>_draft.md`
 
 **Sub-Agent Invocation**:
@@ -59,7 +59,7 @@
 
 **Purpose**: Converts PDF technical proposals or draft documents into the standardized "Final Draft Template" format, unifying the document structure for subsequent knowledge base ingestion.
 
-**How It Works**: Unstructured or heterogeneous documents (PDF/drafts) are normalized against the built-in final-draft template: core concept tables, business rules, key flows, configuration, error handling, and other standard sections are extracted; missing section markers are filled in; the output is a consistently structured `_final.md`. The final draft is the standard input for `f2s-ctx-build`, keeping knowledge-base entry structure uniform.
+**How It Works**: Unstructured or heterogeneous documents (PDF/drafts) are normalized against the built-in final-draft template: core concept tables, business rules, key flows, configuration, error handling, and other standard sections are extracted; missing section markers are filled in; the output is a consistently structured `_final.md`. The final draft is the standard input for `f2s-kb-build`, keeping knowledge-base entry structure uniform.
 
 **Use Cases**:
 - PDF technical proposals need conversion to Markdown
@@ -68,7 +68,7 @@
 
 **Relationships**:
 - **Prerequisite**: PDF document or draft document
-- **Next Step**: `f2s-ctx-build` (final draft imported into the knowledge base)
+- **Next Step**: `f2s-kb-build` (final draft imported into the knowledge base)
 - **Output**: `.Knowledge/stock-docs/<Document>_final.md`
 
 **Sub-Agent Invocation**:
@@ -83,7 +83,7 @@
 
 ---
 
-### `f2s-ctx-build`
+### `f2s-kb-build`
 
 **Purpose**: Synchronizes documents from `stock-docs/` (architecture, final drafts) into the knowledge base routing system, generating/updating topic files, the index, manifest-routing, and matchers.
 
@@ -117,11 +117,11 @@
 
 ---
 
-### `f2s-doc-add`
+### `f2s-kb-add`
 
 **Purpose**: Parses already-implemented capabilities (aggregated from multiple files) into the knowledge base. Suitable when code already exists but lacks documentation, or when multiple documents need to be imported into the knowledge base in a unified manner.
 
-**How It Works**: Aggregates capability descriptions from multiple scattered sources (code, config, loose docs) and runs the full "draft → final draft → topics/index/manifest" pipeline. Unlike `f2s-ctx-build`, the input differs: `ctx-build` is driven from a single existing final draft; `doc-add` aggregates many scattered sources first, then follows the same pipeline. It closes the gap of "implementation exists but documentation does not."
+**How It Works**: Aggregates capability descriptions from multiple scattered sources (code, config, loose docs) and runs the full "draft → final draft → topics/index/manifest" pipeline. Unlike `f2s-kb-build`, the input differs: `ctx-build` is driven from a single existing final draft; `doc-add` aggregates many scattered sources first, then follows the same pipeline. It closes the gap of "implementation exists but documentation does not."
 
 **Use Cases**:
 - Existing code needs knowledge base documentation
@@ -150,11 +150,11 @@
 
 ---
 
-### `f2s-ctx-rm`
+### `f2s-kb-rm`
 
 **Purpose**: Deletes corresponding knowledge topics and index mappings based on `stock-docs` documents. Only removes reference relationships in the knowledge base, not the source documents themselves.
 
-**How It Works**: The inverse of `f2s-ctx-build` — given a `stock-docs` document path, locate its task→topic rules in `manifest-routing.json`, the corresponding `matchers/<id>.json` shard, `topics/<topic>.md`, and entries in `index.md`, and remove those references one by one. If a topic has no remaining task references after deletion, remove that topic file. Source documents are left in place; the user may delete them physically if desired.
+**How It Works**: The inverse of `f2s-kb-build` — given a `stock-docs` document path, locate its task→topic rules in `manifest-routing.json`, the corresponding `matchers/<id>.json` shard, `topics/<topic>.md`, and entries in `index.md`, and remove those references one by one. If a topic has no remaining task references after deletion, remove that topic file. Source documents are left in place; the user may delete them physically if desired.
 
 **Use Cases**:
 - A document is deprecated and needs removal from the knowledge routing
@@ -186,7 +186,7 @@
 **Relationships**:
 - **Prerequisite**: PDF document
 - **Output**: `.Knowledge/req-docs/<Proposal>.md`
-- **Next Step** (recommended): `f2s-req-clarify` → `f2s-req-backend` → implement from the technical proposal MD via `implement-tech-design`; for knowledge base archival use `f2s-doc-final` → `f2s-ctx-build`
+- **Next Step** (recommended): `f2s-req-clarify` → `f2s-req-backend` → implement from the technical proposal MD via `implement-tech-design`; for knowledge base archival use `f2s-doc-final` → `f2s-kb-build`
 
 **Sub-Agent Invocation**:
 - `subAgent: false` (default): The main agent completes the full workflow
@@ -405,7 +405,7 @@
 - **Prerequisite**: None (can be triggered directly, or with zero-input inference)
 - **Next Step**: None
 - **Feature**: First outputs a knowledge base update outline, then writes only after user confirmation
-- **Difference from `f2s-ctx-build`**: `ctx-build` is driven from `stock-docs`; `kb-sync` infers from the conversation/code
+- **Difference from `f2s-kb-build`**: `ctx-build` is driven from `stock-docs`; `kb-sync` infers from the conversation/code
 
 **Sub-Agent Invocation**:
 - `subAgent: false` (default): The main agent completes inference and sync
@@ -525,7 +525,7 @@
 
 The following are not skill commands but rules activated by trigger words to guide Agent behavior.
 
-### `f2s-karpathy-guidelines`
+### `f2s-coding-guide`
 
 **Trigger Words**: `alwaysApply` (always on; no explicit trigger needed)
 
@@ -557,7 +557,7 @@ The following are not skill commands but rules activated by trigger words to gui
 
 ---
 
-### `stock-docs-vs-req-docs`
+### `f2s-doc-routing`
 
 **Trigger Words**: stock-docs, req-docs, implemented capability, where to put the technical proposal, PDF final draft
 
@@ -569,7 +569,7 @@ The following are not skill commands but rules activated by trigger words to gui
 
 | Directory | Purpose | When It Is Written |
 |-----------|---------|-------------------|
-| `stock-docs/` | Archival of existing knowledge (architecture, final drafts) | `f2s-doc-arch`, `f2s-doc-final`, `f2s-ctx-build` |
+| `stock-docs/` | Archival of existing knowledge (architecture, final drafts) | `f2s-doc-arch`, `f2s-doc-final`, `f2s-kb-build` |
 | `req-docs/` | Requirements and technical proposals (driving implementation) | `f2s-req-backend`, `f2s-doc-pdf`, manual placement |
 
 **Use Cases**:

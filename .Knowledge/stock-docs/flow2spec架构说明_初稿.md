@@ -52,10 +52,10 @@ flow2spec/
 │   └── skills/                     # 14 个 f2s-* 技能 SKILL.md
 │       ├── f2s-doc-arch/           # 架构说明初稿
 │       ├── f2s-doc-final/          # 终稿模版转换
-│       ├── f2s-doc-add/            # 已落地能力进知识库
+│       ├── f2s-kb-add/            # 已落地能力进知识库
 │       ├── f2s-doc-pdf/            # PDF 转 MD
-│       ├── f2s-ctx-build/          # 构建上下文索引
-│       ├── f2s-ctx-rm/             # 删除上下文映射
+│       ├── f2s-kb-build/          # 构建上下文索引
+│       ├── f2s-kb-rm/             # 删除上下文映射
 │       ├── f2s-req-clarify/        # 需求澄清
 │       ├── f2s-req-backend/        # 后端技术方案
 │       ├── f2s-kb-feat/            # 新增能力
@@ -135,8 +135,8 @@ flow2spec/
 
 | 场景 | 技能链 |
 | --- | --- |
-| **上下文沉淀** | `f2s-doc-arch` → `f2s-doc-final` → `f2s-ctx-build` |
-| **已落地能力补录** | `f2s-doc-add` |
+| **上下文沉淀** | `f2s-doc-arch` → `f2s-doc-final` → `f2s-kb-build` |
+| **已落地能力补录** | `f2s-kb-add` |
 | **按方案实现** | `f2s-doc-pdf`（可选）→ `.Knowledge/req-docs/*.md` → `implement-tech-design` |
 | **知识库维护** | `f2s-kb-fix` / `f2s-kb-feat` / `f2s-kb-sync` / `f2s-kb-merge` |
 | **包模板升级** | `f2s-kb-upgrade`（其中一步代跑 `flow2spec init`） |
@@ -158,5 +158,5 @@ flow2spec/
 
 - 本初稿未覆盖 `lib/init.js` 中模板落盘的详细增量/覆盖策略（如 `copyRecursivePreserve` 的跳过逻辑）
 - `scripts/` 目录内容未扫描，用途待补充
-- 各技能 SKILL.md 的具体触发词与执行细节未展开（建议按 `f2s-doc-add` 补录进知识库）
+- 各技能 SKILL.md 的具体触发词与执行细节未展开（建议按 `f2s-kb-add` 补录进知识库）
 - 项目测试覆盖情况（当前 `package.json` 中 test 仅运行 `--help`）

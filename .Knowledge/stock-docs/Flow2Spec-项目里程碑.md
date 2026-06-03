@@ -56,7 +56,7 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | M10 Codex 入口 | 2026-05-16 | 3.0.13 | 根 `AGENTS.md` 自动发现 | ● | ● |
 | M11 单仓里程碑 | 2026-05-18 | — | `f2s-doc-milestone` + `项目里程碑模版`（工作区变更中） | ● | ● |
 | M12 文档打磨 | 2026-05-16 | 3.0.13 | 设计说明 / README 优化（无新版本号） | ● | ● |
-| M13 知识工程规范 | 2026-06-03 | 3.0.14–3.0.19 | `skill-authoring` 骨架规范、`f2s-rule-capture`、`f2s-topic-authoring` 创作侧准则 | ● | ● |
+| M13 知识工程规范 | 2026-06-03 | 3.0.14–3.0.19 | `skill-authoring` 骨架规范、`f2s-kb-capture`、`f2s-topic-authoring` 创作侧准则 | ● | ● |
 
 图例：**●** 主交付仓；**○** 跟随合并/同步。
 
@@ -135,7 +135,7 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | 项 | 内容 |
 | --- | --- |
 | **版本** | **3.0.6** → **3.0.7** |
-| **交付** | **`f2s-karpathy-guidelines`**；`completed/<YYYYMMDD>-<task-name>/` |
+| **交付** | **`f2s-coding-guide`**；`completed/<YYYYMMDD>-<task-name>/` |
 | **开源仓** | `升至 3.0.7，补齐 config 预检、KB 预检与 Karpathy 全端模板` |
 
 ---
@@ -248,7 +248,7 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | 项 | 内容 |
 | --- | --- |
 | **版本** | **3.0.14–3.0.19** |
-| **交付** | **`skill-authoring`** topic + matcher（SKILL 骨架与命名约定）；**`f2s-rule-capture`** 技能（用户口述规则沉淀进知识库）；**`f2s-topic-authoring`** 创作侧规则（topic 命名 / 骨架 / `topicDependencies` 判定 / DAG 最小化）；`f2s-ctx-build` / `f2s-doc-add` / `f2s-kb-feat` / `f2s-kb-fix` / `f2s-kb-sync` / `f2s-kb-migrate` / `f2s-ctx-rm` 各增创作侧准则引用注释；`f2s-flow2spec-unified-entry` 新增 Topic Authoring 指针段落 |
+| **交付** | **`skill-authoring`** topic + matcher（SKILL 骨架与命名约定）；**`f2s-kb-capture`** 技能（用户口述规则沉淀进知识库）；**`f2s-topic-authoring`** 创作侧规则（topic 命名 / 骨架 / `topicDependencies` 判定 / DAG 最小化）；`f2s-kb-build` / `f2s-kb-add` / `f2s-kb-feat` / `f2s-kb-fix` / `f2s-kb-sync` / `f2s-kb-migrate` / `f2s-kb-rm` 各增创作侧准则引用注释；`f2s-flow2spec-unified-entry` 新增 Topic Authoring 指针段落 |
 | **双仓** | ● ● |
 
 ---
@@ -269,7 +269,7 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | Codex 发现 | 根 AGENTS.md | M10 | 双仓 |
 | 单仓里程碑 | f2s-doc-milestone | M11 | 生成物见各仓 `stock-docs/项目里程碑.md` |
 | 文档维护 | README、设计说明 | M12 | 双仓 |
-| 知识工程规范 | skill-authoring、f2s-rule-capture、f2s-topic-authoring | M13 | 双仓 |
+| 知识工程规范 | skill-authoring、f2s-kb-capture、f2s-topic-authoring | M13 | 双仓 |
 
 ---
 
@@ -311,4 +311,4 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | 2026-05-15 | 增补 **双仓同步清单**；开源仓对齐 templates / .Knowledge / lib / cli |
 | 2026-05-18 | 当前版本 **3.0.13**；增补 M9–M12、`f2s-doc-milestone` 与单仓 `项目里程碑.md` 分工 |
 | 2026-05-21 | **M12 文档维护**：`docs/` 去 `README-`/`Flow2Spec-` 前缀；英文迁入 **`docs/en/`**（去掉 `.en` 后缀）；删除「PDF 直驱实现」叙述；**双仓同步** `templates/`、`lib/`、`cli.js`、`docs/`、`.Knowledge` 与 README（`f2s-kb-upgrade` 仍保留各仓 npm 包名；`presentations/`、`package.json` 刻意分叉） |
-| 2026-06-03 | **M13 知识工程规范**：`skill-authoring` topic + matcher（SKILL 骨架约定）、`f2s-rule-capture` 技能（口述规则进 KB）、`f2s-topic-authoring` 创作侧规则（topic 命名/骨架/依赖判定/DAG）；各 SKILL 新增创作侧准则引用注释；**双仓同步** |
+| 2026-06-03 | **M13 知识工程规范**：`skill-authoring` topic + matcher（SKILL 骨架约定）、`f2s-kb-capture` 技能（口述规则进 KB）、`f2s-topic-authoring` 创作侧规则（topic 命名/骨架/依赖判定/DAG）；各 SKILL 新增创作侧准则引用注释；**双仓同步** |

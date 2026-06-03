@@ -65,7 +65,7 @@ description: <一句话 + 「；触发：<词1>、<词2>、<词3>」>
 ### `完成后自检`
 
 - 每条对应可校验的事实（agent 能用 `Read` / `Grep` 验证），避免"是否合理 / 是否充分"这类主观项。
-- 命中本技能特有风险点（例：`f2s-rule-capture` 必检"是否在用户未确认前提前落盘"）。
+- 命中本技能特有风险点（例：`f2s-kb-capture` 必检"是否在用户未确认前提前落盘"）。
 
 ## 不规定的事
 
@@ -75,8 +75,8 @@ description: <一句话 + 「；触发：<词1>、<词2>、<词3>」>
 
 ## 参考实现
 
-- 最近按本模板写的：`templates/skills/f2s-rule-capture/SKILL.md`（含「与既有技能的边界」「强制前置」「步骤 1–5」「输出摘要」「约束」「复杂场景示例」「完成后自检」）。
-- 风格接近的旧 SKILL：`templates/skills/f2s-ctx-build/SKILL.md`（小标题用「步骤 N：xxx」而非子标题，下次维护时顺手降级即可）。
+- 最近按本模板写的：`templates/skills/f2s-kb-capture/SKILL.md`（含「与既有技能的边界」「强制前置」「步骤 1–5」「输出摘要」「约束」「复杂场景示例」「完成后自检」）。
+- 风格接近的旧 SKILL：`templates/skills/f2s-kb-build/SKILL.md`（小标题用「步骤 N：xxx」而非子标题，下次维护时顺手降级即可）。
 
 ## 演进策略
 

@@ -19,7 +19,7 @@ flow2spec init [cursor|claude|codex ...] --reset-knowledge
 | Aligns `manifest-routing` + `matchers/` package-level structure | Replace `f2s-*` skills for writing business semantics |
 | Overwrites `.Knowledge` template files with `--reset-knowledge` | Override existing `.Knowledge` content (without this flag) |
 
-> **`init` and "knowledge base upgrade" are two different things**: `init` only handles structural alignment — business semantics (topics content, routing terms, stock-docs/req-docs) are maintained by skills like `f2s-doc-add`, `f2s-kb-fix`, `f2s-kb-feat`, `f2s-kb-sync`, `f2s-ctx-build`, etc. For cross-version upgrades, use `f2s-kb-upgrade`. **Do not treat a standalone `init` as an upgrade command.**
+> **`init` and "knowledge base upgrade" are two different things**: `init` only handles structural alignment — business semantics (topics content, routing terms, stock-docs/req-docs) are maintained by skills like `f2s-kb-add`, `f2s-kb-fix`, `f2s-kb-feat`, `f2s-kb-sync`, `f2s-kb-build`, etc. For cross-version upgrades, use `f2s-kb-upgrade`. **Do not treat a standalone `init` as an upgrade command.**
 
 ### `f2s-*` and `flow2spec.config.json`: Multi-Client, Multi-Layered Reminders (Authority Remains the Disk JSON)
 
@@ -79,20 +79,20 @@ When requirements are already clear, `f2s-req-clarify` can be skipped, starting 
 ### Document Ingestion
 
 ```
-New architecture document ingestion: f2s-doc-arch → f2s-doc-final → f2s-ctx-build
-PDF/draft ingestion:               f2s-doc-final → f2s-ctx-build
+New architecture document ingestion: f2s-doc-arch → f2s-doc-final → f2s-kb-build
+PDF/draft ingestion:               f2s-doc-final → f2s-kb-build
 ```
 
-Integrate architecture descriptions or PDF final drafts into knowledge routing (generates topics/matchers/manifest-routing). To ingest a PDF into the knowledge base, use `f2s-doc-final` then `f2s-ctx-build`. `f2s-doc-pdf` only converts a PDF to Markdown under `req-docs/` for editing; it is **not** the recommended path for "PDF straight to coding."
+Integrate architecture descriptions or PDF final drafts into knowledge routing (generates topics/matchers/manifest-routing). To ingest a PDF into the knowledge base, use `f2s-doc-final` then `f2s-kb-build`. `f2s-doc-pdf` only converts a PDF to Markdown under `req-docs/` for editing; it is **not** the recommended path for "PDF straight to coding."
 
 ### Backfilling Existing Capabilities
 
 ```
-f2s-doc-add      # Aggregate multiple files, extract from source code / documents
+f2s-kb-add      # Aggregate multiple files, extract from source code / documents
 f2s-kb-sync      # Infer already-implemented capabilities from current session
 ```
 
-Use these when code has already been shipped but the knowledge base has no record. `f2s-doc-add` is suitable for batch imports; `f2s-kb-sync` is suitable for real-time consolidation at the end of a session.
+Use these when code has already been shipped but the knowledge base has no record. `f2s-kb-add` is suitable for batch imports; `f2s-kb-sync` is suitable for real-time consolidation at the end of a session.
 
 ### Routine Maintenance
 

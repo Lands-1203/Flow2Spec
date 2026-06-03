@@ -74,7 +74,7 @@ Codex does not read the `rules/` directory; execution constraints are carried th
 
 ## 5. Key Chains
 
-- Documentation curation chain: `f2s-doc-arch` -> `f2s-doc-final` -> `f2s-ctx-build`
+- Documentation curation chain: `f2s-doc-arch` -> `f2s-doc-final` -> `f2s-kb-build`
 - Implementation chain: `.Knowledge/req-docs/*.md` -> `implement-tech-design` -> code
 - Maintenance chain: `f2s-kb-fix` / `f2s-kb-feat` / `f2s-kb-sync` / `f2s-kb-merge`
 - Requirements planning chain: `f2s-req-plan` (planning + implementation, always creates task checklist)
