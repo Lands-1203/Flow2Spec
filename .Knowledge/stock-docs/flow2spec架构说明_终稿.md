@@ -85,6 +85,7 @@
 | 修正实现/规则错误 | `f2s-kb-fix` |
 | 新增能力（补全实现 + 知识库） | `f2s-kb-feat` |
 | 全局同步已实现能力 | `f2s-kb-sync` |
+| 从 stock-docs 生成主题路由（含拆分评估） | `f2s-kb-build`（stock-doc > 300–500 行或覆盖 3+ 职责域时提示拆分） |
 | 解决合并后上下文冲突 | `f2s-kb-merge` |
 | 知识库模板升级 | `f2s-kb-upgrade`（其中一步代跑 `npx @double-codeing/flow2spec@latest init`，或已全局安装时的 `flow2spec init`） |
 | 旧版一次性迁移 | `f2s-kb-migrate` |
