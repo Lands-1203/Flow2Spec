@@ -1,3 +1,6 @@
+---
+description: Flow2Spec 主题创作准则：topic 命名 / 骨架 / topicDependencies 判定 / rule 是否需建对应 topic / 写盘权属指针
+---
 
 # Flow2Spec 主题创作准则（Topic Authoring）
 
