@@ -28,16 +28,6 @@
           }
         ]
       }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node .claude/hooks/f2s-update-notice.js"
-          }
-        ]
-      }
     ]
   }
 }

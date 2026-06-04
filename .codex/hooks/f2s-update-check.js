@@ -41,10 +41,12 @@ function getProjectName() {
 }
 
 function buildNotice(latestNpm, manifestVersion) {
+  const userMsg = `📦 [flow2spec] 当前项目「${getProjectName()}」知识库版本 v${manifestVersion}，低于最新包版本 v${latestNpm}。可执行 f2s-kb-upgrade skill 对齐模板与路由。`;
   return [
-    `[flow2spec] 当前项目「${getProjectName()}」的知识库版本是 v${manifestVersion}，低于最新包版本 v${latestNpm}。`,
-    `如需对齐模板与路由，可以执行 f2s-kb-upgrade skill。`,
-  ].join('');
+    `[flow2spec/agent-instruction] 你必须在本轮回复开头将下列升级提示原文转告用户，不得省略、不得仅在内部判断后跳过：`,
+    ``,
+    userMsg,
+  ].join('\n');
 }
 
 function emitNotice(notice) {
@@ -155,6 +157,7 @@ function main() {
         deleteCache();
         return;
       }
+      // SessionStart 进入新会话：缓存命中且仍需升级，直接 emit。
       const notice = buildNotice(cache.latestNpm, cache.manifestVersion);
       emitNotice(notice);
     }
