@@ -89,6 +89,17 @@ alwaysApply: true
 
 **例外（应显式否定）**：A、B 两种做法在逻辑上均正确，但项目已做出**排他性选择**时，须写出「不用 B」——不说清楚，读者无法判断 B 是否仍可选。
 
+## 知识库版本自检（每日首次，仅 updateCheck.enabled=true 时）
+
+**规则层双保险**（与脚本缓存互为备份）：
+
+1. 读 `flow2spec.config.json` → 若 `updateCheck.enabled` 不为 `true`，跳过，不做任何提示。
+2. 读 `.flow2spec/update-check.json` → 若文件存在且 `checkedAt` 与今日为同一自然日（`new Date(checkedAt).toDateString() === new Date().toDateString()`），**跳过，不执行脚本，不做任何提示**。
+3. 上述两步均未跳过时：执行 `node .cursor/hooks/f2s-update-check.js`，解析标准输出的 JSON：
+   - 若含 `hookSpecificOutput.additionalContext`：**告知用户**该内容（建议执行 `/f2s-kb-upgrade`）。
+   - 无输出或解析失败：静默，不提示。
+4. 以上步骤出现任何错误，静默跳过，不影响正常对话。
+
 ## 主题创作（Topic Authoring）指针
 
 新增或修改 `.Knowledge/topics/<topic>.md`、调整 `manifest-routing.topicDependencies`、删除 / 迁移 topic 时，**创作侧** 准则以 **`rules/f2s-topic-authoring.*`** 为单一事实源（**Cursor/Claude**：`rules/f2s-topic-authoring.mdc`；**Codex**：`.codex/topics/f2s-topic-authoring.md`）。本入口为**消费侧**（如何按已有 topic 路由 / 读取 / 兜底），与之并存；硬冲突时以本入口为准。`f2s-kb-build` / `f2s-kb-add` / `f2s-kb-feat` / `f2s-kb-fix` / `f2s-kb-sync` / `f2s-kb-migrate` / `f2s-kb-rm` 在涉及 topic 落盘前须 Read 该条全文。
