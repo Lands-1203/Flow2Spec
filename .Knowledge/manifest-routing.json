@@ -1,13 +1,13 @@
 {
-  "version": "2.0.0",
+  "version": "3.1.0",
   "knowledgeRoot": ".Knowledge",
   "matcherKey": "matcherId",
   "sourceOfTruth": ".Knowledge/manifest-routing.json",
   "fallbackTopic": "fallback-triage",
   "topicDependencies": {
     "implement-tech-design": [
-      "stock-docs-vs-req-docs",
-      "f2s-doc-routing"
+      "f2s-doc-routing",
+      "stock-docs-vs-req-docs"
     ],
     "f2s-req-plan": [
       "f2s-task"
@@ -15,12 +15,12 @@
   },
   "topicPaths": {
     "implement-tech-design": ".Knowledge/topics/f2s-implement-tech-design.md",
-    "stock-docs-vs-req-docs": ".Knowledge/topics/f2s-stock-docs-vs-req-docs.md",
+    "f2s-doc-routing": ".Knowledge/topics/f2s-stock-docs-vs-req-docs.md",
     "fallback-triage": ".Knowledge/topics/f2s-fallback-triage.md",
     "config-precheck": ".Knowledge/topics/f2s-config-precheck.md",
     "f2s-task": ".Knowledge/topics/f2s-task.md",
     "f2s-req-plan": ".Knowledge/topics/f2s-req-plan.md",
-    "f2s-doc-routing": ".Knowledge/topics/f2s-stock-docs-vs-req-docs.md",
+    "stock-docs-vs-req-docs": ".Knowledge/topics/f2s-stock-docs-vs-req-docs.md",
     "flow2spec-presentations": ".Knowledge/topics/f2s-flow2spec-presentations.md",
     "flow2spec-milestones": ".Knowledge/topics/f2s-flow2spec-milestones.md",
     "skill-authoring": ".Knowledge/topics/skill-authoring.md"
@@ -39,9 +39,9 @@
       "matcherId": "m-implement-from-spec",
       "matcherPath": ".Knowledge/matchers/m-implement-from-spec.json",
       "topics": [
-        "stock-docs-vs-req-docs",
+        "f2s-doc-routing",
         "implement-tech-design",
-        "f2s-doc-routing"
+        "stock-docs-vs-req-docs"
       ]
     },
     {
@@ -49,8 +49,8 @@
       "matcherId": "m-doc-routing",
       "matcherPath": ".Knowledge/matchers/m-doc-routing.json",
       "topics": [
-        "stock-docs-vs-req-docs",
-        "f2s-doc-routing"
+        "f2s-doc-routing",
+        "stock-docs-vs-req-docs"
       ]
     },
     {

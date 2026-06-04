@@ -11,8 +11,9 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 ## 边界（避免误区）
 
-- **`flow2spec init` 不写业务知识**：不替代 `f2s-doc-add`、`f2s-kb-fix`、`f2s-kb-feat`、`f2s-kb-sync`、`f2s-ctx-build` 等对 `stock-docs` / `req-docs` / `topics` 正文与业务向路由词条的维护。
-- 本技能跑通的是 **包版本下的目录、模板占位、路由结构对齐**；用户若说「把新能力写进知识库」，应引导 **`f2s-kb-sync` / `f2s-doc-add`** 等，而非仅 `f2s-kb-upgrade`。
+- **`flow2spec init` 不写业务知识**：不替代 `f2s-kb-add`、`f2s-kb-fix`、`f2s-kb-feat`、`f2s-kb-sync`、`f2s-kb-build` 等对 `stock-docs` / `req-docs` / `topics` 正文与业务向路由词条的维护。
+- 本技能跑通的是 **包版本下的目录、模板占位、路由结构对齐**；用户若说「把新能力写进知识库」，应引导 **`f2s-kb-sync` / `f2s-kb-add`** 等，而非仅 `f2s-kb-upgrade`。
+- 本技能负责存量 `topicMetadata` 审计：`primary` / `tags` 仅用于治理、审计、盘点和阅读预期，不参与路由命中或执行强制性；执行强制性仍以 `AGENTS.md`、rules、skills 与 topic 正文为准。
 
 ## 编排（主 / 子 agent）
 
@@ -111,23 +112,36 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 **本技能步骤 2** `flow2spec init` 成功后，先执行「旧文件清理 + 引用修复」：
 
-1. 清理旧主题文件（仅在文件存在时删除）：
+> **skill 目录自动对齐**：`flow2spec init` 现已自动删除配置根 `skills/` 中不再存在于 `templates/skills/` 的旧目录（重命名/删除的 skill 如 `f2s-ctx-build`、`f2s-doc-add`、`f2s-rule-capture`、`stock-docs-vs-req-docs` 等），**无需 Agent 手动清理**。
+
+1. 清理旧命名主题文件（仅在文件存在时删除，均为无 `f2s-` 前缀的旧版遗留）：
    - `.Knowledge/topics/flow2spec-architecture.md`
    - `.Knowledge/topics/implement-tech-design.md`
-   - `.Knowledge/topics/stock-docs-vs-req-docs.md`
    - `templates/knowledge/topics/implement-tech-design.md`
-   - `templates/knowledge/topics/stock-docs-vs-req-docs.md`
 2. 修复引用（仅在文件存在时更新；**`.Knowledge/index.md` 正文不由 init 改写**，见步骤 3b）：
    - `templates/knowledge/index.md`
    - `templates/knowledge/manifest-routing.json`
    - `.Knowledge/index.md`（按需人工或技能侧改路径/段落）
    - `.Knowledge/manifest-routing.json`
-3. 引用更新目标：
+3. 引用更新目标（确认使用新名）：
    - `.Knowledge/topics/f2s-flow2spec-architecture.md`
    - `.Knowledge/topics/f2s-implement-tech-design.md`
    - `.Knowledge/topics/f2s-stock-docs-vs-req-docs.md`
 
-> 口径：只清理“旧命名主题文件”，不删除带 `f2s-` 前缀的新主题文件。
+> 口径：只清理”旧命名主题文件”，不删除带 `f2s-` 前缀的现行主题文件。
+
+### 步骤 3a：`topicMetadata` 存量审计（必须执行）
+
+1. 读取 `.Knowledge/manifest-routing.json`，以 `topicPaths` 为主题全集。
+2. 校验 `topicMetadata`：key 必须存在于 `topicPaths`；`primary` 仅允许 `feature` / `module` / `config` / `policy`；`tags` 若存在须为数组，元素取值同 `primary` 且不得与 `primary` 重复；`confidence` 仅允许 `manual` / `inferred`。
+3. 对 `topicPaths` 中缺少 metadata 的主题做分类分析：**必须 Read 对应 `.Knowledge/topics/<id>.md` 正文**，禁止仅凭 topicId 名称推断。证据明确则写入 `inferred`；证据不足时**不写 metadata**，但须在摘要中列出推断方向与依据（如「建议 policy，正文含多处强制约束」），供用户确认后手动补写 `manual`。
+4. 分类判断以 `f2s-topic-authoring` 准则第 3 节为准，Agent 基于 topic 正文判断主要性质，写 `primary`；同时覆盖多个性质时其余写 `tags`（可选）。
+5. 禁止因为补分类创建、重命名或拆分 topic。
+6. **主题粒度审计**（不阻断升级，仅列入摘要）：逐项检查，命中任一信号时在步骤 5 摘要中列为「建议拆分」：
+   - 对应 stock-doc 超过 **300–500 行**；
+   - `includeAny` 词数超过 **12 个**；
+   - topic 正文包含超过 **3 个不相干职责域**的二级标题；
+   - 该 topic 同时被多种不相干任务类型频繁命中（可从 `taskToTopicRules` 和 matcher 词宽度判断）。
 
 ### 步骤 3b：`index.md` 融合与 `template/index.template.md`（必须执行）
 
@@ -196,6 +210,7 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 - 旧主题文件：`已清理` / `无需清理`
 - 引用修复：`已更新` / `已一致`
 - **index（快照 + 融合）**：`快照已复制` / `index.md 已融合` / `待处理（见备注）`
+- **topicMetadata（存量审计）**：`已补齐` / `待用户确认`；列出新增 / 修正 / 删除的 topicId
 - **f2s-kb-upgrade SKILL**：`init 后无变化` / `已按新版重跑 N 轮` / `待确认`
 - manifest-routing / matchers 分片：`已与模板对齐` / `已是最新` / `reset 覆盖`
 - topics.path：`全部存在` / `存在缺失（见下）`
@@ -219,7 +234,8 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 3. 是否已实际执行 shell 命令（而非只给建议）。
 4. 是否明确标注增量 or reset 模式。
 5. 是否已处理旧主题文件清理与 `index/manifest` 引用修复。
-6. 是否已执行 **步骤 3b**：**融合** `index.md`（**主题一览**节起至命中与执行前为项目维护区，其余同包版），并核对 `topicPaths`。
-7. 是否输出了 manifest 与关键路径校验结果。
-8. 若失败，是否给出下一步具体命令建议。
-9. 步骤 3b 的 `index.md` 融合由主 agent 完成并落盘，无子 agent 越权写入。
+6. 是否已执行 **步骤 3a**：审计 `topicMetadata`，确保无孤儿 key / 非法 primary / 非法 confidence；缺失旧主题已按证据补 `inferred` 或列为待确认。
+7. 是否已执行 **步骤 3b**：**融合** `index.md`（**主题一览**节起至命中与执行前为项目维护区，其余同包版），并核对 `topicPaths`。
+8. 是否输出了 manifest 与关键路径校验结果。
+9. 若失败，是否给出下一步具体命令建议。
+10. 步骤 3b 的 `index.md` 融合由主 agent 完成并落盘，无子 agent 越权写入。
