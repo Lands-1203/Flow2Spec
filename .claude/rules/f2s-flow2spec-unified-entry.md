@@ -88,16 +88,16 @@ description: Flow2Spec 统一知识库入口，按 .Knowledge 渐进式读取
 
 **例外（应显式否定）**：A、B 两种做法在逻辑上均正确，但项目已做出**排他性选择**时，须写出「不用 B」——不说清楚，读者无法判断 B 是否仍可选。
 
-## 知识库版本自检（sessionStart 自动触发；每日首次，仅 updateCheck.enabled=true 时）
+## 知识库版本自检（hook 自动触发；每日首次，仅 updateCheck.enabled=true 时）
 
-Cursor 由 `flow2spec init cursor` 写入 **`.cursor/hooks.json`**，在 `sessionStart` 自动执行 `node .cursor/hooks/f2s-update-check.js`；脚本通过 `additional_context` 把升级提示注入会话。Codex 由 `flow2spec init codex` 写入 **`.codex/hooks.json`**，在 `SessionStart` 的 `startup|resume` 事件自动执行 `node .codex/hooks/f2s-update-check.js`。
+Cursor 由 `flow2spec init cursor` 写入 **`.cursor/hooks.json`**，在 `sessionStart` 自动执行 `node .cursor/hooks/f2s-update-check.js`；Codex 由 `flow2spec init codex` 写入 **`.codex/hooks.json`**，在 `SessionStart` 的 `startup|resume` 事件自动执行 `node .codex/hooks/f2s-update-check.js`；Claude 由 `flow2spec init claude` 写入 **`.claude/settings.json`**，在 `SessionStart` 执行 `node .claude/hooks/f2s-update-check.js` 做完整检测并写缓存，在 `UserPromptSubmit` 执行 `node .claude/hooks/f2s-update-notice.js` 只读缓存并注入首轮用户消息提示。脚本通过 `additional_context` 把升级提示注入会话。
 
 **规则层双保险**（与脚本缓存互为备份）：
 
 1. 读 `flow2spec.config.json` → 若 `updateCheck.enabled` 不为 `true`，跳过，不做任何提示。
 2. 读 `.Knowledge/update-check.json` → 若文件存在且 `checkedAt` 与今日为同一自然日（`new Date(checkedAt).toDateString() === new Date().toDateString()`），不重复查 npm；但若 `needsUpgrade=true` 或 `latestNpm > manifestVersion`，本会话首次回复用户时仍须提醒执行 `f2s-kb-upgrade`；若当前 `.Knowledge/manifest-routing.json.version` 已不低于 `latestNpm`，删除该缓存并不再提示。
-3. 上述两步均未跳过时：执行当前 agent 配置根下的更新检测脚本（Cursor：`node .cursor/hooks/f2s-update-check.js`；Codex：`node .codex/hooks/f2s-update-check.js`），解析标准输出的 JSON：
-   - 若含 `hookSpecificOutput.additionalContext`：**告知用户**该内容（建议执行 `/f2s-kb-upgrade`）。
+3. 上述两步均未跳过时：执行当前 agent 配置根下的更新检测脚本（Claude：`SessionStart` 执行 `node .claude/hooks/f2s-update-check.js`，`UserPromptSubmit` 执行 `node .claude/hooks/f2s-update-notice.js`；Cursor：`node .cursor/hooks/f2s-update-check.js`；Codex：`node .codex/hooks/f2s-update-check.js`），解析标准输出的 JSON：
+   - 若含 `hookSpecificOutput.additionalContext`：**告知用户**该内容（建议执行 `f2s-kb-upgrade` skill）。
    - 无输出或解析失败：静默，不提示。
 4. 以上步骤出现任何错误，静默跳过，不影响正常对话。
 

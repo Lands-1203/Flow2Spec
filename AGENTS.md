@@ -118,7 +118,7 @@ Codex 由 `flow2spec init codex` 写入 **`.codex/hooks.json`**，在 `SessionSt
 - `f2s-doc-final`：将 PDF 或 MD 转为《终稿模版》规范格式，便于后续用 f2s-kb-build 同步 topics/index/manifest；触发：f2s-doc-final、转成概述模板、终稿模版
 - `f2s-doc-milestone`：据 req-docs、git log、.task 与知识库主题语义生成里程碑（《项目里程碑模版》）；触发：f2s-doc-milestone、生成项目里程碑、里程碑。命令后可附语义化范围。本技能固定子 agent 生成、主 agent 验证，不受 flow2spec.config 编排开关影响
 - `f2s-doc-pdf`：将 PDF 技术方案转为 Markdown 并保存到 req-docs，可补全流程说明；触发：PDF转MD、按方案实现前的 PDF
-- `f2s-git-commit`：代码写完后提交 Git：检查变更与知识库覆盖；生成带 emoji 首行的提交说明后**可直接 commit**（须在当条回复展示首行，不要求用户单独确认 commit）；**git pull 类拉取须用户先确认**。触发：f2s-git-commit、提交代码、git commit、帮我提交
+- `f2s-git-commit`：代码写完后提交 Git：默认检查变更与知识库覆盖；用户明确要求“快捷提交”时跳过知识库覆盖检查；生成带 emoji 首行的提交说明后**可直接 commit**（须在当条回复展示首行，不要求用户单独确认 commit）；**git pull 类拉取须用户先确认**。触发：f2s-git-commit、提交代码、快捷提交、git commit、帮我提交
 - `f2s-kb-add`：工作中把已落地能力解析进知识库（多文件聚合）：初稿→终稿→topics/index/manifest；触发：f2s-kb-add、已有能力进知识库、多文件生成上下文
 - `f2s-kb-addRules`：把用户口述的规则沉淀进知识库，自动判定「新建主题 / 并入存量主题」并同步路由；不写代码、不创建 .task/；触发：f2s-kb-addRules、新增规则、口述规则、把这条记到知识库
 - `f2s-kb-build`：根据 .Knowledge/stock-docs 文档生成知识路由主题与索引；触发：生成项目上下文、f2s-kb-build、终稿生成上下文

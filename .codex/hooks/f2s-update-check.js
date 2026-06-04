@@ -18,28 +18,6 @@ const CACHE_FILE   = path.join(CACHE_DIR, 'update-check.json');
 const PACKAGE_NAME_PLACEHOLDER = '__FLOW2SPEC_' + 'PACKAGE_NAME__';
 const PACKAGE_NAME = '@double-codeing/flow2spec';
 
-// ── Hook 输入 ────────────────────────────────────────────────────────────────
-
-function readHookInput() {
-  try {
-    if (process.stdin.isTTY) return {};
-    const raw = fs.readFileSync(0, 'utf8').trim();
-    if (!raw) return {};
-    const data = JSON.parse(raw);
-    return data && typeof data === 'object' ? data : {};
-  } catch (_) { return {}; }
-}
-
-function getHookEventName(input) {
-  const name = String((input && input.hook_event_name) || '').trim();
-  return name || 'SessionStart';
-}
-
-function getSessionId(input) {
-  const id = String((input && input.session_id) || '').trim();
-  return id || '';
-}
-
 // ── 缓存 ────────────────────────────────────────────────────────────────────
 
 function readCache() {
@@ -66,15 +44,15 @@ function buildNotice(latestNpm, manifestVersion) {
   return [
     `[flow2spec] 当前项目「${getProjectName()}」的知识库版本是 v${manifestVersion}，低于最新包版本 v${latestNpm}。`,
     `如需对齐模板与路由，可以执行 f2s-kb-upgrade skill。`,
-  ].join(' ');
+  ].join('');
 }
 
-function emitNotice(notice, hookEventName) {
+function emitNotice(notice) {
   process.stdout.write(
     JSON.stringify({
       additional_context: notice,
       hookSpecificOutput: {
-        hookEventName,
+        hookEventName: 'SessionStart',
         additionalContext: notice,
       },
     }) + '\n'
@@ -95,29 +73,6 @@ function writeCache(latestNpm, manifestVersion) {
       }, null, 2)}\n`,
       'utf8'
     );
-  } catch (_) {}
-}
-
-function isPromptAlreadyNotified(cache, input, hookEventName) {
-  if (hookEventName !== 'UserPromptSubmit') return false;
-  const sessionId = getSessionId(input);
-  if (!sessionId) return false;
-  const sessions = cache && cache.notifiedSessions;
-  return Boolean(sessions && typeof sessions === 'object' && sessions[sessionId]);
-}
-
-function markPromptNotified(cache, input, hookEventName) {
-  if (hookEventName !== 'UserPromptSubmit') return;
-  const sessionId = getSessionId(input);
-  if (!sessionId) return;
-  try {
-    const next = Object.assign({}, cache || {});
-    const sessions = next.notifiedSessions && typeof next.notifiedSessions === 'object'
-      ? next.notifiedSessions
-      : {};
-    sessions[sessionId] = Date.now();
-    next.notifiedSessions = sessions;
-    fs.writeFileSync(CACHE_FILE, `${JSON.stringify(next, null, 2)}\n`, 'utf8');
   } catch (_) {}
 }
 
@@ -188,8 +143,6 @@ function isEnabled() {
 function main() {
   if (process.env.CI || process.env.CONTINUOUS_INTEGRATION) return;
   if (!isEnabled()) return;
-  const hookInput = readHookInput();
-  const hookEventName = getHookEventName(hookInput);
   const cache = readCache();
   if (cache) {
     // 今天已检查过则不重复查 npm；若缓存显示仍需升级，每个新会话继续提醒。
@@ -202,10 +155,8 @@ function main() {
         deleteCache();
         return;
       }
-      if (isPromptAlreadyNotified(cache, hookInput, hookEventName)) return;
       const notice = buildNotice(cache.latestNpm, cache.manifestVersion);
-      emitNotice(notice, hookEventName);
-      markPromptNotified(cache, hookInput, hookEventName);
+      emitNotice(notice);
     }
     return;
   }
@@ -226,10 +177,8 @@ function main() {
 
   if (cmpVer(manifestVersion, latestNpm) >= 0) return;  // 已是最新
 
-  const nextCache = readCache() || { latestNpm, manifestVersion, checkedAt: Date.now() };
   const notice = buildNotice(latestNpm, manifestVersion);
-  emitNotice(notice, hookEventName);
-  markPromptNotified(nextCache, hookInput, hookEventName);
+  emitNotice(notice);
 }
 
 main();
