@@ -1,3 +1,4 @@
 .agents/
 .DS_Store
-docs/*.json.flow2spec/
+docs/*.json
+.flow2spec/
