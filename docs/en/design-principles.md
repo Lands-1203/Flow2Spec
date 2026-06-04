@@ -477,8 +477,10 @@ Session context itself is an information source  ·  no need for users to organi
 
 | Mechanism | Design Intent |
 | --- | --- |
-| **Cursor `f2s-config-check.mdc`** | Rule-layer enforcement: "Read before skill body." |
-| **Claude `f2s-config-inject` PreToolUse** | Injects parsed results when calling **`f2s-*` Skill**; **missing file / broken JSON / hook exception** still outputs a note with default semantics, no silent failure. |
+| **Cursor `f2s-config-check.mdc`** | Rule-layer enforcement: "Read before skill body"; Cursor hooks are used for update checks only, not automatic config reads. |
+| **Claude `f2s-config-session` SessionStart** | Injects one config summary when the conversation starts, reducing the chance that the setting is forgotten. |
+| **Claude `f2s-config-inject` PreToolUse** | Only guards **`f2s-*` Skill** calls by reminding the agent that the first skill-body action must be Read; it no longer repeatedly injects the full config. |
+| **Codex `AGENTS.md` / `.codex/topics/f2s-config-check.md`** | Text-layer enforcement: "Read before skill body"; Codex hooks are used for update checks only, not automatic config reads. |
 | **Codex `AGENTS.md` + `renderProjectConfigBlock`** | Top-level **Read** hard constraint + **init snapshot table** (if inconsistent with disk, Read takes precedence). |
 | **Knowledge base `config-precheck` topic** | When routing hits, provides only **summary** and a pointer to the Codex full text, **not** a substitute for Read JSON. |
 

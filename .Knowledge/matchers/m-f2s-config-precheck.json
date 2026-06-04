@@ -7,7 +7,15 @@
     "技能前置",
     "f2s-config-check",
     "f2s-config-inject",
-    "changeTracking"
+    "f2s-config-session",
+    "f2s-update-check",
+    "changeTracking",
+    "updateCheck.enabled",
+    "SessionStart",
+    "PreToolUse",
+    "hooks.json",
+    "additional_context",
+    "hookSpecificOutput"
   ],
   "id": "m-f2s-config-precheck",
   "version": "1.0.0",

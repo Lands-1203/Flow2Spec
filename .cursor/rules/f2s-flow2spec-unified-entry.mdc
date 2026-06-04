@@ -89,7 +89,9 @@ alwaysApply: true
 
 **例外（应显式否定）**：A、B 两种做法在逻辑上均正确，但项目已做出**排他性选择**时，须写出「不用 B」——不说清楚，读者无法判断 B 是否仍可选。
 
-## 知识库版本自检（每日首次，仅 updateCheck.enabled=true 时）
+## 知识库版本自检（sessionStart 自动触发；每日首次，仅 updateCheck.enabled=true 时）
+
+Cursor 由 `flow2spec init cursor` 写入 **`.cursor/hooks.json`**，在 `sessionStart` 自动执行 `node .cursor/hooks/f2s-update-check.js`；脚本通过 `additional_context` 把升级提示注入会话。Codex 由 `flow2spec init codex` 写入 **`.codex/hooks.json`**，在 `SessionStart` 的 `startup|resume` 事件自动执行 `node .codex/hooks/f2s-update-check.js`。
 
 **规则层双保险**（与脚本缓存互为备份）：
 

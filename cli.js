@@ -153,8 +153,8 @@ init 会:
   3. 默认仅补齐 .Knowledge 缺失模板，并对路由清单做包级/结构增量对齐（manifest-routing + matcherPath 分片；关键词仅写在 matchers/*.json）；不替代 f2s-* 对业务文档与路由内容的写入。
      传 --reset-knowledge 时才会强制用模板覆盖 .Knowledge 中模板承载部分。
   4. 在各 agent 配置根写入 rules、skills（Claude 规则自动转 .md；Codex 在仓库根写入完整 AGENTS.md，.codex/ 写入指针）。
-     Claude 额外写入 .claude/hooks/f2s-config-inject.js 与 .claude/settings.json（PreToolUse hook），
-     在调用 f2s-* Skill 时注入配置摘要；配置缺失、JSON 无效或 hook 异常时也会注入默认语义说明，避免静默。
+     Claude 额外写入 .claude/hooks/f2s-config-session.js、f2s-config-inject.js 与 .claude/settings.json：
+     SessionStart 注入一次配置摘要；PreToolUse 仅在调用 f2s-* Skill 时提示首步必须 Read 配置。
      Cursor 额外写入 f2s-config-check.mdc（alwaysApply），强制在技能首步读取配置文件；
      并写入 .cursor/hooks.json，在 sessionStart 自动检测知识库版本。
      Codex：仓库根 AGENTS.md（CLI 自动发现，完整条令）；.codex/AGENTS.md 为指针。
@@ -406,7 +406,7 @@ if (sub === "init") {
           return `  - ${root}/：（${label}）skills/、topics/、AGENTS.md（指针）；仓库根 AGENTS.md（完整）`;
         if (id === "claude") {
           const hookLine = claudeHooksResult?.settingsChanged
-            ? "rules/、skills/、hooks/f2s-config-inject.js、settings.json（已写入 f2s PreToolUse hook）"
+            ? "rules/、skills/、hooks/f2s-config-session.js、hooks/f2s-config-inject.js、settings.json（已写入 f2s SessionStart/PreToolUse hooks）"
             : "rules/、skills/（settings.json 中 f2s hook 已存在，跳过）";
           return `  - ${root}/：（${label}）${hookLine}`;
         }

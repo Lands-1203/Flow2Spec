@@ -19,7 +19,9 @@ alwaysApply: true
 | `switchAgentVerification: false` | 落盘侧自验，不交叉 |
 | 文件不存在 | 所有字段均视为 `false` |
 
-**Claude Code**：若已启用 `f2s-config-inject` PreToolUse hook，调用 `f2s-*` Skill 时会注入配置摘要；**文件缺失、JSON 损坏或 hook 异常时也会注入说明与默认语义**，不静默。仍建议在存疑或刚改过配置时用 `Read` 与磁盘核对。
+**Claude Code**：`f2s-config-session` 在 `SessionStart` 注入一次配置摘要；`f2s-config-inject` 在 `PreToolUse` 仅作为守门提示，提醒调用 `f2s-*` Skill 前首步必须 `Read("flow2spec.config.json")`。两者都**不替代**本条 Read 要求。
+
+**Cursor / Codex**：配置读取仍走文本约束（Cursor：本规则 `alwaysApply`；Codex：根 `AGENTS.md` 与 `.codex/topics/f2s-config-check.md`），不依赖 hook 自动读取配置。
 
 ### changeTracking（变更追踪）
 
