@@ -149,7 +149,7 @@ npx @double-codeing/flow2spec@latest init
 | `/f2s-kb-feat` | 新增小功能 |
 | `/f2s-kb-fix` | 改 BUG |
 | `/f2s-kb-sync` | 同步知识库 |
-| `/f2s-git-commit` | 提交代码 |
+| `/f2s-git-commit` | 提交代码；“快捷提交”跳过知识库覆盖检查 |
 | `/f2s-kb-add <路径>` | 接口模块入知识库 |
 
 更多命令详见 [使用说明](./docs/使用说明.md) · [命令说明](./docs/命令说明.md)

@@ -15,7 +15,7 @@
 | `/f2s-req-clarify` | Clarify requirements via multi-round Q&A | Requirements |
 | `/f2s-req-backend` | Generate backend technical proposal from clarified requirements | Requirements |
 | `/f2s-req-plan` | Break a technical proposal into a task checklist and implement (always creates tasks, regardless of `changeTracking.*` config) | Requirements |
-| `/f2s-git-commit` | Commit code with automatic knowledge base coverage check | Commit |
+| `/f2s-git-commit` | Commit code; checks knowledge base coverage by default, skips that check in "quick commit" mode | Commit |
 | `/f2s-kb-feat` | Add new capability + sync knowledge base | KB Maintenance |
 | `/f2s-kb-fix` | Fix a bug + auto-sync knowledge base | KB Maintenance |
 | `/f2s-kb-sync` | Sink implemented capabilities from the conversation into the knowledge base | KB Maintenance |
@@ -288,13 +288,14 @@
 
 ### `f2s-git-commit`
 
-**Purpose**: Executes a Git commit after code is written. Automatically checks changed files, compares knowledge base coverage, prompts the user about capabilities not yet imported, and performs the commit after the commit message is confirmed.
+**Purpose**: Executes a Git commit after code is written. By default it checks changed files and knowledge base coverage, prompting the user about capabilities not yet imported. If the user explicitly asks for a "quick commit", it skips the knowledge base coverage check. Before committing, it displays the commit message subject and then runs `git commit`.
 
-**How It Works**: Layers a "knowledge base coverage gate" on top of `git commit` — infer touched capability areas from `git diff`, cross-check against `.Knowledge/topics/` and `stock-docs/`, and decide whether changed capabilities are documented in the knowledge base. If not covered, block and offer three choices (document first / skip / cancel) to avoid silent drift where "code exists but the knowledge base does not know." Commit messages use emoji + Conventional Commits for consistent, machine-friendly `git log`.
+**How It Works**: Layers a "knowledge base coverage gate" on top of `git commit` — infer touched capability areas from `git diff`, cross-check against `.Knowledge/topics/` and `stock-docs/`, and decide whether changed capabilities are documented in the knowledge base. If not covered, block and offer three choices (document first / skip / cancel) to avoid silent drift where "code exists but the knowledge base does not know." Quick commit mode only skips this coverage gate; it does not skip conflict checks, message display, precise `git add`, or git hooks. Commit messages use emoji + Conventional Commits for consistent, machine-friendly `git log`.
 
 **Use Cases**:
 - Committing code after each feature implementation or bug fix
 - Wanting reminders about knowledge base coverage at commit time
+- Explicitly wanting to skip this commit's coverage check with a quick commit
 - Needing AI help to generate meaningful commit messages
 
 **Relationships**:
@@ -304,7 +305,7 @@
 
 **Execution Flow**:
 1. `git status --short` + `git diff HEAD` to classify files into staged / unstaged / untracked; immediately terminates if merge conflict markers are found
-2. Compare `.Knowledge/topics/` and `stock-docs/` to determine whether the changed capabilities have been imported; skips and notifies if `.Knowledge` does not exist
+2. By default, compare `.Knowledge/topics/` and `stock-docs/` to determine whether the changed capabilities have been imported; skips and notifies if `.Knowledge` does not exist; skips this step when the user asks for a quick commit
 3. If not covered, prompt the user to choose: A) Import first, then commit / B) Commit now, import later / C) Cancel
 4. Generate a commit message draft based on `git diff` content, wait for user confirmation or changes
 5. `git add <specific files>` + `git commit`; if a hook fails, prompt for fix, do not skip
@@ -314,7 +315,7 @@
 - `git add -A` / `git add .` is forbidden; only add confirmed changed files
 - `--no-verify` is forbidden; hook failures must be fixed and retried
 - Auto-push is forbidden
-- The commit message must be confirmed by the user; silent commits are not allowed
+- The commit message subject must be displayed before committing; an extra user confirmation round is not required
 
 **Sub-Agent Invocation**: None (full interactive confirmation, handled within the main agent)
 

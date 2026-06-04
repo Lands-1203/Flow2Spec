@@ -28,6 +28,7 @@
 | config-precheck | `.Knowledge/topics/f2s-config-precheck.md` | 执行 `f2s-*` 前读 `flow2spec.config.json` / 编排开关 / 更新检测 | Codex 长文：仓库根 `.codex/topics/f2s-config-check.md`；Claude/Cursor/Codex hooks：[路由摘要](topics/f2s-config-precheck.md) |
 | f2s-task | `.Knowledge/topics/f2s-task.md` | 变更追踪、`.task/` 任务清单与跨会话续作 | stock：[任务清单与变更追踪](stock-docs/Flow2Spec-任务清单与变更追踪.md)；长文：`rules/f2s-task.*` |
 | f2s-req-plan | `.Knowledge/topics/f2s-req-plan.md` | 需求/方案规划与实现；始终维护 `.task/` | 技能：`skills/f2s-req-plan/SKILL.md`；依赖 `f2s-task` |
+| f2s-git-commit | `.Knowledge/topics/f2s-git-commit.md` | 提交代码；默认检查知识库覆盖，快捷提交跳过覆盖检查 | 技能：`skills/f2s-git-commit/SKILL.md`；模板：[f2s-git-commit](../templates/skills/f2s-git-commit/SKILL.md) |
 | flow2spec-presentations | `.Knowledge/topics/f2s-flow2spec-presentations.md` | 本仓对外介绍 HTML 演示稿路径与维护约定 | stock：[对外介绍演示](stock-docs/Flow2Spec-对外介绍演示.md) |
 | flow2spec-milestones | `.Knowledge/topics/f2s-flow2spec-milestones.md` | 版本演进；含内部仓 vs 开源仓、双语 PPT、Cursor 插件 | stock：[项目里程碑](stock-docs/Flow2Spec-项目里程碑.md) |
 | skill-authoring | `.Knowledge/topics/skill-authoring.md` | 新增 / 重构 `f2s-*` SKILL 时的骨架与命名约定（仅本仓，不下发） | 参考实现：`templates/skills/f2s-kb-addRules/SKILL.md` |
