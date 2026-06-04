@@ -10,7 +10,7 @@ const path = require('path');
 const DEFAULT_CFG = {
   subAgent: false,
   switchAgentVerification: false,
-  changeTracking: { feat: false, fix: false, implement: false },
+  changeTracking: { feat: true, fix: false, implement: true },
 };
 
 /** 与 lib/flow2specConfig.js 一致，避免 hook 依赖包内路径 */

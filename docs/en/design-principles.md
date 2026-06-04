@@ -562,8 +562,9 @@ flow2spec.config.json
   switchAgentVerification: false → writer-side self-verify, daily use
   switchAgentVerification: true  → cross-verification, high-confidence critical scenarios
 
-  changeTracking.feat/fix/implement: false → no task checklist created
-  changeTracking.feat/fix/implement: true  → automatic task checklist creation when corresponding skills run, supporting cross-session continuation
+  changeTracking.feat: true        → f2s-kb-feat creates a task checklist by default
+  changeTracking.fix: false        → f2s-kb-fix does not create a task checklist by default
+  changeTracking.implement: true   → implement-tech-design creates a task checklist by default
 
   Three orthogonal dimensions · each skill can further refine and override global config
 ```

@@ -136,9 +136,9 @@ Design intent: Cross-verification introduces an external perspective, reducing t
 ```json
 {
   "changeTracking": {
-    "feat": false,
+    "feat": true,
     "fix": false,
-    "implement": false
+    "implement": true
   }
 }
 ```

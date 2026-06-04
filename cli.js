@@ -2,6 +2,7 @@
 
 const path = require("path");
 const fs = require("fs");
+const os = require("os");
 const readline = require("readline");
 const runInit = require("./lib/init");
 const { AGENTS } = require("./lib/agents");
@@ -12,7 +13,7 @@ const {
   getMissingConfigFields,
 } = require("./lib/flow2specConfig");
 
-const { execSync } = require("child_process");
+const { execFileSync } = require("child_process");
 
 const args = process.argv.slice(2);
 const sub = args[0];
@@ -23,6 +24,107 @@ const agentList = Object.entries(AGENTS)
 
 const pkg = require("./package.json");
 
+const UPDATE_CHECK_TTL_MS = 24 * 60 * 60 * 1000;
+
+function parseVersion(version) {
+  return String(version || "")
+    .replace(/^v/, "")
+    .split(/[.-]/)
+    .slice(0, 3)
+    .map((part) => {
+      const n = Number.parseInt(part, 10);
+      return Number.isFinite(n) ? n : 0;
+    });
+}
+
+function compareVersions(a, b) {
+  const av = parseVersion(a);
+  const bv = parseVersion(b);
+  for (let i = 0; i < 3; i += 1) {
+    const diff = (av[i] || 0) - (bv[i] || 0);
+    if (diff !== 0) return diff;
+  }
+  return 0;
+}
+
+function updateCheckCacheFile() {
+  const safeName = String(pkg.name || "flow2spec").replace(/[^a-z0-9_.-]+/gi, "_");
+  return path.join(os.homedir(), ".flow2spec", `${safeName}-update-check.json`);
+}
+
+function readUpdateCheckCache() {
+  const file = updateCheckCacheFile();
+  if (!fs.existsSync(file)) return null;
+  try {
+    const data = JSON.parse(fs.readFileSync(file, "utf8"));
+    if (!data || typeof data !== "object") return null;
+    if (Date.now() - Number(data.checkedAt || 0) > UPDATE_CHECK_TTL_MS) {
+      return null;
+    }
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function writeUpdateCheckCache(latest) {
+  try {
+    const file = updateCheckCacheFile();
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    fs.writeFileSync(
+      file,
+      `${JSON.stringify({ latest, checkedAt: Date.now() }, null, 2)}\n`,
+      "utf8",
+    );
+  } catch {
+    // 更新检查不能影响主命令。
+  }
+}
+
+function queryLatestPackageVersion() {
+  const cached = readUpdateCheckCache();
+  if (cached?.latest) return cached.latest;
+  const latest = execFileSync("npm", ["view", pkg.name, "version"], {
+    encoding: "utf8",
+    timeout: 2000,
+    stdio: ["ignore", "pipe", "ignore"],
+  }).trim();
+  if (latest) writeUpdateCheckCache(latest);
+  return latest;
+}
+
+function shouldCheckForUpdates() {
+  if (process.env.FLOW2SPEC_SKIP_UPDATE_CHECK === "1") return false;
+  if (process.env.CI) return false;
+  if (!process.stdout.isTTY) return false;
+  return Boolean(pkg.name && pkg.version);
+}
+
+function printKnowledgeUpgradeHint(latest) {
+  console.log(`
+⚠ Flow2Spec 有新版本 v${latest}（当前 v${pkg.version}）
+建议先更新包：
+  flow2spec update
+
+更新后请在 Agent 对话中执行：
+  f2s-kb-upgrade
+
+用于对齐项目知识库模板、manifest/matchers 与配置根产物；不要把单独 flow2spec init 当作知识库升级。
+`);
+}
+
+function maybePrintUpdateNotice() {
+  if (!shouldCheckForUpdates()) return;
+  try {
+    const latest = queryLatestPackageVersion();
+    if (latest && compareVersions(latest, pkg.version) > 0) {
+      printKnowledgeUpgradeHint(latest);
+    }
+  } catch {
+    // 静默跳过，不能因为网络或 npm registry 影响主命令。
+  }
+}
+
 const help = `
 Flow2Spec - 统一知识库工作流（AI 配置入口）  v${pkg.version}
 
@@ -30,7 +132,7 @@ Flow2Spec - 统一知识库工作流（AI 配置入口）  v${pkg.version}
   flow2spec init [agent ...] [--reset-knowledge] [--yes]    在当前项目初始化：写入 .Knowledge 与所选 agent 入口
   flow2spec config              打印项目根 ${CONFIG_FILENAME} 的解析结果（缺省值合并后）
   flow2spec version             显示当前 flow2spec 版本
-  flow2spec update              更新 flow2spec 到最新版本
+  flow2spec update              更新 flow2spec 到最新版本；更新后提示执行 f2s-kb-upgrade
   flow2spec --help              显示本说明
 
 agent（可多个，空格分隔；省略时交互选择）：
@@ -47,7 +149,7 @@ init 会:
   1. 交互询问要初始化的 AI 工具（cursor / claude / codex，可多选）；已通过参数指定则跳过。
      传 --yes 或非 TTY 环境时跳过问答，使用默认值。
   2. 对 ${CONFIG_FILENAME} 中缺失的配置字段逐项提问（已有字段不覆盖）。
-     传 --yes 时所有缺失字段使用默认值（均为 false）。
+     传 --yes 时所有缺失字段使用各自默认值。
   3. 默认仅补齐 .Knowledge 缺失模板，并对路由清单做包级/结构增量对齐（manifest-routing + matcherPath 分片；关键词仅写在 matchers/*.json）；不替代 f2s-* 对业务文档与路由内容的写入。
      传 --reset-knowledge 时才会强制用模板覆盖 .Knowledge 中模板承载部分。
   4. 在各 agent 配置根写入 rules、skills（Claude 规则自动转 .md；Codex 在仓库根写入完整 AGENTS.md，.codex/ 写入指针）。
@@ -68,6 +170,7 @@ if (sub === "--help" || sub === "-h" || !sub) {
 
 if (sub === "version" || sub === "--version" || sub === "-v") {
   console.log(`flow2spec v${pkg.version}`);
+  maybePrintUpdateNotice();
   process.exit(0);
 }
 
@@ -75,19 +178,25 @@ if (sub === "update") {
   console.log(`当前版本: v${pkg.version}`);
   console.log("正在检查最新版本...");
   try {
-    const latest = execSync(`npm view ${pkg.name} version`, {
+    const latest = execFileSync("npm", ["view", pkg.name, "version"], {
       encoding: "utf8",
     }).trim();
-    if (latest === pkg.version) {
-      console.log(`已是最新版本 v${latest}`);
+    if (compareVersions(latest, pkg.version) <= 0) {
+      console.log(`当前版本不低于 npm 最新版本 v${latest}`);
       process.exit(0);
     }
     console.log(`发现新版本: v${latest}`);
     console.log("正在更新...");
-    execSync(`npm install -g ${pkg.name}@latest`, {
+    execFileSync("npm", ["install", "-g", `${pkg.name}@latest`], {
       stdio: "inherit",
     });
     console.log(`\n✓ 已更新到 v${latest}`);
+    console.log(`
+下一步：请在需要升级的项目 Agent 对话中执行：
+  f2s-kb-upgrade
+
+用于对齐项目知识库模板、manifest/matchers 与配置根产物；不要把单独 flow2spec init 当作知识库升级。
+`);
   } catch (e) {
     console.error("更新失败:", e.message || e);
     process.exit(1);
@@ -326,6 +435,7 @@ ${lines.join("\n")}
 
 建议阅读 README 或 docs/使用说明.md，按「规则在配置根、文档在 .Knowledge」的方式使用。
 `);
+      maybePrintUpdateNotice();
     })
     .catch((e) => {
       console.error(e.message || e);

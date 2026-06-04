@@ -4,7 +4,7 @@
 
 The following examples revolve around the same e-commerce project, covering the full pipeline from requirements clarification through post-launch maintenance.
 
-**Prerequisite**: The project has executed `flow2spec init`, and `flow2spec.config.json` uses the default configuration (`subAgent: false`). `f2s-*` skills do not modify the configuration root `rules/` or `skills/` files.
+**Prerequisite**: The project has executed `flow2spec init`, and `flow2spec.config.json` uses the default configuration (`subAgent: false`; `changeTracking.feat/implement: true`, `changeTracking.fix: false`). `f2s-*` skills do not modify the configuration root `rules/` or `skills/` files.
 
 ---
 

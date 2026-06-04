@@ -497,6 +497,7 @@
 **Use Cases**:
 - After a `flow2spec` package version upgrade, upgrade the project knowledge base template
 - Upgrade an old project to the latest structure
+- When interactive `flow2spec version` / `flow2spec init` detects a newer npm version, the CLI prompts you to run `flow2spec update`, then execute this skill in the Agent conversation
 
 **Relationships**:
 - **Prerequisite**: `f2s-kb-migrate` (V1 flow) or an existing `.Knowledge/`
@@ -590,7 +591,7 @@ The following are not skill commands but rules activated by trigger words to gui
 
 ## 6) Sub-Agent Configuration
 
-Controlled via `flow2spec.config.json` at the project root (all fields default to `false`).
+Controlled via `flow2spec.config.json` at the project root. Defaults: `subAgent=false`, `switchAgentVerification=false`, `changeTracking.feat=true`, `changeTracking.fix=false`, `changeTracking.implement=true`.
 
 ### How Different Products "See" the Configuration (use with the field table below)
 
@@ -617,9 +618,9 @@ A nested object, with each skill independently controlled:
 ```json
 {
   "changeTracking": {
-    "feat": false,
+    "feat": true,
     "fix": false,
-    "implement": false
+    "implement": true
   }
 }
 ```

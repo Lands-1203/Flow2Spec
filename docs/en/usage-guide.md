@@ -110,6 +110,8 @@ f2s-kb-migrate (Legacy V1: old knowledge base) → f2s-kb-upgrade
 f2s-kb-upgrade (Current V2+: already has .Knowledge; includes npm v3.x projects, etc.; see skill step 0)
 ```
 
+In interactive terminals, the Flow2Spec CLI checks the latest npm version with a cache when running `flow2spec version` / `flow2spec init`. If a newer version exists, it prompts you to run `flow2spec update`, then execute `f2s-kb-upgrade` in the Agent conversation to align the project knowledge templates, manifest/matchers, and agent config roots. Failed update checks are skipped silently and do not affect the current command; checks are disabled in `CI`, non-TTY sessions, or when `FLOW2SPEC_SKIP_UPDATE_CHECK=1` is set.
+
 ---
 
 ## 4. Agent Execution Configuration
