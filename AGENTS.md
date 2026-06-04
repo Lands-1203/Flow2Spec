@@ -99,9 +99,11 @@
 
 执行 Flow2Spec 相关任务时，先读本文件（**`./AGENTS.md`**）与 **`./.Knowledge/manifest-routing.json`**，再按需打开上列 **`./.codex/topics/*.md`** 文件。
 
-## 知识库版本自检（每日首次，仅 updateCheck.enabled=true 时）
+## 知识库版本自检（SessionStart 自动触发；每日首次，仅 updateCheck.enabled=true 时）
 
-**规则层双保险**（与脚本缓存互为备份）：
+Codex 由 `flow2spec init codex` 写入 **`.codex/hooks.json`**，在 `SessionStart` 的 `startup|resume` 事件自动执行 `node .codex/hooks/f2s-update-check.js`；首次生成或 hook 内容变化后，Codex 可能要求通过 `/hooks` 审核并信任该项目 hook。
+
+**规则层双保险**（若 hook 未运行，则按本节补检；与脚本缓存互为备份）：
 
 1. 读 `flow2spec.config.json` → 若 `updateCheck.enabled` 不为 `true`，跳过，不做任何提示。
 2. 读 `.Knowledge/update-check.json` → 若文件存在且 `checkedAt` 与今日为同一自然日（`new Date(checkedAt).toDateString() === new Date().toDateString()`），**跳过，不执行脚本，不做任何提示**。

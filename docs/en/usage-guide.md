@@ -112,6 +112,8 @@ f2s-kb-upgrade (Current V2+: already has .Knowledge; includes npm v3.x projects,
 
 In interactive terminals, the Flow2Spec CLI checks the latest npm version with a cache when running `flow2spec version` / `flow2spec init`. If a newer version exists, it prompts you to run `flow2spec update`, then execute `f2s-kb-upgrade` in the Agent conversation to align the project knowledge templates, manifest/matchers, and agent config roots. Failed update checks are skipped silently and do not affect the current command; checks are disabled in `CI`, non-TTY sessions, or when `FLOW2SPEC_SKIP_UPDATE_CHECK=1` is set.
 
+After `flow2spec init codex`, Codex projects include `.codex/hooks.json` and `.codex/hooks/f2s-update-check.js`. The hook runs on Codex `SessionStart` for `startup|resume` and checks the knowledge-base version automatically. When the hook is first generated or changed, trust it through `/hooks` in Codex. Set `updateCheck.enabled=false` in `flow2spec.config.json` to skip the check.
+
 ---
 
 ## 4. Agent Execution Configuration

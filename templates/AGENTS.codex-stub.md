@@ -14,6 +14,8 @@
 | --- | --- |
 | `skills/` | Flow2Spec 技能（`f2s-*`） |
 | `topics/` | 规则长文镜像（与 Cursor/Claude `rules` 同源） |
+| `hooks.json` | Codex SessionStart hook 配置，用于启动时检测 Flow2Spec 知识库版本 |
+| `hooks/` | hook 脚本目录 |
 | `config.toml` | 项目级 Codex 配置（若已创建） |
 
 配置真值：仓库根 **`flow2spec.config.json`**（须 Read）；init 快照表见根 **`AGENTS.md`**。

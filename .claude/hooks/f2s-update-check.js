@@ -6,16 +6,17 @@
  *   - 一致或本地更新 → 静默退出
  *   - 落后 → 向 Agent 上下文注入一行提示（建议执行 f2s-kb-upgrade）
  * 已检查过（24h 内）则完全静默，不做任何输出。
- * 由 flow2spec init --claude 写入 .claude/hooks/f2s-update-check.js。
+ * 由 flow2spec init 写入对应 agent 的 hooks/f2s-update-check.js。
  */
 const fs   = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 
-const TTL_MS       = 24 * 60 * 60 * 1000;
 const MANIFEST_PATH = path.join(process.cwd(), '.Knowledge', 'manifest-routing.json');
 const CACHE_DIR    = path.join(process.cwd(), '.Knowledge');
 const CACHE_FILE   = path.join(CACHE_DIR, 'update-check.json');
+const PACKAGE_NAME_PLACEHOLDER = '__FLOW2SPEC_' + 'PACKAGE_NAME__';
+const PACKAGE_NAME = '@double-codeing/flow2spec';
 
 // ── 缓存 ────────────────────────────────────────────────────────────────────
 
@@ -24,7 +25,9 @@ function readCache() {
   try {
     const d = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
     if (!d || typeof d !== 'object') return null;
-    if (Date.now() - Number(d.checkedAt || 0) > TTL_MS) return null;
+    const checkedAt = Number(d.checkedAt || 0);
+    if (!checkedAt) return null;
+    if (new Date(checkedAt).toDateString() !== new Date().toDateString()) return null;
     return d;
   } catch (_) { return null; }
 }
@@ -68,24 +71,9 @@ function getManifestVersion() {
 }
 
 function getPackageName() {
-  // hook 放在 .claude/hooks/，从 cwd 找 flow2spec 包名
-  const candidates = [
-    // 项目内 devDependency
-    path.join(process.cwd(), 'node_modules', '.bin', 'flow2spec'),
-  ];
-  void candidates;
-  // 直接用已知包名（全局安装 / npx 场景）
-  try {
-    // 尝试找全局安装的包名
-    const globalPkg = execFileSync('npm', ['root', '-g'], {
-      encoding: 'utf8', timeout: 3000, stdio: ['ignore', 'pipe', 'ignore'],
-    }).trim();
-    const pkgJson = path.join(globalPkg, 'flow2spec', 'package.json');
-    if (fs.existsSync(pkgJson)) {
-      return JSON.parse(fs.readFileSync(pkgJson, 'utf8')).name;
-    }
-  } catch (_) {}
-  // 兜底：从 manifest-routing.json 旁找同级 package.json
+  if (PACKAGE_NAME && PACKAGE_NAME !== PACKAGE_NAME_PLACEHOLDER) {
+    return PACKAGE_NAME;
+  }
   return '@double-codeing/flow2spec';
 }
 

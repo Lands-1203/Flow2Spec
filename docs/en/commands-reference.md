@@ -498,6 +498,7 @@
 - After a `flow2spec` package version upgrade, upgrade the project knowledge base template
 - Upgrade an old project to the latest structure
 - When interactive `flow2spec version` / `flow2spec init` detects a newer npm version, the CLI prompts you to run `flow2spec update`, then execute this skill in the Agent conversation
+- When Codex detects an older knowledge-base version through `.codex/hooks.json` on `SessionStart`, it prompts you to execute this skill (new or changed hooks must be trusted through `/hooks` first)
 
 **Relationships**:
 - **Prerequisite**: `f2s-kb-migrate` (V1 flow) or an existing `.Knowledge/`
