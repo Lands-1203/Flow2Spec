@@ -28,7 +28,8 @@
   "scripts": {
     "test": "node cli.js --help",
     "prepublishOnly": "node cli.js --help",
-    "pack:check": "npm pack --dry-run"
+    "pack:check": "npm pack --dry-run",
+    "tag:version": "node scripts/git-tag-version.js"
   },
   "keywords": [
     "flow2spec",
