@@ -151,7 +151,7 @@ natural language: implement the proposal above         ← AI starts coding (tas
 | `/f2s-kb-feat` | Add a new capability |
 | `/f2s-kb-fix` | Fix a bug |
 | `/f2s-kb-sync` | Sync knowledge base |
-| `/f2s-git-commit` | Commit code |
+| `/f2s-git-commit` | Commit code; "quick commit" skips KB coverage check |
 | `/f2s-kb-add <path>` | Import API module into knowledge base |
 
 For the full command list, see [Usage Guide](./docs/en/usage-guide.md) · [Commands Reference](./docs/en/commands-reference.md)

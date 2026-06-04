@@ -65,6 +65,10 @@ Type meanings:
 | `config` | Configuration items, switches, defaults, initialization parameters |
 | `policy` | Process, rule, constraint, gate, prohibition, agent orchestration, skill step |
 
+## Topic Granularity
+
+A topic is a routing summary plus key boundaries; details belong in `stock-docs/`. Consider splitting into a main topic plus independently matchable sub-topics when its stock-doc exceeds 300-500 lines, matcher `includeAny` exceeds 12 terms, or the body spans more than 3 unrelated responsibility areas.
+
 ---
 
 ## Related Documents
