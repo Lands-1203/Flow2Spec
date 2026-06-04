@@ -7,7 +7,7 @@
 
 ## 相关资料
 - `Flow2Spec-public/package.json` → `@double-codeing/flow2spec`
-- `flow2spec/package.json` → `@ctrip/flow2spec`
+- `flow2spec/package.json` → `@double-codeing/flow2spec`
 
 ## 用户代办清单
 - 见同目录 `user-todos.md`

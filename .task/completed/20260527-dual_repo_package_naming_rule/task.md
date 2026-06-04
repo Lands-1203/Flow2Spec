@@ -8,5 +8,5 @@
 - [x] 步骤 5：输出摘要
 
 ## 备注
-规则：内部仓（flow2spec）所有文档只能用 @ctrip/flow2spec；外部仓（Flow2Spec-public）所有文档只能用 @double-codeing/flow2spec。
+规则：内部仓（flow2spec）所有文档只能用 @double-codeing/flow2spec；外部仓（Flow2Spec-public）所有文档只能用 @double-codeing/flow2spec。
 发现里程碑 stock-doc 中「npm 包名」行两列均错误写为 @double-codeing/flow2spec，需同步修正。

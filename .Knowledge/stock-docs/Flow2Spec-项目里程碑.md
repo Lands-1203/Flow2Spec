@@ -16,8 +16,8 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | --- | --- | --- |
 | **本地路径** | `项目/ai/flow2spec` | `项目/个人/Flow2Spec` |
 | **Git 托管** | 携程内网 Git（`git.dev.sh.ctripcorp.com`） | [GitHub Lands-1203/Flow2Spec](https://github.com/Lands-1203/Flow2Spec) |
-| **npm 包名** | `@ctrip/flow2spec` | `@double-codeing/flow2spec` |
-| **快速体验** | `npm install @ctrip/flow2spec`（内网）| `npx @double-codeing/flow2spec@latest init` |
+| **npm 包名** | `@double-codeing/flow2spec` | `@double-codeing/flow2spec` |
+| **快速体验** | `npm install @double-codeing/flow2spec`（内网）| `npx @double-codeing/flow2spec@latest init` |
 | **README 语言** | 中文为主 + `README.en.md`（内网文档链路） | **中英双入口**：`README.md` / `README.en.md`，顶部互链 |
 | **演示稿源目录** | `presentations/flow2spec-intro-draft/` | `presentations/flow2spec-intro-public/`（中文）、`flow2spec-intro-public-en/`（英文） |
 | **在线 PPT** | GitLab **Pages**（内网演示 URL，由 `scripts/sync-pages.sh` 从 draft 同步） | GitHub **Pages** 公网：[中文](https://lands-1203.github.io/Flow2Spec/) · [English](https://lands-1203.github.io/Flow2Spec/en/) |
@@ -27,10 +27,10 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | **产品知识库** | 本仓 `.Knowledge/`（里程碑、架构终稿等 **产品自用**） | 开源仓亦有 `.Knowledge/`（对外协作者可读） |
 
 **关系一句话（中）**：内部仓负责携程场景下的 npm 发布与内网 Pages；开源仓负责 GitHub、公网演示、npm 公共包与 Cursor 插件目录提交。  
-**One-liner (EN)**：The internal repo ships `@ctrip/flow2spec` and GitLab Pages; the open-source repo ships `@double-codeing/flow2spec`, bilingual GitHub Pages, and the Cursor Directory plugin branch.
+**One-liner (EN)**：The internal repo ships `@double-codeing/flow2spec` and GitLab Pages; the open-source repo ships `@double-codeing/flow2spec`, bilingual GitHub Pages, and the Cursor Directory plugin branch.
 
 **包名使用规则**：
-- 内部仓（本仓，`flow2spec`）所有文档只能使用 `@ctrip/flow2spec` 前缀
+- 内部仓（本仓，`flow2spec`）所有文档只能使用 `@double-codeing/flow2spec` 前缀
 - 开源仓（`Flow2Spec-public`）所有文档只能使用 `@double-codeing/flow2spec` 前缀
 - 禁止跨仓混用包名（如在内部仓文档中写 `@double-codeing/flow2spec`）
 
