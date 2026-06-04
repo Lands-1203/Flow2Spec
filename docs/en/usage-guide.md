@@ -114,6 +114,8 @@ In interactive terminals, the Flow2Spec CLI checks the latest npm version with a
 
 After `flow2spec init codex`, Codex projects include `.codex/hooks.json` and `.codex/hooks/f2s-update-check.js`. The hook runs on Codex `SessionStart` for `startup|resume` and checks the knowledge-base version automatically. When the hook is first generated or changed, trust it through `/hooks` in Codex. Set `updateCheck.enabled=false` in `flow2spec.config.json` to skip the check.
 
+After `flow2spec init cursor`, Cursor projects include `.cursor/hooks.json` and `.cursor/hooks/f2s-update-check.js`. The hook runs on Cursor `sessionStart` and injects upgrade reminders through `additional_context`. Set `updateCheck.enabled=false` in `flow2spec.config.json` to skip the check.
+
 ---
 
 ## 4. Agent Execution Configuration

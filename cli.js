@@ -155,7 +155,8 @@ init 会:
   4. 在各 agent 配置根写入 rules、skills（Claude 规则自动转 .md；Codex 在仓库根写入完整 AGENTS.md，.codex/ 写入指针）。
      Claude 额外写入 .claude/hooks/f2s-config-inject.js 与 .claude/settings.json（PreToolUse hook），
      在调用 f2s-* Skill 时注入配置摘要；配置缺失、JSON 无效或 hook 异常时也会注入默认语义说明，避免静默。
-     Cursor 额外写入 f2s-config-check.mdc（alwaysApply），强制在技能首步读取配置文件。
+     Cursor 额外写入 f2s-config-check.mdc（alwaysApply），强制在技能首步读取配置文件；
+     并写入 .cursor/hooks.json，在 sessionStart 自动检测知识库版本。
      Codex：仓库根 AGENTS.md（CLI 自动发现，完整条令）；.codex/AGENTS.md 为指针。
   5. 每次 init 将包内 templates/knowledge/index.md 复制到 .Knowledge/template/index.template.md，供 f2s-kb-upgrade 技能与 .Knowledge/index.md 对照；不自动改写 index.md。（「知识库升级」指 f2s-kb-upgrade 技能，init 本身不是升级命令。）
   6. 规则与技能在各 agent 配置根加载；其他模版类文件在 .Knowledge/template/ 等目录。

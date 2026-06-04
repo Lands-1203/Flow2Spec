@@ -129,6 +129,7 @@ function main() {
 
   process.stdout.write(
     JSON.stringify({
+      additional_context: notice,
       hookSpecificOutput: {
         hookEventName: 'SessionStart',
         additionalContext: notice,
