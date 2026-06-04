@@ -93,7 +93,7 @@ description: Flow2Spec 统一知识库入口，按 .Knowledge 渐进式读取
 **规则层双保险**（与脚本缓存互为备份）：
 
 1. 读 `flow2spec.config.json` → 若 `updateCheck.enabled` 不为 `true`，跳过，不做任何提示。
-2. 读 `.flow2spec/update-check.json` → 若文件存在且 `checkedAt` 与今日为同一自然日（`new Date(checkedAt).toDateString() === new Date().toDateString()`），**跳过，不执行脚本，不做任何提示**。
+2. 读 `.Knowledge/update-check.json` → 若文件存在且 `checkedAt` 与今日为同一自然日（`new Date(checkedAt).toDateString() === new Date().toDateString()`），**跳过，不执行脚本，不做任何提示**。
 3. 上述两步均未跳过时：执行 `node .cursor/hooks/f2s-update-check.js`，解析标准输出的 JSON：
    - 若含 `hookSpecificOutput.additionalContext`：**告知用户**该内容（建议执行 `/f2s-kb-upgrade`）。
    - 无输出或解析失败：静默，不提示。

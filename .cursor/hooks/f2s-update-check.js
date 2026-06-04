@@ -14,7 +14,7 @@ const { execFileSync } = require('child_process');
 
 const TTL_MS       = 24 * 60 * 60 * 1000;
 const MANIFEST_PATH = path.join(process.cwd(), '.Knowledge', 'manifest-routing.json');
-const CACHE_DIR    = path.join(process.cwd(), '.flow2spec');
+const CACHE_DIR    = path.join(process.cwd(), '.Knowledge');
 const CACHE_FILE   = path.join(CACHE_DIR, 'update-check.json');
 
 // ── 缓存 ────────────────────────────────────────────────────────────────────
@@ -31,7 +31,6 @@ function readCache() {
 
 function writeCache(latestNpm, manifestVersion) {
   try {
-    fs.mkdirSync(CACHE_DIR, { recursive: true });
     fs.writeFileSync(
       CACHE_FILE,
       `${JSON.stringify({ latestNpm, manifestVersion, checkedAt: Date.now() }, null, 2)}\n`,
@@ -143,7 +142,7 @@ function main() {
   process.stdout.write(
     JSON.stringify({
       hookSpecificOutput: {
-        hookEventName: 'UserPromptSubmit',
+        hookEventName: 'SessionStart',
         additionalContext: notice,
       },
     }) + '\n'
