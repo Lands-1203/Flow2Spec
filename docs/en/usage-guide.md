@@ -116,7 +116,7 @@ After `flow2spec init codex`, Codex projects include `.codex/hooks.json` and `.c
 
 After `flow2spec init cursor`, Cursor projects include `.cursor/hooks.json` and `.cursor/hooks/f2s-update-check.js`. The hook runs on Cursor `sessionStart` and injects upgrade reminders through `additional_context`. Set `updateCheck.enabled=false` in `flow2spec.config.json` to skip the check.
 
-Claude / Cursor / Codex startup hooks only inject the upgrade reminder into context. Agents usually do not speak proactively; the reminder appears in the first reply after the user sends a message.
+Claude / Cursor / Codex startup hooks only inject the upgrade reminder into context. Agents usually do not speak proactively; the reminder appears in the first reply after the user sends a message. If today's cache already says an upgrade is needed, new sessions keep reminding the user; after a successful upgrade, `f2s-kb-upgrade` clears `.Knowledge/update-check.json` so stale reminders disappear.
 
 ---
 

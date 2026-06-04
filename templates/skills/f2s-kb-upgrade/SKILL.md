@@ -182,6 +182,7 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 5. 配置根产物是否存在：
    - Cursor/Claude：`rules/`、`skills/`
    - Codex：`.codex/AGENTS.md`、`skills/`
+6. 本技能成功完成后，删除 `.Knowledge/update-check.json`（若存在），让下一次新会话重新检测并清除旧升级提示；若删除失败，在步骤 5 摘要中写明。
 
 ### 步骤 5：输出结果摘要（必须）
 
@@ -195,6 +196,7 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 - **SKILL 自更新**：`init` 后是否重读 `f2s-kb-upgrade/SKILL.md`；是否因文件变化 **整技能重跑**及轮次（见「init 与技能自更新」）
 - manifest / matchers 对齐结论（随 init 输出）
 - 关键文件校验结论
+- `.Knowledge/update-check.json` 清理结论（已删除 / 不存在 / 删除失败）
 - 如失败，给出下一步可执行修复建议
 
 ## 输出摘要模板（建议）
@@ -215,6 +217,7 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 - manifest-routing / matchers 分片：`已与模板对齐` / `已是最新` / `reset 覆盖`
 - topics.path：`全部存在` / `存在缺失（见下）`
 - agent 产物：`通过` / `异常（见下）`
+- update-check 缓存：`已删除` / `不存在` / `删除失败`
 
 ### 备注
 - <失败原因或后续建议>
@@ -239,3 +242,4 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 8. 是否输出了 manifest 与关键路径校验结果。
 9. 若失败，是否给出下一步具体命令建议。
 10. 步骤 3b 的 `index.md` 融合由主 agent 完成并落盘，无子 agent 越权写入。
+11. 成功升级后是否删除 `.Knowledge/update-check.json`，避免当天新会话继续提示旧升级信息。

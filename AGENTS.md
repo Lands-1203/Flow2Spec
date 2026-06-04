@@ -106,7 +106,7 @@ Codex 由 `flow2spec init codex` 写入 **`.codex/hooks.json`**，在 `SessionSt
 **规则层双保险**（若 hook 未运行，则按本节补检；与脚本缓存互为备份）：
 
 1. 读 `flow2spec.config.json` → 若 `updateCheck.enabled` 不为 `true`，跳过，不做任何提示。
-2. 读 `.Knowledge/update-check.json` → 若文件存在且 `checkedAt` 与今日为同一自然日（`new Date(checkedAt).toDateString() === new Date().toDateString()`），**跳过，不执行脚本，不做任何提示**。
+2. 读 `.Knowledge/update-check.json` → 若文件存在且 `checkedAt` 与今日为同一自然日（`new Date(checkedAt).toDateString() === new Date().toDateString()`），不重复查 npm；但若 `needsUpgrade=true` 或 `latestNpm > manifestVersion`，本会话首次回复用户时仍须提醒执行 `f2s-kb-upgrade`；若当前 `.Knowledge/manifest-routing.json.version` 已不低于 `latestNpm`，删除该缓存并不再提示。
 3. 上述两步均未跳过时：执行 `node .codex/hooks/f2s-update-check.js`，解析标准输出的 JSON：
    - 若含 `hookSpecificOutput.additionalContext`：**告知用户**该内容（建议执行 `/f2s-kb-upgrade`）。
    - 无输出或解析失败：静默，不提示。
