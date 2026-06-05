@@ -69,7 +69,8 @@ Flow2Spec rules intentionally overlap in a few places: the global entry defines 
 
 | Scenario | Priority Rule | Role |
 | --- | --- | --- |
-| First read / first tool call for ordinary questions | `f2s-knowledge-preflight` | Decides whether current-repo questions must first read `.Knowledge/manifest-routing.json`, and performs the source-code fallback closing check. |
+| First read / first tool call for ordinary questions | `f2s-knowledge-preflight` | Decides whether current-repo questions must first read `.Knowledge/manifest-routing.json`, and governs the gap gate / source fallback rhythm. |
+| Source fallback closing for ordinary Q&A | `f2s-kb-feedback-closing` | After answering from source code, all four cases must take an explicit stance: cases 1–3 emit a `f2s-kb-add` / `f2s-kb-sync` suggestion; case 4 emits an explicit "knowledge base already covers" marker. Silently skipping the entire closing step is forbidden. |
 | Global routing facts / progressive loading chain | `f2s-flow2spec-unified-entry` | Defines the source-of-truth relationship and read order for manifest, matcher, topic, stock-docs, and req-docs. |
 | Reading config before any `f2s-*` skill | `f2s-config-check` | Enforces `flow2spec.config.json` as the first step of every `f2s-*` skill. |
 | Implementing from a technical proposal | `f2s-implement-tech-design` | Full execution rule for implementation from a technical design. |
