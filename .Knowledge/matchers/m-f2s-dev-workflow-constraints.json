@@ -1,0 +1,15 @@
+{
+  "id": "m-f2s-dev-workflow-constraints",
+  "includeAny": [
+    "双仓同步",
+    "双仓",
+    "内仓",
+    "@ctrip",
+    "@double-codeing",
+    "不要改配置根",
+    "只改templates",
+    "自己init",
+    "flow2spec init",
+    "配置根写权"
+  ]
+}

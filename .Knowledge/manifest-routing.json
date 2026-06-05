@@ -5,6 +5,9 @@
   "sourceOfTruth": ".Knowledge/manifest-routing.json",
   "fallbackTopic": "fallback-triage",
   "topicDependencies": {
+    "f2s-dev-workflow-constraints": [
+      "f2s-git-commit"
+    ],
     "implement-tech-design": [
       "f2s-doc-routing",
       "stock-docs-vs-req-docs"
@@ -25,7 +28,8 @@
     "flow2spec-presentations": ".Knowledge/topics/f2s-flow2spec-presentations.md",
     "flow2spec-milestones": ".Knowledge/topics/f2s-flow2spec-milestones.md",
     "skill-authoring": ".Knowledge/topics/skill-authoring.md",
-    "f2s-req-tech": ".Knowledge/topics/f2s-req-tech.md"
+    "f2s-req-tech": ".Knowledge/topics/f2s-req-tech.md",
+    "f2s-dev-workflow-constraints": ".Knowledge/topics/f2s-dev-workflow-constraints.md"
   },
   "taskToTopicRules": [
     {
@@ -110,6 +114,14 @@
       "topics": [
         "f2s-req-tech"
       ]
+    },
+    {
+      "task": "dev-workflow-constraints",
+      "matcherId": "m-f2s-dev-workflow-constraints",
+      "matcherPath": ".Knowledge/matchers/m-f2s-dev-workflow-constraints.json",
+      "topics": [
+        "f2s-dev-workflow-constraints"
+      ]
     }
   ],
   "topicMetadata": {
@@ -157,6 +169,10 @@
       "confidence": "inferred"
     },
     "f2s-req-tech": {
+      "primary": "policy",
+      "confidence": "inferred"
+    },
+    "f2s-dev-workflow-constraints": {
       "primary": "policy",
       "confidence": "inferred"
     }
