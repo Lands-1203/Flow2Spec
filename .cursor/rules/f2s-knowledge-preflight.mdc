@@ -34,7 +34,9 @@ alwaysApply: true
 - 用户给出 **绝对路径 + 明确指令**（例如「只把该行改为 x」）且与业务知识无关的纯机械编辑；
 - **同一会话内**已对当前工作区执行过 `Read(".Knowledge/manifest-routing.json")` 且用户未要求「重新路由/全量检查」的**直接续问**：可在回答首句写「manifest 已读本会话，沿用上次路由」，**不再重复 Read** manifest。
 
-## 知识缺口与下钻源码（防「grep 死循环」）
+## 回答收口检查（源码补答后）
+
+普通问答读取业务源码后的知识库补充建议，以 **`f2s-kb-feedback-closing`** 为单一规则源。本条只保留触发关系：读完首个业务源码文件后，视为本轮已触发 `sourceFallbackUsed=true`；若最终答案引用源码事实，发出回答前必须执行 `f2s-kb-feedback-closing` 的四 case 自检。若本轮已经进入 `f2s-*` 技能、`implement-tech-design`、`f2s-git-commit` 或其他已有后续流程，不重复提示。
 
 与 **`f2s-flow2spec-unified-entry`** 中 **「知识缺口与对策」** 一致；命中 **1b（命中但上下文不够）** 或 **2（库里没有对应文档）** 时，还须遵守：
 
@@ -67,4 +69,4 @@ alwaysApply: true
 
 ## 对 Agent 自检
 
-若你发现自己在回答当前仓库相关问题时尚未 `Read` manifest，**须立即停止补写**，先 `Read` manifest 与命中 topic，再更正或续答。
+若你发现自己在回答当前仓库相关问题时尚未 `Read` manifest，**须立即停止补写**，先 `Read` manifest 与命中 topic，再更正或续答。若本轮读取过业务源码并引用源码事实，发出回答前须继续执行 `f2s-kb-feedback-closing`。

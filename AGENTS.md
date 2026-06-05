@@ -62,6 +62,7 @@
    - 禁止把 `fallbackTopic` 当作最终命中直接实施改动；`fallbackTopic` 仅作安全兜底与澄清前置上下文。
    - 禁止在不满足触发门槛时做跨 matcher 全量补检索。
 10. **检索与作答节奏**：在 KB 已形成可答结论时，控制 `grep`/读盘范围与轮次；优先按 topic 给出的目录做单点 `Read`。用户未要求「全仓 / 通读依赖」时，允许**先短答再按需下钻**。细则见 **`./.codex/topics/f2s-knowledge-preflight.md`** 中 **「检索体积与作答节奏」**。
+11. **普通问答源码补答收口**：普通问答下钻源码并据此补答时，先按 **`./.codex/topics/f2s-knowledge-preflight.md`** 完成首读与缺口闸门，再按 **`./.codex/topics/f2s-kb-feedback-closing.md`** 完成最终知识库补充建议收口；只提示，不自动执行 `f2s-kb-add` / `f2s-kb-sync`。
 
 ## 渐进式读取顺序
 
@@ -95,6 +96,7 @@
 同目录下另有：
 
 - **`./.codex/topics/f2s-knowledge-preflight.md`**：**普通提问**也须先 `Read` **`./.Knowledge/manifest-routing.json`** 再下钻代码；与统一入口并行时以本条「首工具调用」为准。
+- **`./.codex/topics/f2s-kb-feedback-closing.md`**：普通问答读取业务源码后的知识库补充建议收口；需要补充时只输出一条 `f2s-kb-add` / `f2s-kb-sync` 命令，不需要时静默。
 - **`./.codex/topics/f2s-config-check.md`**：内容与上文「先 Read **`./flow2spec.config.json`**」一致并含 **changeTracking** 细表；**仅**在需核对细表时按需打开，不必与上列三条并列必读。
 
 执行 Flow2Spec 相关任务时，先读本文件（**`./AGENTS.md`**）与 **`./.Knowledge/manifest-routing.json`**，再按需打开上列 **`./.codex/topics/*.md`** 文件。
@@ -129,6 +131,6 @@ Codex 由 `flow2spec init codex` 写入 **`.codex/hooks.json`**，在 `SessionSt
 - `f2s-kb-rm`：删除某 stock-docs 文档对应的知识主题与索引映射；触发：删除项目上下文、f2s-kb-rm
 - `f2s-kb-sync`：可显式给出能力或零输入推断；先输出知识库更新大纲，确认后写入 topics/index/manifest；触发：f2s-kb-sync、全局同步、知识库同步、已实现能力
 - `f2s-kb-upgrade`：知识库模板升级技能（仅指本 SKILL）：**流程分流 V1** 须先 f2s-kb-migrate 再在流程内代跑 flow2spec init；**现行库（流程代号 V2+，含已用 .Knowledge 的 Flow2Spec npm v3.x 等项目）** 则代跑 init 以对齐 manifest-routing + matchers 分片（包内 `manifest-matchers.json` 仅作 init 合并种子，不落盘 .Knowledge）。触发：f2s-kb-upgrade、一键升级迁移、旧项目升级、知识库模板升级。注意：不要把单独的 flow2spec init 称作「升级命令」；**V1/V2+ 为技能内分流代号，不等于 npm 包主版本号**。
-- `f2s-req-tech`：根据澄清后的需求基于项目知识库/Skills/Rules 生成技术方案文档；触发：生成技术方案文档、技术方案
 - `f2s-req-clarify`：针对 PRD/需求反问直到清楚，再可用 f2s-req-tech 出技术方案；触发：需求澄清、PRD 澄清
 - `f2s-req-plan`：根据技术方案/需求描述/变更描述规划并实现任务；始终按 f2s-task 维护 .task/；支持子 agent 并行实现；触发：f2s-req-plan、创建任务、任务规划、我需要任务清单
+- `f2s-req-tech`：根据澄清后的需求基于项目知识库/Skills/Rules 生成技术方案文档；触发：生成技术方案、技术方案、f2s-req-tech

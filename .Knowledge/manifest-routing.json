@@ -5,15 +5,15 @@
   "sourceOfTruth": ".Knowledge/manifest-routing.json",
   "fallbackTopic": "fallback-triage",
   "topicDependencies": {
-    "f2s-dev-workflow-constraints": [
-      "f2s-git-commit"
-    ],
     "implement-tech-design": [
       "f2s-doc-routing",
       "stock-docs-vs-req-docs"
     ],
     "f2s-req-plan": [
       "f2s-task"
+    ],
+    "f2s-dev-workflow-constraints": [
+      "f2s-git-commit"
     ]
   },
   "topicPaths": {
