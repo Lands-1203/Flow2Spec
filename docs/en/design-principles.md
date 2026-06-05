@@ -63,6 +63,23 @@ graph LR
     note2["Rules evolve with tool upgrades"] -.-> R
 ```
 
+### 1.1 Rule Scope and Priority
+
+Flow2Spec rules intentionally overlap in a few places: the global entry defines the overall path, while focused rules enforce one specific stage. This redundancy reduces missed mandatory steps, but agents must resolve overlap by scope priority instead of treating similar wording as conflict.
+
+| Scenario | Priority Rule | Role |
+| --- | --- | --- |
+| First read / first tool call for ordinary questions | `f2s-knowledge-preflight` | Decides whether current-repo questions must first read `.Knowledge/manifest-routing.json`, and performs the source-code fallback closing check. |
+| Global routing facts / progressive loading chain | `f2s-flow2spec-unified-entry` | Defines the source-of-truth relationship and read order for manifest, matcher, topic, stock-docs, and req-docs. |
+| Reading config before any `f2s-*` skill | `f2s-config-check` | Enforces `flow2spec.config.json` as the first step of every `f2s-*` skill. |
+| Implementing from a technical proposal | `f2s-implement-tech-design` | Full execution rule for implementation from a technical design. |
+| `stock-docs` / `req-docs` boundary | `f2s-stock-docs-vs-req-docs` | Defines the path responsibilities of persistent context vs requirement / technical proposal documents. |
+| Writing topics / metadata / dependencies | `f2s-topic-authoring` | Authoring-side rule for topic naming, granularity, classification, dependencies, and persistence. |
+| Task checklist maintenance | `f2s-task` | Governs `.task/` creation, continuation, and archival. |
+| General coding discipline | `f2s-karpathy-guidelines` | Supplemental coding discipline only; it must not override mandatory f2s workflows. |
+
+Core principle: **gate rules decide whether something must be read or whether an action is allowed; focused rules then define how to execute it**. If rules overlap, apply the scenario priority above.
+
 
 
 ### 2. Progressive Routing
