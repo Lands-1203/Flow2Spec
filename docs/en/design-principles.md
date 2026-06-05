@@ -104,7 +104,7 @@ graph LR
 
     OLD["Existing Code/Docs"] -->|f2s-kb-add| K
 
-    NR["New Requirement"] --> CL["f2s-req-clarify"] --> BE["f2s-req-backend"]
+    NR["New Requirement"] --> CL["f2s-req-clarify"] --> BE["f2s-req-tech"]
     BE --> IMPL["Implement xxx technical design"] -->|auto-trigger implement-tech-design rule| K
 
     GIT["After Git Merge"] -->|f2s-kb-merge| K

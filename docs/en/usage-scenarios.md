@@ -29,11 +29,11 @@ The following examples revolve around the same e-commerce project, covering the 
 
 **Agent**
 
-> Clarification complete. Run `/f2s-req-backend` to produce the technical design.
+> Clarification complete. Run `/f2s-req-tech` to produce the technical design.
 
 **You**
 
-> /f2s-req-backend
+> /f2s-req-tech
 
 **Agent**
 

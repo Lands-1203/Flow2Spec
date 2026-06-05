@@ -62,7 +62,7 @@ Each task hits 1–4 topics, ~300 lines. Business constraints — Redis lock key
 `/f2s-kb-feat` writes topics while writing features, `/f2s-kb-fix` corrects topics while fixing bugs, `/f2s-git-commit` checks topic coverage before committing. Changing code == updating knowledge. No separate "documentation maintenance."
 
 **④ Full pipeline from requirements to code**  
-`/f2s-req-clarify` asks questions until requirements are unambiguous. `/f2s-req-backend` generates a ready-to-implement technical proposal into `req-docs/`. AI implements from the proposal — no relying on verbal agreements.
+`/f2s-req-clarify` asks questions until requirements are unambiguous. `/f2s-req-tech` generates a ready-to-implement technical proposal into `req-docs/`. AI implements from the proposal — no relying on verbal agreements.
 
 **⑤ Task checklists track progress across sessions**  
 When `changeTracking` is enabled, skills like `f2s-kb-feat` / `f2s-kb-fix` automatically create a `task.md` with checkboxes. Each step is checked off immediately to disk. New sessions auto-load the remaining checklist — no relying on memory. User-side todos (run SQL, set env vars, click approvals) go into `user-todos.md`, separate from AI steps.
@@ -124,7 +124,7 @@ In your Agent tool (Cursor / Claude Code):
 
 ```
 /f2s-req-clarify  one-line description or paste PRD    ← clarify requirements
-/f2s-req-backend                                       ← generate technical proposal
+/f2s-req-tech                                       ← generate technical proposal
 natural language: implement the proposal above         ← AI starts coding (task checklist auto-created when changeTracking is on)
 (debug and verify)
 /f2s-kb-feat  add xxx capability                       ← if something's missing
@@ -147,7 +147,7 @@ natural language: implement the proposal above         ← AI starts coding (tas
 | Command | Purpose |
 |---|---|
 | `/f2s-req-clarify` | Clarify requirements |
-| `/f2s-req-backend` | Generate technical proposal |
+| `/f2s-req-tech` | Generate technical proposal |
 | `/f2s-kb-feat` | Add a new capability |
 | `/f2s-kb-fix` | Fix a bug |
 | `/f2s-kb-sync` | Sync knowledge base |

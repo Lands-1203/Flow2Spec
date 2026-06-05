@@ -73,10 +73,10 @@
 ### 流程三：按方案实现工作流
 
 1. **需求澄清**：`f2s-req-clarify` 针对 PRD/需求反问直到清楚
-2. **技术方案**：`f2s-req-backend` 基于知识库生成后端技术文档，写入 `.Knowledge/req-docs/`
+2. **技术方案**：`f2s-req-tech` 基于知识库生成技术方案文档，写入 `.Knowledge/req-docs/`
 3. **方案实现**：`implement-tech-design` 读取 `req-docs` 中的技术方案并执行编码
 
-**入口**：用户执行 `/f2s-req-clarify` → `/f2s-req-backend` → 命中 `implement-tech-design` 主题
+**入口**：用户执行 `/f2s-req-clarify` → `/f2s-req-tech` → 命中 `implement-tech-design` 主题
 
 ### 流程四：知识库维护工作流
 
@@ -142,7 +142,7 @@
 1. 在目标业务仓库执行：`npx @double-codeing/flow2spec@latest init [cursor|claude|codex]`
 2. 检查项目根 `flow2spec.config.json`，按需调整 `subAgent` / `switchAgentVerification`
 3. 使用 `f2s-doc-arch` → `f2s-doc-final` → `f2s-kb-build` 沉淀项目上下文
-4. 使用 `f2s-req-clarify` → `f2s-req-backend` 生成技术方案，再由 `implement-tech-design` 执行编码
+4. 使用 `f2s-req-clarify` → `f2s-req-tech` 生成技术方案，再由 `implement-tech-design` 执行编码
 5. 使用 `f2s-kb-sync` / `f2s-kb-add` 维护已落地能力
 
 ---

@@ -82,7 +82,7 @@ Flow2Spec 同源能力、**分仓发布**。里程碑表中「内部仓 / 开源
 | 项 | 内容 |
 | --- | --- |
 | **版本** | 1.0.8 → 1.0.11 |
-| **交付** | **`f2s-req-clarify`**、**`f2s-req-backend`** |
+| **交付** | **`f2s-req-clarify`**、**`f2s-req-tech`** |
 | **知识库** | 架构终稿「流程三」上游能力成形 |
 
 **意义**：PRD → `req-docs` 技术方案，与 `implement-tech-design` 闭环。

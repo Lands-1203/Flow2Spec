@@ -13,7 +13,7 @@
 | `/f2s-kb-rm` | Remove knowledge topic and index mapping for a stock-docs document | Doc Curation |
 | `/f2s-doc-pdf` | Convert PDF technical proposal to Markdown, save to req-docs | Doc Curation |
 | `/f2s-req-clarify` | Clarify requirements via multi-round Q&A | Requirements |
-| `/f2s-req-backend` | Generate backend technical proposal from clarified requirements | Requirements |
+| `/f2s-req-tech` | Generate technical proposal from clarified requirements | Requirements |
 | `/f2s-req-plan` | Break a technical proposal into a task checklist and implement (always creates tasks, regardless of `changeTracking.*` config) | Requirements |
 | `/f2s-git-commit` | Commit code; checks knowledge base coverage by default, skips that check in "quick commit" mode | Commit |
 | `/f2s-kb-feat` | Add new capability + sync knowledge base | KB Maintenance |
@@ -176,17 +176,17 @@
 
 **Purpose**: Converts PDF technical proposals to Markdown format, saves to `req-docs/`, and can supplement the process description.
 
-**How It Works**: Extracts structured content from the PDF (API definitions, data models, sequence flows, etc.) into Markdown under `req-docs/` for editing and follow-up with `f2s-req-clarify` / `f2s-req-backend`. Unlike `f2s-doc-final`, `doc-pdf` writes to `req-docs/`; `doc-final` writes to `stock-docs/` for `ctx-build`. **Not recommended** as a shortcut for "PDF straight to coding" without clarification and a backend technical proposal.
+**How It Works**: Extracts structured content from the PDF (API definitions, data models, sequence flows, etc.) into Markdown under `req-docs/` for editing and follow-up with `f2s-req-clarify` / `f2s-req-tech`. Unlike `f2s-doc-final`, `doc-pdf` writes to `req-docs/`; `doc-final` writes to `stock-docs/` for `ctx-build`. **Not recommended** as a shortcut for "PDF straight to coding" without clarification and a technical proposal.
 
 **Use Cases**:
 - Cross-team deliverables are in PDF format and need conversion to editable Markdown
 - Historical PDF proposals need to live under `req-docs/`
-- Provide a readable draft before `f2s-req-clarify` / `f2s-req-backend`
+- Provide a readable draft before `f2s-req-clarify` / `f2s-req-tech`
 
 **Relationships**:
 - **Prerequisite**: PDF document
 - **Output**: `.Knowledge/req-docs/<Proposal>.md`
-- **Next Step** (recommended): `f2s-req-clarify` → `f2s-req-backend` → implement from the technical proposal MD via `implement-tech-design`; for knowledge base archival use `f2s-doc-final` → `f2s-kb-build`
+- **Next Step** (recommended): `f2s-req-clarify` → `f2s-req-tech` → implement from the technical proposal MD via `implement-tech-design`; for knowledge base archival use `f2s-doc-final` → `f2s-kb-build`
 
 **Sub-Agent Invocation**:
 - `subAgent: false` (default): The main agent completes the full workflow
@@ -206,7 +206,7 @@
 
 **Purpose**: Asks clarifying questions against PRDs/requirement documents, using multi-round Q&A to define requirement boundaries, non-goals, and key flows, until the requirements are clear enough for a technical proposal.
 
-**How It Works**: Uses a "structured questioning" strategy — decomposes the requirement document along six dimensions (roles, scenarios, flows, boundaries, exceptions, non-goals), checks each for vague wording, undefined concepts, or contradictions, and generates targeted questions for each gap. Dialogue continues until all dimensions are unambiguous, then outputs a clarification record as input for `f2s-req-backend`. It turns unstructured PRDs into structured, actionable requirement constraints.
+**How It Works**: Uses a "structured questioning" strategy — decomposes the requirement document along six dimensions (roles, scenarios, flows, boundaries, exceptions, non-goals), checks each for vague wording, undefined concepts, or contradictions, and generates targeted questions for each gap. Dialogue continues until all dimensions are unambiguous, then outputs a clarification record as input for `f2s-req-tech`. It turns unstructured PRDs into structured, actionable requirement constraints.
 
 **Use Cases**:
 - First step after receiving a PRD, ensuring correct understanding
@@ -215,18 +215,18 @@
 
 **Relationships**:
 - **Prerequisite**: None (can be triggered directly)
-- **Next Step**: `f2s-req-backend` (generates a technical proposal after clarification)
+- **Next Step**: `f2s-req-tech` (generates a technical proposal after clarification)
 - **Output**: Requirement clarification record (optionally saved to `.Knowledge/req-docs/`)
 
 **Sub-Agent Invocation**: None (clarification relies on continuous dialogue and immediate user feedback throughout; no sub-agent splitting)
 
 ---
 
-### `f2s-req-backend`
+### `f2s-req-tech`
 
-**Purpose**: Based on clarified requirements and the project knowledge base, generates a backend technical proposal document including API design, data models, flow descriptions, error codes, etc.
+**Purpose**: Based on clarified requirements and the project knowledge base, generates an implementation-ready technical proposal. The content is selected by scenario: APIs, pages/components, scripts/tools, data processing, configuration, events, or module changes.
 
-**How It Works**: Centered on "knowledge base constraints + template-driven" authoring — first pull a constraint summary for the current project from `topics/stock-docs` (architecture conventions, API style, data model norms, etc.), then fill the backend technical proposal template (APIs / models / flows / errors / config / migrations) chapter by chapter against the clarified requirements so the proposal matches the existing architecture. Output is persisted under `req-docs/` as the coding contract for `implement-tech-design`.
+**How It Works**: Centered on "knowledge base constraints + template-guided" authoring — first pull a constraint summary for the current project from `topics/stock-docs` (architecture conventions, contract style, data and module boundaries, etc.), then choose only the relevant blocks from the technical proposal template. Do not force API, database, error-code, or message-queue sections just to fit the template. Output is persisted under `req-docs/` as the coding contract for `implement-tech-design`.
 
 **Use Cases**:
 - After `f2s-req-clarify` completes, output a proposal based on clarification results
@@ -248,7 +248,7 @@
 | Sub-Agent | Read-only access to multiple sources (topics / stock-docs / clarified req-docs / templates), writes `req-docs` draft per template; must not expand the read scope on its own |
 
 **Cross-Verification (when `switchAgentVerification: true`)**:
-- API/model/flow documents persisted by sub-agents -> Main agent verifies cross-chapter consistency (API signatures align with data models, flows and error handling coverage)
+- Draft proposals persisted by sub-agents -> Main agent verifies consistency across deliverables, data structures, processing flows, error handling, and project conventions
 - Only effective when `subAgent: true` and sub-tasks are actually dispatched; otherwise all verification happens within the main agent
 
 ---
@@ -574,7 +574,7 @@ The following are not skill commands but rules activated by trigger words to gui
 - After a proposal change, code needs to be updated accordingly
 
 **Relationships**:
-- **Prerequisite**: `.Knowledge/req-docs/<Technical Proposal>.md` (via `f2s-req-backend` or manual placement)
+- **Prerequisite**: `.Knowledge/req-docs/<Technical Proposal>.md` (via `f2s-req-tech` or manual placement)
 - **Rule Location**:
   - Cursor: `.cursor/rules/f2s-implement-tech-design.mdc`
   - Claude: `.claude/rules/f2s-implement-tech-design.md`

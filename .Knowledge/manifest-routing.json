@@ -24,7 +24,8 @@
     "stock-docs-vs-req-docs": ".Knowledge/topics/f2s-stock-docs-vs-req-docs.md",
     "flow2spec-presentations": ".Knowledge/topics/f2s-flow2spec-presentations.md",
     "flow2spec-milestones": ".Knowledge/topics/f2s-flow2spec-milestones.md",
-    "skill-authoring": ".Knowledge/topics/skill-authoring.md"
+    "skill-authoring": ".Knowledge/topics/skill-authoring.md",
+    "f2s-req-tech": ".Knowledge/topics/f2s-req-tech.md"
   },
   "taskToTopicRules": [
     {
@@ -101,6 +102,14 @@
       "topics": [
         "skill-authoring"
       ]
+    },
+    {
+      "task": "req-tech",
+      "matcherId": "m-req-tech",
+      "matcherPath": ".Knowledge/matchers/m-req-tech.json",
+      "topics": [
+        "f2s-req-tech"
+      ]
     }
   ],
   "topicMetadata": {
@@ -144,6 +153,10 @@
       "confidence": "inferred"
     },
     "skill-authoring": {
+      "primary": "policy",
+      "confidence": "inferred"
+    },
+    "f2s-req-tech": {
       "primary": "policy",
       "confidence": "inferred"
     }

@@ -60,7 +60,7 @@ AI: 开始改，预计 3 处文件。
 `/f2s-kb-feat` 写功能时同步写 topic，`/f2s-kb-fix` 修 bug 时更正 topic，`/f2s-git-commit` 提交前检查 topic 覆盖。改代码就是记知识，没有"单独维护文档"这件事。
 
 **④ 需求到实现全链路：澄清 → 技术方案 → 代码**  
-`/f2s-req-clarify` 反问到无歧义，`/f2s-req-backend` 生成可直接实现的技术方案文档落到 `req-docs/`，AI 按方案实现，不靠口头约定。
+`/f2s-req-clarify` 反问到无歧义，`/f2s-req-tech` 生成可直接实现的技术方案文档落到 `req-docs/`，AI 按方案实现，不靠口头约定。
 
 **⑤ 任务清单跨会话追踪进度**  
 开启 `changeTracking` 配置后，`f2s-kb-feat` / `f2s-kb-fix` 等技能执行时自动创建带 checkbox 的 `task.md`，每步完成立即打钩落盘。新会话续作时自动加载剩余清单，不靠记忆、不靠口头，任务进度永远在磁盘上。用户侧的代办（执行 SQL、配环境变量、点审批）单独写入 `user-todos.md`，不混在 AI 步骤里。
@@ -122,7 +122,7 @@ npx @double-codeing/flow2spec@latest init
 
 ```
 /f2s-req-clarify  一句话需求或粘贴 PRD    ← 需求澄清
-/f2s-req-backend                          ← 生成技术方案
+/f2s-req-tech                          ← 生成技术方案
 自然语言：实现上面的技术方案              ← AI 开始实现（开启 changeTracking 时自动建任务清单）
 （调试验证）
 /f2s-kb-feat  新增 xxx 能力               ← 功能缺失时补能力
@@ -145,7 +145,7 @@ npx @double-codeing/flow2spec@latest init
 | 命令 | 用途 |
 |---|---|
 | `/f2s-req-clarify` | 需求澄清 |
-| `/f2s-req-backend` | 生成技术方案 |
+| `/f2s-req-tech` | 生成技术方案 |
 | `/f2s-kb-feat` | 新增小功能 |
 | `/f2s-kb-fix` | 改 BUG |
 | `/f2s-kb-sync` | 同步知识库 |
