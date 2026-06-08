@@ -12,9 +12,9 @@
 
 **禁止在未读该文件的情况下进入技能正文的任何执行步骤。**
 
-## Flow2Spec 项目开关（`./flow2spec.config.json`；缺失时由 `flow2spec init` 从 npm 包模板补齐）
+## Flow2Spec 项目开关（`./flow2spec.config.json`；缺失时由 `flow2spec init` 补齐）
 
-**`flow2spec init` 的定位**：把 Flow2Spec **包内模板**落到当前仓库——包括 **`./.Knowledge/`**（含路由结构、快照等）、仓库根 **`./AGENTS.md`**（完整）、**`.codex/AGENTS.md`**（指针）及 **`./.codex/`**（**`./.codex/skills/`**、经 init 写入的 **`./.codex/topics/*.md`** 等），**不负责**撰写业务 **`./.Knowledge/stock-docs/`**、**`./.Knowledge/topics/`** 正文或替代 **`f2s-*` 技能**；即 **模板与目录落盘 / 形态对齐**，不是「知识库升级命令」（升级见 **`f2s-kb-upgrade`** 技能）。
+**`flow2spec init` 的定位**：把 Flow2Spec 运行结构写入当前仓库——包括 **`./.Knowledge/`**（含路由结构、快照等）、仓库根 **`./AGENTS.md`**（完整）、**`.codex/AGENTS.md`**（指针）及 **`./.codex/`**（**`./.codex/skills/`**、**`./.codex/topics/*.md`** 等），**不负责**撰写业务 **`./.Knowledge/stock-docs/`**、**`./.Knowledge/topics/`** 正文或替代 **`f2s-*` 技能**；即 **目录落盘 / 形态对齐**，不是「知识库升级命令」（升级见 **`f2s-kb-upgrade`** 技能）。
 
 执行任意 **`f2s-*` 技能**前，必须读取 `./flow2spec.config.json` 中的布尔字段（缺省或文件不存在均视为 `false`）。下表由 **最近一次 `flow2spec init`** 根据当时配置写入，**以磁盘上的文件为准**。
 
@@ -29,7 +29,7 @@
 
 ### `subAgent` 与 `switchAgentVerification`（语义与上表一致；以磁盘配置为准）
 
-- **`subAgent`**：`f2s-*` 技能若写明某步「用子 agent 执行」，**`true`** 时按技能使用子 agent，**`false`** 时在主会话内完成。用户可说明「**仅当** `subAgent` 为 **`true`** 时，由主 agent **动态判断**哪些子任务适合交给子 agent」——**仅当配置为 `true` 时该说明有效**；为 **`false`** 时该段要求**自动失效**，不得拆子 agent。**各技能在何阶段用子 agent** 由技能正文约定，包模板**尚未**给出统一阶段清单。
+- **`subAgent`**：`f2s-*` 技能若写明某步「用子 agent 执行」，**`true`** 时按技能使用子 agent，**`false`** 时在主会话内完成。用户可说明「**仅当** `subAgent` 为 **`true`** 时，由主 agent **动态判断**哪些子任务适合交给子 agent」——**仅当配置为 `true` 时该说明有效**；为 **`false`** 时该段要求**自动失效**，不得拆子 agent。**各技能在何阶段用子 agent** 由技能正文约定；若技能未写明，则不默认拆子。
 - **`switchAgentVerification`（切换 agent 校验）**：**不是**「校验一律在主会话」；**`false` 或未启用交叉规则时**：谁在会话里**落盘**，验证与复核（对照清单、diff、自检）**就在该 agent 会话内**完成（子写子验、主写主验）。**`true` 且** 当前 **`f2s-*` 技能正文**写明依赖本项时，启用**交叉校验**：**子 agent 落盘的 → 主 agent 验**；**主 agent 落盘的 → 子 agent 验**（无子 agent 时，如 **`subAgent` 为 `false`**，则「主落盘→子验」不发生，**全在主会话**验）。
 
 ### `intentRecognition`（意图识别自动分流）
@@ -93,7 +93,7 @@
 
 ## 专题长文（`./.codex/topics/`）
 
-由 **`flow2spec init`** 将 npm 包内 **`templates/rules/*.mdc`** 去 frontmatter 后写入 **`./.codex/topics/*.md`**，与本文件、**`./.codex/skills/`** 一起构成 Flow2Spec 的可执行依据。**当前包模板**对应文件（运行时路径均在仓库根下 `.codex/topics/`）：
+由 **`flow2spec init`** 写入当前仓库，与本文件、**`./.codex/skills/`** 一起构成 Flow2Spec 的可执行依据。当前运行时路径均在仓库根下 **`.codex/topics/`**：
 
 - **统一入口**：`./.codex/topics/f2s-flow2spec-unified-entry.md`
 - **implement-tech-design**：`./.codex/topics/f2s-implement-tech-design.md`

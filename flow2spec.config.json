@@ -9,5 +9,6 @@
   "updateCheck": {
     "enabled": true
   },
-  "intentRecognition": false
+  "intentRecognition": false,
+  "locale": "zh-CN"
 }

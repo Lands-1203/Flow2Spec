@@ -33,13 +33,13 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 | 技能 | 解决的问题 |
 | --- | --- |
 | **`f2s-kb-migrate`** | **结构搬家**：`docs-index.md` / `index-doc.md`、`rules/main.md(c)`、业务 `skills/`、散落 `stock-docs`/`req-docs` → **迁入 `.Knowledge`**，落盘 `migration-report.md`、删除清单需用户确认。不代跑 npm 包升级。 |
-| **本技能 `f2s-kb-upgrade`** | **包与模板对齐**：代跑 **`flow2spec init`**，合并 **`manifest-routing.json`** 与 **`matchers/*.json`**（包内 `manifest-matchers.json` 仅作 init 合并种子，**不落盘**到 `.Knowledge`），刷新各 agent **`rules`/`skills`**（或 Codex **`AGENTS.md`**）；`init` 另将包内 **`index.md` → `.Knowledge/template/index.template.md`** 作对照快照，**`.Knowledge/index.md`** 由步骤 3b **diff 对齐**，init **不**自动改其正文。 |
+| **本技能 `f2s-kb-upgrade`** | **包与模板对齐**：代跑 **`flow2spec init`**，合并 **`manifest-routing.json`** 与 **`matchers/*.json`**，刷新各 agent **`rules`/`skills`**（或 Codex **`AGENTS.md`**）；`init` 另将当前语言的 **`index.md` → `.Knowledge/template/index.template.md`** 作对照快照，**`.Knowledge/index.md`** 由步骤 3b **diff 对齐**，init **不**自动改其正文。 |
 
 - **旧项目一键闭环**：**先 `f2s-kb-migrate`** → **再本技能**（`init`）。禁止仅用 `init` 代替完整迁移。
 - **已是新版 `.Knowledge` 的项目**：**只跑本技能**，勿重复 migrate。
 
 **为何 Cursor / Claude / Codex 下各有一份同名 `SKILL.md`？**  
-各工具只加载**本配置根**下的 `skills/`（例如 Codex 仅 `.codex/skills/`）。内容应以 **`templates/skills/`**（或包发布物）为源保持一致；`flow2spec init` 会向所选 agent 目录**同步落盘**。
+各工具只加载**本配置根**下的 `skills/`（例如 Codex 仅 `.codex/skills/`）。`flow2spec init` 会向所选 agent 目录**同步落盘**当前语言对应的技能内容。
 
 ## 目标
 
@@ -53,7 +53,7 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 ## init 与技能自更新（必须）
 
-本技能在 **步骤 2** 会执行 **`flow2spec init`**；`init` 会把包内 **`templates/skills/`** 等同步到各 agent **配置根**，因此 **`init` 成功结束后**，本仓库里的 **`skills/f2s-kb-upgrade/SKILL.md`** **可能被新版本覆盖**，与当前对话里已缓存的旧说明不一致。
+本技能在 **步骤 2** 会执行 **`flow2spec init`**；`init` 会把当前语言对应的技能内容同步到各 agent **配置根**，因此 **`init` 成功结束后**，本仓库里的 **`skills/f2s-kb-upgrade/SKILL.md`** **可能被新版本覆盖**，与当前对话里已缓存的旧说明不一致。
 
 **闭环（防旧条令）**：
 
@@ -92,6 +92,7 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 - 若用户未明确「覆盖重置」，本技能步骤 2 默认 **增量 `init`**。
 - 若用户提到「全部按模板覆盖/重置」，二次确认后再使用 `--reset-knowledge`。
+- **locale 规则**：普通升级沿用项目 `flow2spec.config.json.locale`；字段不存在时按 `zh-CN` 补齐。禁止在本技能中顺手切换语言；只有用户显式要求 `--locale en-US` / `--locale zh-CN` 时才传入对应参数。
 
 ### 步骤 2：执行命令（代用户跑 shell）
 
@@ -103,6 +104,8 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
    - `npx flow2spec init <agents...>`
 3. 覆盖重置时：
    - 在上述命令末尾追加 `--reset-knowledge`
+4. 用户显式要求切换模板语言时：
+   - 在上述命令末尾追加 `--locale <zh-CN|en-US>`
 
 > `<agents...>` 示例：`cursor claude codex`。
 
@@ -112,15 +115,12 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 **本技能步骤 2** `flow2spec init` 成功后，先执行「旧文件清理 + 引用修复」：
 
-> **skill 目录自动对齐**：`flow2spec init` 现已自动删除配置根 `skills/` 中不再存在于 `templates/skills/` 的旧目录（重命名/删除的 skill 如 `f2s-ctx-build`、`f2s-doc-add`、`f2s-rule-capture`、`stock-docs-vs-req-docs` 等），**无需 Agent 手动清理**。
+> **skill 目录自动对齐**：`flow2spec init` 现已自动删除配置根 `skills/` 中当前版本不再提供的旧目录（重命名/删除的 skill 如 `f2s-ctx-build`、`f2s-doc-add`、`f2s-rule-capture`、`stock-docs-vs-req-docs` 等），**无需 Agent 手动清理**。
 
 1. 清理旧命名主题文件（仅在文件存在时删除，均为无 `f2s-` 前缀的旧版遗留）：
    - `.Knowledge/topics/flow2spec-architecture.md`
    - `.Knowledge/topics/implement-tech-design.md`
-   - `templates/knowledge/topics/implement-tech-design.md`
 2. 修复引用（仅在文件存在时更新；**`.Knowledge/index.md` 正文不由 init 改写**，见步骤 3b）：
-   - `templates/knowledge/index.md`
-   - `templates/knowledge/manifest-routing.json`
    - `.Knowledge/index.md`（按需人工或技能侧改路径/段落）
    - `.Knowledge/manifest-routing.json`
 3. 引用更新目标（确认使用新名）：
@@ -147,19 +147,19 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 > **范围**：本条「融合」**仅在本技能内由 Agent 落盘 `.Knowledge/index.md`**；**不要求、也不假设**修改 Flow2Spec 包内 **`cli.js` / `lib/init.js`** 等 JS。`init` 行为仍以仓库现行为准（仅复制快照等）。
 
-**`flow2spec init` 在本流程中的角色**：把包内 **`templates/knowledge/index.md` 原样复制**到 **`.Knowledge/template/index.template.md`**，作为**包版外壳对照**；**不**替代本步骤对 **`index.md`** 的融合书写。
+**`flow2spec init` 在本流程中的角色**：把当前语言的 `index.md` 快照复制到 **`.Knowledge/template/index.template.md`**，作为**包版外壳对照**；**不**替代本步骤对 **`index.md`** 的融合书写。
 
 #### 融合规则（必须遵守）
 
 0. **写权归属**：本步骤的 `.Knowledge/index.md` 融合恒由主 agent 执行并落盘；子 agent 不得直接写入（写权硬约束）。
 1. **对照源**  
-   - **包版全文**：**`.Knowledge/template/index.template.md`**（与当前包 `templates/knowledge/index.md` 一致）。  
+   - **包版全文**：**`.Knowledge/template/index.template.md`**。
    - **项目现状**：**`.Knowledge/index.md`**。
 
-2. **项目自身维护区（锚点：包模板 `index.md` 约第 18–19 行）**  
-   - 以包模板行号为参照：**从二级标题 `## 主题一览` 起**（对应模板中紧接上一段 `---` 之后的 **`## 主题一览`** 与节首空行，即常见 **第 18–19 行**），**直至本节结束**：即到 **紧挨在 `## 命中与执行`（含括号说明）之前的那个 `---` 之前**的整块内容（含「主题一览」下的表格、节内说明段落等）。  
+2. **项目自身维护区（锚点：`.Knowledge/template/index.template.md` 中的 `## 主题一览`）**
+   - 以 `.Knowledge/template/index.template.md` 为参照：**从二级标题 `## 主题一览` 起**，**直至本节结束**：即到 **紧挨在 `## 命中与执行`（含括号说明）之前的那个 `---` 之前**的整块内容（含「主题一览」下的表格、节内说明段落等）。
    - 该整块 **必须保留来自当前项目 `.Knowledge/index.md` 的正文**（由业务与 **f2s-*** 维护）；**禁止**用包模板同一段落**整体替换**覆盖（避免丢失业务主题行与摘要列）。  
-   - **允许**在该块内做**最小必要修补**：例如为包新增的 `topicPaths` 主题**补行**、按 **`manifest-routing.json` 的 `topicPaths`** 改正「路径」列、与快照对比后补上包模板里**新增**的表格列说明——仍以保留项目已有行为主。
+   - **允许**在该块内做**最小必要修补**：例如为新增的 `topicPaths` 主题**补行**、按 **`manifest-routing.json` 的 `topicPaths`** 改正「路径」列、与快照对比后补上新增的表格列说明——仍以保留项目已有行为主。
 
 3. **必须与包模板一致的部分**  
    - **上述维护区之外**的所有内容（含 **`## 主题一览` 之前**从文件开头到该节前、以及 **`## 命中与执行` 及之后**直到文件结尾）：须与 **`.Knowledge/template/index.template.md`** 中对应段落 **一致**（以包版为准；diff 后以模板覆盖项目侧旧文）。

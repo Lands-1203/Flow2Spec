@@ -34,7 +34,7 @@ description: 旧版知识库一次性迁到 `.Knowledge`：以配置根 `docs-in
 - **迁移验收、删除清单确认完成后**：应提醒或代用户执行 **`f2s-kb-upgrade` 技能全文**（其中 **步骤 2** 会代跑 **`flow2spec init`**），把 Flow2Spec 包版本、路由分片与配置根产物对齐到当前包。**勿**让用户以为「单独执行 `init`」即完成知识库模板升级。
 - **已在稳定使用 `.Knowledge` 且无旧索引负担的项目**：不要重复跑本技能；日常包/模板对齐走 **`f2s-kb-upgrade`** 技能即可（不是只跑 `init`）。
 
-**为何各 agent 下都有同名 `SKILL.md`？** 各工具只读各自配置根下的 `skills/`；`flow2spec init` 会向所选 agent **同步** `templates/skills/` 中的内容。
+**为何各 agent 下都有同名 `SKILL.md`？** 各工具只读各自配置根下的 `skills/`；`flow2spec init` 会向所选 agent **同步**当前语言对应的技能内容。
 
 ## 本命令做什么（对外口径）
 
