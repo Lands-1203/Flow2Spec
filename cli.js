@@ -11,6 +11,8 @@ const {
   CONFIG_FILENAME,
   CONFIG_FIELDS,
   getMissingConfigFields,
+  SUPPORTED_LOCALES,
+  normalizeLocale,
 } = require("./lib/flow2specConfig");
 
 const { execFileSync } = require("child_process");
@@ -129,7 +131,7 @@ const help = `
 Flow2Spec - 统一知识库工作流（AI 配置入口）  v${pkg.version}
 
 用法:
-  flow2spec init [agent ...] [--reset-knowledge] [--yes]    在当前项目初始化：写入 .Knowledge 与所选 agent 入口
+  flow2spec init [agent ...] [--reset-knowledge] [--yes] [--locale zh-CN|en-US]    在当前项目初始化：写入 .Knowledge 与所选 agent 入口
   flow2spec config              打印项目根 ${CONFIG_FILENAME} 的解析结果（缺省值合并后）
   flow2spec version             显示当前 flow2spec 版本
   flow2spec update              更新 flow2spec 到最新版本；更新后提示执行 f2s-kb-upgrade
@@ -142,13 +144,14 @@ agent（可多个，空格分隔；省略时交互选择）：
   flow2spec init                  # 交互选择工具和配置
   flow2spec init claude           # 直接写入 .claude/，跳过工具选择
   flow2spec init cursor claude    # 同时写入 .cursor/ 与 .claude/
+  flow2spec init codex --locale en-US  # 使用英文模板初始化 Codex
   flow2spec init --yes            # 跳过所有问答，使用默认值（适合 CI）
   flow2spec init --reset-knowledge  # 强制用模板覆盖 .Knowledge（谨慎）
 
 init 会:
   1. 交互询问要初始化的 AI 工具（cursor / claude / codex，可多选）；已通过参数指定则跳过。
      传 --yes 或非 TTY 环境时跳过问答，使用默认值。
-  2. 对 ${CONFIG_FILENAME} 中缺失的配置字段逐项提问（已有字段不覆盖）。
+  2. 对 ${CONFIG_FILENAME} 中缺失的配置字段逐项提问（已有字段不覆盖）。模板语言由 --locale、已有 locale 或默认 zh-CN 决定。
      传 --yes 时所有缺失字段使用各自默认值。
   3. 默认仅补齐 .Knowledge 缺失模板，并对路由清单做包级/结构增量对齐（manifest-routing + matcherPath 分片；关键词仅写在 matchers/*.json）；不替代 f2s-* 对业务文档与路由内容的写入。
      传 --reset-knowledge 时才会强制用模板覆盖 .Knowledge 中模板承载部分。
@@ -158,7 +161,7 @@ init 会:
      Cursor 额外写入 f2s-config-check.mdc（alwaysApply），强制在技能首步读取配置文件；
      并写入 .cursor/hooks.json，在 sessionStart 自动检测知识库版本。
      Codex：仓库根 AGENTS.md（CLI 自动发现，完整条令）；.codex/AGENTS.md 为指针。
-  5. 每次 init 将包内 templates/knowledge/index.md 复制到 .Knowledge/template/index.template.md，供 f2s-kb-upgrade 技能与 .Knowledge/index.md 对照；不自动改写 index.md。（「知识库升级」指 f2s-kb-upgrade 技能，init 本身不是升级命令。）
+  5. 每次 init 将当前 locale 包模板 knowledge/index.md 复制到 .Knowledge/template/index.template.md，供 f2s-kb-upgrade 技能与 .Knowledge/index.md 对照；不自动改写 index.md。（「知识库升级」指 f2s-kb-upgrade 技能，init 本身不是升级命令。）
   6. 规则与技能在各 agent 配置根加载；其他模版类文件在 .Knowledge/template/ 等目录。
 
 更多说明见 README.md 或 docs/使用说明.md
@@ -222,9 +225,31 @@ if (sub === "init") {
   const rawArgs = args.slice(1);
   const overwriteKnowledge = rawArgs.includes("--reset-knowledge");
   const skipPrompts = rawArgs.includes("--yes") || rawArgs.includes("-y");
-  const agentArgs = rawArgs.filter(
-    (a) => a !== "--reset-knowledge" && a !== "--yes" && a !== "-y",
-  );
+  let cliLocale;
+  const agentArgs = [];
+  for (let i = 0; i < rawArgs.length; i += 1) {
+    const arg = rawArgs[i];
+    if (arg === "--reset-knowledge" || arg === "--yes" || arg === "-y") continue;
+    if (arg === "--locale") {
+      if (!rawArgs[i + 1] || rawArgs[i + 1].startsWith("--")) {
+        console.error(`--locale 需要取值。可选：${SUPPORTED_LOCALES.join(", ")}`);
+        process.exit(1);
+      }
+      cliLocale = String(rawArgs[i + 1] || "").trim();
+      i += 1;
+      continue;
+    }
+    if (arg.startsWith("--locale=")) {
+      cliLocale = String(arg.slice("--locale=".length) || "").trim();
+      continue;
+    }
+    agentArgs.push(arg);
+  }
+  if (cliLocale && !SUPPORTED_LOCALES.includes(cliLocale)) {
+    console.error(`不支持的 locale：${cliLocale}。可选：${SUPPORTED_LOCALES.join(", ")}`);
+    process.exit(1);
+  }
+  if (cliLocale) cliLocale = normalizeLocale(cliLocale);
 
   const cwd = process.cwd();
 
@@ -299,6 +324,60 @@ if (sub === "init") {
   }
 
   /**
+   * 单选 UI（raw mode）：箭头键移动，回车确认。
+   * 非 TTY 或 skipPrompts 时直接返回默认值。
+   */
+  async function promptSingleSelect(title, items, defaultValue) {
+    const fallback = defaultValue || items[0].value;
+    if (!process.stdin.isTTY || skipPrompts) return fallback;
+
+    let cursor = Math.max(0, items.findIndex((item) => item.value === fallback));
+    let rendered = 0;
+
+    function render() {
+      if (rendered > 0) clearLines(rendered);
+      const lines = [];
+      lines.push(`  ${title}`);
+      for (let i = 0; i < items.length; i++) {
+        const selected = i === cursor;
+        const check = selected ? "\x1b[32m◉\x1b[0m" : "○";
+        const arr = selected ? "\x1b[36m›\x1b[0m" : " ";
+        const label = items[i].label.padEnd(10);
+        const desc = items[i].desc ? `  \x1b[2m${items[i].desc}\x1b[0m` : "";
+        lines.push(`  ${arr} ${check}  ${label}${desc}`);
+      }
+      lines.push("");
+      lines.push("  \x1b[2m↑↓ 移动  回车 确认\x1b[0m");
+      rendered = lines.length;
+      process.stdout.write(lines.join("\n") + "\n");
+    }
+
+    render();
+
+    return new Promise((resolve) => {
+      function onKey(str, key) {
+        if (!key) return;
+        if (key.ctrl && key.name === "c") process.exit(0);
+
+        if (key.name === "up") {
+          cursor = (cursor - 1 + items.length) % items.length;
+          render();
+        } else if (key.name === "down") {
+          cursor = (cursor + 1) % items.length;
+          render();
+        } else if (key.name === "return") {
+          process.stdin.removeListener("keypress", onKey);
+          const result = items[cursor]?.value || fallback;
+          if (rendered > 0) clearLines(rendered);
+          process.stdout.write(`  ${title}  \x1b[32m${result}\x1b[0m\n`);
+          resolve(result);
+        }
+      }
+      process.stdin.on("keypress", onKey);
+    });
+  }
+
+  /**
    * 单键 y/n 问答（raw mode）。
    * 非 TTY 或 skipPrompts 时直接返回默认值。
    */
@@ -325,6 +404,16 @@ if (sub === "init") {
     });
   }
 
+  async function promptLocale(question, defaultValue = "zh-CN") {
+    if (!process.stdin.isTTY || skipPrompts) return defaultValue;
+    const items = SUPPORTED_LOCALES.map((locale) => ({
+      value: locale,
+      label: locale,
+      desc: locale === "zh-CN" ? "中文模板" : "English templates",
+    }));
+    return promptSingleSelect(question, items, defaultValue);
+  }
+
   async function collectInitOptions() {
     const needAgentPrompt = agentArgs.length === 0 && !skipPrompts;
     const missingFields = getMissingConfigFields(cwd);
@@ -332,7 +421,7 @@ if (sub === "init") {
 
     // 没有任何需要处理的事情
     if (!needAgentPrompt && !needConfigPrompt) {
-      return { configValues: undefined, chosenAgents: agentArgs };
+      return { configValues: cliLocale ? { locale: cliLocale } : undefined, chosenAgents: agentArgs };
     }
 
     // --yes 模式：缺失字段直接用默认值，不弹交互
@@ -377,12 +466,19 @@ if (sub === "init") {
         );
         const values = {};
         for (const field of missingFields) {
-          values[field.key] = await promptBooleanKey(
-            field.question,
-            field.default,
-          );
+          if (field.type === "locale") {
+            values[field.key] = cliLocale || await promptLocale(field.question, field.default);
+          } else {
+            values[field.key] = await promptBooleanKey(
+              field.question,
+              field.default,
+            );
+          }
         }
+        if (cliLocale) values.locale = cliLocale;
         configValues = values;
+      } else if (cliLocale) {
+        configValues = { locale: cliLocale };
       }
     } finally {
       if (isInteractive) {
@@ -397,9 +493,9 @@ if (sub === "init") {
 
   collectInitOptions()
     .then(({ configValues, chosenAgents }) =>
-      runInit(cwd, chosenAgents, { overwriteKnowledge, configValues }),
+      runInit(cwd, chosenAgents, { overwriteKnowledge, configValues, locale: cliLocale }),
     )
-    .then(({ ids, knowledgeResult, routingUpgrade, indexSnapshot, projectConfig, claudeHooksResult }) => {
+    .then(({ ids, knowledgeResult, routingUpgrade, indexSnapshot, projectConfig, locale, claudeHooksResult }) => {
       const lines = ids.map((id) => {
         const { root, label } = AGENTS[id];
         if (id === "codex")
@@ -423,9 +519,9 @@ if (sub === "init") {
       const indexLine =
         indexSnapshot?.written === false
           ? `  - .Knowledge/template/index.template.md：未复制（${indexSnapshot?.reason || "skip"}）`
-          : "  - .Knowledge/template/index.template.md：已从包内 templates/knowledge/index.md 复制（与 .Knowledge/index.md 对照见 f2s-kb-upgrade 技能）";
+          : `  - .Knowledge/template/index.template.md：已从包内 templates/${locale}/knowledge/index.md 复制（与 .Knowledge/index.md 对照见 f2s-kb-upgrade 技能）`;
       const pc = projectConfig || {};
-      const configLine = `  - ${CONFIG_FILENAME}：subAgent=${Boolean(pc.subAgent)}, switchAgentVerification=${Boolean(pc.switchAgentVerification)}`;
+      const configLine = `  - ${CONFIG_FILENAME}：locale=${pc.locale || locale}, subAgent=${Boolean(pc.subAgent)}, switchAgentVerification=${Boolean(pc.switchAgentVerification)}`;
       console.log(`
 ✓ Flow2Spec init 完成
 ${knowledgeLine}

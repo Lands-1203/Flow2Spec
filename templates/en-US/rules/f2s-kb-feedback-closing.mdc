@@ -1,0 +1,58 @@
+---
+description: Closing rule for knowledge-base follow-up suggestions after source code was read during ordinary Q&A; only suggest f2s-kb-add/f2s-kb-sync, do not write automatically
+alwaysApply: true
+---
+
+# Flow2Spec Knowledge-Base Feedback Closing
+
+This rule only governs knowledge-base follow-up suggestions after ordinary Q&A reads business source code. It is not a user-task routing topic and does not replace `f2s-kb-add` / `f2s-kb-sync`; it only decides whether the final answer should append one minimal suggestion.
+
+## Scope
+
+Run this rule only when all of the following are true:
+
+- This turn is **ordinary Q&A / troubleshooting / explanation**;
+- This turn has **not entered** an `f2s-*` skill, `implement-tech-design`, `f2s-git-commit`, or another existing follow-up flow;
+- This turn read business source code and the final answer cites source-code facts.
+
+If this turn is already running a knowledge-base skill, do not repeat the suggestion.
+
+## Mechanical Gate
+
+- After reading the first business source file, treat this turn as having triggered `sourceFallbackUsed=true`.
+- When `sourceFallbackUsed=true` and the final answer cites source-code facts, this four-case self-check must run before sending the answer.
+- **One of the four cases must be stated explicitly**: every closing pass must choose cases 1-4 and **output the corresponding block explicitly**; silently skipping the whole closing flow is not allowed.
+- When a topic matched, source code was read, and the answer cites source-code facts, default to **case 2 / `f2s-kb-sync`**. Only use **case 4** when the relevant KB topic is confirmed to fully cover the core facts in this answer and this turn introduced no new facts outside the KB.
+- If a visible gap note such as "still missing X / KB does not cover X / topic does not cover X" was already written before source-code drilling, the answer must use **case 2**; case 4 is prohibited.
+
+## Four Closing Cases
+
+1. **KB does not cover it + source code provided the answer**: append this at the end of the answer:
+   ```md
+   > **Knowledge-base follow-up suggestion**
+   > `f2s-kb-add <module-path>`
+   ```
+2. **KB covers it but lacks detail + source code completed the answer**: append this at the end of the answer:
+   ```md
+   > **Knowledge-base follow-up suggestion**
+   > `f2s-kb-sync <topicId>: <summary of the new details from this turn>`
+   ```
+3. **KB and source code disagree**: answer according to source-code facts and append this at the end of the answer:
+   ```md
+   > **Knowledge-base follow-up suggestion**
+   > `f2s-kb-sync <topicId>: <summary of the corrected fact from this turn>`
+   ```
+4. **KB fully covers it; source code was only verification**: append this at the end of the answer:
+   ```md
+   > **Knowledge base already covers this**: the core facts in this answer were fully provided by `<topicId>`; source-code reading was only verification.
+   ```
+   Decision criteria: the relevant KB topic already states the core answer to this question, this turn introduced no facts outside the KB, and no visible gap note was written before source-code drilling.
+
+## Output Format
+
+- Cases 1-3: output one Markdown blockquote containing only one executable command.
+- Case 4: output one Markdown blockquote stating "Knowledge base already covers this" plus the related topicId.
+- `f2s-kb-sync` must include a one-sentence summary of the facts that can be written back from this turn, avoiding bare commands that depend on conversation memory.
+- The path in `f2s-kb-add <module-path>` is the smallest stable directory actually read in this turn; if the path is uncertain, ask the user to confirm candidates in the main answer and do not output the suggestion block.
+- Do not omit this block; do not output a list of KB paths read, a coverage comparison table, explanations, or multi-line background.
+- Only suggest; do not automatically run `f2s-kb-add` / `f2s-kb-sync`.
