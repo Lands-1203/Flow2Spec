@@ -34,7 +34,7 @@ description: Migrate a legacy knowledge base to `.Knowledge` in one pass: use th
 - **After migration acceptance and deletion-list confirmation are complete**: remind the user to execute, or execute for them, the **full `f2s-kb-upgrade` skill** (whose **step 2** runs **`flow2spec init`**) to align the Flow2Spec package version, routing shards, and configuration-root artifacts to the current package. **Do not** let the user think that running `init` alone completes knowledge-base template upgrade.
 - **Projects already stably using `.Knowledge` with no legacy-index burden**: do not run this skill again; daily package/template alignment uses **`f2s-kb-upgrade`** only (not just `init`).
 
-**Why does each agent directory have a same-named `SKILL.md`?** Each tool reads only its own configuration-root `skills/`; `flow2spec init` **syncs** the content from `templates/<locale>/skills/` into the selected agent directories.
+**Why does each agent directory have a same-named `SKILL.md`?** Each tool reads only its own configuration-root `skills/`; `flow2spec init` **syncs** the current-language skill content into the selected agent directories.
 
 ## What This Command Does (External Wording)
 

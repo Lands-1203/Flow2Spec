@@ -12,9 +12,9 @@ Must execute: Read("flow2spec.config.json")  <- relative to the repository root;
 
 **Do not enter any execution step in the skill body before reading this file.**
 
-## Flow2Spec Project Switches (`./flow2spec.config.json`; if missing, `flow2spec init` fills it from the npm package template)
+## Flow2Spec Project Switches (`./flow2spec.config.json`; if missing, `flow2spec init` fills it)
 
-**Purpose of `flow2spec init`**: place Flow2Spec **package templates** into the current repository, including **`./.Knowledge/`** (routing structure, snapshots, and so on), repository-root **`./AGENTS.md`** (complete), **`.codex/AGENTS.md`** (pointer), and **`./.codex/`** (such as **`./.codex/skills/`** and **`./.codex/topics/*.md`** written by init). It **does not** author business content in **`./.Knowledge/stock-docs/`** or **`./.Knowledge/topics/`**, and it does not replace **`f2s-*` skills**. In short, it writes templates/directories and aligns shape; it is not a "knowledge-base upgrade command" (for upgrades, see the **`f2s-kb-upgrade`** skill).
+**Purpose of `flow2spec init`**: write the Flow2Spec runtime structure into the current repository, including **`./.Knowledge/`** (routing structure, snapshots, and so on), repository-root **`./AGENTS.md`** (complete), **`.codex/AGENTS.md`** (pointer), and **`./.codex/`** (such as **`./.codex/skills/`** and **`./.codex/topics/*.md`**). It **does not** author business content in **`./.Knowledge/stock-docs/`** or **`./.Knowledge/topics/`**, and it does not replace **`f2s-*` skills**. In short, it writes directories and aligns shape; it is not a "knowledge-base upgrade command" (for upgrades, see the **`f2s-kb-upgrade`** skill).
 
 Before executing any **`f2s-*` skill**, you must read the boolean fields in `./flow2spec.config.json` (missing fields or missing file are treated as `false`). The table below is written by the **most recent `flow2spec init`** from the configuration at that time; **the file on disk is authoritative**.
 
@@ -22,7 +22,7 @@ Before executing any **`f2s-*` skill**, you must read the boolean fields in `./f
 
 ### `subAgent` and `switchAgentVerification` (same semantics as the table above; disk configuration is authoritative)
 
-- **`subAgent`**: If an `f2s-*` skill states that a step should be executed by a sub-agent, use a sub-agent when this is **`true`** and complete it in the main session when this is **`false`**. The user may say that the main agent should **dynamically decide** which subtasks are suitable for sub-agents **only when** `subAgent` is **`true`**; that instruction is valid **only when the configuration is `true`**. When it is **`false`**, that requirement **automatically does not apply**, and no sub-agent split is allowed. **Which phases use sub-agents** is defined by each skill body; the package template does **not yet** provide a unified phase list.
+- **`subAgent`**: If an `f2s-*` skill states that a step should be executed by a sub-agent, use a sub-agent when this is **`true`** and complete it in the main session when this is **`false`**. The user may say that the main agent should **dynamically decide** which subtasks are suitable for sub-agents **only when** `subAgent` is **`true`**; that instruction is valid **only when the configuration is `true`**. When it is **`false`**, that requirement **automatically does not apply**, and no sub-agent split is allowed. **Which phases use sub-agents** is defined by each skill body; if the skill does not specify a split, do not split by default.
 - **`switchAgentVerification` (agent-switch verification)**: this does **not** mean "verification always happens in the main session." When this is **`false` or cross-verification is not enabled**: whichever agent session **writes to disk** also performs verification and review in that same session (checklist comparison, diff, self-check). When this is **`true` and** the current **`f2s-*` skill body** states that it depends on this field, enable **cross-verification**: **sub-agent disk writes -> main-agent verification**; **main-agent disk writes -> sub-agent verification**. If there is no sub-agent, such as when **`subAgent` is `false`**, then "main writes -> sub-agent verifies" does not occur, and **all verification stays in the main session**.
 
 ### `intentRecognition` (intent-recognition auto-routing)
@@ -86,7 +86,7 @@ Before executing any **`f2s-*` skill**, you must read the boolean fields in `./f
 
 ## Long-Form Topics (`./.codex/topics/`)
 
-**`flow2spec init`** strips frontmatter from **`templates/<locale>/rules/*.mdc`** in the npm package and writes the result to **`./.codex/topics/*.md`**. Together with this file and **`./.codex/skills/`**, these files form Flow2Spec's executable authority. **Current package-template** corresponding files (runtime paths are all under `.codex/topics/` at the repository root):
+**`flow2spec init`** writes these files into the current repository. Together with this file and **`./.codex/skills/`**, they form Flow2Spec's executable authority. Current runtime paths are all under **`.codex/topics/`** at the repository root:
 
 - **Unified entry**: `./.codex/topics/f2s-flow2spec-unified-entry.md`
 - **implement-tech-design**: `./.codex/topics/f2s-implement-tech-design.md`

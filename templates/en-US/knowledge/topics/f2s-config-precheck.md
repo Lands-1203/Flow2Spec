@@ -12,7 +12,6 @@
 | Codex (init mirror, same source as template) | [f2s-config-check.md](../../.codex/topics/f2s-config-check.md) |
 | Cursor | Repository-root `.cursor/rules/f2s-config-check.mdc` (`flow2spec init cursor`) |
 | Claude | `.claude/rules/f2s-config-check.md`; SessionStart: `.claude/hooks/f2s-config-session.js`; PreToolUse guard: `.claude/hooks/f2s-config-inject.js` |
-| Package template | `templates/<locale>/rules/f2s-config-check.mdc` |
 
 ## Required Steps
 

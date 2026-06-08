@@ -17,7 +17,7 @@ description: Convert a PDF or MD document into the `final-overview-template` sta
 
 The user provides **at least one argument** after this skill: the **first argument** is a local **PDF file path** or **Markdown file path** (required); the **second argument** (optional) is an output file path and overrides the default output location. Execute the following workflow based on the file type, and output a final-style Markdown document that can later be consumed by **f2s-kb-build**.
 
-**The `final-overview-template` is only guidance**: if `.Knowledge/template/final-overview-template.md` exists (from `templates/<locale>/knowledge/template/final-overview-template.md`), read it as a structural reference. Do not force an exact template fit.
+**The `final-overview-template` is only guidance**: if `.Knowledge/template/final-overview-template.md` exists, read it as a structural reference. Do not force an exact template fit.
 
 ## Embedded Template Structure (Use When `.Knowledge/template/final-overview-template.md` Does Not Exist)
 

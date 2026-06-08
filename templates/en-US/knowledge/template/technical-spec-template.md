@@ -1,5 +1,4 @@
 > **Primary convention (unified knowledge base)**: technical-spec templates and outputs are maintained in `/.Knowledge/template/` and `/.Knowledge/req-docs/`.
-> The sole source of this template is `templates/<locale>/knowledge/template/technical-spec-template.md`.
 
 # Technical Spec Template
 

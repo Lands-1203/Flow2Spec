@@ -33,13 +33,13 @@ description: Knowledge-base template upgrade skill (this SKILL only): **V1 flow 
 | Skill | Problem solved |
 | --- | --- |
 | **`f2s-kb-migrate`** | **Structural move**: `docs-index.md` / `index-doc.md`, `rules/main.md(c)`, business `skills/`, scattered `stock-docs`/`req-docs` -> **migrate into `.Knowledge`**, write `migration-report.md`, and confirm deletion list with the user. It does not run npm package upgrade. |
-| **This skill `f2s-kb-upgrade`** | **Package and template alignment**: run **`flow2spec init`**, merge **`manifest-routing.json`** with **`matchers/*.json`** (package `manifest-matchers.json` is only an init merge seed and is **not written** into `.Knowledge`), refresh each agent's **`rules`/`skills`** (or Codex **`AGENTS.md`**); `init` also copies package **`index.md` -> `.Knowledge/template/index.template.md`** as a comparison snapshot. **`.Knowledge/index.md`** is diff-aligned in step 3b; init **does not** automatically change its body. |
+| **This skill `f2s-kb-upgrade`** | **Package and template alignment**: run **`flow2spec init`**, merge **`manifest-routing.json`** with **`matchers/*.json`**, refresh each agent's **`rules`/`skills`** (or Codex **`AGENTS.md`**); `init` also copies the current-language **`index.md` -> `.Knowledge/template/index.template.md`** as a comparison snapshot. **`.Knowledge/index.md`** is diff-aligned in step 3b; init **does not** automatically change its body. |
 
 - **One-click closure for old projects**: **first `f2s-kb-migrate`** -> **then this skill** (`init`). Do not use only `init` as a substitute for full migration.
 - **Projects already using new `.Knowledge`**: **run only this skill**; do not repeat migrate.
 
 **Why does each Cursor / Claude / Codex directory have a same-named `SKILL.md`?**  
-Each tool only loads `skills/` under **its own configuration root** (for example, Codex only loads `.codex/skills/`). Content should stay consistent with **`templates/<locale>/skills/`** (or package artifacts); `flow2spec init` writes it into the selected agent directories.
+Each tool only loads `skills/` under **its own configuration root** (for example, Codex only loads `.codex/skills/`). `flow2spec init` writes the current-language skill content into the selected agent directories.
 
 ## Goal
 
@@ -53,7 +53,7 @@ When the user says "help me upgrade the knowledge-base template / run f2s-kb-upg
 
 ## init and Skill Self-Update (Required)
 
-This skill executes **`flow2spec init`** in **step 2**. `init` syncs package **`templates/<locale>/skills/`** and similar artifacts into each agent **configuration root**, so after **`init` succeeds**, the repository's **`skills/f2s-kb-upgrade/SKILL.md`** may be overwritten by a new version and differ from the old instructions cached in the current conversation.
+This skill executes **`flow2spec init`** in **step 2**. `init` syncs the current-language skill content into each agent **configuration root**, so after **`init` succeeds**, the repository's **`skills/f2s-kb-upgrade/SKILL.md`** may be overwritten by a new version and differ from the old instructions cached in the current conversation.
 
 **Closed loop (avoid stale instructions)**:
 
@@ -115,15 +115,12 @@ Run one of the following in the target project root:
 
 After this skill's step 2 `flow2spec init` succeeds, first perform "old file cleanup + reference fixes":
 
-> **skill directory auto-alignment**: `flow2spec init` now automatically deletes old directories in configuration-root `skills/` that no longer exist in `templates/<locale>/skills/` (renamed/deleted skills such as `f2s-ctx-build`, `f2s-doc-add`, `f2s-rule-capture`, `stock-docs-vs-req-docs`, etc.). **No manual Agent cleanup is needed**.
+> **skill directory auto-alignment**: `flow2spec init` now automatically deletes old directories in configuration-root `skills/` that the current version no longer provides (renamed/deleted skills such as `f2s-ctx-build`, `f2s-doc-add`, `f2s-rule-capture`, `stock-docs-vs-req-docs`, etc.). **No manual Agent cleanup is needed**.
 
 1. Clean old-name topic files (delete only if they exist; all are old legacy names without the `f2s-` prefix):
    - `.Knowledge/topics/flow2spec-architecture.md`
    - `.Knowledge/topics/implement-tech-design.md`
-   - `templates/<locale>/knowledge/topics/implement-tech-design.md`
 2. Fix references (update only if files exist; **`.Knowledge/index.md` body is not rewritten by init**, see step 3b):
-   - `templates/<locale>/knowledge/index.md`
-   - `templates/<locale>/knowledge/manifest-routing.json`
    - `.Knowledge/index.md` (manually or skill-side as needed for paths/paragraphs)
    - `.Knowledge/manifest-routing.json`
 3. Reference targets (confirm current names):
@@ -150,17 +147,17 @@ After this skill's step 2 `flow2spec init` succeeds, first perform "old file cle
 
 > **Scope**: this "merge" is written to `.Knowledge/index.md` **only by the Agent in this skill**. It does **not** require or assume changes to Flow2Spec package **`cli.js` / `lib/init.js`** or other JS. `init` behavior follows the repository's current implementation (snapshot copy, etc.).
 
-**Role of `flow2spec init` in this workflow**: copy package **`templates/<locale>/knowledge/index.md`** as-is to **`.Knowledge/template/index.template.md`** as a **package-shell comparison snapshot**. It does **not** replace this step's merge writing for **`index.md`**.
+**Role of `flow2spec init` in this workflow**: copy the current-language `index.md` snapshot to **`.Knowledge/template/index.template.md`** as a **package-shell comparison snapshot**. It does **not** replace this step's merge writing for **`index.md`**.
 
 #### Merge Rules (Required)
 
 0. **Write ownership**: this step's `.Knowledge/index.md` merge is always performed and written by the main agent; sub-agents must not write directly (write-authority hard rule).
 1. **Comparison sources**
-   - **Package full text**: **`.Knowledge/template/index.template.md`** (same as current package `templates/<locale>/knowledge/index.md`).
+   - **Package full text**: **`.Knowledge/template/index.template.md`**.
    - **Project current state**: **`.Knowledge/index.md`**.
 
-2. **Project-maintained section (anchor: package template `index.md` around lines 18-19)**
-   - Using package-template line numbers as reference: from the second-level heading **`## Topic Overview`** (the common **lines 18-19**, immediately after the previous `---` and a blank line), **until the end of that section**: specifically, up to the `---` immediately before **`## Match and Execute`** (including the "Topic Overview" table and intra-section explanatory paragraphs).
+2. **Project-maintained section (anchor: `## Topic Overview` in `.Knowledge/template/index.template.md`)**
+   - Using `.Knowledge/template/index.template.md` as reference: from the second-level heading **`## Topic Overview`** **until the end of that section**: specifically, up to the `---` immediately before **`## Match and Execute`** (including the "Topic Overview" table and intra-section explanatory paragraphs).
    - This whole block **must preserve the body from current project `.Knowledge/index.md`** (maintained by business and **f2s-***). It is **forbidden** to wholesale replace it with the same block from the package template (to avoid losing business topic rows and summary columns).
    - **Allowed** minimal repairs inside this block: for example, add rows for package-added `topicPaths` topics, correct the "path" column according to **`manifest-routing.json` `topicPaths`**, and add new table-column explanations introduced by the package snapshot while preserving existing project behavior.
 

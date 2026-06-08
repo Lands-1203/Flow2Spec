@@ -12,7 +12,6 @@
 | Codex（init 镜像，与模板同源） | [f2s-config-check.md](../../.codex/topics/f2s-config-check.md) |
 | Cursor | 仓库根 `.cursor/rules/f2s-config-check.mdc`（`flow2spec init cursor`） |
 | Claude | `.claude/rules/f2s-config-check.md`；SessionStart：`.claude/hooks/f2s-config-session.js`；PreToolUse 守门：`.claude/hooks/f2s-config-inject.js` |
-| 包模板 | `templates/<locale>/rules/f2s-config-check.mdc` |
 
 ## 必备步骤
 
