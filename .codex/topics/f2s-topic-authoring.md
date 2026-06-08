@@ -45,10 +45,10 @@
 
 1. `topicMetadata` key 必须存在于 `topicPaths`；仅给已存在或本次确认创建的 topicId 写入。
 2. `primary` 取 topic 最核心的性质：读 topic 正文，判断其主要内容属于哪个类型，写入 `primary`。
-3. `config`：配置项、开关、默认值、初始化参数。
-4. `policy`：流程、规则、约束、门禁、禁止项、agent 编排、技能步骤。
+3. `config`：配置项、开关、默认值、初始化参数；仅当这些内容构成 topic 的主要语义时才可作为 `primary`。
+4. `policy`：流程、规则、约束、门禁、禁止项、agent 编排、技能步骤；仅当这些内容构成 topic 的主要语义时才可作为 `primary`。
 5. `feature`：已落地业务 / 产品能力。
-6. `module`：目录、包、模块边界与工程结构。
+6. `module`：公共能力、公共包、模块边界与工程结构
 7. topic 同时覆盖多个性质时，最主要性质写 `primary`，其余明确成立的性质写 `tags`（可选数组，元素取值同 `primary`，不得与 `primary` 重复）。
 8. `manual` 仅用于用户或维护者明确确认分类值；有明确证据但未人工确认分类值时写 `inferred`。证据不足时**不写 metadata**，但须在摘要中列出推断方向与依据（如「建议 policy，正文含多处强制约束」），供用户确认后手动补写 `manual`。**禁止仅凭 topicId 名称推断分类，必须 Read topic 正文后再判断。**
 
