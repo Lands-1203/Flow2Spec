@@ -637,3 +637,4 @@ Best suited when: has scale · long-term iteration · multi-tool or multi-person
 - [Commands Reference](./commands-reference.md)
 - [Architecture](./architecture.md)
 - [Usage Scenarios](./usage-scenarios.md)
+- [Project Milestones](./milestones.md)

@@ -77,3 +77,4 @@ A topic is a routing summary plus key boundaries; details belong in `stock-docs/
 - [Commands Reference](./commands-reference.md)
 - [Architecture](./architecture.md)
 - [Usage Scenarios](./usage-scenarios.md)
+- [Project Milestones](./milestones.md)

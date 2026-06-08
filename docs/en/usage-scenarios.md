@@ -194,3 +194,4 @@ The following examples revolve around the same e-commerce project, covering the 
 - [Commands Reference](./commands-reference.md)
 - [Directory Conventions](./directory-conventions.md)
 - [Architecture](./architecture.md)
+- [Project Milestones](./milestones.md)

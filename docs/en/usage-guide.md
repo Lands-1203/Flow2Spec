@@ -163,3 +163,4 @@ Skills are triggered by matching `name` and `description`. Files are located und
 - [Directory Conventions](./directory-conventions.md)
 - [Architecture](./architecture.md)
 - [Usage Scenarios](./usage-scenarios.md)
+- [Project Milestones](./milestones.md)

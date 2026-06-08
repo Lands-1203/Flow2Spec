@@ -166,3 +166,4 @@ Design intent: Cross-verification introduces an external perspective, reducing t
 - [Commands Reference](./commands-reference.md)
 - [Directory Conventions](./directory-conventions.md)
 - [Usage Scenarios](./usage-scenarios.md)
+- [Project Milestones](./milestones.md)
