@@ -34,4 +34,12 @@ alwaysApply: true
 | `changeTracking.implement: true` | `f2s-implement-tech-design` | **步骤 2.5 写入任务清单、步骤 2.6 随实现同步打钩 `task.md`、步骤 5 满足归档门禁后归档** |
 | `changeTracking.implement: false` | `f2s-implement-tech-design` | 步骤 2.5、2.6 和步骤 5 的变更追踪部分跳过 |
 
+### intentRecognition（意图识别）
+
+| 字段 | 行为 |
+|------|------|
+| `intentRecognition: true` | 启用意图识别：高置信操作意图按 `rules/f2s-intent-routing.*` 自动进入对应 Skill；讨论 / 评估 / 低置信输入不得自动调用 |
+| `intentRecognition: false` | 不启用自动分流；仅显式 `$f2s-*` / 明确要求执行某技能时进入对应 Skill |
+| 字段不存在 | 视为 `false` |
+
 **禁止在未读该文件的情况下进入技能正文的任何执行步骤。**

@@ -117,6 +117,10 @@
 | --- | --- | --- | --- |
 | `subAgent` | boolean | false | 技能规定用子 agent 的步骤：`true` 执行，`false` 全在主会话完成 |
 | `switchAgentVerification` | boolean | false | 切换 agent 校验：`false` 时落盘侧同会话内验；`true` 且技能写明依赖时交叉验 |
+| `intentRecognition` | boolean | false | 意图识别：`true` 时仅高置信操作意图可按 `rules/f2s-intent-routing.*` 自动进入对应 Skill；`false` 时不启用自动分流 |
+| `changeTracking.feat` | boolean | true | `f2s-kb-feat` 变更追踪开关 |
+| `changeTracking.fix` | boolean | false | `f2s-kb-fix` 变更追踪开关 |
+| `changeTracking.implement` | boolean | true | `f2s-implement-tech-design` 变更追踪开关 |
 
 - 旧键名 `subAgentVerification` 仍可被兼容解析
 

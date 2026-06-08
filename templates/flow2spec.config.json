@@ -1,6 +1,7 @@
 {
   "subAgent": false,
   "switchAgentVerification": false,
+  "intentRecognition": false,
   "changeTracking": {
     "feat": true,
     "fix": false,

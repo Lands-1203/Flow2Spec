@@ -15,7 +15,10 @@
     "PreToolUse",
     "hooks.json",
     "additional_context",
-    "hookSpecificOutput"
+    "hookSpecificOutput",
+    "intentRecognition",
+    "意图识别",
+    "f2s-intent-routing"
   ],
   "id": "m-f2s-config-precheck",
   "version": "1.0.0",

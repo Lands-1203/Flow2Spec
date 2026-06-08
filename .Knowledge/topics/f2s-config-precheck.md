@@ -3,7 +3,7 @@
 ## 本主题作用
 
 - 供 `manifest-routing.topicPaths` 锚定主题 id **`config-precheck`**。
-- 与执行任意 **`f2s-*` 技能**前读取项目根 **`flow2spec.config.json`**（`subAgent`、`switchAgentVerification`、`changeTracking`、`updateCheck`）相关；语义与 **`AGENTS.md`** 顶部、「统一入口」一致。
+- 与执行任意 **`f2s-*` 技能**前读取项目根 **`flow2spec.config.json`**（`subAgent`、`switchAgentVerification`、`changeTracking`、`intentRecognition`、`updateCheck`）相关；语义与 **`AGENTS.md`** 顶部、「统一入口」一致。
 - 同时记录 Claude / Cursor / Codex 三端对“配置读取提醒”和“自动更新检测”的分工，避免把 hooks 注入误认为替代显式 Read。
 
 ## 完整条令（按需，勿在 `.Knowledge` 再维护第二份正文）
@@ -29,7 +29,19 @@
 | Cursor | 通过 `.cursor/rules/f2s-config-check.mdc` 文本约束技能前先读配置 | `sessionStart` 执行 `.cursor/hooks/f2s-update-check.js`，通过 `additional_context` 注入提示 |
 | Codex | 通过根 `AGENTS.md` 与 `.codex/topics/f2s-config-check.md` 文本约束技能前先读配置 | `SessionStart`（`startup|resume`）执行 `.codex/hooks/f2s-update-check.js`，通过 `hookSpecificOutput.additionalContext` 注入提示 |
 
+## intentRecognition（意图识别自动分流）
+
+| 字段 | 行为 |
+| --- | --- |
+| `intentRecognition: true` | 启用意图识别：高置信操作意图按 `rules/f2s-intent-routing.*` 自动进入对应 Skill；讨论 / 评估 / 低置信输入不得自动调用 |
+| `intentRecognition: false` | 不启用自动分流；仅显式 `$f2s-*` / 明确要求执行某技能时进入对应 Skill |
+| 字段不存在 | 视为 `false` |
+
+- 完整路由规则：`rules/f2s-intent-routing.*`（Claude/Cursor）；`.codex/topics/f2s-intent-routing.md`（Codex）。
+- `f2s-intent-routing` 属内部行为规则，不作为独立 topic 路由，不写入 `topicPaths` / `taskToTopicRules`。
+
 ## 禁止项
 
 - 禁止在未读 **`flow2spec.config.json`** 的情况下进入 **`f2s-*`** 技能正文步骤（与 `AGENTS`、`.codex/topics/f2s-config-check.md` 一致）。
 - 禁止因为 hooks 已输出配置摘要，就跳过技能开始时的 `flow2spec.config.json` 显式读取。
+- 禁止在 `intentRecognition` 未读取或为 `false` 时自动调用任何 Skill。

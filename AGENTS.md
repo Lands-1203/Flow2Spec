@@ -22,6 +22,7 @@
 | --- | --- | --- |
 | `subAgent` | true | 技能规定用子 agent 的步骤：`true` 执行，`false` 全在主会话。用户「动态判断谁用子 agent」**仅当本项为 true** 时有效，否则该说明失效。各 f2s 阶段细则见技能正文（模板未统一写死）。 |
 | `switchAgentVerification` | true | **切换 agent 校验**：`false` 时落盘侧同会话内验（子写子验、主写主验）。`true` 且技能写明依赖本项时交叉验：子落盘→主验，主落盘→子验；无子 agent（如 `subAgent` false）则主落盘→子验不发生、全主验。旧键 `subAgentVerification` 仍可被解析。 |
+| `intentRecognition` | false | `true` → 高置信操作意图按 `f2s-intent-routing` 自动进入对应 `f2s-*` 技能；`false` → 不做自动分流，按普通对话与显式命令处理。讨论/评估/低置信输入不自动调用技能。 |
 | `changeTracking.feat` | true | `true` → `f2s-kb-feat` **步骤 0** 必须创建/续作 `.task/active/` 变更追踪任务；`false` → 跳过，不创建 `.task/` 目录。 |
 | `changeTracking.fix` | false | `true` → `f2s-kb-fix` **步骤 0** 必须创建/续作 `.task/active/` 变更追踪任务；`false` → 跳过。 |
 | `changeTracking.implement` | true | `true` → `f2s-implement-tech-design` **步骤 2.5** 写入任务清单、**步骤 5** 归档完成；`false` → 跳过。 |
@@ -30,6 +31,11 @@
 
 - **`subAgent`**：`f2s-*` 技能若写明某步「用子 agent 执行」，**`true`** 时按技能使用子 agent，**`false`** 时在主会话内完成。用户可说明「**仅当** `subAgent` 为 **`true`** 时，由主 agent **动态判断**哪些子任务适合交给子 agent」——**仅当配置为 `true` 时该说明有效**；为 **`false`** 时该段要求**自动失效**，不得拆子 agent。**各技能在何阶段用子 agent** 由技能正文约定，包模板**尚未**给出统一阶段清单。
 - **`switchAgentVerification`（切换 agent 校验）**：**不是**「校验一律在主会话」；**`false` 或未启用交叉规则时**：谁在会话里**落盘**，验证与复核（对照清单、diff、自检）**就在该 agent 会话内**完成（子写子验、主写主验）。**`true` 且** 当前 **`f2s-*` 技能正文**写明依赖本项时，启用**交叉校验**：**子 agent 落盘的 → 主 agent 验**；**主 agent 落盘的 → 子 agent 验**（无子 agent 时，如 **`subAgent` 为 `false`**，则「主落盘→子验」不发生，**全在主会话**验）。
+
+### `intentRecognition`（意图识别自动分流）
+
+- **`intentRecognition: false` 或字段不存在**：不启用自动分流；仅用户显式 `$f2s-*` / 明确要求执行某技能时进入对应技能。
+- **`intentRecognition: true`**：按 **`./.codex/topics/f2s-intent-routing.md`** 判断高置信操作意图；询问、讨论、评估、低置信、多意图冲突、当前流程未结束等场景不得自动切换技能，必须先回答或澄清。
 
 ## 全局约束
 
@@ -97,6 +103,7 @@
 
 - **`./.codex/topics/f2s-knowledge-preflight.md`**：**普通提问**也须先 `Read` **`./.Knowledge/manifest-routing.json`** 再下钻代码；与统一入口并行时以本条「首工具调用」为准。
 - **`./.codex/topics/f2s-kb-feedback-closing.md`**：普通问答读取业务源码后的知识库补充建议收口；需要补充时只输出一条 `f2s-kb-add` / `f2s-kb-sync` 命令，不需要时静默。
+- **`./.codex/topics/f2s-intent-routing.md`**：仅当 `flow2spec.config.json.intentRecognition=true` 时启用；高置信操作意图可自动进入对应 `f2s-*` 技能，讨论 / 评估 / 低置信输入不自动调用。
 - **`./.codex/topics/f2s-config-check.md`**：内容与上文「先 Read **`./flow2spec.config.json`**」一致并含 **changeTracking** 细表；**仅**在需核对细表时按需打开，不必与上列三条并列必读。
 
 执行 Flow2Spec 相关任务时，先读本文件（**`./AGENTS.md`**）与 **`./.Knowledge/manifest-routing.json`**，再按需打开上列 **`./.codex/topics/*.md`** 文件。

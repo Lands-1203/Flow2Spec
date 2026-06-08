@@ -25,6 +25,11 @@
 - **`subAgent`**：`f2s-*` 技能若写明某步「用子 agent 执行」，**`true`** 时按技能使用子 agent，**`false`** 时在主会话内完成。用户可说明「**仅当** `subAgent` 为 **`true`** 时，由主 agent **动态判断**哪些子任务适合交给子 agent」——**仅当配置为 `true` 时该说明有效**；为 **`false`** 时该段要求**自动失效**，不得拆子 agent。**各技能在何阶段用子 agent** 由技能正文约定，包模板**尚未**给出统一阶段清单。
 - **`switchAgentVerification`（切换 agent 校验）**：**不是**「校验一律在主会话」；**`false` 或未启用交叉规则时**：谁在会话里**落盘**，验证与复核（对照清单、diff、自检）**就在该 agent 会话内**完成（子写子验、主写主验）。**`true` 且** 当前 **`f2s-*` 技能正文**写明依赖本项时，启用**交叉校验**：**子 agent 落盘的 → 主 agent 验**；**主 agent 落盘的 → 子 agent 验**（无子 agent 时，如 **`subAgent` 为 `false`**，则「主落盘→子验」不发生，**全在主会话**验）。
 
+### `intentRecognition`（意图识别自动分流）
+
+- **`intentRecognition: false` 或字段不存在**：不启用自动分流；仅用户显式 `$f2s-*` / 明确要求执行某技能时进入对应技能。
+- **`intentRecognition: true`**：按 **`./.codex/topics/f2s-intent-routing.md`** 判断高置信操作意图；询问、讨论、评估、低置信、多意图冲突、当前流程未结束等场景不得自动切换技能，必须先回答或澄清。
+
 ## 全局约束
 
 1. **必须先读机器索引**：优先读取 **`./.Knowledge/manifest-routing.json`** 做主题路由；按需依据 `taskToTopicRules[].matcherPath` 读取对应 matcher 分片（单文件，路径形如 **`./.Knowledge/matchers/<id>.json`**）取匹配词；无法命中时进入补召回阶段。
@@ -91,6 +96,7 @@
 
 - **`./.codex/topics/f2s-knowledge-preflight.md`**：**普通提问**也须先 `Read` **`./.Knowledge/manifest-routing.json`** 再下钻代码；与统一入口并行时以本条「首工具调用」为准。
 - **`./.codex/topics/f2s-kb-feedback-closing.md`**：普通问答读取业务源码后的知识库补充建议收口；需要补充时只输出一条 `f2s-kb-add` / `f2s-kb-sync` 命令，不需要时静默。
+- **`./.codex/topics/f2s-intent-routing.md`**：仅当 `flow2spec.config.json.intentRecognition=true` 时启用；高置信操作意图可自动进入对应 `f2s-*` 技能，讨论 / 评估 / 低置信输入不自动调用。
 - **`./.codex/topics/f2s-config-check.md`**：内容与上文「先 Read **`./flow2spec.config.json`**」一致并含 **changeTracking** 细表；**仅**在需核对细表时按需打开，不必与上列三条并列必读。
 
 执行 Flow2Spec 相关任务时，先读本文件（**`./AGENTS.md`**）与 **`./.Knowledge/manifest-routing.json`**，再按需打开上列 **`./.codex/topics/*.md`** 文件。
