@@ -123,6 +123,11 @@ manifest-routing.json
 
 图 1：知识库渐进式读取
 
+![图 1：知识库渐进式读取](./images/flow2spec-progressive-reading.png)
+
+<details>
+<summary>查看图 1 Mermaid 源码</summary>
+
 ```mermaid
 flowchart LR
   A[manifest-routing.json<br/>机读路由清单] --> B[matchers<br/>关键词分片]
@@ -133,6 +138,8 @@ flowchart LR
   C --> G[verify<br/>缺口检查]
   G --> H[act<br/>执行 / 澄清 / 补知识提示]
 ```
+
+</details>
 
 这套结构的价值在于：
 
@@ -346,6 +353,11 @@ Flow2Spec 的目标不是“任何话都自动跑技能”，而是让 Agent 在
 
 图 2：开发过程生成知识图谱
 
+![图 2：开发过程生成知识图谱](./images/flow2spec-development-knowledge-loop.png)
+
+<details>
+<summary>查看图 2 Mermaid 源码</summary>
+
 ```mermaid
 flowchart TD
   A[用户提出需求] --> B{显式 f2s-* skill<br/>或 intentRecognition 辅助判断}
@@ -366,6 +378,8 @@ flowchart TD
   L --> M[下一次类似需求<br/>复用知识]
   M --> G
 ```
+
+</details>
 
 这条链路里，每一步都会留下可追踪的资产：
 
@@ -432,6 +446,11 @@ Flow2Spec 还支持启动时检测知识库模板版本。
 
 图 3：普通记忆文件 vs Flow2Spec 知识图谱
 
+![图 3：普通记忆文件 vs Flow2Spec 知识图谱](./images/flow2spec-memory-vs-knowledge-graph.png)
+
+<details>
+<summary>查看图 3 Mermaid 源码</summary>
+
 ```mermaid
 flowchart LR
   subgraph L[普通记忆文件]
@@ -455,6 +474,8 @@ flowchart LR
     R7 --> R1
   end
 ```
+
+</details>
 
 普通知识库关注：
 
