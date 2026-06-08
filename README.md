@@ -1,13 +1,13 @@
-# Flow2Spec — 让 AI 一直知道你在做什么
+# Flow2Spec — Let AI Always Know What You're Doing
 
-> 解决 Cursor / Claude Code 的「失忆症」——用一个命令初始化，让 AI
-> 跨会话记住项目上下文，不用每轮重新交代。
+> Cures the "amnesia" of Cursor / Claude Code — with one `init` command, AI
+> remembers project context across sessions. No more re-explaining every time.
 >
-> 🌐 **[English](./README.en.md)** · 中 / EN
+> 🌐 **[中文](./README.zh-CN.md)** · EN / 中
 
-🎬 **[在线演示](https://lands-1203.github.io/Flow2Spec/)**（13 页 HTML PPT，`←` `→` 翻页，`S` 演讲者模式）
+🎬 **[Live Demo](https://lands-1203.github.io/Flow2Spec/)** (13-slide HTML PPT, `←` `→` to navigate, `S` for presenter mode)
 
-🔧 **快速体验**：
+🔧 **Quick start**:
 
 ```bash
 npx @double-codeing/flow2spec@latest init
@@ -17,171 +17,173 @@ npx @double-codeing/flow2spec@latest init
 
 ## Before / After
 
-同样一句话，两段对话：
+The exact same request, two conversations:
 
 ```
-> 改一下评价模板文案库的批量重评分
+> Update the batch re-scoring of the review template library
 ```
 
-**没有 Flow2Spec**：
+**Without Flow2Spec**:
 
 ```
-AI: 这个模块的表在哪？
-AI: batchReScore 是同步还是异步？
-AI: 有没有锁？幂等键是什么？
-AI: 返回格式是什么？错误码是多少？
-AI: （翻遍 416 个接口、796 份文件、4.7 MB 源码…）
+AI: Which module has this table?
+AI: Is batchReScore sync or async?
+AI: Is there a lock? What's the idempotency key?
+AI: What's the response format? What's the error code?
+AI: (Digging through 416 APIs, 796 files, 4.7 MB of source code…)
 ```
-反复介绍 · 反复翻代码 · 反复踩坑
 
-**有 Flow2Spec**：
+Repeated introductions · Repeated code searches · Repeated mistakes
+
+**With Flow2Spec**:
 
 ```
-[matcher 命中] m-product-review-template-library
-[加载依赖] 4 个 topic · 约 300 行
-AI: 已知 — fire-and-forget
-     Redis 锁 smp:product-review:template-library:batch-rescore:lock（TTL 10 分钟）
-     单次最多 100 条 · 错误码 101
-AI: 开始改，预计 3 处文件。
+[matcher hit] m-product-review-template-library
+[loading deps] 4 topics · ~300 lines
+AI: Known — fire-and-forget
+     Redis lock smp:product-review:template-library:batch-rescore:lock (TTL 10 min)
+     Max 100 items per batch · error code 101
+AI: Starting implementation, 3 files affected.
 ```
-4.7 MB → 300 行 · 秒级定位到硬约束
+
+4.7 MB → 300 lines · Pinpoint accuracy in seconds
 
 ---
 
-## Flow2Spec 做这些事
+## What Flow2Spec Does
 
-**① 跨会话记住项目上下文**  
-`.Knowledge/` 结构化知识库：路由清单（manifest-routing.json）+ 关键词索引（matchers）+ 主题分片（topics）。AI 启动时只读该读的，4.7 MB 源码压到 300 行精准上下文。
+**① Remembers project context across sessions**
+`.Knowledge/` structured knowledge base: routing manifest (`manifest-routing.json`) + keyword indices (matchers) + topic shards (topics). AI only loads what's relevant — 4.7 MB of source code compressed to ~300 lines of precise context.
 
-**② 路由清单让 AI 不翻仓库，只拿该拿的**  
-每次需求命中 1~4 个 topic，约 300 行。业务的硬约束——锁的 key、错误码、上限——都在 topic 里，AI 不用从源码猜。
+**② Routing manifest means AI doesn't dig through your repo**
+Each task hits 1–4 topics, ~300 lines. Business constraints — Redis lock keys, error codes, batch limits — are all in the topics. AI doesn't have to guess from source code.
 
-**③ f2s-* 技能改代码顺手更新知识**  
-`/f2s-kb-feat` 写功能时同步写 topic，`/f2s-kb-fix` 修 bug 时更正 topic，`/f2s-git-commit` 提交前检查 topic 覆盖。改代码就是记知识，没有"单独维护文档"这件事。
+**③ f2s-* skills update knowledge as you code**
+`/f2s-kb-feat` writes topics while writing features, `/f2s-kb-fix` corrects topics while fixing bugs, `/f2s-git-commit` checks topic coverage before committing. Changing code == updating knowledge. No separate "documentation maintenance."
 
-**④ 需求到实现全链路：澄清 → 技术方案 → 代码**  
-`/f2s-req-clarify` 反问到无歧义，`/f2s-req-tech` 生成可直接实现的技术方案文档落到 `req-docs/`，AI 按方案实现，不靠口头约定。
+**④ Full pipeline from requirements to code**
+`/f2s-req-clarify` asks questions until requirements are unambiguous. `/f2s-req-tech` generates a ready-to-implement technical proposal into `req-docs/`. AI implements from the proposal — no relying on verbal agreements.
 
-**⑤ 任务清单跨会话追踪进度**  
-开启 `changeTracking` 配置后，`f2s-kb-feat` / `f2s-kb-fix` 等技能执行时自动创建带 checkbox 的 `task.md`，每步完成立即打钩落盘。新会话续作时自动加载剩余清单，不靠记忆、不靠口头，任务进度永远在磁盘上。用户侧的代办（执行 SQL、配环境变量、点审批）单独写入 `user-todos.md`，不混在 AI 步骤里。
+**⑤ Task checklists track progress across sessions**
+When `changeTracking` is enabled, skills like `f2s-kb-feat` / `f2s-kb-fix` automatically create a `task.md` with checkboxes. Each step is checked off immediately to disk. New sessions auto-load the remaining checklist — no relying on memory. User-side todos (run SQL, set env vars, click approvals) go into `user-todos.md`, separate from AI steps.
 
-**⑥ 文档驱动：PDF / MD 一键入知识库**  
-`/f2s-kb-add` 把已落地能力的源码聚合成初稿 → 终稿 → topics，`/f2s-doc-final` 把 PDF 或任意 MD 转成规范终稿格式。外部文档、历史方案都能变成可路由的知识。
+**⑥ Document-driven: PDF / MD straight into the knowledge base**
+`/f2s-kb-add` aggregates source files into draft → final → topics. `/f2s-doc-final` converts any PDF or MD into the canonical final-draft format. External docs and legacy proposals all become routable knowledge.
 
 ---
 
-## 上手成本
+## Getting Started
 
-**最小可用集是一个空骨架。**
+**Minimum viable setup is an empty skeleton.**
 
 ```bash
 npx @double-codeing/flow2spec@latest init
 ```
 
-1 分钟生成目录结构 + 路由配置，空的，直接跑。**下次需求命中哪块，写哪块**，不提前建设。
+1 minute generates the directory structure + routing config. Empty, ready to use. **Next requirement hits whichever area → you document that area.** No upfront investment needed.
 
-真实仓库跑了三个月的数据：
+Real data from a production repo running for 3 months:
 
-| 指标 | 数值 |
+| Metric | Value |
 |---|---|
-| 对外接口数 | 416 |
-| 源码体积 | 796 文件 / 4.7 MB / ~10 万行 |
-| Flow2Spec 每次加载 | **≈ 300 行**（噪声切掉 99%） |
+| Public APIs | 416 |
+| Source code | 796 files / 4.7 MB / ~100K lines |
+| Flow2Spec per-task load | **≈ 300 lines** (99% noise removed) |
 
 ---
 
-## 使用流程
+## Usage Flow
 
-### 第一步：初始化（一次性）
+### Step 1: Initialize (one-time)
 
 ```bash
 npx @double-codeing/flow2spec@latest init
 ```
 
-跟着提示走完，生成 `.Knowledge/` 目录结构和路由配置骨架。
+Follow the prompts to completion — generates the `.Knowledge/` directory structure and routing config skeleton.
 
 ---
 
-### 第二步：建知识库（一次性）
+### Step 2: Build the Knowledge Base (one-time)
 
-在 Agent 工具（Cursor / Claude Code）中执行：
+In your Agent tool (Cursor / Claude Code):
 
-1. `/f2s-doc-arch` — 扫描项目架构，生成架构说明初稿，跟着流程走直到生成主题（topics）
+1. `/f2s-doc-arch` — Scan your project architecture, generate an architecture draft, and follow the flow until topics are created
 
-> 这一步只做一次，之后日常开发不需要重复。
+> This step is done once. You won't need to repeat it for daily development.
 
-2. `/f2s-kb-add <文件夹路径>` — 把还没入库的功能模块路径补进来
+2. `/f2s-kb-add <folder path>` — Import any feature modules that haven't been added yet
 
-> 这一步在进入开发前，发现没有某个模块能力的知识的时候选择性的去做
-
----
-
-### 第三步：日常开发（每次需求）
-
-**大需求：**
-
-```
-/f2s-req-clarify  一句话需求或粘贴 PRD    ← 需求澄清
-/f2s-req-tech                          ← 生成技术方案
-自然语言：实现上面的技术方案              ← AI 开始实现（开启 changeTracking 时自动建任务清单）
-（调试验证）
-/f2s-kb-feat  新增 xxx 能力               ← 功能缺失时补能力
-/f2s-kb-fix   修复 xxx                    ← 有 BUG 时修复
-/f2s-kb-sync                              ← 同步知识库
-/f2s-git-commit                           ← 检查并提交
-```
-
-**小需求 / 日常改动：**
-
-```
-/f2s-kb-feat  新增 xxx 能力               ← 功能缺失
-/f2s-kb-fix   修复 xxx                    ← 改 BUG
-```
+> Do this selectively before starting development when you notice a module's knowledge is missing from the knowledge base.
 
 ---
 
-## 常用命令速查
+### Step 3: Daily Development (every feature or fix)
 
-| 命令 | 用途 |
+**Large features:**
+
+```
+/f2s-req-clarify  one-line description or paste PRD    ← clarify requirements
+/f2s-req-tech                                       ← generate technical proposal
+natural language: implement the proposal above         ← AI starts coding (task checklist auto-created when changeTracking is on)
+(debug and verify)
+/f2s-kb-feat  add xxx capability                       ← if something's missing
+/f2s-kb-fix   fix xxx                                  ← if there's a bug
+/f2s-kb-sync                                           ← sync knowledge base
+/f2s-git-commit                                        ← check and commit
+```
+
+**Small changes / quick fixes:**
+
+```
+/f2s-kb-feat  add xxx capability                       ← missing feature
+/f2s-kb-fix   fix xxx                                  ← bug fix
+```
+
+---
+
+## Quick Command Reference
+
+| Command | Purpose |
 |---|---|
-| `/f2s-req-clarify` | 需求澄清 |
-| `/f2s-req-tech` | 生成技术方案 |
-| `/f2s-kb-feat` | 新增小功能 |
-| `/f2s-kb-fix` | 改 BUG |
-| `/f2s-kb-sync` | 同步知识库 |
-| `/f2s-git-commit` | 提交代码；“快捷提交”跳过知识库覆盖检查 |
-| `/f2s-kb-add <路径>` | 接口模块入知识库 |
+| `/f2s-req-clarify` | Clarify requirements |
+| `/f2s-req-tech` | Generate technical proposal |
+| `/f2s-kb-feat` | Add a new capability |
+| `/f2s-kb-fix` | Fix a bug |
+| `/f2s-kb-sync` | Sync knowledge base |
+| `/f2s-git-commit` | Commit code; "quick commit" skips KB coverage check |
+| `/f2s-kb-add <path>` | Import API module into knowledge base |
 
-更多命令详见 [使用说明](./docs/使用说明.md) · [命令说明](./docs/命令说明.md)
-
----
-
-## 什么时候别用
-
-- **一次性脚本** — 写完就删的东西，直接丢几个 Markdown 给 AI 更快
-- **单人小项目** — 一份 CLAUDE.md 就够，路由和分片的开销大于收益
-- **团队不愿同步 .Knowledge/** — 工具不能替代纪律
+For the full command list, see [Usage Guide](./docs/en/usage-guide.md) · [Commands Reference](./docs/en/commands-reference.md)
 
 ---
 
-## 详细文档
+## When NOT to Use
 
-### 中文
-- [使用说明](./docs/使用说明.md) — 技能链、配置详解
-- [命令说明](./docs/命令说明.md) — 所有 f2s-* 命令速查
-- [目录与路径约定](./docs/目录与路径约定.md)
-- [体系与原理](./docs/体系与原理.md)
-- [使用案例·模拟对话](./docs/使用案例-模拟对话.md)
-- [设计说明](./docs/设计说明.md)
+- **One-off scripts** — throwaway code is faster with a few Markdown files for AI context
+- **Solo small projects** — a single CLAUDE.md is enough; routing overhead > benefits
+- **Team won't maintain .Knowledge/** — tools can't replace discipline
+
+---
+
+## Documentation
 
 ### English
-- [Usage Guide](./docs/en/usage-guide.md)
-- [Commands Reference](./docs/en/commands-reference.md)
+- [Usage Guide](./docs/en/usage-guide.md) — skill chains, config details
+- [Commands Reference](./docs/en/commands-reference.md) — all f2s-* command reference
 - [Directory Conventions](./docs/en/directory-conventions.md)
 - [Architecture & Principles](./docs/en/architecture.md)
 - [Usage Scenarios](./docs/en/usage-scenarios.md)
 - [Design Principles](./docs/en/design-principles.md)
 
-## 协议
+### 中文
+- [使用说明](./docs/使用说明.md)
+- [命令说明](./docs/命令说明.md)
+- [目录与路径约定](./docs/目录与路径约定.md)
+- [体系与原理](./docs/体系与原理.md)
+- [使用案例·模拟对话](./docs/使用案例-模拟对话.md)
+- [设计说明](./docs/设计说明.md)
+
+## License
 
 MIT. Copyright © 2026 兰涛

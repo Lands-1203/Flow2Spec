@@ -3,7 +3,7 @@
 > Cures the "amnesia" of Cursor / Claude Code — with one `init` command, AI
 > remembers project context across sessions. No more re-explaining every time.
 >
-> 🌐 **[中文](./README.md)** · 中 / EN
+> 🌐 **[中文](./README.zh-CN.md)** · EN / 中
 
 🎬 **[Live Demo](https://lands-1203.github.io/Flow2Spec/)** (13-slide HTML PPT, `←` `→` to navigate, `S` for presenter mode)
 
@@ -52,22 +52,22 @@ AI: Starting implementation, 3 files affected.
 
 ## What Flow2Spec Does
 
-**① Remembers project context across sessions**  
+**① Remembers project context across sessions**
 `.Knowledge/` structured knowledge base: routing manifest (`manifest-routing.json`) + keyword indices (matchers) + topic shards (topics). AI only loads what's relevant — 4.7 MB of source code compressed to ~300 lines of precise context.
 
-**② Routing manifest means AI doesn't dig through your repo**  
+**② Routing manifest means AI doesn't dig through your repo**
 Each task hits 1–4 topics, ~300 lines. Business constraints — Redis lock keys, error codes, batch limits — are all in the topics. AI doesn't have to guess from source code.
 
-**③ f2s-* skills update knowledge as you code**  
+**③ f2s-* skills update knowledge as you code**
 `/f2s-kb-feat` writes topics while writing features, `/f2s-kb-fix` corrects topics while fixing bugs, `/f2s-git-commit` checks topic coverage before committing. Changing code == updating knowledge. No separate "documentation maintenance."
 
-**④ Full pipeline from requirements to code**  
+**④ Full pipeline from requirements to code**
 `/f2s-req-clarify` asks questions until requirements are unambiguous. `/f2s-req-tech` generates a ready-to-implement technical proposal into `req-docs/`. AI implements from the proposal — no relying on verbal agreements.
 
-**⑤ Task checklists track progress across sessions**  
+**⑤ Task checklists track progress across sessions**
 When `changeTracking` is enabled, skills like `f2s-kb-feat` / `f2s-kb-fix` automatically create a `task.md` with checkboxes. Each step is checked off immediately to disk. New sessions auto-load the remaining checklist — no relying on memory. User-side todos (run SQL, set env vars, click approvals) go into `user-todos.md`, separate from AI steps.
 
-**⑥ Document-driven: PDF / MD straight into the knowledge base**  
+**⑥ Document-driven: PDF / MD straight into the knowledge base**
 `/f2s-kb-add` aggregates source files into draft → final → topics. `/f2s-doc-final` converts any PDF or MD into the canonical final-draft format. External docs and legacy proposals all become routable knowledge.
 
 ---
