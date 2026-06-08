@@ -173,6 +173,7 @@ npx @double-codeing/flow2spec@latest init
 - [体系与原理](./docs/体系与原理.md)
 - [使用案例·模拟对话](./docs/使用案例-模拟对话.md)
 - [设计说明](./docs/设计说明.md)
+- [项目里程碑](./docs/项目里程碑.md)
 
 ### English
 - [Usage Guide](./docs/en/usage-guide.md)
@@ -181,6 +182,7 @@ npx @double-codeing/flow2spec@latest init
 - [Architecture & Principles](./docs/en/architecture.md)
 - [Usage Scenarios](./docs/en/usage-scenarios.md)
 - [Design Principles](./docs/en/design-principles.md)
+- [Project Milestones](./docs/en/milestones.md)
 
 ## 协议
 
