@@ -123,10 +123,6 @@ manifest-routing.json
 
 图 1：知识库渐进式读取
 
-![图 1：知识库渐进式读取](./images/flow2spec-progressive-reading.png)
-
-<details>
-<summary>查看图 1 Mermaid 源码</summary>
 
 ```mermaid
 flowchart LR
@@ -139,7 +135,7 @@ flowchart LR
   G --> H[act<br/>执行 / 澄清 / 补知识提示]
 ```
 
-</details>
+
 
 这套结构的价值在于：
 
@@ -353,11 +349,6 @@ Flow2Spec 的目标不是“任何话都自动跑技能”，而是让 Agent 在
 
 图 2：开发过程生成知识图谱
 
-![图 2：开发过程生成知识图谱](./images/flow2spec-development-knowledge-loop.png)
-
-<details>
-<summary>查看图 2 Mermaid 源码</summary>
-
 ```mermaid
 flowchart TD
   A[用户提出需求] --> B{显式 f2s-* skill<br/>或 intentRecognition 辅助判断}
@@ -379,7 +370,6 @@ flowchart TD
   M --> G
 ```
 
-</details>
 
 这条链路里，每一步都会留下可追踪的资产：
 
@@ -446,25 +436,26 @@ Flow2Spec 还支持启动时检测知识库模板版本。
 
 图 3：普通记忆文件 vs Flow2Spec 知识图谱
 
-![图 3：普通记忆文件 vs Flow2Spec 知识图谱](./images/flow2spec-memory-vs-knowledge-graph.png)
-
-<details>
-<summary>查看图 3 Mermaid 源码</summary>
-
 ```mermaid
 flowchart LR
-  L1[普通记忆文件<br/>大文档 / rules / docs] --> L2[Agent 自己翻找] --> L3[答完即结束]
+ L1["大文档 / rules / docs"] --> L2["Agent 自己翻找"] --> L3["答完即结束"]
 ```
-
 ```mermaid
 flowchart LR
-  R1[Flow2Spec<br/>manifest 路由] --> R2[matcher 命中] --> R3[topic 摘要] --> R4[依赖展开] --> R5{缺口验证}
-  R5 -->|足够| R7[知识反哺 / 提交检查]
-  R5 -->|不足| R6[源码兜底] --> R7
-  R7 --> R1
-```
+    R5{"缺口验证"}
+    R6["源码兜底"]
+    R7["知识反哺 / 提交检查"]
+    R1["manifest 路由"]
+    R2["matcher 命中"]
+    R3["topic 摘要"]
+    R4["依赖展开"]
 
-</details>
+    R5 -->|不足| R6
+    R6 --> R7
+    R5 -->|足够| R7
+    R7 --> R1 --> R2 --> R3 --> R4
+    R4 --> R5
+```
 
 普通知识库关注：
 
