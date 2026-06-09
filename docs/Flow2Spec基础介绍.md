@@ -453,29 +453,15 @@ Flow2Spec 还支持启动时检测知识库模板版本。
 
 ```mermaid
 flowchart LR
-  subgraph L[普通记忆文件]
-    L1[大文档 / rules / docs]
-    L2[Agent 自己翻找]
-    L3[答完即结束]
-    L1 --> L2 --> L3
-  end
+  L1[普通记忆文件<br/>大文档 / rules / docs] --> L2[Agent 自己翻找] --> L3[答完即结束]
 ```
 
 ```mermaid
 flowchart LR
-  subgraph R[Flow2Spec]
-    R1[manifest 路由]
-    R2[matcher 命中]
-    R3[topic 摘要]
-    R4[依赖展开]
-    R5[缺口验证]
-    R6[源码兜底]
-    R7[知识反哺 / 提交检查]
-    R1 --> R2 --> R3 --> R4 --> R5
-    R5 -->|足够| R7
-    R5 -->|不足| R6 --> R7
-    R7 --> R1
-  end
+  R1[Flow2Spec<br/>manifest 路由] --> R2[matcher 命中] --> R3[topic 摘要] --> R4[依赖展开] --> R5{缺口验证}
+  R5 -->|足够| R7[知识反哺 / 提交检查]
+  R5 -->|不足| R6[源码兜底] --> R7
+  R7 --> R1
 ```
 
 </details>
