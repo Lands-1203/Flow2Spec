@@ -132,6 +132,9 @@ flowchart LR
   D --> E[stock-docs / req-docs<br/>长文档]
   E --> F[源码兜底]
   C --> G[verify<br/>缺口检查]
+  D --> G
+  E --> G
+  F --> G
   G --> H[act<br/>执行 / 澄清 / 补知识提示]
 ```
 
