@@ -476,7 +476,7 @@ flowchart LR
     R7 --> R1
   end
 
-  L --> R
+
 ```
 
 </details>
