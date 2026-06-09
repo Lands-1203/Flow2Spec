@@ -114,28 +114,38 @@ Agent 的读取顺序不是自由发挥，而是按协议走：
 
 ```text
 manifest-routing.json
-  -> matcher 分片
-  -> topic 摘要
-  -> topicDependencies
-  -> stock-docs / req-docs
-  -> 源码兜底
+  -> matcher 分片（matcherPath 指向的单个文件）
+  -> match（主候选）
+  -> expand（先依赖 topic，再主 topic；保留次高候选）
+  -> verify（缺口检查）
+      -> 足够：act
+      -> 不足：stock-docs / req-docs（按需）
+          -> 仍不足：源码兜底
+          -> act 或澄清
 ```
 
 图 1：知识库渐进式读取
 
-
 ```mermaid
 flowchart LR
-  A[manifest-routing.json<br/>机读路由清单] --> B[matchers<br/>关键词分片]
-  B --> C[topics<br/>主题摘要]
-  C --> D[topicDependencies<br/>依赖主题]
-  D --> E[stock-docs / req-docs<br/>长文档]
-  E --> F[源码兜底]
-  C --> G[verify<br/>缺口检查]
-  D --> G
-  E --> G
-  F --> G
-  G --> H[act<br/>执行 / 澄清 / 补知识提示]
+  subgraph entry["路由入口"]
+    direction LR
+    A["manifest-routing.json<br/>机读路由清单"] --> B["matchers<br/>关键词分片"]
+  end
+  
+ 
+  B --> M["match<br/>主候选"]
+  M --> E["expand<br/>先依赖 topic，再主 topic<br/>+ 次高候选"]
+  E --> V{"verify<br/>缺口检查"}
+
+  V -->|足够| H["act<br/>执行 / 澄清 / 补知识提示"]
+  V -->|不足| F["stock-docs / req-docs<br/>长文档（按需）"]
+  F --> V2{"仍不足?"}
+  V2 -->|是| G["源码兜底"]
+  V2 -->|足够| H
+  G --> H
+
+  entry ~~~ M
 ```
 
 
