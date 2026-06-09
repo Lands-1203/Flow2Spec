@@ -452,7 +452,7 @@ Flow2Spec 还支持启动时检测知识库模板版本。
 <summary>查看图 3 Mermaid 源码</summary>
 
 ```mermaid
-flowchart LR
+flowchart TB
   subgraph L[普通记忆文件]
     direction LR
     L1[大文档 / rules / docs]
