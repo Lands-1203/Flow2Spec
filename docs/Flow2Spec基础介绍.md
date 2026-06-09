@@ -454,6 +454,7 @@ Flow2Spec 还支持启动时检测知识库模板版本。
 ```mermaid
 flowchart LR
   subgraph L[普通记忆文件]
+    direction LR
     L1[大文档 / rules / docs]
     L2[Agent 自己翻找]
     L3[答完即结束]
@@ -461,6 +462,7 @@ flowchart LR
   end
 
   subgraph R[Flow2Spec]
+    direction LR
     R1[manifest 路由]
     R2[matcher 命中]
     R3[topic 摘要]
@@ -473,6 +475,8 @@ flowchart LR
     R5 -->|不足| R6 --> R7
     R7 --> R1
   end
+
+  L --> R
 ```
 
 </details>
