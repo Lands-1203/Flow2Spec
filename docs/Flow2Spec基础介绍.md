@@ -568,7 +568,7 @@ Flow2Spec 自己也有一套分层约束，尽量减少“规则写了但 Agent 
 2. 配置层：执行任何 `f2s-`* 技能前，必须先读 `flow2spec.config.json`，确认 `subAgent`、`switchAgentVerification`、`intentRecognition` 等开关。
 3. 路由层：普通问答和开发任务都先读 `manifest-routing.json`，再按 matcher / topic 读取，而不是直接全仓搜索。
 4. 技能层：每个 `f2s-*` 技能定义自己的前置检查、用户确认点、落盘步骤和收口方式。
-5. 门禁层：`f2s-git-commit` 在提交前再检查 diff、冲突和知识覆盖，避免前面漏掉的规则直接进 Git。
+5. 门禁层：在多个节点分别设门禁，而不是只靠提交前一道。任务归档前检查 checklist（`f2s-task`）、知识落盘前确认大纲（`f2s-kb-sync`）、问答下钻源码后强制收口自检（`f2s-kb-feedback-closing`）、代码提交前检查 diff 与知识覆盖（`f2s-git-commit`）。
 
 举个容易出错的案例：
 
