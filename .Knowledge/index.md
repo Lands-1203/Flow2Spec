@@ -34,9 +34,10 @@
 | skill-authoring | `.Knowledge/topics/skill-authoring.md` | 新增 / 重构 `f2s-*` SKILL 时的骨架与命名约定（仅本仓，不下发） | 参考实现：`templates/skills/f2s-kb-addRules/SKILL.md` |
 | f2s-req-tech | `.Knowledge/topics/f2s-req-tech.md` | 生成技术方案文档（全端通用，含后端/前端/全栈等） | 模板：[技术方案模版](template/技术方案模版.md)；技能：`skills/f2s-req-tech/SKILL.md` |
 | f2s-dev-workflow-constraints | `.Knowledge/topics/f2s-dev-workflow-constraints.md` | 开发工作流约束：双仓同步、配置根写权、agent 开发纪律 | 无 |
+| f2s-kb-distill | `.Knowledge/topics/f2s-kb-distill.md` | Q&A 驱动知识提取；自动判断创建新 topic 或追加现有 topic | 技能：skills/f2s-kb-distill/SKILL.mdc |
 
 每主题保留 **1–3 条** 可点击摘要链接；全量路径对照写入 `.Knowledge/migration-report.md`（迁移场景）。  
-其中 **`implement-tech-design`**、**`f2s-doc-routing`**、**`config-precheck`**、**`f2s-task`** 在 `topics/` 内为**路由摘要**；执行长文见配置根 **`rules/f2s-*.md(c)`**；使用 Codex 时见 **`.codex/AGENTS.md`**、**`.codex/topics/f2s-*.md`**（`f2s-config-check` 与 `AGENTS` 前置同源，按需打开）。**`f2s-knowledge-preflight`** 与 **`f2s-kb-feedback-closing`** 是普通问答首读 / 源码补答收口门禁，作为配置根规则 / Codex 专题长文生效，不写入 `topicPaths` 或 `taskToTopicRules`。
+其中 **`implement-tech-design`**、**`f2s-doc-routing`**、**`config-precheck`**、**`f2s-task`** 在 `topics/` 内为**路由摘要**；执行长文见配置根 **`rules/f2s-*.md(c)`**；使用 Codex 时见 **`.codex/AGENTS.md`**、**`.codex/topics/f2s-*.md`**（`f2s-config-check` 与 `AGENTS` 前置同源，按需打开）。**`f2s-knowledge-preflight`** 与 **`f2s-kb-feedback-closing`** 是普通问答首读 / 源码补答收口门禁，作为配置根规则 / Codex 专题长文生效，不写入 `topicPaths` 或 `taskToTopicRules`；**`f2s-kb-feedback-closing`** 在 cases 1–3 建议执行 **`f2s-kb-distill`**。
 
 ---
 

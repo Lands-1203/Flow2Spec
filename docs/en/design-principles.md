@@ -70,7 +70,7 @@ Flow2Spec rules intentionally overlap in a few places: the global entry defines 
 | Scenario | Priority Rule | Role |
 | --- | --- | --- |
 | First read / first tool call for ordinary questions | `f2s-knowledge-preflight` | Decides whether current-repo questions must first read `.Knowledge/manifest-routing.json`, and governs the gap gate / source fallback rhythm. |
-| Source fallback closing for ordinary Q&A | `f2s-kb-feedback-closing` | After answering from source code, all four cases must take an explicit stance: cases 1–3 emit a `f2s-kb-add` / `f2s-kb-sync` suggestion; case 4 emits an explicit "knowledge base already covers" marker. Silently skipping the entire closing step is forbidden. |
+| Source fallback closing for ordinary Q&A | `f2s-kb-feedback-closing` | After answering from source code, all four cases must take an explicit stance: cases 1–3 emit a `f2s-kb-distill` suggestion; case 4 emits an explicit "knowledge base already covers" marker. Silently skipping the entire closing step is forbidden. |
 | Global routing facts / progressive loading chain | `f2s-flow2spec-unified-entry` | Defines the source-of-truth relationship and read order for manifest, matcher, topic, stock-docs, and req-docs. |
 | Reading config before any `f2s-*` skill | `f2s-config-check` | Enforces `flow2spec.config.json` as the first step of every `f2s-*` skill. |
 | Implementing from a technical proposal | `f2s-implement-tech-design` | Full execution rule for implementation from a technical design. |
@@ -498,8 +498,8 @@ Session context itself is an information source  ·  no need for users to organi
 | **Cursor `f2s-config-check.mdc`** | Rule-layer enforcement: "Read before skill body"; Cursor hooks are used for update checks only, not automatic config reads. |
 | **Claude `f2s-config-session` SessionStart** | Injects one config summary when the conversation starts, reducing the chance that the setting is forgotten. |
 | **Claude `f2s-config-inject` PreToolUse** | Only guards **`f2s-*` Skill** calls by reminding the agent that the first skill-body action must be Read; it no longer repeatedly injects the full config. |
-| **Codex `AGENTS.md` / `.codex/topics/f2s-config-check.md`** | Text-layer enforcement: "Read before skill body"; Codex hooks are used for update checks only, not automatic config reads. |
-| **Codex `AGENTS.md` + `renderProjectConfigBlock`** | Top-level **Read** hard constraint + **init snapshot table** (if inconsistent with disk, Read takes precedence). |
+| **Codex `AGENTS.md` / `.codex/topics/f2s-config-check.md` + `f2s-config-session`** | One `SessionStart` configuration summary plus text-layer enforcement: "Read before skill body"; there is still no Claude-style `PreToolUse Skill` guard. |
+| **Codex `AGENTS.md` + `renderProjectConfigBlock`** | Top-level **Read** hard constraint + field-semantics table; current values only come from disk Read and the SessionStart summary. |
 | **Knowledge base `config-precheck` topic** | When routing hits, provides only **summary** and a pointer to the Codex full text, **not** a substitute for Read JSON. |
 
 **Authority remains** the **Read** result of the project-root JSON; each layer is a prompt, not a second source of truth. For the complete operational table and paths, see **[Usage Guide § 1. `f2s-*` and `flow2spec.config.json`](./usage-guide.md)**.

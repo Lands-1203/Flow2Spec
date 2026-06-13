@@ -6,6 +6,15 @@
         "hooks": [
           {
             "type": "command",
+            "command": "node .codex/hooks/f2s-config-session.js"
+          }
+        ]
+      },
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
             "command": "node .codex/hooks/f2s-update-check.js",
             "statusMessage": "Checking Flow2Spec knowledge version"
           }

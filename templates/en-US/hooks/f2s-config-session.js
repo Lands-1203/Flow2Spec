@@ -3,7 +3,7 @@
 /**
  * flow2spec SessionStart hook — injects a flow2spec.config.json summary once at session start.
  * This summary does not replace Read("flow2spec.config.json") before an f2s-* Skill body.
- * Written by flow2spec init --claude to .claude/hooks/f2s-config-session.js.
+ * Written by flow2spec init to the corresponding agent's hooks/f2s-config-session.js.
  */
 const fs = require('fs');
 const path = require('path');

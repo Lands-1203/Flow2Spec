@@ -3,7 +3,7 @@
 /**
  * flow2spec SessionStart hook — 会话开始时一次性注入 flow2spec.config.json 摘要。
  * 该摘要不替代 f2s-* Skill 正文前的 Read("flow2spec.config.json")。
- * 由 flow2spec init --claude 写入 .claude/hooks/f2s-config-session.js。
+ * 由 flow2spec init 写入对应 agent 的 hooks/f2s-config-session.js。
  */
 const fs = require('fs');
 const path = require('path');
