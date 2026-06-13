@@ -14,9 +14,6 @@
     ],
     "f2s-dev-workflow-constraints": [
       "f2s-git-commit"
-    ],
-    "f2s-kb-distill": [
-      "f2s-topic-authoring"
     ]
   },
   "topicPaths": {
