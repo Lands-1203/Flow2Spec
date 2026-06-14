@@ -29,7 +29,8 @@
     "flow2spec-milestones": ".Knowledge/topics/f2s-flow2spec-milestones.md",
     "skill-authoring": ".Knowledge/topics/skill-authoring.md",
     "f2s-req-tech": ".Knowledge/topics/f2s-req-tech.md",
-    "f2s-dev-workflow-constraints": ".Knowledge/topics/f2s-dev-workflow-constraints.md"
+    "f2s-dev-workflow-constraints": ".Knowledge/topics/f2s-dev-workflow-constraints.md",
+    "f2s-kb-distill": ".Knowledge/topics/f2s-kb-distill.md"
   },
   "taskToTopicRules": [
     {
@@ -122,6 +123,14 @@
       "topics": [
         "f2s-dev-workflow-constraints"
       ]
+    },
+    {
+      "task": "kb-distill",
+      "matcherId": "m-f2s-kb-distill",
+      "matcherPath": ".Knowledge/matchers/m-f2s-kb-distill.json",
+      "topics": [
+        "f2s-kb-distill"
+      ]
     }
   ],
   "topicMetadata": {
@@ -175,6 +184,10 @@
     "f2s-dev-workflow-constraints": {
       "primary": "policy",
       "confidence": "inferred"
+    },
+    "f2s-kb-distill": {
+      "primary": "policy",
+      "confidence": "manual"
     }
   }
 }

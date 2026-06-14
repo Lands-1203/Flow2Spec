@@ -13,7 +13,7 @@ Required: Read("flow2spec.config.json")  <- before any step in the skill body
 
 | Read result | Behavior |
 |---------|------|
-| `subAgent: true` | Follow the B/C mode in the skill's SKILL.md to dispatch sub agents for parallel scanning, then have the main agent merge and write results |
+| `subAgent: true` | First make an explicit decision about whether the current skill meets the split preconditions / scale threshold; if it does, follow the skill's B/C mode to dispatch sub agents and record "whether this run split work, to whom, and why"; otherwise continue in the main agent, but still output the no-split reason |
 | `subAgent: false` | Complete everything in the main agent; do not split work to sub agents |
 | `switchAgentVerification: true` | Writes from a sub agent are verified by the main agent; writes from the main agent are verified by a sub agent (requires `subAgent=true` and an actual split subtask) |
 | `switchAgentVerification: false` | The writing side verifies its own work; no cross-verification |
@@ -21,7 +21,9 @@ Required: Read("flow2spec.config.json")  <- before any step in the skill body
 
 **Claude Code**: `f2s-config-session` injects one configuration summary at `SessionStart`; `f2s-config-inject` only acts as a guard reminder in `PreToolUse`, reminding that the first step before invoking an `f2s-*` Skill must be `Read("flow2spec.config.json")`. Neither replaces the Read requirement in this rule.
 
-**Cursor / Codex**: configuration reading still relies on text constraints (Cursor: this `alwaysApply` rule; Codex: root `AGENTS.md` and `.codex/topics/f2s-config-check.md`) and does not depend on hooks reading configuration automatically.
+**Cursor**: configuration reading still relies on text constraints (this `alwaysApply` rule) and does not depend on hooks reading configuration automatically.
+
+**Codex**: `SessionStart` injects one configuration summary, but before entering any `f2s-*` skill body you still must `Read("flow2spec.config.json")`. When `subAgent=true`, the main agent **must first make an explicit split/no-split decision** for the current skill based on its preconditions / thresholds before deciding whether to dispatch sub agents; even when deciding not to split, it must output the no-split reason. Codex does **not** have Claude's `PreToolUse Skill` guard, so this decision cannot remain implicit.
 
 ### changeTracking
 

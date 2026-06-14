@@ -15,7 +15,7 @@ alwaysApply: true
 
 ### 两字段语义（模板约定）
 
-- **`subAgent`**：`f2s-*` 技能若规定某步骤「用子 agent 执行」，则 **`true`** 时按技能使用子 agent，**`false`** 时在主 agent 内完成。用户可在对话中要求「**仅当**本项为 **`true`** 时，由主 agent **动态判断**哪些子任务适合交给子 agent」——**仅当配置为 `true` 时该要求有效**；配置为 `false` 时凡依赖拆子 agent 的该段说明**不生效**，全部在主 agent 完成。**各 `f2s-*` 在工作哪一阶段必须或建议使用子 agent** 由技能正文逐步约定；技能未写明时不默认拆子。
+- **`subAgent`**：`f2s-*` 技能若规定某步骤「用子 agent 执行」，则 **`true`** 时按技能使用子 agent，**`false`** 时在主 agent 内完成。用户可在对话中要求「**仅当**本项为 **`true`** 时，由主 agent **动态判断**哪些子任务适合交给子 agent」——**仅当配置为 `true` 时该要求有效**；配置为 `false` 时凡依赖拆子 agent 的该段说明**不生效**，全部在主 agent 完成。`subAgent=true` 时，主 agent 必须在技能正文前段显式判断本次是否拆子；即使判断不拆，也必须输出不拆原因。**各 `f2s-*` 在工作哪一阶段必须或建议使用子 agent** 由技能正文逐步约定；技能未写明时不默认拆子。
 - **`switchAgentVerification`（切换 agent 校验）**：落盘或变更后的**验证/复核**（对照清单、diff、自检）**不是**「一律在主 agent」；默认以**落盘侧所在 agent 为「当前 agent」**，在该会话内完成校验（**子 agent 落盘的就在子 agent 内验，主 agent 落盘的就在主 agent 内验**）。**仅当**① 配置 **`switchAgentVerification` 为 `true`**，**且** ② **当前 `f2s-*` 技能正文**对该步骤**明确写出**「当 **`switchAgentVerification`** 为 **`true`**」时，才启用**交叉校验**：**子 agent 落盘的 → 由主 agent 校验**；**主 agent 落盘的 → 由子 agent 校验**（**须**已存在子 agent 会话，即 **`subAgent` 为 `true`** 且实际拆出子任务；若 **`subAgent` 为 `false`**，无子侧可承接，**「主落盘→子验」不发生**，校验**全部在主 agent 内**完成）。配置为 `false`、或技能未写依赖本项、或用户仅泛泛要求「给对方验」的：**不**启用交叉，仍在**落盘侧 agent**内完成验证。
 
 ### Git worktree 与子任务工作目录卫生（`subAgent: true` 或并行子任务时必读）
@@ -92,7 +92,7 @@ alwaysApply: true
 
 ## 知识库版本自检（hook 自动触发；每日首次，仅 updateCheck.enabled=true 时）
 
-三端均采用 **SessionStart 单脚本**架构：Cursor 由 `flow2spec init cursor` 写入 **`.cursor/hooks.json`** 在 `sessionStart` 执行 `node .cursor/hooks/f2s-update-check.js`；Codex 由 `flow2spec init codex` 写入 **`.codex/hooks.json`** 在 `SessionStart` 的 `startup|resume` 事件执行 `node .codex/hooks/f2s-update-check.js`；Claude 由 `flow2spec init claude` 写入 **`.claude/settings.json`** 在 `SessionStart` 执行 `node .claude/hooks/f2s-update-check.js`。脚本完成版本比对与缓存写入后，需升级时通过 `additional_context` 注入命令式升级提示（agent-instruction 文案要求 agent 必须原文转告用户）。
+三端均在 SessionStart 注册版本检查脚本：Cursor 由 `flow2spec init cursor` 写入 **`.cursor/hooks.json`** 在 `sessionStart` 执行 `node .cursor/hooks/f2s-update-check.js`；Codex 由 `flow2spec init codex` 写入 **`.codex/hooks.json`**，在 `SessionStart` 的 `startup|resume` 事件同时注册配置摘要脚本 `node .codex/hooks/f2s-config-session.js` 与版本检查脚本 `node .codex/hooks/f2s-update-check.js`；Claude 由 `flow2spec init claude` 写入 **`.claude/settings.json`**，注册配置摘要、版本检查与 `PreToolUse Skill` 守门。版本检查脚本完成版本比对与缓存写入后，需升级时通过 `additional_context` 注入命令式升级提示（agent-instruction 文案要求 agent 必须原文转告用户）。
 
 **规则层双保险**（与脚本缓存互为备份）：
 
