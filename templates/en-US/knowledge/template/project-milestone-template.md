@@ -5,25 +5,28 @@
 # (Scope Name) Milestones
 
 > **Scope**: (user-provided semantic scope; if unspecified, write "entire project")  
-> **Generated at**: `YYYY-MM-DD`  
-> **Sources**: req-docs · git command/tag · `.task` paths · knowledge-base topics (`manifest-routing` / `index.md` topic overview and `topics/*.md` read in this run)
+> **Updated**: `YYYY-MM-DD`
 
 ## Overview
 
-| Phase | Time | One-liner |
+| Phase | Time | Summary |
 | --- | --- | --- |
-| M1 (feature change summary) | YYYY-MM | (verifiable feature delivery, must be supported by sources; not integration testing/testing/acceptance) |
-| M2 … | … | … |
+| MN · (latest phase title) | YYYY-MM | (verifiable feature delivery summary; not integration testing/testing/acceptance) |
+| … | … | … |
+| M1 · (initial phase title) | YYYY-MM | … |
 
-## M1 · (Phase Title)
+## MN · (Latest Phase Title)
 
-- **Delivery**: (list, verifiable)
-- **Evidence**: (optional) req `…` · commit `hash` · task `…`
+- (Delivered feature items, one per line, verifiable)
 
-## M2 · …
+## …
 
-(Same structure as M1; each Mx row in the overview table must have a corresponding H2 heading.)
+(Same structure as MN; each Mx row in the overview table must have a corresponding H2 heading; all in newest-first order.)
+
+## M1 · (Initial Phase Title)
+
+- (Delivered feature items, one per line, verifiable)
 
 ## Pending Confirmation
 
-- (List when the three source types disagree or records are missing; otherwise write "None")
+- (List functional/delivery gaps or inconsistencies from the four sources; write "None" if absent)

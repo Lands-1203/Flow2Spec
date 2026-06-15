@@ -18,6 +18,7 @@
 | `/f2s-git-commit` | Commit code; checks knowledge base coverage by default, skips that check in "quick commit" mode | Commit |
 | `/f2s-kb-feat` | Add new capability + sync knowledge base | KB Maintenance |
 | `/f2s-kb-fix` | Fix a bug + auto-sync knowledge base | KB Maintenance |
+| `/f2s-kb-distill` | Extract reusable knowledge facts from Q&A and auto-commit to knowledge base | KB Maintenance |
 | `/f2s-kb-sync` | Sink implemented capabilities from the conversation into the knowledge base | KB Maintenance |
 | `/f2s-kb-merge` | Resolve knowledge base conflicts after a Git merge | KB Maintenance |
 | `/f2s-kb-migrate` | One-time migration of a legacy knowledge base to `.Knowledge/` | KB Maintenance |
@@ -393,6 +394,26 @@
 
 ---
 
+### `f2s-kb-distill`
+
+**Purpose**: Extracts reusable knowledge facts from a Q&A session and automatically commits them to the knowledge base; decides whether to create a new topic or supplement an existing one based on drill-down depth and matched topics.
+
+**How It Works**: After the Agent answers a user question by drilling into source code, this skill analyzes the current conversation for reusable knowledge facts (core mechanisms, state transitions, return-value contracts, config-switch effects, failure fallback strategies, module boundaries, etc.) and determines whether they are already covered in the knowledge base. Uncovered facts are written to a new or extended topic; covered facts that lack detail get supplemented. Distinction from `f2s-kb-sync`: `sync` is for batch syncing multiple capabilities; `distill` focuses on incremental knowledge extraction driven by a single Q&A.
+
+**Use Cases**:
+- After a Q&A drills into source code and the topic doesn't cover it or lacks detail
+- Automatically suggested by the `f2s-kb-feedback-closing` rule
+- User wants to persist the conclusions of a Q&A session into the knowledge base
+
+**Relationships**:
+- **Prerequisite**: A Q&A session that included source code drill-down (context auto-extracted from conversation history)
+- **Next Step**: None (ends when ingestion is complete)
+- **Feature**: Only maintains `.Knowledge/`; does not touch `rules/skills` config root
+
+**Sub-Agent Invocation**: None (single-round focused task; completed by the main agent end-to-end)
+
+---
+
 ### `f2s-kb-sync`
 
 **Purpose**: Sinks already-implemented capabilities from the conversation back into the knowledge base. Can accept an explicit capability description or infer with zero input.
@@ -649,6 +670,7 @@ For a complete directory description, see [Directory Conventions](./directory-co
 ---
 
 Related Documents:
+- [Flow2Spec Introduction](./Flow2Spec-Introduction.md)
 - [Usage Guide](./usage-guide.md)
 - [Directory Conventions](./directory-conventions.md)
 - [Architecture](./architecture.md)

@@ -30,7 +30,7 @@
 | f2s-req-plan | `.Knowledge/topics/f2s-req-plan.md` | 需求/方案规划与实现；始终维护 `.task/` | 技能：`skills/f2s-req-plan/SKILL.md`；依赖 `f2s-task` |
 | f2s-git-commit | `.Knowledge/topics/f2s-git-commit.md` | 提交代码；默认检查知识库覆盖，快捷提交跳过覆盖检查 | 技能：`skills/f2s-git-commit/SKILL.md`；模板：[f2s-git-commit](../templates/skills/f2s-git-commit/SKILL.md) |
 | flow2spec-presentations | `.Knowledge/topics/f2s-flow2spec-presentations.md` | 本仓对外介绍 HTML 演示稿路径与维护约定 | stock：[对外介绍演示](stock-docs/Flow2Spec-对外介绍演示.md) |
-| flow2spec-milestones | `.Knowledge/topics/f2s-flow2spec-milestones.md` | 版本演进；含内部仓 vs 开源仓、双语 PPT、Cursor 插件 | stock：[项目里程碑](stock-docs/Flow2Spec-项目里程碑.md) |
+| flow2spec-milestones | `.Knowledge/topics/f2s-flow2spec-milestones.md` | 版本演进；含内部仓 vs 开源仓、双语 PPT、Cursor 插件 | stock：[项目里程碑](stock-docs/项目里程碑.md) |
 | skill-authoring | `.Knowledge/topics/skill-authoring.md` | 新增 / 重构 `f2s-*` SKILL 时的骨架与命名约定（仅本仓，不下发） | 参考实现：`templates/skills/f2s-kb-addRules/SKILL.md` |
 | f2s-req-tech | `.Knowledge/topics/f2s-req-tech.md` | 生成技术方案文档（全端通用，含后端/前端/全栈等） | 模板：[技术方案模版](template/技术方案模版.md)；技能：`skills/f2s-req-tech/SKILL.md` |
 | f2s-dev-workflow-constraints | `.Knowledge/topics/f2s-dev-workflow-constraints.md` | 开发工作流约束：双仓同步、配置根写权、agent 开发纪律 | 无 |

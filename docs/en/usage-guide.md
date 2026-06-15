@@ -159,6 +159,7 @@ Skills are triggered by matching `name` and `description`. Files are located und
 
 ## 7. Related Documents
 
+- [Flow2Spec Introduction](./Flow2Spec-Introduction.md)
 - [Commands Reference](./commands-reference.md)
 - [Directory Conventions](./directory-conventions.md)
 - [Architecture](./architecture.md)

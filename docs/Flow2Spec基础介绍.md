@@ -1,3 +1,5 @@
+[中文](./Flow2Spec基础介绍.md) | [English](./en/Flow2Spec-Introduction.md)
+
 # AI 写代码不缺上下文，缺的是会在开发中生长的项目知识图谱
 
 ## 一、前言

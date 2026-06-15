@@ -4,6 +4,7 @@ Product docs in English live under `docs/en/`. Chinese docs are in `docs/` (repo
 
 | Document | Chinese counterpart |
 | --- | --- |
+| [Flow2Spec-Introduction.md](./Flow2Spec-Introduction.md) | [Flow2Spec基础介绍.md](../Flow2Spec基础介绍.md) |
 | [usage-guide.md](./usage-guide.md) | [使用说明.md](../使用说明.md) |
 | [commands-reference.md](./commands-reference.md) | [命令说明.md](../命令说明.md) |
 | [directory-conventions.md](./directory-conventions.md) | [目录与路径约定.md](../目录与路径约定.md) |

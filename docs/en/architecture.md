@@ -162,6 +162,7 @@ Design intent: Cross-verification introduces an external perspective, reducing t
 
 ## 8. Related Documents
 
+- [Flow2Spec Introduction](./Flow2Spec-Introduction.md)
 - [Usage Guide](./usage-guide.md)
 - [Commands Reference](./commands-reference.md)
 - [Directory Conventions](./directory-conventions.md)

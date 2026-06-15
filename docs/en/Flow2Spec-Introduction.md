@@ -1,3 +1,5 @@
+[中文](../Flow2Spec基础介绍.md) | [English](./Flow2Spec-Introduction.md)
+
 # AI Coding Doesn't Lack Context — It Lacks a Project Knowledge Graph That Grows With Development
 
 ## I. Introduction

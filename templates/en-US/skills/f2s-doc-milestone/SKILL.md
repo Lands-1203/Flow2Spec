@@ -61,7 +61,7 @@ Milestones **Mx record only feature/capability changes**: deliverables that are 
 3. **Read `.Knowledge/topics/<topic>.md` as needed**: summaries related to the scope or manifest hits (**do not** enumerate the entire `topics/` directory; read only topics named by manifest/index, usually no more than the table rows).
 4. Summarize topic semantics into a list of "capability/scenario nodes" for the sub-agent contract. Milestone stages must either cover them or explain related gaps under "Pending Confirmation".
 
-At the beginning of the document, the **"Sources"** line must state which topics were read in this round (ids or `topics/*.md` paths), or "no `.Knowledge` routing".
+> **Source information is for collection and verification only — do not write it into the generated document.** The output must not contain a "Sources" line, topic file paths, or internal manifest names.
 
 ## Input (Only One, Optional)
 
@@ -98,10 +98,14 @@ If sources are empty: still generate the document and explain gaps under "Pendin
 
 ## Step 2: Apply Template and Write (Sub Agent)
 
-1. `# (Scope Name) Milestones`; at the top, include scope, time, and **Sources (including topics read this round)**.
-2. Use chronological order **M1, M2...**; overview table rows and each `## Mx ·` section correspond one-to-one. **Each stage title and one-sentence summary must reflect a feature change**. Do not use "joint debugging / testing / acceptance" as a stage name (see "Stage Granularity").
-3. Do not write the template's top explanatory blockquote.
-4. **`Write`** to `outputPath`.
+**Generation principle: write for readers, not internal tooling.**
+
+1. Document header: title `# (Scope Name) Milestones`, scope, and updated date only. **Do not write** a Sources line, topic paths, manifest names, commit hashes, npm publish status, environment status, or any other internal information.
+2. **Newest first**: both the overview table and each `## Mx ·` section are ordered **latest phase first** (MN → … → M1). Each stage title must reflect a feature change; do not use "joint debugging / testing / acceptance" as a name (see "Stage Granularity").
+3. Each stage body: list **delivered features only**, one item per line, verifiable. Do not include timing details, process narration, or background context.
+4. **Pending Confirmation**: only list functional/delivery gaps or inconsistencies. **Do not** include internal operations, release, or environment status. Write "None" if there are no gaps.
+5. Do not write the template's top explanatory blockquote.
+6. **`Write`** to `outputPath`.
 
 ## Step 3: Verify (Main Agent, Required)
 
@@ -119,7 +123,9 @@ After the sub agent writes the draft, the main agent **must** verify whether **i
 | Task closure | If `.task/` exists: archived tasks are reflected in related Mx |
 | Traceable basis | Each Mx deliverable can be traced to the four sources |
 | Timeline | Ordering is reasonable; same-window multi-version changes are split if needed |
+| **Ordering** | Overview table and all Mx sections are newest-first; reorder if not |
 | **Stage granularity** | No Mx consists only of joint debugging/testing/acceptance/environment work without feature delivery; if found, **delete it or merge it** into an adjacent feature stage |
+| **Internal information** | Document contains no Sources line, commit hashes, topic paths, or npm/environment status; **remove** if found |
 
 3. Missing items -> add Mx (**must be feature changes**); errors -> correct according to the four sources; unknowns -> "Pending Confirmation" (**do not** replace unknowns with fake Mx).
 4. Only after verification or revision is complete may Step 4 run.
