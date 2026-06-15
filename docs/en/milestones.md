@@ -2,123 +2,160 @@
 
 # Project Milestones
 
-> This page summarizes the product evolution of Flow2Spec. For usage details, see [Usage Guide](./usage-guide.md); for command semantics, see [Commands Reference](./commands-reference.md); for system design, see [Architecture](./architecture.md) and [Design Principles](./design-principles.md).
-
-- **Scope**: whole project
-- **Updated**: 2026-06-08
-- **Sources**: `.Knowledge/manifest-routing.json`, `.Knowledge/index.md`, `docs/项目里程碑.md`, Git log/tags, `package.json`, `.task/`
-- **Current package version in this repo**: `3.1.5`
+> **Scope**: whole project  
+> **Updated**: 2026-06-15
 
 ## Overview
 
 | Stage | Time | Summary |
 | --- | --- | --- |
-| M1 CLI bootstrap and OpenSpec workflow | 2026-02 ~ 2026-04 | Flow2Spec started as an installable CLI and initially organized AI collaboration through OpenSpec / opsx-style change flows. |
-| M2 OpenSpec removal and f2s skills | 2026-04-23 ~ 2026-04-24 | OpenSpec dependencies were removed and the project moved to its own `f2s-*` skill workflow. |
-| M3 `.Knowledge` machine-readable routing | 2026-05-08 ~ 2026-05-11 | Introduced `.Knowledge`, `manifest-routing.json`, topics, and matchers as the progressive context loading chain. |
-| M4 Public demo and bilingual materials | 2026-05-13 ~ 2026-05-14 | Added public slides, English docs, GitHub Pages sync, and bilingual documentation entry points. |
-| M5 CLI operations and task routing | 2026-05-15 | Added `version` / `update` commands and routed `f2s-task` + `f2s-req-plan` into the package template. |
-| M6 Codex root `AGENTS.md` discovery | 2026-05-16 | `flow2spec init codex` writes full rules to root `AGENTS.md`; `.codex/AGENTS.md` becomes a pointer. |
-| M7 Four-source milestone generation | 2026-05-18 | Added `f2s-doc-milestone` and the milestone template, based on req-docs, git, `.task`, and knowledge topics. |
-| M8 Document pipeline and directory boundaries | 2026-05-21 | Clarified `req-docs` / `stock-docs`, `doc-arch` / `doc-final`, and the new-requirement development path. |
-| M9 README and task capability exposure | 2026-05-26 ~ 2026-05-28 | Expanded README, command docs, task checklist descriptions, and daily workflow guidance. |
-| M10 Documentation capture rules | 2026-05-27 ~ 2026-05-28 | Added multi-module detection for `f2s-doc-add`, dual-repo package naming rules, and global response discipline. |
-| M11 Knowledge engineering rules and skill skeletons | 2026-06-03 | Added `skill-authoring`, `f2s-kb-addRules`, `f2s-topic-authoring`, and large-feature split guidance. |
-| M12 Topic metadata and init merge checks | 2026-06-03 | Added `topicMetadata.primary/tags/confidence`, init merge validation, skill rename cleanup, and old skill directory cleanup. |
-| M13 Update checks and startup reminders | 2026-06-04 | Added `updateCheck.enabled`, SessionStart hooks, daily cache, and Claude / Cursor / Codex upgrade reminders. |
-| M14 Quick commit mode | 2026-06-04 | `f2s-git-commit` supports quick commit by skipping only knowledge coverage checks while keeping diff, precise add, hooks, and commit-message display. |
-| M15 General technical proposal and source-answer closing | 2026-06-05 | Renamed `f2s-req-backend` to `f2s-req-tech`; the template became a general technical proposal template, and source-code Q&A gained knowledge-backfill closing. |
-| M16 Intent recognition routing | 2026-06-08 | Added `intentRecognition` and `f2s-intent-routing` so high-confidence operation intent can route to skills under control. |
-| M17 Locale-aware templates and English default README | 2026-06-08 | `flow2spec init` supports `zh-CN` / `en-US` template selection; public README defaults to English, with Chinese in `README.zh-CN.md`. |
+| M18 · f2s-kb-distill and rule refactor | 2026-06-14 | Added f2s-kb-distill knowledge extraction skill; feedback-closing refactored to single entry; Codex AGENTS.md slimmed to "two steps" guide; SessionStart hooks landed; CLI cross-platform extension handling |
+| M17 · Locale-aware template initialization | 2026-06-08 | flow2spec init supports zh-CN/en-US single-choice initialization; public README defaults to English; Chinese moved to README.zh-CN.md |
+| M16 · Intent recognition routing | 2026-06-08 | Added intentRecognition config switch and f2s-intent-routing rules; high-confidence operation intent can route to f2s skills automatically |
+| M15 · General technical proposal and Q&A closing | 2026-06-05 | f2s-req-backend renamed to f2s-req-tech; template extended to frontend/backend/fullstack; source-code Q&A gained knowledge-backfill closing |
+| M14 · f2s-git-commit quick commit | 2026-06-04 | f2s-git-commit quick commit skips knowledge coverage check while keeping diff, precise add, hooks, and commit-message display |
+| M13 · Update checks and startup reminders | 2026-06-04 | Added updateCheck.enabled config, version-check hook, daily cache; Claude/Cursor/Codex SessionStart upgrade reminders |
+| M12 · Topic metadata and init merge checks | 2026-06-03 | topicMetadata supports primary/tags/confidence; init gained merge validation and template-priority behavior; skills renamed to kb-/doc- prefix |
+| M11 · Knowledge engineering rules and skill skeletons | 2026-06-03 | Added skill-authoring spec, f2s-kb-addRules, f2s-topic-authoring, and large-feature split strategy |
+| M10 · Documentation capture rules | 2026-05-27 | f2s-doc-add added multi-module detection; dual-repo package naming rules; global negation-style constraint |
+| M9 · README and task capability exposure | 2026-05-26 | README and English README expanded with usage flow, command reference, task checklist, and daily workflow |
+| M8 · Document pipeline and directory boundaries | 2026-05-21 | Reorganized docs directory; doc-arch drafts must go through doc-final; new-requirement skill chain clarified |
+| M7 · Four-source milestone generation | 2026-05-18 | Added f2s-doc-milestone skill and milestone template; stages backed by req-docs/git/.task/knowledge topics |
+| M6 · Codex root AGENTS.md discovery | 2026-05-16 | flow2spec init codex writes full rules to root AGENTS.md; .codex/AGENTS.md becomes a pointer |
+| M5 · CLI operations and task routing | 2026-05-15 | CLI added version/update commands; package template manifest includes f2s-task and f2s-req-plan routing |
+| M4 · Public demo and bilingual materials | 2026-05-13 | Added presentation sources, sync-gh-pages.sh, English slides and 6 English docs; bilingual README entry points |
+| M3 · .Knowledge machine-readable routing | 2026-05-08 | Introduced .Knowledge, manifest-routing.json, topics and matchers; match→expand→verify→act chain; config preflight and KB preflight rules |
+| M2 · OpenSpec removal and f2s skills | 2026-04-23 | Removed OpenSpec/opsx; converted to f2s skill workflow; requirements clarification and technical proposal generation established |
+| M1 · CLI bootstrap and OpenSpec workflow | 2026-02 ~ 2026-04 | Flow2Spec started as an installable CLI; early AI collaboration organized around OpenSpec/opsx change flows |
 
-## M1 · CLI Bootstrap and OpenSpec Workflow
+## M18 · f2s-kb-distill and Rule Refactor
 
-- **Delivery**: installable CLI prototype; early AI collaboration was organized around OpenSpec / opsx change flows.
-- **Trace**: early tags up to `V2.2.3`; product milestone stock-doc M0/M1.
+- Added f2s-kb-distill skill: extracts reusable knowledge facts from Q&A, auto-decides new topic or append to existing
+- Refactored f2s-kb-feedback-closing: unified suggestion entry to f2s-kb-distill, replacing f2s-kb-add/f2s-kb-sync dual entry
+- Codex root AGENTS.md slimmed: removed embedded rules, replaced with "do these two things first" short guide
+- Codex hooks landed: .codex/hooks.json adds SessionStart config-summary and version-check dual scripts
+- CLI cross-platform extension handling: Cursor rules keep .mdc, Claude/Codex rules switch to .md, codexAgentsAdapter handles .mdc reading
+- intentRecognition enabled by default in internal repo
 
-## M2 · OpenSpec Removal and f2s Skills
+## M17 · Locale-Aware Template Initialization
 
-- **Delivery**: removed OpenSpec / opsx and converted the collaboration model to Flow2Spec-owned skills; requirements clarification and technical proposal generation became the upstream implementation path.
-- **Related docs**: [Commands Reference](./commands-reference.md), [Usage Guide](./usage-guide.md).
-
-## M3 · `.Knowledge` Machine-Readable Routing
-
-- **Delivery**: introduced `.Knowledge`, `manifest-routing.json`, topic shards, matcher shards, and the `match -> expand -> verify -> act` execution chain.
-- **Related docs**: [Architecture](./architecture.md), [Design Principles](./design-principles.md), [Directory Conventions](./directory-conventions.md).
-
-## M4 · Public Demo and Bilingual Materials
-
-- **Delivery**: added public presentation sources, English docs, GitHub Pages publishing scripts, and bilingual documentation links.
-- **Related docs**: [Usage Scenarios](./usage-scenarios.md).
-
-## M5 · CLI Operations and Task Routing
-
-- **Delivery**: added CLI `version` / `update`; package routing included `f2s-task` and `f2s-req-plan`.
-- **Related docs**: [Commands Reference](./commands-reference.md).
-
-## M6 · Codex Root `AGENTS.md` Discovery
-
-- **Delivery**: Codex initialization writes complete rules to root `AGENTS.md`; `.codex/AGENTS.md` only points to it.
-- **Related docs**: [Usage Guide](./usage-guide.md), [Design Principles](./design-principles.md).
-
-## M7 · Four-Source Milestone Generation
-
-- **Delivery**: added `f2s-doc-milestone` and `project milestone` template; milestones must be backed by req-docs, git, `.task`, and knowledge-topic semantics.
-- **Related docs**: this document and [Commands Reference](./commands-reference.md).
-
-## M8 · Document Pipeline and Directory Boundaries
-
-- **Delivery**: clarified that `stock-docs/` stores stable knowledge inputs while `req-docs/` stores implementation-driving technical proposals; `doc-arch` drafts must be normalized through `doc-final` before `kb-build`.
-- **Related docs**: [Directory Conventions](./directory-conventions.md), [Usage Guide](./usage-guide.md).
-
-## M9 · README and Task Capability Exposure
-
-- **Delivery**: README and command docs describe task checklists, daily workflows, and Flow2Spec capabilities more explicitly.
-- **Related docs**: [Usage Guide](./usage-guide.md), [Commands Reference](./commands-reference.md).
-
-## M10 · Documentation Capture Rules
-
-- **Delivery**: added multi-module detection to prevent unrelated modules from being merged into one knowledge output; documented dual-repo package naming and response-style constraints.
-- **Related docs**: [Directory Conventions](./directory-conventions.md), [Design Principles](./design-principles.md).
-
-## M11 · Knowledge Engineering Rules and Skill Skeletons
-
-- **Delivery**: added `skill-authoring` rules, `f2s-kb-addRules`, topic authoring guidance, and large-feature split recommendations.
-- **Related docs**: [Architecture](./architecture.md), [Design Principles](./design-principles.md).
-
-## M12 · Topic Metadata and Init Merge Checks
-
-- **Delivery**: `manifest-routing.json` supports topic metadata (`primary`, `tags`, `confidence`); `init` gained merge validation, template-priority behavior, and old skill directory cleanup.
-- **Related docs**: [Architecture](./architecture.md), [Directory Conventions](./directory-conventions.md).
-
-## M13 · Update Checks and Startup Reminders
-
-- **Delivery**: added `updateCheck.enabled`, hook-based version checks, `.Knowledge/update-check.json`, and startup reminders across Claude, Cursor, and Codex.
-- **Related docs**: [Usage Guide](./usage-guide.md), [Commands Reference](./commands-reference.md).
-
-## M14 · Quick Commit Mode
-
-- **Delivery**: `f2s-git-commit` quick commit skips only the knowledge coverage check; it still reads diff, checks conflicts, adds files precisely, keeps hooks, and displays the commit headline.
-- **Related docs**: [Commands Reference](./commands-reference.md).
-
-## M15 · General Technical Proposal and Source-Answer Closing
-
-- **Delivery**: `f2s-req-backend` became `f2s-req-tech`; the backend-specific template became a general technical proposal template. Ordinary source-code Q&A now ends with a knowledge-backfill suggestion when the answer relies on facts missing from the knowledge base.
-- **Related docs**: [Usage Guide](./usage-guide.md), [Commands Reference](./commands-reference.md).
+- templates/ split into zh-CN/ and en-US/ directories
+- flow2spec init supports single-choice locale initialization, defaults to Chinese
+- English templates cover rules, skills, knowledge, AGENTS.md and flow2spec.config.json with English filenames
+- Public README defaults to English; Chinese moved to README.zh-CN.md; README.en.md kept for compatibility
 
 ## M16 · Intent Recognition Routing
 
-- **Delivery**: added `intentRecognition` and `f2s-intent-routing`; high-confidence operation intent can enter the matching skill, while discussion, evaluation, low confidence, and conflicting intents stay in normal conversation or clarification.
-- **Related docs**: [Usage Guide](./usage-guide.md), [Design Principles](./design-principles.md).
+- flow2spec.config.json adds intentRecognition boolean field
+- Added f2s-intent-routing rules: high-confidence operation intent routes to matching f2s skill automatically
+- Discussion, evaluation, low-confidence, or incomplete-requirement inputs stay in normal conversation or clarification
+- Skill routing is blocked when intentRecognition is not read or set to false
 
-## M17 · Locale-Aware Templates and English Default README
+## M15 · General Technical Proposal and Q&A Closing
 
-- **Delivery**: templates are split into `templates/zh-CN` and `templates/en-US`; `flow2spec init` supports single-choice locale selection with Chinese as default; English template filenames are localized; downstream runtime docs no longer expose package-internal template paths; public `README.md` is English by default and Chinese moved to `README.zh-CN.md`.
-- **Trace**: package/tag version `3.1.5`; npm publication still requires OTP / permission handling.
-- **Related docs**: [Usage Guide](./usage-guide.md), [Commands Reference](./commands-reference.md), [Directory Conventions](./directory-conventions.md).
+- f2s-req-backend renamed to f2s-req-tech
+- Technical proposal template upgraded from backend-only to frontend/backend/fullstack general purpose
+- Added f2s-kb-feedback-closing rules: four-case knowledge-backfill suggestion closing for source-code Q&A
+- Reduced unnecessary f2s-kb-add/sync prompts in ordinary Q&A flows
 
-## Open Items
+## M14 · f2s-git-commit Quick Commit
 
-- `.Knowledge/req-docs/` currently has no Markdown source for this repo-level milestone.
-- `.task/active/lazy_loading_rule_optimization/` remains active and is not recorded as a delivered milestone yet.
-- `v3.1.5` tags exist, but npm publishing has not completed because public publishing needs OTP and internal publishing returned a permission error.
+- f2s-git-commit supports quick commit mode, skips knowledge coverage check
+- Retains diff reading, conflict checking, precise add, git hooks, and commit headline display
+- Auto push/pull disabled; user confirmation preserved
+
+## M13 · Update Checks and Startup Reminders
+
+- flow2spec.config.json adds updateCheck.enabled config
+- Version-check hook: manifest version vs npm latest; daily cache to .Knowledge/update-check.json
+- Claude: writes SessionStart version-check script to .claude/settings.json
+- Cursor: writes SessionStart version-check script to .cursor/hooks.json
+- Codex: writes SessionStart config-summary and version-check dual scripts to .codex/hooks.json
+- Rule-layer fallback: script cache and rule-layer updateCheck serve as mutual backup
+
+## M12 · Topic Metadata and Init Merge Checks
+
+- manifest-routing.json adds topicMetadata with primary/tags/confidence fields
+- f2s-topic-authoring rules add topicMetadata classification criteria (4 primary types, confidence rules)
+- init copySkills auto-removes old skill directories without deleting user-custom skills
+- init supports template-priority overwrite and merge validation
+- 6 skills renamed to kb-/doc- prefix convention
+- Redundant skills (f2s-coding-guide, f2s-doc-routing) removed
+
+## M11 · Knowledge Engineering Rules and Skill Skeletons
+
+- Added skill-authoring topic + matcher: unified SKILL.md skeleton, naming, and section order for templates/skills/f2s-*
+- Added f2s-kb-addRules skill (renamed from f2s-kb-capture): verbal rule capture, auto-decides new topic or merge into existing
+- Added f2s-topic-authoring rules: topic authoring guidelines covering naming, skeleton, topicDependencies, and large-feature split
+- Large-feature split strategy: main topic + sub-topic structure recommendation with split thresholds and exclusion rules
+
+## M10 · Documentation Capture Rules
+
+- f2s-doc-add (predecessor of f2s-kb-add) added multi-module detection to prevent merging unrelated modules into single output
+- Dual-repo milestone stock-doc added package naming rules (public @double-codeing/flow2spec vs internal path)
+- Global rules added negation-style constraint: use affirmative statements instead of "not X / non-X"
+
+## M9 · README and Task Capability Exposure
+
+- README added usage flow and command quick reference
+- README added task checklist capability and daily workflow description
+- English README synced with capability descriptions; removed misleading f2s-req-plan reference
+
+## M8 · Document Pipeline and Directory Boundaries
+
+- Docs directory reorganized, removed product-repo docs path coupling
+- Established doc-arch → doc-final → kb-build pipeline; drafts must not drive kb-build directly
+- Updated new-requirement skill chain; clarified each skill's role in the requirements→implementation→knowledge loop
+- .Knowledge/stock-docs and req-docs directory conventions de-coupled from product-specific paths
+
+## M7 · Four-Source Milestone Generation
+
+- Added f2s-doc-milestone skill: generates milestones from req-docs, git log, .task, and knowledge topics
+- Added project milestone template: defines stage structure, field conventions, and no-testing/acceptance constraint
+- Milestone stages record only feature/capability changes; engineering changes merged into feature stages
+
+## M6 · Codex Root AGENTS.md Discovery
+
+- flow2spec init codex writes complete rules to root AGENTS.md
+- .codex/AGENTS.md becomes a pointer, reducing risk of Codex missing rules
+- Established unified pattern: Claude/Cursor/Codex each write rules to their own config root
+
+## M5 · CLI Operations and Task Routing
+
+- CLI added version command: reads package.json and outputs current version
+- CLI added update command: self-update
+- Package template manifest includes f2s-task and f2s-req-plan routing entries and topicDependencies
+
+## M4 · Public Demo and Bilingual Materials
+
+- Added presentations/flow2spec-intro-public source files
+- Added sync-gh-pages.sh and GitHub Pages deployment
+- Added English slides and 6 English docs
+- README added bilingual entry points and demo links
+
+## M3 · .Knowledge Machine-Readable Routing
+
+- Introduced .Knowledge/ directory: manifest-routing.json, topics/, matchers/ structure
+- Established match→expand→verify→act knowledge consumption chain
+- Added f2s-knowledge-preflight rules: mandatory first-read of manifest-routing.json with gap-gate constraints
+- Added f2s-config-check rules: f2s-* skills must read flow2spec.config.json first
+- Added Karpathy full-platform coding behavior guidelines (f2s-karpathy-guidelines)
+
+## M2 · OpenSpec Removal and f2s Skills
+
+- Removed OpenSpec/opsx dependencies and change-flow organization
+- Fully converted to f2s self-owned skill workflow (skills/ directory structure established)
+- f2s-req-clarify and f2s-req-tech skills initialized
+- f2s-* skills established as the base execution units for knowledge and requirement pipelines
+
+## M1 · CLI Bootstrap and OpenSpec Workflow
+
+- Flow2Spec initialized as an installable CLI tool
+- Early AI collaboration organized around OpenSpec/opsx change flows
+- Basic init command supports Cursor/Claude/Codex config root writing
+
+## Pending Confirmation
+
+- .Knowledge/req-docs/ currently has no Markdown files; milestone evidence relies primarily on git
+- .task/active/lazy_loading_rule_optimization/ remains in progress and has not formed a delivered stage
+- Early 2026-02 to 2026-04 OpenSpec details are supported mainly by git commit messages, without req-docs or .task closure
