@@ -1,3 +1,5 @@
+[中文](../Flow2Spec基础介绍.md) | [English](./Flow2Spec-Introduction.md) · [项目首页](../../README.zh-CN.md) | [Project home](../../README.md)
+
 # Flow2Spec：让项目在开发中自然长出知识图谱
 
 <p><img src="./images/flow2spec-intro-cover.png" alt="Flow2Spec 封面" style="max-width:720px;width:100%;" /></p>

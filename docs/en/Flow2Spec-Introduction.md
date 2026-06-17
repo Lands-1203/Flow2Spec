@@ -1,4 +1,4 @@
-[中文](../Flow2Spec基础介绍.md) | [English](./Flow2Spec-Introduction.md)
+[中文](../Flow2Spec基础介绍.md) | [English](./Flow2Spec-Introduction.md) · [项目首页](../../README.zh-CN.md) | [Project home](../../README.md)
 
 # Flow2Spec: Let Projects Naturally Grow a Knowledge Graph During Development
 

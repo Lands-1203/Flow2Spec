@@ -7,6 +7,8 @@
 
 🎬 **[Live Demo](https://lands-1203.github.io/Flow2Spec/)** (13-slide HTML PPT, `←` `→` to navigate, `S` for presenter mode)
 
+📖 **[Flow2Spec Introduction](./docs/en/Flow2Spec-Introduction.md)** · **[基础介绍（中文）](./docs/Flow2Spec基础介绍.md)** — long-form article: why Flow2Spec, knowledge graph vs project memory, with diagrams
+
 🔧 **Quick start**:
 
 ```bash
@@ -167,6 +169,13 @@ For the full command list, see [Usage Guide](./docs/en/usage-guide.md) · [Comma
 ---
 
 ## Documentation
+
+**Start here** — product narrative and diagrams:
+
+- [Flow2Spec Introduction](./docs/en/Flow2Spec-Introduction.md) (EN)
+- [Flow2Spec 基础介绍](./docs/Flow2Spec基础介绍.md) (中文)
+
+**Hands-on guides**
 
 ### English
 - [Usage Guide](./docs/en/usage-guide.md) — skill chains, config details

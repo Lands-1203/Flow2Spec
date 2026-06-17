@@ -7,6 +7,8 @@
 
 🎬 **[在线演示](https://lands-1203.github.io/Flow2Spec/)**（13 页 HTML PPT，`←` `→` 翻页，`S` 演讲者模式）
 
+📖 **[Flow2Spec 基础介绍](./docs/Flow2Spec基础介绍.md)** · **[Introduction (EN)](./docs/en/Flow2Spec-Introduction.md)** — 长文：为什么做 Flow2Spec、知识图谱 vs 项目记忆，含配图与流程图
+
 🔧 **快速体验**：
 
 ```bash
@@ -165,6 +167,13 @@ npx @double-codeing/flow2spec@latest init
 ---
 
 ## 详细文档
+
+**从这里开始** — 产品叙事与配图：
+
+- [Flow2Spec 基础介绍](./docs/Flow2Spec基础介绍.md)（中文）
+- [Flow2Spec Introduction](./docs/en/Flow2Spec-Introduction.md)（EN）
+
+**上手与参考**
 
 ### 中文
 - [使用说明](./docs/使用说明.md) — 技能链、配置详解
