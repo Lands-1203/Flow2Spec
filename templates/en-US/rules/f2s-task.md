@@ -27,7 +27,7 @@ When executing **`f2s-req-plan`** (or continuing a task matched by `linkedSkill:
 
 - It is **not constrained** by `changeTracking.feat` / `fix` / `implement`, but **must** maintain `.task/` according to this rule's "Task start / During execution / Interruption and session end / Task completion / New-session continuation" sections.
 - Skill **step 0** must `Read` this full rule (**Cursor/Claude**: `rules/f2s-task.*`; **Codex**: `.codex/topics/f2s-task.md`).
-- Disk writes, checkbox updates, archiving, and `user-todos.md` format **are governed by this rule**. The skill body must not omit `todo.json` or `user-todos.md`, and must not rewrite the archive directory naming (`<YYYYMMDD>-<task-name>`).
+- Disk writes, checkbox updates, archiving, and `user-todos.md` / `acceptance.md` format **are governed by this rule**. The skill body must not omit `todo.json` / `user-todos.md` / `acceptance.md`, and must not rewrite the archive directory naming (`<YYYYMMDD>-<task-name>`).
 
 ## Directory Structure
 
@@ -38,12 +38,14 @@ When executing **`f2s-req-plan`** (or continuing a task matched by `linkedSkill:
 │   └── <task-name>/
 │       ├── task.md                    <- checklist (execution steps)
 │       ├── context.md                 <- involved file paths and related material links
-│       └── user-todos.md              <- todos that the user must execute (database changes, environment config, etc.); see below
+│       ├── user-todos.md              <- todos that the user must execute (database changes, environment config, etc.); see below
+│       └── acceptance.md              <- acceptance checklist: generated after every task.md item is [x] and before archiving; see below
 └── completed/
     └── <YYYYMMDD>-<task-name>/
         ├── task.md
         ├── context.md
-        └── user-todos.md              <- archived with the task so acceptance can clear items one by one
+        ├── user-todos.md              <- archived with the task so acceptance can clear items one by one
+        └── acceptance.md              <- archived with the task for the user's final cross-check
 ```
 
 **Archive directory naming**: folder names under `completed/` are **`<YYYYMMDD>-<task-name>`** (**8-digit local calendar date first**, and `<task-name>` matches the `active/` name in snake_case for time sorting). **All new archives must use this format**. Existing legacy `<task-name>-<YYYYMMDD>` directories in the repository may remain and can be manually renamed when convenient.
@@ -98,6 +100,7 @@ When executing **`f2s-req-plan`** (or continuing a task matched by `linkedSkill:
 **Archive gate (self-check before moving directories)**:
 
 - Move the directory into `completed/` **if and only if** every item under "## Steps" in `task.md` that is related to this delivery is **`[x]`** (or items explicitly canceled by the user are explained under "## Notes", and the corresponding list item has been changed to `[x]` / deleted with a cancellation note).
+- After every `task.md` item is `[x]` and before moving the directory, `acceptance.md` **must** have already been created or updated (see "`acceptance.md` format and disk-write obligation" below). A missing `acceptance.md`, or one still containing only the placeholder note from task creation, fails the gate; archiving is forbidden.
 - If any `[ ]` remains: **do not** move `active` -> `completed/`, and **do not** remove the entry from `todo.json`; first return to "During execution" to finish the work or adjust the checklist, then archive.
 
 After the gate passes:
@@ -112,7 +115,7 @@ At the start of a new session, if `.task/todo.json` exists:
 
 1. Read all active tasks.
 2. Match the user's first message against each entry's `keywords`.
-3. If matched, show the remaining checklist. **If `user-todos.md` exists, summarize any user todo items still marked `- [ ]`**, and ask "An unfinished task was detected. Continue?"
+3. If matched, show the remaining checklist. **If `user-todos.md` exists, summarize any user todo items still marked `- [ ]`**; **if `acceptance.md` exists, report its current state** (placeholder / final; final form is required before archiving). Ask "An unfinished task was detected. Continue?"
 4. After the user confirms: **if `linkedSkill` is non-empty, first load the corresponding skill rule file (configuration-root `skills/<linkedSkill>/SKILL.md`) as execution context**, then continue according to the remaining steps in `task.md`. The skill's disk-write constraints, writing style rules, and self-check checklist all apply as they did on the first invocation.
 5. If there is no match, do not interrupt; respond normally.
 
@@ -147,6 +150,9 @@ At the start of a new session, if `.task/todo.json` exists:
 
 ## User Todo List
 - See `user-todos.md` in the same directory (items that the user must execute are centralized in that file; do not list them only in the conversation)
+
+## Acceptance
+- See `acceptance.md` in the same directory (generated after every `task.md` item is `[x]` and before archiving)
 ```
 
 ## `user-todos.md` Format and Disk-Write Obligation
@@ -183,6 +189,57 @@ At the start of a new session, if `.task/todo.json` exists:
 - [ ] After production release, write the actual version number back into this document's notes
 ```
 
+## `acceptance.md` Format and Disk-Write Obligation
+
+**Path**: `.task/active/<task-name>/acceptance.md` (after archiving: `.task/completed/<YYYYMMDD>-<task-name>/acceptance.md`). The filename **must be exactly** `acceptance.md`, kept in the same directory as `task.md` / `user-todos.md`.
+
+**Purpose**: after every `task.md` item is `[x]` and before archiving, the Agent distills the **acceptance checklist** based on what was actually delivered this round. The user can verify item by item that "this task is truly done." Responsibilities are **separated** from `user-todos.md`:
+
+| File | Who acts | Focus |
+| --- | --- | --- |
+| `task.md` | Agent | Progress checkboxes for implementation steps |
+| `user-todos.md` | User | **Todos**: things the Agent cannot do; the user must run them externally (database / platform / approval) |
+| `acceptance.md` | User | **Acceptance**: deliverables produced by the Agent this round; the user verifies they actually work |
+
+**Scope of effect**: generated for any task that uses `.task/` — both automatic mode (`changeTracking.feat` / `fix` / `implement`) and explicit mode (`f2s-req-plan`); not skill-specific.
+
+**Disk-write obligation**:
+
+1. **When creating a task** (after `f2s-task` "Task start" step 3.e): `acceptance.md` **may** be created at the same time with a placeholder note (e.g. "After every `task.md` item is `[x]`, the Agent fills in the acceptance checklist here"). **Do not** prewrite acceptance items before implementation; that would risk drifting from the final delivery.
+2. **During execution**: in principle **do not write**; if the delivery boundary materially shifts, add a one-line record under "## Notes" and consolidate when finalizing.
+3. **After every `task.md` item is `[x]` and before archiving** (**required**): the Agent compiles the formal acceptance checklist based on the actual changes; placeholder notes must be replaced by the final content. **This is the archive gate** (see "Task Completion").
+4. **Continuation**: when loading the task, `Read` this file and show the user the current state (placeholder / final).
+
+**Content shape**: a checklist of `- [ ]` items plus a verification method. Each item looks like:
+
+```markdown
+- [ ] <acceptance point: what was delivered> (verification: <which file to open / which command to run / which page to view>)
+```
+
+Group by delivery domain via second-level headings (e.g. `## Code`, `## Rules and knowledge base`, `## Task list itself`). **Do not** repeat the execution steps from `task.md`; **do not** move "user todos" from `user-todos.md` into this file.
+
+**Example structure**:
+
+```markdown
+# Acceptance Checklist
+
+> Compiled by the Agent; after verification the user may change the corresponding `- [ ]` to `- [x]`.
+
+## Code
+
+- [ ] `src/<module>/<file>.ts`: <change point> (verification: read the file / run `npm test -- <file>`)
+
+## Rules and knowledge base
+
+- [ ] `.Knowledge/topics/<topic>.md`: <added/revised description> (verification: open the file to confirm sections are complete)
+- [ ] `.Knowledge/manifest-routing.json`: <whether changed and why> (verification: read the corresponding field)
+
+## Task list itself
+
+- [ ] `.task/completed/<YYYYMMDD>-<task-name>/` directory complete: `task.md` / `context.md` / `user-todos.md` / `acceptance.md`
+- [ ] The entry in `todo.json` has been removed (or the file has been deleted if the array became empty)
+```
+
 ## Recommended Hook Configuration (Claude Code)
 
 Add this to the project's `.claude/settings.json` to inject active tasks into context before each file change:
@@ -208,3 +265,5 @@ Add this to the project's `.claude/settings.json` to inject active tasks into co
 - Do not batch-check checkboxes; they must be checked step by step.
 - Do not create a `.task/` directory when all of `changeTracking.feat` / `changeTracking.fix` / `changeTracking.implement` are `false` or missing (`f2s-req-plan` is not constrained by this).
 - In a task that already uses `.task/`, do not write "todos that the user must execute" **only** in the conversation or only in `task.md` without appending them to `user-todos.md` (when there are no todos, the file may keep a placeholder note).
+- Do not archive while `acceptance.md` is still a placeholder note or is missing; do not merge `user-todos.md` (user todos) and `acceptance.md` (user acceptance) into the same file.
+- Do not prewrite concrete acceptance items before implementation is finished (only a placeholder is allowed), to avoid drifting from the actual delivery.

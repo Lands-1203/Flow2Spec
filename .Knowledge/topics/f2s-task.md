@@ -25,19 +25,21 @@
 ├── active/<task-name>/
 │   ├── task.md                  ← checklist（执行步骤）
 │   ├── context.md               ← 涉及文件、文档链接
-│   └── user-todos.md            ← 须用户执行的代办（改库、配环境等）
+│   ├── user-todos.md            ← 须用户执行的代办（改库、配环境等）
+│   └── acceptance.md            ← 验收清单：task.md 全部 [x] 后、归档前生成
 └── completed/<YYYYMMDD>-<task-name>/
     ├── task.md
     ├── context.md
-    └── user-todos.md
+    ├── user-todos.md
+    └── acceptance.md
 ```
 
-用户代办**必须**落在与 `task.md` 同目录的 **`user-todos.md`**，细则见配置根 **`rules/f2s-task.*`**。
+用户代办**必须**落在与 `task.md` 同目录的 **`user-todos.md`**；归档前**必须**生成与 `task.md` 同目录的 **`acceptance.md`**（验收清单），二者职责分离：`user-todos.md` 管用户**代办**（Agent 做不了的事），`acceptance.md` 管用户**验收**（Agent 已做完的事是否真的可用）。细则见配置根 **`rules/f2s-task.*`**。
 
 ## 跨会话续作
 
 新会话开始时若存在 `todo.json`，规则自动将用户首条消息与各条目 `keywords` 匹配：
-- 命中 → 展示剩余 checklist，**摘要 `user-todos.md` 中未完成项（若有）**，加载 `linkedSkill` 对应技能文件作为执行上下文，提示是否继续
+- 命中 → 展示剩余 checklist，**摘要 `user-todos.md` 中未完成项（若有）**，**提示 `acceptance.md` 当前形态**（占位 / 已成稿），加载 `linkedSkill` 对应技能文件作为执行上下文，提示是否继续
 - 无命中 → 不打扰，正常响应
 
 ## 下一步

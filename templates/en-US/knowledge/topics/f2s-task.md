@@ -25,19 +25,21 @@ Change-tracking rules (`alwaysApply: true`). When the corresponding skill's `cha
 ├── active/<task-name>/
 │   ├── task.md                  ← checklist (execution steps)
 │   ├── context.md               ← related files and document links
-│   └── user-todos.md            ← todos the user must perform (database changes, environment setup, etc.)
+│   ├── user-todos.md            ← todos the user must perform (database changes, environment setup, etc.)
+│   └── acceptance.md            ← acceptance checklist: generated after every task.md item is [x] and before archiving
 └── completed/<YYYYMMDD>-<task-name>/
     ├── task.md
     ├── context.md
-    └── user-todos.md
+    ├── user-todos.md
+    └── acceptance.md
 ```
 
-User-side todos **must** be written to **`user-todos.md`** in the same directory as `task.md`; see configuration-root **`rules/f2s-task.*`** for details.
+User-side todos **must** be written to **`user-todos.md`** in the same directory as `task.md`; before archiving, **`acceptance.md`** in the same directory **must** be produced (the acceptance checklist). Their responsibilities are separated: `user-todos.md` tracks user-side **todos** (things the Agent cannot do), while `acceptance.md` tracks user-side **acceptance** (whether the Agent's deliverables actually work). See configuration-root **`rules/f2s-task.*`** for details.
 
 ## Cross-Session Resume
 
 If `todo.json` exists when a new session starts, the rule automatically matches the user's first message against each entry's `keywords`:
-- Hit -> show the remaining checklist, **summarize incomplete items in `user-todos.md` if any**, load the skill file corresponding to `linkedSkill` as execution context, and ask whether to continue
+- Hit -> show the remaining checklist, **summarize incomplete items in `user-todos.md` if any**, **report the current state of `acceptance.md`** (placeholder / final), load the skill file corresponding to `linkedSkill` as execution context, and ask whether to continue
 - No hit -> do not interrupt; respond normally
 
 ## Next Step

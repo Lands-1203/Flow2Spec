@@ -26,7 +26,7 @@ description: >
 
 - **不受** `changeTracking.feat` / `fix` / `implement` 限制，但 **必须** 按本规则「任务开始 / 执行中 / 中断与会话结束 / 任务完成 / 新会话续作」维护 `.task/`；
 - 技能 **步骤 0** 须 `Read` 本规则全文（**Cursor/Claude**：`rules/f2s-task.*`；**Codex**：`.codex/topics/f2s-task.md`）；
-- 落盘、打钩、归档、`user-todos.md` 格式 **以本规则为准**；技能正文不得省略 `todo.json` 或 `user-todos.md`，不得改写归档目录命名（`<YYYYMMDD>-<task-name>`）。
+- 落盘、打钩、归档、`user-todos.md` / `acceptance.md` 格式 **以本规则为准**；技能正文不得省略 `todo.json` / `user-todos.md` / `acceptance.md`，不得改写归档目录命名（`<YYYYMMDD>-<task-name>`）。
 
 ## 目录结构
 
@@ -37,12 +37,14 @@ description: >
 │   └── <task-name>/
 │       ├── task.md                    ← checklist（执行步骤）
 │       ├── context.md                 ← 涉及文件路径、相关资料链接
-│       └── user-todos.md              ← 须用户执行的代办（改库、配环境等），见下文
+│       ├── user-todos.md              ← 须用户执行的代办（改库、配环境等），见下文
+│       └── acceptance.md              ← 验收清单：task.md 全部 [x] 后、归档前生成，见下文
 └── completed/
     └── <YYYYMMDD>-<task-name>/
         ├── task.md
         ├── context.md
-        └── user-todos.md              ← 随任务一并归档，便于验收后逐项消项
+        ├── user-todos.md              ← 随任务一并归档，便于验收后逐项消项
+        └── acceptance.md              ← 随任务一并归档，便于用户最终核对
 ```
 
 **归档目录命名**：`completed/` 下文件夹名为 **`<YYYYMMDD>-<task-name>`**（**本地日历日期 8 位在前**，`<task-name>` 与 `active/` 下一致、为 snake_case；便于按时间排序）。**新归档一律使用本格式**；仓库中已有的旧式 `<task-name>-<YYYYMMDD>` 目录可保留，择机人工重命名即可。
@@ -97,6 +99,7 @@ description: >
 **归档门禁（须先于移动目录自检）**：
 
 - 将目录移入 `completed/` **当且仅当** `task.md` 的「## 步骤」下，与本次交付相关的条目**全部为 `[x]`**（或用户明确取消的项已在「## 备注」说明，且对应列表项已改为 `[x]` / 已删除该项并注明取消）。
+- `task.md` 全部 `[x]` 后、移动目录前，**必须**已生成或更新 `acceptance.md`（见下文「acceptance.md 格式与写盘义务」）；缺失 `acceptance.md` 或仍为创建任务时的占位说明 → 视为门禁未过，禁止归档。
 - 若仍存在 `[ ]`：**禁止**移动 `active` → `completed/`、**禁止**从 `todo.json` 删除该条目；应先回到「执行中」补完或改清单后再归档。
 
 完成上述门禁后：
@@ -111,7 +114,7 @@ description: >
 
 1. 读取全部活跃任务
 2. 将用户首条消息与各条目 `keywords` 匹配
-3. 命中则展示剩余 checklist，**若存在 `user-todos.md` 则摘要其中仍为 `- [ ]` 的用户代办**，并提示「检测到未完成任务，是否继续？」
+3. 命中则展示剩余 checklist，**若存在 `user-todos.md` 则摘要其中仍为 `- [ ]` 的用户代办**；**若存在 `acceptance.md` 则提示其当前形态**（占位 / 已成稿；归档前必须成稿）；提示「检测到未完成任务，是否继续？」
 4. 用户确认后：**若 `linkedSkill` 非空，先加载对应技能规则文件（配置根 `skills/<linkedSkill>/SKILL.md`）作为执行上下文**，再按 `task.md` 剩余步骤继续——技能的落盘约束、文风规则、自检清单全部生效，与首次调用一致
 5. 无命中则不打扰，正常响应
 
@@ -146,6 +149,9 @@ description: >
 
 ## 用户代办清单
 - 见同目录 `user-todos.md`（须用户执行的项统一写在该文件，勿仅在对话中罗列）
+
+## 验收
+- 见同目录 `acceptance.md`（task.md 全部 `[x]` 后、归档前生成）
 ```
 
 ## user-todos.md 格式与写盘义务
@@ -182,6 +188,57 @@ description: >
 - [ ] 生产发版后回写实际版本号到本文档备注
 ```
 
+## acceptance.md 格式与写盘义务
+
+**路径**：`.task/active/<task-name>/acceptance.md`（归档后位于 `.task/completed/<YYYYMMDD>-<task-name>/acceptance.md`）。**固定文件名** `acceptance.md`，与 `task.md` / `user-todos.md` 同目录。
+
+**用途**：Agent 在 `task.md` 全部 `[x]` 后、归档前，依据本次实际交付沉淀的**验收清单**：用户照单逐项核对就能确认「这次任务真的做完了」。与 `user-todos.md` **职责分离**：
+
+| 文件 | 谁在做 | 内容焦点 |
+| --- | --- | --- |
+| `task.md` | Agent | 实现步骤的进度 checkbox |
+| `user-todos.md` | 用户 | **代办**：Agent 做不了、必须用户在外部（库 / 平台 / 审批）执行的事 |
+| `acceptance.md` | 用户 | **验收**：本轮 Agent 已交付项，用户核对是否真的可用 |
+
+**生效范围**：凡使用 `.task/` 的任务均生成（自动模式 `changeTracking.feat` / `fix` / `implement` 命中、以及显式模式 `f2s-req-plan`）；不区分技能。
+
+**写盘义务**：
+
+1. **创建任务时**（`f2s-task`「任务开始」步骤 3.e 之后）：**可同时创建** `acceptance.md` 并写占位说明（如「task.md 全部 `[x]` 后由 Agent 在此填入验收清单」）；尚未实现时**不得**预先写入验收点，避免与最终交付脱节。
+2. **执行中**：原则上**不写**；若交付边界发生重大变化，可在「## 备注」一行记录，最终成稿时再统一整理。
+3. **task.md 全部 `[x]` 后、归档前**（**必写**）：Agent 基于本次实际改动整理为正式验收清单；占位说明须被替换为成稿。**这是归档门禁**（见「任务完成」）。
+4. **续作**：加载任务时 `Read` 本文件，向用户展示当前形态（占位 / 已成稿）。
+
+**内容形态**：可勾选 `- [ ]` 列表 + 验收方式。每项形如：
+
+```markdown
+- [ ] <验收点：交付了什么>（验收方式：<查看哪份文件 / 跑哪条命令 / 看哪个页面>）
+```
+
+按交付域分二级标题分组（如 `## 代码`、`## 规则与知识库`、`## 任务清单本体`）。**勿**重复列 `task.md` 的执行步骤；**勿**把 `user-todos.md` 中「用户代办」搬入此处。
+
+**示例结构**：
+
+```markdown
+# 验收清单
+
+> Agent 整理；用户核对后可将对应 `- [ ]` 改为 `- [x]`。
+
+## 代码
+
+- [ ] `src/<模块>/<文件>.ts`：<改动点>（验收方式：阅读该文件 / 跑 `npm test -- <文件>`）
+
+## 规则与知识库
+
+- [ ] `.Knowledge/topics/<topic>.md`：<新增/修订说明>（验收方式：打开该文件确认章节齐全）
+- [ ] `.Knowledge/manifest-routing.json`：<是否变更与原因>（验收方式：阅读对应字段）
+
+## 任务清单本体
+
+- [ ] `.task/completed/<YYYYMMDD>-<task-name>/` 目录齐全：`task.md` / `context.md` / `user-todos.md` / `acceptance.md`
+- [ ] `todo.json` 已删除对应条目（或文件已删除，若数组变空）
+```
+
 ## 推荐 Hook 配置（Claude Code）
 
 在项目 `.claude/settings.json` 中添加，每次文件变更前将活跃任务注入上下文：
@@ -207,3 +264,5 @@ description: >
 - 禁止批量勾选 checkbox（必须逐步勾选）
 - 禁止在 `changeTracking.feat` / `changeTracking.fix` / `changeTracking.implement` 均为 `false` 或字段不存在时创建 `.task/` 目录（`f2s-req-plan` 不受此约束）
 - 禁止在已使用 `.task/` 的任务中，将「须用户执行的代办」**仅**写在对话或仅写在 `task.md` 而**不**追加到 `user-todos.md`（无代办时文件可保持占位说明）
+- 禁止在 `acceptance.md` 仍为占位说明、或缺失该文件时归档；禁止把 `user-todos.md`（用户代办）与 `acceptance.md`（用户验收）合并写入同一文件
+- 禁止在任务实现完成前预先写入具体验收点（仅可写占位说明），避免与实际交付脱节

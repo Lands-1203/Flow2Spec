@@ -33,18 +33,34 @@
 ├── active/<task-name>/
 │   ├── task.md               ← checklist（步骤级 checkbox）
 │   ├── context.md            ← 涉及文件、req-docs/stock-docs 链接
-│   └── user-todos.md         ← 须用户执行的代办（执行 SQL、改配置等）
+│   ├── user-todos.md         ← 须用户执行的代办（执行 SQL、改配置等）
+│   └── acceptance.md         ← 验收清单（task.md 全部 [x] 后、归档前生成）
 └── completed/<YYYYMMDD>-<task-name>/
     ├── task.md
     ├── context.md
-    └── user-todos.md
+    ├── user-todos.md
+    └── acceptance.md
 ```
 
-- **`user-todos.md`**：与 `task.md` 同目录、固定文件名；Agent 将「仅用户可完成」的项追加写入，作为跨会话交接面；完整约定见 **`rules/f2s-task.*`**。
+- **`user-todos.md`** 与 **`acceptance.md`**：与 `task.md` 同目录、固定文件名；详见下文 **3.1**。完整约定见 **`rules/f2s-task.*`**。
 - **任务名**：`snake_case`，简短描述变更内容。
 - **归档目录名**：`completed/` 下为 **`<YYYYMMDD>-<task-name>`**（**日期 8 位在前**）；新归档一律使用本格式，旧式 `<task-name>-<YYYYMMDD>` 可保留并择机重命名。
 - **归档**：完成后将 `active/<task-name>/` 整体移至 `completed/<YYYYMMDD>-<task-name>/`，并从 `todo.json` 删除对应条目；若数组为空可删除 `todo.json`。
 - **子任务与 Git worktree**：`subAgent=true` 或并行子任务若使用 **`git worktree`**（或 IDE 等价隔离目录），须在子任务结束或主 agent 合并后 **`git worktree remove`** 并 `git worktree list` 自检，禁止长期遗留孤儿 worktree；细则见配置根 **`rules/f2s-flow2spec-unified-entry.*`**。
+
+### 3.1 `user-todos.md` 与 `acceptance.md`：用户侧两份文件，职责分离
+
+| 文件 | 谁在做 | 内容焦点 | 写入时机 |
+| --- | --- | --- | --- |
+| `task.md` | Agent | 实现步骤的进度 checkbox | 任务全生命周期 |
+| **`user-todos.md`** | 用户 | **代办**：Agent 做不了、必须用户在外部（库 / 平台 / 审批）执行的事 | 创建任务时建占位；执行中**追加** |
+| **`acceptance.md`** | 用户 | **验收**：本轮 Agent 已交付项，用户核对是否真的可用 | 创建任务时可建占位；`task.md` 全部 `[x]` 后、归档前**成稿**（归档门禁） |
+
+要点：
+
+- 两者**不合并**到同一文件；`user-todos.md` 是「**还**没做的、要你来做」，`acceptance.md` 是「Agent **已经**做完的、请你核对」。
+- `acceptance.md` 在实现完成前**不预写**验收点，避免与实际交付脱节。
+- 完整格式、示例与禁止项见配置根 **`rules/f2s-task.*`**。
 
 ---
 
