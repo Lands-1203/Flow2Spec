@@ -14,13 +14,13 @@ Over the past year, many AI coding tools have been solving the same problem: **h
 
 That matters, of course. But talking about "project memory," "context management," and "rule files" alone is no longer enough.
 
-Many open-source projects are already doing similar things: writing an `AGENTS.md` / `CLAUDE.md`, adding rules, creating a docs directory, having the Agent read project documentation first, or connecting a vector store for retrieval.
+Many open-source projects are already doing similar things: writing an `AGENTS.md` / `CLAUDE.md`, adding a set of rules, creating a docs directory, having the Agent read project documentation first, or wiring up a vector store for retrieval.
 
 These approaches help, but what I really want to solve isn't "stuffing a bunch of context into the AI at startup." What I want to solve is:
 
 **Can project knowledge be continuously accumulated, automatically routed, continuously validated, and evolve alongside the code — throughout the actual development process?**
 
-That's Flow2Spec. One-line summary: **Flow2Spec is an Agent engineering framework that lets a project naturally grow a knowledge graph during development.**
+That's Flow2Spec. In one line: **Flow2Spec is an Agent engineering framework that lets a project naturally grow a knowledge graph during development.**
 
 ---
 
@@ -28,9 +28,9 @@ That's Flow2Spec. One-line summary: **Flow2Spec is an Agent engineering framewor
 
 <p><img src="../images/flow2spec-intro-02-memory.png" alt="Why memory alone isn't enough" style="max-width:720px;width:100%;" /></p>
 
-After many projects integrate AI, they quickly run into a paradox: you want the AI to understand the project better, but the more context you give it, the more likely it is to miss things, go off track, or forget what matters.
+After projects integrate AI, they quickly run into a paradox: you want the AI to understand the project better, but the more context you give it, the more likely it is to miss things, go off track, or forget what matters.
 
-So people keep adding rules: read this file first, then that directory, don't touch this module, that interface has legacy compatibility, remember to update the docs after changes… Eventually the context becomes another burden. It looks like a knowledge base, but it's really more like an ever-expanding instruction manual.
+So people keep adding rules: read this file first, then that directory, don't touch this module, that interface has legacy compatibility, remember to update the docs after changes… Eventually the context becomes another burden. It looks like a knowledge base, but it's really more like an ever-growing instruction manual.
 
 Flow2Spec's position is: **project knowledge can't just be "written down" — it needs to be routable, composable, verifiable, and continuously updated.**
 
@@ -43,14 +43,18 @@ Flow2Spec's position is: **project knowledge can't just be "written down" — it
 Flow2Spec doesn't ask you to do a massive documentation effort upfront. The recommended approach is:
 
 1. Run `flow2spec init` to initialize an empty skeleton.
+
 2. Use `f2s-doc-arch` to generate an architecture overview and bring it into the knowledge base.
+
 3. When real requirements arrive, have the Agent route through existing knowledge first.
-4. After implementation, use `f2s-kb-sync` to sync confirmed facts back into the knowledge base.
+
+4. After a capability ships, use `f2s-kb-sync` to sync confirmed facts back into the knowledge base.
+
 5. The next time a similar requirement comes up, draw from this knowledge incrementally.
 
 **Knowledge isn't built all at once. It grows through requirements clarification, technical design, code implementation, bug fixing, knowledge sync, and committing code.**
 
-This is what sets Flow2Spec apart from ordinary "project memory files": an ordinary solution hands the Agent a manual; Flow2Spec maintains an evolvable knowledge graph in the repository's `.Knowledge/` — diffable, reviewable, and committed alongside code.
+This is what sets Flow2Spec apart from ordinary "project memory files": an ordinary solution hands the Agent a manual; Flow2Spec maintains an evolvable knowledge graph in the repository's `.Knowledge/` — diffable, reviewable, committed alongside code.
 
 ---
 
@@ -66,7 +70,7 @@ Flow2Spec's knowledge base has a clear interface structure:
   matchers/               # Keyword shards
   topics/                 # Topic summaries
   stock-docs/             # Long-form docs for shipped capabilities
-  req-docs/               # Requirements and technical design docs
+  req-docs/               # Requirements / technical design docs
 
 ```
 
@@ -76,7 +80,7 @@ The Agent's reading order isn't free-form — it follows the protocol:
 manifest-routing.json
   -> matcher shard (single file pointed to by matcherPath)
   -> match (primary candidate)
-  -> expand (dependency topics first, then primary topic; keep secondary candidate)
+  -> expand (dependency topics first, then primary; keep secondary candidate)
   -> verify (gap check)
       -> sufficient: act
       -> insufficient: stock-docs / req-docs (on demand)
@@ -88,7 +92,7 @@ Figure 1: Incremental Knowledge Retrieval
 
 ```mermaid
 flowchart LR
-  subgraph entry["Routing Entry"]
+  subgraph entry["Routing entry"]
     direction LR
     A["manifest-routing.json<br/>Machine-readable manifest"] --> B["matchers<br/>Keyword shards"]
   end
@@ -109,7 +113,7 @@ flowchart LR
 
 The value of this structure: **the knowledge base doesn't expose "files" to the Agent — it exposes an interface for "how to find the right knowledge."**
 
-`manifest-routing.json` tells the Agent what topics exist; `matchers/*.json` tells the Agent which topics a task might match; `topics/*.md` gives short summaries and hard constraints; `topicDependencies` tells the Agent which prerequisite rules must be read together; `stock-docs/` and `req-docs/` are only drilled into when needed.
+`manifest-routing.json` tells the Agent what topics exist; `matchers/*.json` tells the Agent which topics a requirement might match; `topics/*.md` gives short summaries and hard constraints; `topicDependencies` tells the Agent which prerequisite rules must be read together; `stock-docs/` and `req-docs/` are only drilled into when needed.
 
 ---
 
@@ -121,9 +125,9 @@ Flow2Spec's retrieval model can be summarized in four steps: **match → expand 
 
 **match**: The Agent reads `manifest-routing.json`, then reads the corresponding matcher shard for the task. It doesn't traverse the entire knowledge base — it narrows down candidates first.
 
-**expand**: After hitting the primary topic, the Agent continues reading dependency topics via `topicDependencies`, avoiding partial rule coverage. For example, a feature might depend on common config rules, auth rules, and a specific business module's constraints.
+**expand**: After hitting the primary topic, the Agent continues reading dependency topics via `topicDependencies`, avoiding partial rule coverage. For example, a feature might depend on common config rules, auth rules, and a specific business module's constraints all at once.
 
-**verify**: Hitting a topic doesn't guarantee sufficient knowledge. Flow2Spec requires the Agent to check before acting: does the topic cover the user's question, are dependencies missing, is a long-form doc needed, should the user be asked first? This turns "looks like a match" into "confirmed ready to act."
+**verify**: Hitting a topic doesn't guarantee sufficient knowledge. Flow2Spec requires the Agent to check before acting: does the topic actually cover the user's question, are key dependencies missing, is a long-form doc needed, should the user be asked first? This turns "looks like a match" into "confirmed ready to act."
 
 **act**: Only when knowledge coverage is sufficient and boundaries are clear does the Agent proceed to implement, modify, or commit. If confidence is low, it clarifies first — it doesn't forge ahead.
 
@@ -133,10 +137,12 @@ Flow2Spec's retrieval model can be summarized in four steps: **match → expand 
 
 <p><img src="../images/flow2spec-intro-06-dependencies.png" alt="Multi-dependency capability" style="max-width:720px;width:100%;" /></p>
 
-In real projects, many errors happen because the Agent read only a local piece of knowledge and missed a prerequisite constraint:
+In real projects, many errors happen not because the AI didn't read knowledge at all, but because it read only a local piece and missed a prerequisite constraint:
 
 - Changing a feature while reading the business topic, but missing commit rules
-- Generating a technical design while reading requirements, but missing req-docs / stock-docs boundary rules
+
+- Generating a technical design while reading requirements, but missing req\-docs / stock\-docs boundary rules
+
 - Modifying config while reading the module description, but missing config switch defaults
 
 Flow2Spec makes these dependencies explicit in the routing layer. A topic can declare which other topics it depends on; when the Agent hits a primary topic, it expands dependencies first. This isn't just "read a few more files" — it transforms project knowledge from flat documents into a graph with edges:
@@ -163,7 +169,9 @@ Two things kill a knowledge base: going stale, and being wrong. Flow2Spec doesn'
 A typical scenario: the user asks a business detail; the Agent checks the knowledge base, finds topic coverage but not enough detail, then drills into source code for a more accurate fact. At this point Flow2Spec shouldn't just answer and move on — it also needs to determine:
 
 - Has this fact already been written into the topic?
+
 - If not (or coverage isn't detailed enough), should it suggest `f2s-kb-distill` to extract this round's Q&A into the knowledge base?
+
 - If knowledge appears covered, can it prove the coverage source? If not, it can't stay silent.
 
 This is the "knowledge base feedback closing step." **It ensures new knowledge found in source code doesn't just live in this one chat session — it feeds back into the knowledge base.**
@@ -177,12 +185,14 @@ This is the "knowledge base feedback closing step." **It ensures new knowledge f
 When the user says something, should the Agent answer, discuss, clarify, or jump straight into a development workflow?
 
 - "Is this approach feasible?" → discussion, not automatic coding
+
 - "Fix this bug" → enter the fix workflow
-- "I want a new feature — help me clarify requirements first" → enter requirements clarification, not immediate implementation
 
-Flow2Spec has an `intentRecognition` switch. When enabled, the Agent uses intent recognition rules: high-confidence new feature → feat workflow; high-confidence bug fix → fix workflow; unclear requirements → req-clarify; just asking or discussing → stay in normal conversation.
+- "I want a new capability — help me clarify requirements first" → enter requirements clarification, not immediate implementation
 
-After being validated across real projects, **intent recognition is now stable enough that we recommend enabling it by default** and letting the Agent route automatically in most cases. You can still type `f2s-req-clarify`, `f2s-kb-feat`, `f2s-kb-fix`, etc. explicitly at any time to override the automatic decision.
+Flow2Spec has an `intentRecognition` switch. When enabled, the Agent uses intent recognition rules to assist routing: high-confidence new capability → feat workflow; high-confidence bug fix → fix workflow; unclear requirements → req\-clarify; mere asking or discussing → stay in normal conversation.
+
+After validation across real projects over time, **intent recognition is now stable enough that we recommend enabling it by default**, letting the Agent route automatically in most scenarios; you can still type `f2s-req-clarify`, `f2s-kb-feat`, `f2s-kb-fix`, etc. explicitly at any time to override the automatic decision. We also recommend using `f2s-*` skills explicitly more often — getting familiar with them is the most efficient way to use Flow2Spec.
 
 ---
 
@@ -195,7 +205,7 @@ With Flow2Spec, a requirement might flow like this:
 ```Plain Text
 User submits requirement
   -> Explicit f2s-* skill / intentRecognition assists
-  -> f2s-req-clarify until no ambiguity
+  -> f2s-req-clarify clarifies until no ambiguity
   -> f2s-req-tech generates technical design
   -> Agent reads knowledge base incrementally
   -> Implements code
@@ -211,7 +221,7 @@ Figure 2: Knowledge Graph Growing Through Development
 flowchart TD
   A[User submits requirement] --> B{Explicit f2s-* skill<br/>or intentRecognition}
   B -->|unclear requirement| C[f2s-req-clarify<br/>Requirements clarification]
-  B -->|new feature| D[f2s-kb-feat<br/>Add capability]
+  B -->|new capability| D[f2s-kb-feat<br/>Add capability]
   B -->|bug fix| E[f2s-kb-fix<br/>Fix issue]
   B -->|large requirement / needs design| F[f2s-req-tech<br/>Technical design]
   C --> F
@@ -228,7 +238,7 @@ flowchart TD
   M --> G
 ```
 
-Every step leaves a trackable asset: requirements in `req-docs/`, shipped knowledge in `stock-docs/`, topic summaries in `topics/`, routing in `manifest-routing.json`, task progress in `.task/`.
+Every step in this chain leaves a trackable asset: requirements in `req-docs/`, shipped knowledge in `stock-docs/`, topic summaries in `topics/`, routing in `manifest-routing.json`, task progress in `.task/`.
 
 **Flow2Spec isn't about making the AI answer better in a single session — it's about turning each development process into an incremental update to the project's knowledge graph.**
 
@@ -240,13 +250,13 @@ Every step leaves a trackable asset: requirements in `req-docs/`, shipped knowle
 
 **Task progress persistence**: When `changeTracking` is enabled, the Agent writes a task checklist to `.task/` during feature development or design implementation. New sessions resume from the on-disk task — no need to ask "where did we stop?"
 
-**Technical designs don't follow a rigid template**: `f2s-req-tech` selects structure based on the current requirement, rather than mechanically filling every section — avoiding a frontend change generating a template full of database chapters.
+**Technical designs don't follow a rigid template**: `f2s-req-tech` selects structure based on the current requirement, rather than mechanically filling every section — so a frontend change doesn't generate a template full of database chapters.
 
-**Multi-Agent orchestration and verification**: Complex tasks can be split to sub-Agents via `subAgent`. When `switchAgentVerification` is enabled, writer and verifier are separated, reducing the risk of an Agent writing, verifying, and approving its own work.
+**Multi-Agent orchestration and verification**: Complex tasks can be split to sub-Agents via `subAgent`. When `switchAgentVerification` is enabled, writer and verifier are separated, reducing the risk of a single Agent writing, verifying, and approving its own work.
 
-**Pre-commit knowledge coverage check**: `f2s-git-commit` checks diff, conflict markers, and staging scope before committing, and checks whether changes require a knowledge base sync — catching "changed code, forgot to update knowledge" before commit.
+**Pre-commit knowledge coverage check**: `f2s-git-commit` checks the diff, conflict markers, and staging scope before committing, and checks whether the round's changes require a knowledge base sync — catching "changed code, forgot to update knowledge" before the commit lands.
 
-**Template and routing upgrade detection**: At startup, Flow2Spec checks whether `.Knowledge/` is behind the npm package version and prompts `f2s-kb-upgrade` to keep the project aligned with the latest structure and rules.
+**Template and routing upgrade detection**: At startup, Flow2Spec checks whether `.Knowledge/` is behind the npm package version and, if so, prompts `f2s-kb-upgrade` to keep the project's knowledge structure aligned with the tool version.
 
 ---
 
@@ -281,9 +291,9 @@ flowchart LR
 
 Ordinary knowledge bases focus on: where to put documents, how to retrieve them, how to summarize them.
 
-Flow2Spec focuses more on: which topic to read when a requirement arrives, what dependencies exist between topics, whether current knowledge is sufficient to act, whether to feed knowledge back after a source code dive, whether user intent should trigger a workflow, whether knowledge updates alongside code changes, and whether knowledge coverage was checked before committing.
+Flow2Spec focuses more on: which topic to read when a requirement arrives, what dependencies exist between topics, whether current knowledge is sufficient to act, whether to feed knowledge back after a source code dive, whether user intent should trigger a workflow, whether knowledge gets updated alongside code changes, and whether knowledge coverage was checked before committing.
 
-This is why Flow2Spec includes `.Knowledge/`, `.task/`, `f2s-*` skills, Agent rules, and `flow2spec.config.json` — they aren't separate pieces, but a protocol organized around the development loop.
+This is why Flow2Spec includes `.Knowledge/`, `.task/`, `f2s-*` skills, Agent rules, and `flow2spec.config.json` together — they aren't separate pieces, but a protocol organized around the development loop.
 
 ---
 
@@ -309,10 +319,10 @@ Flow2Spec raises coverage through five mechanisms:
 1. Routing layer: matcher finds the primary topic
 2. Dependency expansion: `topicDependencies` expands dependency topics
 3. Sync confirmation: `f2s-kb-sync` outputs an update outline for user confirmation
-4. Q&A closing: after a source code drill-down, prompts supplement if gaps are found
+4. Q&A closing: after a source code drill-down in normal Q&A, prompts a supplement if gaps are found
 5. Commit gate: `f2s-git-commit` checks knowledge coverage before commit
 
-**Example**: If you changed an "activity lottery count" feature, the update shouldn't just say "the lottery API changed" — it might also need:
+**Example**: when changing the "activity lottery count" feature, the knowledge update shouldn't just say "the lottery API changed" — it might also need to sync:
 
 - Activity business topic: how lottery counts are calculated
 - Data model topic: which fields record claimed / remaining counts
@@ -325,11 +335,11 @@ Flow2Spec raises coverage through five mechanisms:
 
 **Q: How does Flow2Spec solve the problem of Agents forgetting rules?**
 
-Two sides: **usage side** and **design side**.
+Two sides.
 
 **Usage side**: Rules aren't stuffed into one giant file — they're split into a routable, dependency-aware structure: entry rules in per-IDE config, business knowledge in `topics`, matching keywords in `matchers`, dependencies in `topicDependencies`, long-form docs in `stock-docs` / `req-docs`. The Agent doesn't act from memory — it re-fetches rules via `match → expand → verify → act` every time.
 
-**Design side**: Five layers of constraints intercept "rules exist but aren't followed":
+**Design side**: Five layers of constraints intercept "rules exist but aren't followed" at different stages:
 
 1. Entry layer: declare reading order and prohibitions
 2. Config layer: read config switches before executing any skill
@@ -365,7 +375,7 @@ stock-docs/
 
 The Agent reads "activity-overview" first to judge relevance; task state machine questions → "activity-task-rules"; table field questions → "activity-data-model".
 
-This avoids topics too large to read thoroughly, or trigger keywords too broad that one topic matches everything.
+This avoids topics too large to read thoroughly, or trigger keywords so broad that one topic matches every requirement.
 
 ---
 
@@ -389,7 +399,7 @@ In short: **single Q&A → distill (auto), new module bulk import → add, perio
 
 <p><img src="../images/flow2spec-intro-13-quick-start.png" alt="What projects and quick start" style="max-width:720px;width:100%;" /></p>
 
-**Best for**: medium to large business projects, long-lived codebases, multi-person teams with many rules, teams using Cursor / Claude Code / Codex, and projects where you want AI to participate in maintaining project knowledge — not just read docs.
+**Best for**: medium to large business projects, long-lived codebases, multi-person teams with many rules, teams using Cursor / Claude Code / Codex regularly, and projects where you want AI to participate in maintaining project knowledge — not just read docs.
 
 **May not fit**: one-off scripts or very small personal projects (\< 5000 lines, a README is enough).
 
@@ -410,8 +420,8 @@ Common workflows:
 /f2s-kb-feat       Add capability and sync knowledge
 /f2s-kb-fix        Fix issue and correct knowledge
 /f2s-kb-add <path> Parse an existing module into the knowledge base
-/f2s-kb-distill    Extract this round's Q&A into the KB (auto-decides new topic vs. supplementing existing)
-/f2s-kb-sync       Global / batch sync of shipped capabilities into the knowledge base
+/f2s-kb-sync       Global / batch sync of shipped capabilities into the KB
+/f2s-kb-distill    Extract this round's Q&A into the KB (auto-decides new topic or supplement)
 /f2s-git-commit    Pre-commit check and generate commit message
 
 ```
