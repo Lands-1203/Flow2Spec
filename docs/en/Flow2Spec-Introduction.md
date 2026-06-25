@@ -163,8 +163,7 @@ Two things kill a knowledge base: going stale, and being wrong. Flow2Spec doesn'
 A typical scenario: the user asks a business detail; the Agent checks the knowledge base, finds topic coverage but not enough detail, then drills into source code for a more accurate fact. At this point Flow2Spec shouldn't just answer and move on — it also needs to determine:
 
 - Has this fact already been written into the topic?
-- If not, should it suggest `f2s-kb-sync`?
-- If the entire module isn't in the knowledge base, should it suggest `f2s-kb-add <path>`?
+- If not (or coverage isn't detailed enough), should it suggest `f2s-kb-distill` to extract this round's Q&A into the knowledge base?
 - If knowledge appears covered, can it prove the coverage source? If not, it can't stay silent.
 
 This is the "knowledge base feedback closing step." **It ensures new knowledge found in source code doesn't just live in this one chat session — it feeds back into the knowledge base.**
@@ -183,7 +182,7 @@ When the user says something, should the Agent answer, discuss, clarify, or jump
 
 Flow2Spec has an `intentRecognition` switch. When enabled, the Agent uses intent recognition rules: high-confidence new feature → feat workflow; high-confidence bug fix → fix workflow; unclear requirements → req-clarify; just asking or discussing → stay in normal conversation.
 
-For now, **explicit `f2s-*` skills are recommended** — type `f2s-req-clarify`, `f2s-kb-feat`, `f2s-kb-fix` directly. Explicit commands are more stable than automatic intent recognition, and they make it easier to know which workflow you're in.
+After being validated across real projects, **intent recognition is now stable enough that we recommend enabling it by default** and letting the Agent route automatically in most cases. You can still type `f2s-req-clarify`, `f2s-kb-feat`, `f2s-kb-fix`, etc. explicitly at any time to override the automatic decision.
 
 ---
 
@@ -338,7 +337,7 @@ Two sides: **usage side** and **design side**.
 4. Skill layer: each skill defines pre-checks, confirmation points, and closing steps
 5. Gate layer: gates at multiple nodes — checklist before task archival, outline confirmation before knowledge writes, mandatory closing self-check after Q&A source dives, diff and knowledge coverage check before commit
 
-Two typical scenarios show how these layers work: preventing intent misfire (user still clarifying — Agent must not jump to implementation); and preventing knowledge from not being fed back after a source code answer (must determine `f2s-kb-add` or `f2s-kb-sync` — silent skipping not allowed).
+Two typical scenarios show how these layers work: preventing intent misfire (user still clarifying — Agent must not jump to implementation); and preventing knowledge from not being fed back after a source code answer (must determine whether `f2s-kb-distill` is needed to extract this round's Q&A into the knowledge base — silent skipping not allowed).
 
 Flow2Spec's goal isn't to completely eliminate forgetting — it's to make "bypassing rules" harder at every stage.
 
@@ -372,12 +371,15 @@ This avoids topics too large to read thoroughly, or trigger keywords too broad t
 
 **Q: What if the knowledge base doesn't cover the current module?**
 
-When the Agent finds an answer in source code but the knowledge base doesn't cover it, it shouldn't just give you the answer — it should suggest the next command:
+Flow2Spec offers three complementary commands, distinguished by who triggers them and at what granularity:
 
-| Scenario | Command | When to use |
-| --- | --- | --- |
-| Module not in KB | `f2s-kb-add <module-path>` | Parse and bring an entire module in |
-| In KB but details missing | `f2s-kb-sync <topic or capability>` | Sync newly confirmed facts |
+`f2s-kb-distill` is **auto-suggested by the Agent**: after a single Q&A drills into source code, it extracts this round's Q&A into the KB; internally the skill decides whether to create a new topic or supplement an existing one based on drill-down depth and topic hits.
+
+`f2s-kb-add <path or capability>` is **user-initiated**: use it when you want to parse an **entire module / legacy capability** into the KB in one go — accepts a path or multi-file aggregation, ideal for never-indexed blocks of code.
+
+`f2s-kb-sync` is **user-initiated**: used for **global / batch sync** of shipped capabilities; supports zero-input inference and outputs an update outline before writing — ideal for periodic checkup-style reinforcement.
+
+In short: **single Q&A → distill (auto), new module bulk import → add, periodic batch sync of shipped capabilities → sync**.
 
 > Every time you "find an answer in source code," it can become a knowledge base improvement.
 
@@ -398,7 +400,7 @@ npx @double-codeing/flow2spec@latest init
 
 ```
 
-When getting started, use explicit `f2s-*` skills first; enable `intentRecognition` auto-routing once you're familiar with the workflows.
+When getting started, we recommend typing `f2s-*` skills explicitly first to get familiar with them — it's the most efficient way to learn Flow2Spec. Enabling `intentRecognition` by default then lets the Agent route common tasks automatically.
 
 Common workflows:
 
@@ -408,7 +410,8 @@ Common workflows:
 /f2s-kb-feat       Add capability and sync knowledge
 /f2s-kb-fix        Fix issue and correct knowledge
 /f2s-kb-add <path> Parse an existing module into the knowledge base
-/f2s-kb-sync       Sync newly confirmed facts
+/f2s-kb-distill    Extract this round's Q&A into the KB (auto-decides new topic vs. supplementing existing)
+/f2s-kb-sync       Global / batch sync of shipped capabilities into the knowledge base
 /f2s-git-commit    Pre-commit check and generate commit message
 
 ```
