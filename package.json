@@ -18,8 +18,7 @@
     "cli.js",
     "lib",
     "templates",
-    "README.md",
-    "docs"
+    "README.md"
   ],
   "publishConfig": {
     "access": "public",
