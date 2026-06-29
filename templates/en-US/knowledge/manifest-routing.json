@@ -1,6 +1,6 @@
 {
   "version": "3.1.5",
-  "templateRevision": 1,
+  "projectRev": 1,
   "knowledgeRoot": ".Knowledge",
   "matcherKey": "matcherId",
   "sourceOfTruth": ".Knowledge/manifest-routing.json",

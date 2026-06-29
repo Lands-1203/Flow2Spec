@@ -15,16 +15,16 @@ description: Knowledge-base template upgrade skill (this SKILL only): **V1 flow 
 - This skill completes **directory, template placeholder, and routing-structure alignment under the package version**. If the user says "write the new capability into the knowledge base", guide them to **`f2s-kb-sync` / `f2s-kb-add`** etc., not just `f2s-kb-upgrade`.
 - This skill is responsible for auditing existing `topicMetadata`: `primary` / `tags` are only for governance, audit, inventory, and reading expectations; they do not participate in route matching or execution requirements. Execution requirements still come from `AGENTS.md`, rules, skills, and topic bodies.
 
-## Package-side Release Discipline (`templateRevision` MUST be bumped correctly)
+## Package-side Release Discipline (`projectRev` MUST be bumped correctly)
 
-**Field location**: root-level integer field `templateRevision` in `templates/{zh-CN,en-US}/knowledge/manifest-routing.json` (starts at `1`).
+**Field location**: root-level integer field `projectRev` in `templates/{zh-CN,en-US}/knowledge/manifest-routing.json` (starts at `1`).
 
 **Field write semantics (read first)**:
-- **Package side**: maintainers manually bump per the rules below (the package template's own `templateRevision` is always the latest).
+- **Package side**: maintainers manually bump per the rules below (the package template's own `projectRev` is always the latest).
 - **Project side** (written into `.Knowledge/manifest-routing.json`):
   - **First init**: project `.Knowledge/manifest-routing.json` does not exist -> `init` writes the template value, equivalent to baselined-on-arrival.
-  - **Subsequent init**: project `.Knowledge/manifest-routing.json` already exists -> `init` **no longer overwrites this field** (project value preserved); the field is only written by this skill's full flow tail (see step 3b "Write back `templateRevision`").
-  - This gives "project-side `templateRevision`" a clean meaning: **"the package-template revision this project has been baselined to"** — not "what the last init carried over".
+  - **Subsequent init**: project `.Knowledge/manifest-routing.json` already exists -> `init` **no longer overwrites this field** (project value preserved); the field is only written by this skill's full flow tail (see step 3b "Write back `projectRev`").
+  - This gives "project-side `projectRev`" a clean meaning: **"the package-template revision this project has been baselined to"** — not "what the last init carried over".
 
 **Must bump (at least `+1` per release)** when any of the following changes:
 - Any body change / addition / deletion / rename of `templates/<locale>/knowledge/topics/<topic>.md`;
@@ -122,7 +122,7 @@ Both conditions are met:
 
 ### Step 2: Execute Command (Run Shell for User)
 
-**Before step 2 starts**: read the project-side **`.Knowledge/manifest-routing.json`** `templateRevision` field (**record as `null` if missing**), store it as **`projectRev`**. `projectRev` means **"the package-template revision this project has been baselined to"** (written by this skill's full-flow tail after steps 3 / 3a / 3b; on first init the `init` command writes the template value as the baseline). **`init` no longer overwrites this field when manifest already exists**, so `projectRev` reflects the version this project most recently completed full-flow alignment to — not "what the last init carried over". `projectRev` will be compared with `pkgRev` in step 2c.
+**Before step 2 starts**: read the project-side **`.Knowledge/manifest-routing.json`** `projectRev` field (**record as `null` if missing**), store it as **`projectRev`**. `projectRev` means **"the package-template revision this project has been baselined to"** (written by this skill's full-flow tail after steps 3 / 3a / 3b; on first init the `init` command writes the template value as the baseline). **`init` no longer overwrites this field when manifest already exists**, so `projectRev` reflects the version this project most recently completed full-flow alignment to — not "what the last init carried over". `projectRev` will be compared with `pkgRev` in step 2c.
 
 Run one of the following in the target project root:
 
@@ -141,18 +141,16 @@ Run one of the following in the target project root:
 
 ### Step 2c: Topic-layer Change Judgment (Required, decides fast path vs full flow)
 
-**Goal**: when the package upgrade **does not bring topic-layer changes** (topic / matcher / index template body unchanged), skip steps 3 / 3a / 3b and the "rerun per new SKILL" loop, go directly to step 4 lightweight verification. Only when the package side explicitly bumped `templateRevision` should the full flow run.
+**Goal**: when the package upgrade **does not bring topic-layer changes** (topic / matcher / index template body unchanged), skip steps 3 / 3a / 3b and the "rerun per new SKILL" loop, go directly to step 4 lightweight verification. Only when the package side explicitly bumped `projectRev` should the full flow run.
 
 **Procedure**:
 
-1. **After `init` finished**, obtain `templateRevision` from the **package side**, record it as **`pkgRev`**. **Convention**: use Node `require` resolve against the package-side `manifest-routing.json` template (do NOT read the project side, do NOT use a fixed `node_modules` path — this avoids local-repo / npm cache / `npx --package` path differences). From the project root, run (pick locale per the project's `flow2spec.config.json.locale`; default to `zh-CN` if missing):
+1. **After `init` finished**, take `pkgRev` from the **project-side manifest**. **Convention**: directly `Read` the **`pkgRev`** top-level field in `.Knowledge/manifest-routing.json` at the project root. This field is written by the current `init` and records "the package-template `projectRev` used by this init run" — i.e. the latest package-side value, paired with the `projectRev` field in the same file (= `projectRev`, "the package-template revision this project has been baselined to") to form a "package side / project side" comparison without adding a new file.
 
-   ```bash
-   node -e "try{console.log(JSON.stringify(require('@double-codeing/flow2spec/templates/zh-CN/knowledge/manifest-routing.json').templateRevision ?? null))}catch(e){console.log('null')}"
-   ```
+   - Field exists and is an integer -> `pkgRev = <integer>`;
+   - Field missing or not an integer -> `pkgRev = null` (the package template itself does not declare `projectRev`);
+   - Project-side manifest file itself missing -> not handled here; it should be caught during step 2 / step 1 self-check.
 
-   - Output parseable as an integer -> `pkgRev = <integer>`;
-   - Output `null` / `undefined` / resolve failure (package not installed or old package without this field) -> `pkgRev = null`.
 2. Compare `projectRev` (recorded before step 2) with `pkgRev`:
 
 | `projectRev` | `pkgRev` | Judgment | Next |
@@ -164,9 +162,9 @@ Run one of the following in the target project root:
 
 3. **`--reset-knowledge` exception**: when the user explicitly resets, **force full flow**, ignore this judgment (reset must rebuild via full 3b).
 
-4. **The conclusion of this step must be written into step 5 summary**, e.g. "`templateRevision`: project `X` vs package `Y` -> fast path / full flow / field-missing fallback".
+4. **The conclusion of this step must be written into step 5 summary**, e.g. "`projectRev`: project `X` vs package `Y` -> fast path / full flow / field-missing fallback".
 
-> **Blind-spot disclosure**: this judgment looks only at `templateRevision` and **trusts the package maintainer to bump correctly when topic / matcher template bodies change**. If the package side does not follow discipline, missed bumps occur; when the user feels it is wrong, they can explicitly request "full flow" (verbally is enough) and the skill should ignore the fast path and go to the full flow directly.
+> **Blind-spot disclosure**: this judgment looks only at `projectRev` and **trusts the package maintainer to bump correctly when topic / matcher template bodies change**. If the package side does not follow discipline, missed bumps occur; when the user feels it is wrong, they can explicitly request "full flow" (verbally is enough) and the skill should ignore the fast path and go to the full flow directly.
 
 ### Step 3: Old Topic-Template Cleanup and Reference Fixes (Required If Present)
 
@@ -234,9 +232,9 @@ After this skill's step 2 `flow2spec init` succeeds, first perform "old file cle
 5. **Relationship to `--reset-knowledge`**
    - If the user used `reset`, `.Knowledge/index.md` may have been overwritten by the template whole-file. Still, this step must restore the "Topic Overview" block from backup or version control before performing merge rule **3**. If the repository has no backup, rebuild the topic table from `topicPaths` + snapshot and ask the user to confirm.
 
-#### End of full flow: write back `templateRevision` (Required)
+#### End of full flow: write back `projectRev` (Required)
 
-After steps 3 / 3a / 3b above are completed in the **full flow** (**not executed on the fast path**), the main agent **rewrites** the project-side **`.Knowledge/manifest-routing.json`** `templateRevision` field to **`pkgRev`** (the integer obtained in step 2c; if `pkgRev` is `null`, **leave the field unchanged**):
+After steps 3 / 3a / 3b above are completed in the **full flow** (**not executed on the fast path**), the main agent **rewrites** the project-side **`.Knowledge/manifest-routing.json`** `projectRev` field to **`pkgRev`** (the integer obtained in step 2c; if `pkgRev` is `null`, **leave the field unchanged**):
 
 - This is the **only** write path for `projectRev` (besides the first-init template default-write);
 - The next `f2s-kb-upgrade` will then judge `projectRev == pkgRev` and take the fast path, avoiding repeated 3 / 3a / 3b runs;
@@ -261,11 +259,11 @@ Output:
 
 - Executed command (including agents and whether reset was used)
 - Whether it succeeded
-- **`templateRevision` judgment**: project `X` vs package `Y` -> fast path / full flow / field-missing fallback (step 2c)
+- **`projectRev` judgment**: project `X` vs package `Y` -> fast path / full flow / field-missing fallback (step 2c)
 - Old topic-template cleanup conclusion (what was deleted / what did not exist; **not executed on fast path**)
 - `index/manifest` reference-fix conclusion (**not executed on fast path**)
 - **index**: whether `index.template.md` was generated; whether **`index.md` merge** completed (anchor **lines 18-19 "Topic Overview" section** preserved, rest matching package version) and `topicPaths` / diff conclusion (step 3b; **not executed on fast path**)
-- **`templateRevision` write-back**: whether the project-side `templateRevision` was rewritten to `pkgRev` after the full flow finished (step 3b tail "Write back `templateRevision`"; **not executed on fast path**)
+- **`projectRev` write-back**: whether the project-side `projectRev` was rewritten to `pkgRev` after the full flow finished (step 3b tail "Write back `projectRev`"; **not executed on fast path**)
 - **SKILL self-update**: whether `f2s-kb-upgrade/SKILL.md` was re-read after `init`; whether file changes caused **a rerun from step 2c per the new literal text** and how many rounds (**no second `init`**; see "init and skill self-update"; **this loop is skipped on fast path**)
 - manifest / matchers alignment conclusion (from init output)
 - Key file verification conclusion
@@ -288,7 +286,7 @@ Output:
 - **index (snapshot + merge)**: `snapshot copied` / `index.md merged` / `not executed on fast path` / `pending (see notes)`
 - **topicMetadata (existing audit)**: `filled` / `pending user confirmation` / `not executed on fast path`; list added / fixed / deleted topicIds
 - **f2s-kb-upgrade SKILL**: `unchanged after init` / `reran N rounds from step 2c per new SKILL (no second init)` / `loop skipped on fast path` / `pending confirmation`
-- **`templateRevision` write-back**: `written to project manifest (value=pkgRev)` / `not executed on fast path` / `pkgRev=null, field untouched`
+- **`projectRev` write-back**: `written to project manifest (value=pkgRev)` / `not executed on fast path` / `pkgRev=null, field untouched`
 - manifest-routing / matcher shards: `aligned with template` / `already latest` / `reset overwrite`
 - topics.path: `all exist` / `missing paths (see below)`
 - agent artifacts: `pass` / `issue (see below)`
@@ -308,13 +306,13 @@ Output:
 ## Completion Self-Check
 
 1. **Step 0** was performed: V1 did not skip migrate, and **current repositories (V2+)** did not incorrectly run migrate.
-2. **Before step 2** recorded the project-side `templateRevision` (`projectRev`), and **after step 2 `init`** re-read `pkgRev` and executed **step 2c** judgment.
+2. **Before step 2** recorded the project-side `projectRev` (`projectRev`), and **after step 2 `init`** re-read `pkgRev` and executed **step 2c** judgment.
 3. After **step 2 `init`**, **`f2s-kb-upgrade/SKILL.md`** was re-read: on full flow, a change must trigger **a rerun from step 2c per the new literal text** (**no second `init`**); on fast path, the loop can be skipped (see "init and skill self-update" / "fast-path exception").
 4. A shell command was actually executed, not only suggested.
 5. Incremental or reset mode was clearly labeled.
 6. **On full flow**: old topic-file cleanup and `index/manifest` reference fixes were handled (step 3).
 7. **On full flow**: **Step 3a** was executed: `topicMetadata` audited, with no orphan keys / illegal primary / illegal confidence; missing old topics were filled with `inferred` based on evidence or listed as pending confirmation.
-8. **On full flow**: **Step 3b** was executed: `index.md` was **merged** (from **`Topic Overview`** section through before "Match and Execute" is project-maintained; the rest matches the package version), and `topicPaths` were checked; **at the end of full flow**, the project-side `templateRevision` was **written back** to `pkgRev` (if `pkgRev=null`, the field was left unchanged).
+8. **On full flow**: **Step 3b** was executed: `index.md` was **merged** (from **`Topic Overview`** section through before "Match and Execute" is project-maintained; the rest matches the package version), and `topicPaths` were checked; **at the end of full flow**, the project-side `projectRev` was **written back** to `pkgRev` (if `pkgRev=null`, the field was left unchanged).
 9. **On fast path**: steps 3 / 3a / 3b were actually skipped (no unrelated scans), and the summary explicitly labels "not executed on fast path".
 10. Manifest and key-path verification results were output.
 11. If failed, a concrete next command suggestion was provided.

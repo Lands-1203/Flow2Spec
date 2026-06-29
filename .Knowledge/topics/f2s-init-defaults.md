@@ -67,7 +67,8 @@
 
 - 配置根（Claude `.claude/` / Cursor `.cursor/` / Codex `.codex/`）下的 **rules / skills / hooks 模板** 与 SessionStart / PreToolUse 钩子注册；
 - 包级 **manifest 路由结构骨架**（`flow2spec init` 通过 `manifest-matchers.json` 作为种子合并 matcher 分片）；
-- 项目根 `flow2spec.config.json` 的缺失字段。
+- 项目根 `flow2spec.config.json` 的缺失字段；
+- 项目侧 `.Knowledge/manifest-routing.json` 的 `pkgRev` 顶层字段（每次 init 覆盖；详见下节「manifest 中的两个版本字段」）。
 
 `init` **不修改**业务知识库内容：
 
@@ -76,6 +77,23 @@
 - `.Knowledge/matchers/<id>.json` 的 `includeAny` 词条
 
 这些由 `f2s-kb-build` / `f2s-kb-sync` / `f2s-kb-add` / `f2s-kb-feat` / `f2s-kb-fix` 等 `f2s-*` 技能维护。把 `flow2spec init` 当作「业务知识库已更新」是常见误判（见统一入口 2a）。
+
+## manifest 中的两个版本字段
+
+`.Knowledge/manifest-routing.json` 同时存在两个顶层整数字段，对应 `f2s-kb-upgrade` 步骤 2c 的两侧：
+
+| 字段 | 语义 | 写入方 |
+| --- | --- | --- |
+| `projectRev` | **本项目已基线对齐到的包模板修订号** | `f2s-kb-upgrade` 完整流程末尾（3b）；首次 init 也按模板写入一次 |
+| `pkgRev` | **本次 init 用的包模板修订号** | `flow2spec init`（每次都按当前包模板覆盖） |
+
+人读对照：
+
+- 两值**相等** → 主题层未变，`f2s-kb-upgrade` 走快速路径
+- `projectRev` 缺失 / `pkgRev` 大于 `projectRev` → 完整流程
+- `pkgRev` 缺失 → 包模板自身未声明该字段，SKILL 走兜底完整流程
+
+`f2s-kb-upgrade` 步骤 2c 直接 `Read` 同一文件取这两个字段比对。
 
 ## 禁止项
 

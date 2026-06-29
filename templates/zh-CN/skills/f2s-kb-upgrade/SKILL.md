@@ -15,16 +15,16 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 - 本技能跑通的是 **包版本下的目录、模板占位、路由结构对齐**；用户若说「把新能力写进知识库」，应引导 **`f2s-kb-sync` / `f2s-kb-add`** 等，而非仅 `f2s-kb-upgrade`。
 - 本技能负责存量 `topicMetadata` 审计：`primary` / `tags` 仅用于治理、审计、盘点和阅读预期，不参与路由命中或执行强制性；执行强制性仍以 `AGENTS.md`、rules、skills 与 topic 正文为准。
 
-## 包侧发版纪律（`templateRevision` 必须正确 bump）
+## 包侧发版纪律（`projectRev` 必须正确 bump）
 
-**字段位置**：`templates/{zh-CN,en-US}/knowledge/manifest-routing.json` 的根级整数字段 `templateRevision`（起始 `1`）。
+**字段位置**：`templates/{zh-CN,en-US}/knowledge/manifest-routing.json` 的根级整数字段 `projectRev`（起始 `1`）。
 
 **字段写入语义（必读）**：
-- **包侧**：维护者按下文规则手动 bump（包模板自身的 `templateRevision` 永远是最新值）。
+- **包侧**：维护者按下文规则手动 bump（包模板自身的 `projectRev` 永远是最新值）。
 - **项目侧**（落盘到 `.Knowledge/manifest-routing.json`）：
   - **首次 init**：项目 `.Knowledge/manifest-routing.json` 不存在 → `init` 把模板原值落盘，等同首次落地即基线对齐。
-  - **后续 init**：项目 `.Knowledge/manifest-routing.json` 已存在 → `init` **不再覆盖该字段**（保留项目原值）；该字段只由本技能完整流程末尾 3b 写入（见步骤 3b「回写 `templateRevision`」）。
-  - 这使「项目侧 `templateRevision`」语义清晰：**「本项目已基线对齐到的包模板修订号」**，而非"上次 init 时碰到的"。
+  - **后续 init**：项目 `.Knowledge/manifest-routing.json` 已存在 → `init` **不再覆盖该字段**（保留项目原值）；该字段只由本技能完整流程末尾 3b 写入（见步骤 3b「回写 `projectRev`」）。
+  - 这使「项目侧 `projectRev`」语义清晰：**「本项目已基线对齐到的包模板修订号」**，而非"上次 init 时碰到的"。
 
 **必须 bump 的修改**（每次发版至少 `+1`）：
 - 包模板 `templates/<locale>/knowledge/topics/<topic>.md` 任一文件的**正文**修改、新增、删除或改名；
@@ -122,7 +122,7 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 ### 步骤 2：执行命令（代用户跑 shell）
 
-**步骤 2 开始前**：读取项目侧 **`.Knowledge/manifest-routing.json`** 的 `templateRevision` 字段（**字段不存在则记为 `null`**），将该值记为 **`projectRev`**。`projectRev` 表示**「本项目已基线对齐到的包模板修订号」**（由本技能完整流程跑完步骤 3 / 3a / 3b 后写入；首次 init 时 init 会以模板值落盘）；**`init` 在 manifest 已存在时不再覆盖该字段**，因此 `projectRev` 反映的是本项目最近一次完整流程对齐到的版本，而非"上次 init 时包带过来的"。`projectRev` 将用于步骤 2c 与 `pkgRev` 对比。
+**步骤 2 开始前**：读取项目侧 **`.Knowledge/manifest-routing.json`** 的 `projectRev` 字段（**字段不存在则记为 `null`**），将该值记为 **`projectRev`**。`projectRev` 表示**「本项目已基线对齐到的包模板修订号」**（由本技能完整流程跑完步骤 3 / 3a / 3b 后写入；首次 init 时 init 会以模板值落盘）；**`init` 在 manifest 已存在时不再覆盖该字段**，因此 `projectRev` 反映的是本项目最近一次完整流程对齐到的版本，而非"上次 init 时包带过来的"。`projectRev` 将用于步骤 2c 与 `pkgRev` 对比。
 
 在目标项目根目录执行以下其一：
 
@@ -141,18 +141,16 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 ### 步骤 2c：主题层变更判定（必须，决定走快速路径或完整流程）
 
-**目的**：包升级若**未带主题层变更**（topic / matcher / index 模板正文未改），跳过步骤 3 / 3a / 3b 与"整技能重跑"闭环，直接进入步骤 4 轻量校验。仅当包侧明确 bump 了 `templateRevision` 才走完整流程。
+**目的**：包升级若**未带主题层变更**（topic / matcher / index 模板正文未改），跳过步骤 3 / 3a / 3b 与"整技能重跑"闭环，直接进入步骤 4 轻量校验。仅当包侧明确 bump 了 `projectRev` 才走完整流程。
 
 **判定方法**：
 
-1. **`init` 跑完后**，从**包侧**取 `templateRevision`，记为 **`pkgRev`**。**口径**：用 Node 通过 `require` resolve 解包侧 `manifest-routing.json` 模板（不读项目侧、不读 `node_modules` 固定路径，避免本仓 / npm cache / `npx --package` 路径差异）。在项目根执行（按当前项目 `flow2spec.config.json.locale` 选 locale，缺失则 `zh-CN`）：
+1. **`init` 跑完后**，从**项目侧 manifest**取 `pkgRev`。**口径**：直接 `Read` 项目根 **`.Knowledge/manifest-routing.json`** 的 **`pkgRev`** 顶层字段。该字段由本次 `init` 写入，记录"本次 init 用的包模板 projectRev"——是包侧最新值，与同文件里的 `projectRev`（= `projectRev`，"本项目已基线对齐到的包模板修订号"）形成「包侧 / 项目侧」对照，无需新增文件。
 
-   ```bash
-   node -e "try{console.log(JSON.stringify(require('@double-codeing/flow2spec/templates/zh-CN/knowledge/manifest-routing.json').templateRevision ?? null))}catch(e){console.log('null')}"
-   ```
+   - 字段存在且为整数 → `pkgRev = <整数>`；
+   - 字段缺失或非整数 → `pkgRev = null`（包模板自身未声明 `projectRev`）；
+   - 项目侧 manifest 文件本身缺失 → 不在本步处理，应在步骤 2 / 步骤 1 自检阶段就报错。
 
-   - 输出可解析为整数 → `pkgRev = <整数>`；
-   - 输出 `null` / `undefined` / 解包失败（包未安装或老包无此字段）→ `pkgRev = null`。
 2. 比对 `projectRev`（步骤 2 开始前记录）与 `pkgRev`：
 
 | `projectRev` | `pkgRev` | 判定 | 后续 |
@@ -164,9 +162,9 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 3. **`--reset-knowledge` 例外**：用户显式 reset 时，**强制走完整流程**，忽略本步判定（reset 必须走完整 3b 重建）。
 
-4. **本步判定结论必须写入步骤 5 摘要**，形如「`templateRevision`：项目 `X` vs 包 `Y` → 快速路径 / 完整流程 / 字段缺失走兜底」。
+4. **本步判定结论必须写入步骤 5 摘要**，形如「`projectRev`：项目 `X` vs 包 `Y` → 快速路径 / 完整流程 / 字段缺失走兜底」。
 
-> **盲点声明**：本判定只看 `templateRevision`，**信任包侧维护者在改了 topic / matcher 模板正文时按规矩 bump**。若包侧未守纪律，可能漏判；用户主观觉得不对时可显式追加 `--full` 语义（口头要求"完整流程"即可），技能侧应忽略快速路径直接走完整流程。
+> **盲点声明**：本判定只看 `projectRev`，**信任包侧维护者在改了 topic / matcher 模板正文时按规矩 bump**。若包侧未守纪律，可能漏判；用户主观觉得不对时可显式追加 `--full` 语义（口头要求"完整流程"即可），技能侧应忽略快速路径直接走完整流程。
 
 ### 步骤 3：旧主题模板清理与引用修复（若存在则必须执行）
 
@@ -234,9 +232,9 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 5. **与 `--reset-knowledge` 的关系**  
    - 若用户已 `reset`，`.Knowledge/index.md` 可能被模板整文件覆盖，仍须按本条 **2** 从备份或版本控制恢复「主题一览」块后再与包外壳做 **3** 的合并（若仓库无备份，则按 `topicPaths` + 快照**重建**主题表并让用户确认）。
 
-#### 完整流程末尾：回写 `templateRevision`（必须）
+#### 完整流程末尾：回写 `projectRev`（必须）
 
-完整流程跑完上述步骤 3 / 3a / 3b 之后（**仅完整流程，快速路径不执行**），由主 agent 把项目侧 **`.Knowledge/manifest-routing.json`** 的 `templateRevision` 字段**改写为 `pkgRev`**（步骤 2c 取到的整数；若 `pkgRev` 为 `null` 则**不动**该字段）：
+完整流程跑完上述步骤 3 / 3a / 3b 之后（**仅完整流程，快速路径不执行**），由主 agent 把项目侧 **`.Knowledge/manifest-routing.json`** 的 `projectRev` 字段**改写为 `pkgRev`**（步骤 2c 取到的整数；若 `pkgRev` 为 `null` 则**不动**该字段）：
 
 - 这是 `projectRev` 的**唯一**写入路径（除首次 init 模板默写之外）；
 - 下一次 `f2s-kb-upgrade` 据此判定 `projectRev == pkgRev` 走快速路径，避免重复跑 3 / 3a / 3b；
@@ -261,11 +259,11 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 - 执行命令（含 agent 与是否 reset）
 - 是否成功
-- **`templateRevision` 判定**：`projectRev` X vs `pkgRev` Y → 快速路径 / 完整流程 / 字段缺失走兜底（步骤 2c）
+- **`projectRev` 判定**：`projectRev` X vs `pkgRev` Y → 快速路径 / 完整流程 / 字段缺失走兜底（步骤 2c）
 - 旧主题模板清理结论（删了哪些 / 哪些本就不存在；**快速路径下：未执行**）
 - `index/manifest` 引用修复结论（**快速路径下：未执行**）
 - **index**：`index.template.md` 是否已生成；**`index.md` 融合**是否完成（锚点 **18–19「主题一览」节**保留、其余与包版一致）及 `topicPaths` / diff 结论（步骤 3b；**快速路径下：未执行**）
-- **`templateRevision` 回写**：完整流程跑完后是否已把项目侧 `templateRevision` 改写为 `pkgRev`（步骤 3b 末「回写 `templateRevision`」；**快速路径下：未执行**）
+- **`projectRev` 回写**：完整流程跑完后是否已把项目侧 `projectRev` 改写为 `pkgRev`（步骤 3b 末「回写 `projectRev`」；**快速路径下：未执行**）
 - **SKILL 自更新**：`init` 后是否重读 `f2s-kb-upgrade/SKILL.md`；是否因文件变化**按新版字面从步骤 2c 起重跑**及轮次（**不再次 init**；见「init 与技能自更新」；**快速路径下：跳过该闭环**）
 - manifest / matchers 对齐结论（随 init 输出）
 - 关键文件校验结论
@@ -288,7 +286,7 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 - **index（快照 + 融合）**：`快照已复制` / `index.md 已融合` / `快速路径下未执行` / `待处理（见备注）`
 - **topicMetadata（存量审计）**：`已补齐` / `待用户确认` / `快速路径下未执行`；列出新增 / 修正 / 删除的 topicId
 - **f2s-kb-upgrade SKILL**：`init 后无变化` / `已按新版从 2c 起重跑 N 轮（不再次 init）` / `快速路径下跳过该闭环` / `待确认`
-- **`templateRevision` 回写**：`已写入项目 manifest（值=pkgRev）` / `快速路径下未执行` / `pkgRev=null 未动`
+- **`projectRev` 回写**：`已写入项目 manifest（值=pkgRev）` / `快速路径下未执行` / `pkgRev=null 未动`
 - manifest-routing / matchers 分片：`已与模板对齐` / `已是最新` / `reset 覆盖`
 - topics.path：`全部存在` / `存在缺失（见下）`
 - agent 产物：`通过` / `异常（见下）`
@@ -308,13 +306,13 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 ## 完成后自检
 
 1. 是否已做 **步骤 0**：V1 未跳过 migrate、**现行库（V2+）** 未误跑 migrate。
-2. 是否在 **步骤 2 开始前** 记录了项目侧 `templateRevision`（`projectRev`），并在 **步骤 2 的 `init` 之后** 重读 `pkgRev`、执行 **步骤 2c** 判定。
+2. 是否在 **步骤 2 开始前** 记录了项目侧 `projectRev`（`projectRev`），并在 **步骤 2 的 `init` 之后** 重读 `pkgRev`、执行 **步骤 2c** 判定。
 3. 是否在 **步骤 2 的 `init` 之后**重读过 **`f2s-kb-upgrade/SKILL.md`**：完整流程下有变化必须**按新版字面从步骤 2c 起重跑**（**不再次 init**）；快速路径下可跳过该闭环（见「init 与技能自更新」「快速路径例外」）。
 4. 是否已实际执行 shell 命令（而非只给建议）。
 5. 是否明确标注增量 or reset 模式。
 6. **完整流程时**：是否已处理旧主题文件清理与 `index/manifest` 引用修复（步骤 3）。
 7. **完整流程时**：是否已执行 **步骤 3a**：审计 `topicMetadata`，确保无孤儿 key / 非法 primary / 非法 confidence；缺失旧主题已按证据补 `inferred` 或列为待确认。
-8. **完整流程时**：是否已执行 **步骤 3b**：**融合** `index.md`（**主题一览**节起至命中与执行前为项目维护区，其余同包版），并核对 `topicPaths`；**完整流程末尾**是否已**回写** 项目侧 `templateRevision = pkgRev`（`pkgRev=null` 则保留原值）。
+8. **完整流程时**：是否已执行 **步骤 3b**：**融合** `index.md`（**主题一览**节起至命中与执行前为项目维护区，其余同包版），并核对 `topicPaths`；**完整流程末尾**是否已**回写** 项目侧 `projectRev = pkgRev`（`pkgRev=null` 则保留原值）。
 9. **快速路径时**：步骤 3 / 3a / 3b 是否真的跳过（未做无关扫描），摘要中明确标注「快速路径下未执行」。
 10. 是否输出了 manifest 与关键路径校验结果。
 11. 若失败，是否给出下一步具体命令建议。

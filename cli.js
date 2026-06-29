@@ -102,6 +102,79 @@ function shouldCheckForUpdates() {
   return Boolean(pkg.name && pkg.version);
 }
 
+/**
+ * 读取全局安装的同名包版本（如果有）。
+ *
+ * 用 `npm root -g` 拿全局 node_modules 根目录，再读 `<root>/<pkg.name>/package.json` 的 version。
+ * 这是跨 Node / npm 版本最稳定的判断"用户是否全局装过"的方式（避免 `npm ls -g` 输出格式差异）。
+ *
+ * @returns {string|null} 全局已装版本号；未装、读取失败一律返回 null
+ */
+function getGlobalInstalledVersion() {
+  if (!pkg.name) return null;
+  let globalRoot;
+  try {
+    globalRoot = execFileSync("npm", ["root", "-g"], {
+      encoding: "utf8",
+      timeout: 2000,
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+  } catch {
+    return null;
+  }
+  if (!globalRoot) return null;
+  const pkgJsonPath = path.join(globalRoot, pkg.name, "package.json");
+  try {
+    if (!fs.existsSync(pkgJsonPath)) return null;
+    const data = JSON.parse(fs.readFileSync(pkgJsonPath, "utf8"));
+    return typeof data.version === "string" ? data.version : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * init 收尾时自动把全局 flow2spec 升到 latest。
+ *
+ * 触发条件（同时满足）：
+ *   1. 用户已经全局 `npm i -g` 装过本包（用 getGlobalInstalledVersion 检测）；
+ *   2. npm registry 上 latest 严格高于全局已装版本。
+ *
+ * 用户没全局装过 → 静默跳过；当前 cli 是 npx 临时缓存跑的，不要侵入用户全局环境。
+ * `npm i -g` 失败（权限 / 私服 404 / 网络） → 打印错误 + 手动升级提示，但 init 整体仍 exit 0。
+ *
+ * 该函数本身永不抛错，永远不影响 init 主流程。
+ */
+function maybeAutoUpdateGlobalInstall() {
+  let installed;
+  try {
+    installed = getGlobalInstalledVersion();
+  } catch {
+    return;
+  }
+  if (!installed) return; // 没全局装过 → 不打扰
+  let latest;
+  try {
+    latest = queryLatestPackageVersion();
+  } catch {
+    return; // 查 latest 失败静默跳过
+  }
+  if (!latest) return;
+  if (compareVersions(latest, installed) <= 0) return; // 全局已是最新
+  console.log(`
+↻ 检测到全局 ${pkg.name}@${installed}，正在升级到 v${latest}...`);
+  try {
+    execFileSync("npm", ["install", "-g", `${pkg.name}@latest`], {
+      stdio: "inherit",
+    });
+    console.log(`✓ 全局 ${pkg.name} 已升级到 v${latest}`);
+  } catch (e) {
+    console.error(`
+⚠ 全局升级失败：${e.message || e}
+  可手动执行：  flow2spec update`);
+  }
+}
+
 function printKnowledgeUpgradeHint(latest) {
   console.log(`
 ⚠ Flow2Spec 有新版本 v${latest}（当前 v${pkg.version}）
@@ -533,6 +606,7 @@ ${lines.join("\n")}
 
 建议阅读 README 或 docs/使用说明.md，按「规则在配置根、文档在 .Knowledge」的方式使用。
 `);
+      maybeAutoUpdateGlobalInstall();
       maybePrintUpdateNotice();
     })
     .catch((e) => {
