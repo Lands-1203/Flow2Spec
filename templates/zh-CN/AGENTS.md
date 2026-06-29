@@ -16,7 +16,7 @@
 
 ## 配置开关（以磁盘为准）
 
-下表只说明字段语义，不写入当前值；配置真值以本轮 `Read("flow2spec.config.json")` 结果为准。
+下表只说明字段语义与 `flow2spec init` 写入的默认值；配置真值仍以本轮 `Read("flow2spec.config.json")` 结果为准（用户可能手工改过）。
 
 {{FLOW2SPEC_PROJECT_CONFIG}}
 

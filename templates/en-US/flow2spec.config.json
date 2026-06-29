@@ -1,8 +1,8 @@
 {
   "locale": "en-US",
-  "subAgent": false,
-  "switchAgentVerification": false,
-  "intentRecognition": false,
+  "subAgent": true,
+  "switchAgentVerification": true,
+  "intentRecognition": true,
   "changeTracking": {
     "feat": true,
     "fix": false,

@@ -16,7 +16,7 @@ Do not enter any `f2s-*` skill-body step before reading `flow2spec.config.json`.
 
 ## Configuration Switches (disk is authoritative)
 
-The table below only explains field semantics and does not write current values; the source of truth is the result of `Read("flow2spec.config.json")` in this turn.
+The table below explains field semantics and the defaults written by `flow2spec init`; the source of truth is the result of `Read("flow2spec.config.json")` in this turn (the user may have edited values).
 
 {{FLOW2SPEC_PROJECT_CONFIG}}
 
