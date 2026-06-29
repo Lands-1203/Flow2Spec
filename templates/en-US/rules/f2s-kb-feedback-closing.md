@@ -15,7 +15,7 @@ Run this rule only when all of the following are true:
 - This turn has **not entered** an `f2s-*` skill, `implement-tech-design`, `f2s-git-commit`, or another existing follow-up flow;
 - This turn read business source code and the final answer cites source-code facts.
 
-If this turn is already running a knowledge-base skill, do not repeat the suggestion.
+**Prohibited**: When this turn has already entered any of `f2s-kb-distill` / `f2s-kb-sync` / `f2s-kb-add` / `f2s-kb-feat` / `f2s-kb-fix` / `f2s-kb-build` / `f2s-kb-rm` / `f2s-kb-migrate` / `f2s-kb-upgrade` / `f2s-kb-addRules` — any knowledge-base writing or maintenance skill — do NOT output **any** of this rule's case 1–4 closing blocks at the end of the skill. These skills have already performed knowledge-base writes; appending a distill hint here is both redundant and misleading (the user may think knowledge is still un-ingested). This prohibition is **symmetrical in strength** to the forward rule "do not omit this block" in this section: outputting when you shouldn't is the same severity of violation as omitting when you should.
 
 ## Judgment Timing and Basis
 

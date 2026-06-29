@@ -325,3 +325,4 @@ Self-check list:
 4. New or updated topic has entry in index.md
 5. manifest / matcher correctly configured routing rules
 6. Generated content maintains style of existing topic (if read neighboring topics)
+7. The reply does NOT append any of `f2s-kb-feedback-closing`'s case 1–4 closing blocks at the end (must be yes; this skill itself is a knowledge-base write, and by the reverse prohibition in `f2s-kb-feedback-closing`'s "Applicable Scope", pasting a distill hint here is forbidden).

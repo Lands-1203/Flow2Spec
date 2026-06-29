@@ -2,7 +2,6 @@
 description: 普通问答读取源码后的知识库补充建议收口规则；只提示 f2s-kb-distill，不自动落盘
 alwaysApply: true
 ---
-
 # Flow2Spec 知识库反馈收口
 
 本条专管普通问答读取业务源码后的知识库补充建议。只决定最终回答是否需要追加一条极简提示。
@@ -15,7 +14,7 @@ alwaysApply: true
 - 本轮**未进入** `f2s-*` 技能、`implement-tech-design`、`f2s-git-commit` 或其他已有后续流程；
 - 本轮读取过业务源码，且最终答案引用了源码事实。
 
-若本轮已经在执行知识库技能，不重复提示。
+**禁止**：本轮已进入 `f2s-kb-distill` / `f2s-kb-sync` / `f2s-kb-add` / `f2s-kb-feat` / `f2s-kb-fix` / `f2s-kb-build` / `f2s-kb-rm` / `f2s-kb-migrate` / `f2s-kb-upgrade` / `f2s-kb-addRules` 任一知识库写入或维护技能时，于技能末尾输出本规则 case 1～4 中**任何一个**收口块。这些技能本身已完成知识库写入，再贴 distill 提示既冗余又会让用户误以为知识仍未入库。该禁令与本节正向约束「禁止省略本块」**力度对称**：不该输出时输出，与该输出时省略，是同等级违规。
 
 ## 判断时机与依据
 

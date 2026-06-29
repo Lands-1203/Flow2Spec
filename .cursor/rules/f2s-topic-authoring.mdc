@@ -2,7 +2,6 @@
 description: Flow2Spec 主题创作准则：topic 命名 / 骨架 / topicMetadata / topicDependencies 判定 / rule 是否需建对应 topic / 写盘权属指针
 alwaysApply: false
 ---
-
 # Flow2Spec 主题创作准则（Topic Authoring）
 
 本条为 **创作侧** 单一事实源；凡 `f2s-*` 技能在新增或修改 `.Knowledge/topics/<topic>.md`、调整 `manifest-routing.topicMetadata` / `manifest-routing.topicDependencies`、删除 / 迁移 topic 时，**必须先 Read 本条全文**，再按对应 SKILL 的步骤继续。与 `f2s-flow2spec-unified-entry`（消费侧）**并存**；硬冲突时以统一入口为准。
@@ -55,7 +54,7 @@ alwaysApply: false
 5. `feature`：已落地业务 / 产品能力。
 6. `module`：公共能力、公共包、模块边界与工程结构
 7. topic 同时覆盖多个性质时，最主要性质写 `primary`，其余明确成立的性质写 `tags`（可选数组，元素取值同 `primary`，不得与 `primary` 重复）。
-8. `manual` 仅用于用户或维护者明确确认分类值；有明确证据但未人工确认分类值时写 `inferred`。证据不足时**不写 metadata**，但须在摘要中列出推断方向与依据（如「建议 policy，正文含多处强制约束」），供用户确认后手动补写 `manual`。**禁止仅凭 topicId 名称推断分类，必须 Read topic 正文后再判断。**
+8. `manual` 仅用于用户或维护者明确确认分类值；有明确证据但未人工确认分类值时写 `inferred`。证据不足时**不写 metadata**，但须在摘要中列出推断方向与依据（如「建议 policy，正文含多处强制约束」），供用户确认后手动补写 `manual`。**禁止仅凭 topicId 名称推断分类，必须 Read topic 正文后再判断。** **`inferred` 不需要用户事先同意即可直接落盘**：证据足够时按本条直接写入；只有当用户/维护者主动指定分类、或证据矛盾需要决断时，才升级为 `manual`。把 `inferred` 当作"待用户同意"是常见误读，等同于把"有依据的自动归类"硬变成"必须人工确认"，与本条第 7 项允许 `inferred` 落盘的语义冲突。
 
 禁止：为了分类创建、重命名、拆分 topic；在 topic markdown 正文或 `index.md` 中重复写分类块。
 
