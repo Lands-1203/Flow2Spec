@@ -15,6 +15,23 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 - 本技能跑通的是 **包版本下的目录、模板占位、路由结构对齐**；用户若说「把新能力写进知识库」，应引导 **`f2s-kb-sync` / `f2s-kb-add`** 等，而非仅 `f2s-kb-upgrade`。
 - 本技能负责存量 `topicMetadata` 审计：`primary` / `tags` 仅用于治理、审计、盘点和阅读预期，不参与路由命中或执行强制性；执行强制性仍以 `AGENTS.md`、rules、skills 与 topic 正文为准。
 
+## 包侧发版纪律（`templateRevision` 必须正确 bump）
+
+**字段位置**：`templates/{zh-CN,en-US}/knowledge/manifest-routing.json` 的根级整数字段 `templateRevision`（起始 `1`）。
+
+**必须 bump 的修改**（每次发版至少 `+1`）：
+- 包模板 `templates/<locale>/knowledge/topics/<topic>.md` 任一文件的**正文**修改、新增、删除或改名；
+- 包模板 `templates/<locale>/knowledge/matchers/<id>.json` 的 `includeAny` 词条、`id` 或新增 / 删除 matcher 文件；
+- 包模板 `templates/<locale>/knowledge/manifest-routing.json` 的 `topicPaths` / `taskToTopicRules` / `topicDependencies` / `fallbackTopic` / `topicMetadata` 任一段修改；
+- 包模板 `templates/<locale>/knowledge/index.md` 「主题一览」节或包级章节修改。
+
+**不需要 bump 的修改**：
+- 包源码（`lib/`、`cli.js`、`scripts/`）、`AGENTS.md`、`README*` 文档；
+- `templates/<locale>/flow2spec.config.json` 默认值；
+- `templates/<locale>/rules/*` / `templates/<locale>/skills/*` 仅规则与技能正文修改（这些与主题层无关，无需触发完整流程）。
+
+**判定准则一句话**：模板里 `knowledge/` 目录下 topic / matcher / manifest / index 任一**主题层产物**变了 → 必 bump；否则不动。漏 bump 会让用户的 `f2s-kb-upgrade` 跑快速路径，错过包带来的主题变更。
+
 ## 编排（主 / 子 agent）
 
 - 两字段（`subAgent` / `switchAgentVerification`）语义以统一入口为唯一事实源：**Cursor/Claude** 读配置根 `rules/f2s-flow2spec-unified-entry.*`；**Codex** 读 `.codex/topics/f2s-flow2spec-unified-entry.md`（与上同源，`flow2spec init` 镜像）。本节不复述。
@@ -60,9 +77,11 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 1. **`init` 前**（推荐）：记下当前配置根内 **`skills/f2s-kb-upgrade/SKILL.md`** 的标识（如 `mtime`、文件大小或正文 hash）。  
 2. **`init` 成功结束后**：**重新读取磁盘上** 该 **`SKILL.md` 全文**（Cursor：`.cursor/skills/f2s-kb-upgrade/SKILL.md`；Claude：`.claude/skills/...`；Codex：`.codex/skills/...`，与本次 `init` 写入的 agent 一致）。  
 3. **若相对步骤 1 有变化**（或刚升级 Flow2Spec 包、无法确认是否无变）：**必须以最新 SKILL 为准**，**从下文「步骤 0」起完整再执行一遍**本技能（含版本分流、是否再次 `init`、校验与摘要——一律按新版字面）；可循环直至**连续两轮**读到的 SKILL **无变化**，或用户明确要求停止。  
-4. **若无变化**：继续执行步骤 3 及以后。
+4. **若无变化**：继续执行步骤 2c 及以后。
 
-> 口径：**本技能步骤 2 执行 `init` 后** → 再读最新 `f2s-kb-upgrade/SKILL.md` → 有变则 **整技能重跑**；不要仅凭会话记忆执行 **本技能**。
+> **快速路径例外**：若步骤 2c 判定为「快速路径」（`projectRev == pkgRev`，主题层未变），即便 SKILL.md 字面有变化，也**不要求**整技能重跑——重跑后仍会再次判定为快速路径，徒增开销。仅在「完整流程」分支下保留闭环。
+
+> 口径：**本技能步骤 2 执行 `init` 后** → 再读最新 `f2s-kb-upgrade/SKILL.md` → 有变 + 走完整流程时才 **整技能重跑**；不要仅凭会话记忆执行 **本技能**。
 
 ## 强制流程
 
@@ -96,6 +115,8 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 ### 步骤 2：执行命令（代用户跑 shell）
 
+**步骤 2 开始前**：读取项目侧 **`.Knowledge/manifest-routing.json`** 的 `templateRevision` 字段（**字段不存在则记为 `null`**），将该值记为 **`projectRev`**。`projectRev` 反映「上次 init 时包带过来的主题层修订号」，将用于步骤 2c 与新值对比。
+
 在目标项目根目录执行以下其一：
 
 1. 优先（推荐升级到最新包）：
@@ -109,9 +130,33 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 > `<agents...>` 示例：`cursor claude codex`。
 
-**步骤 2 完成后**：立刻执行上文 **「init 与技能自更新」**：重读 **`skills/f2s-kb-upgrade/SKILL.md`**；若有更新则 **从步骤 0 整技能重跑**，再回到步骤 3（避免用旧版 SKILL 做后续校验）。
+**步骤 2 完成后**：立刻执行上文 **「init 与技能自更新」**：重读 **`skills/f2s-kb-upgrade/SKILL.md`**；若有更新则 **从步骤 0 整技能重跑**，再回到步骤 2c（避免用旧版 SKILL 做后续校验）。
+
+### 步骤 2c：主题层变更判定（必须，决定走快速路径或完整流程）
+
+**目的**：包升级若**未带主题层变更**（topic / matcher / index 模板正文未改），跳过步骤 3 / 3a / 3b 与"整技能重跑"闭环，直接进入步骤 4 轻量校验。仅当包侧明确 bump 了 `templateRevision` 才走完整流程。
+
+**判定方法**：
+
+1. **`init` 跑完后**，重读 **`.Knowledge/manifest-routing.json`** 的 `templateRevision` 字段，记为 **`pkgRev`**（字段不存在则记为 `null`）。
+2. 比对 `projectRev`（步骤 2 开始前记录）与 `pkgRev`：
+
+| `projectRev` | `pkgRev` | 判定 | 后续 |
+| --- | --- | --- | --- |
+| 任意值 | `null` | **完整流程**（包未声明字段，走旧逻辑兜底） | 走完整步骤 3 / 3a / 3b |
+| `null` | 任意整数 | **完整流程**（项目首次接入或老项目升级，需走完整流程做基线对齐） | 走完整步骤 3 / 3a / 3b |
+| 整数 X | 整数 X（相等） | **快速路径**（主题层未变） | **跳过** 步骤 3 / 3a / 3b 及"整技能重跑"闭环，**直接进入步骤 4** |
+| 整数 X | 整数 Y（不等） | **完整流程**（包带来主题层变更） | 走完整步骤 3 / 3a / 3b |
+
+3. **`--reset-knowledge` 例外**：用户显式 reset 时，**强制走完整流程**，忽略本步判定（reset 必须走完整 3b 重建）。
+
+4. **本步判定结论必须写入步骤 5 摘要**，形如「`templateRevision`：项目 `X` vs 包 `Y` → 快速路径 / 完整流程 / 字段缺失走兜底」。
+
+> **盲点声明**：本判定只看 `templateRevision`，**信任包侧维护者在改了 topic / matcher 模板正文时按规矩 bump**。若包侧未守纪律，可能漏判；用户主观觉得不对时可显式追加 `--full` 语义（口头要求"完整流程"即可），技能侧应忽略快速路径直接走完整流程。
 
 ### 步骤 3：旧主题模板清理与引用修复（若存在则必须执行）
+
+> **快速路径跳过**：若步骤 2c 判定为「快速路径」，**本步骤整段跳过**，直接进入步骤 4。仅在「完整流程」时执行以下内容。
 
 **本技能步骤 2** `flow2spec init` 成功后，先执行「旧文件清理 + 引用修复」：
 
@@ -132,6 +177,8 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 ### 步骤 3a：`topicMetadata` 存量审计（必须执行）
 
+> **快速路径跳过**：若步骤 2c 判定为「快速路径」，**本步骤整段跳过**。仅在「完整流程」时执行。
+
 1. 读取 `.Knowledge/manifest-routing.json`，以 `topicPaths` 为主题全集。
 2. 校验 `topicMetadata`：key 必须存在于 `topicPaths`；`primary` 仅允许 `feature` / `module` / `config` / `policy`；`tags` 若存在须为数组，元素取值同 `primary` 且不得与 `primary` 重复；`confidence` 仅允许 `manual` / `inferred`。
 3. 对 `topicPaths` 中缺少 metadata 的主题做分类分析：**必须 Read 对应 `.Knowledge/topics/<id>.md` 正文**，禁止仅凭 topicId 名称推断。证据明确则写入 `inferred`；证据不足时**不写 metadata**，但须在摘要中列出推断方向与依据（如「建议 policy，正文含多处强制约束」），供用户确认后手动补写 `manual`。
@@ -144,6 +191,8 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
    - 该 topic 同时被多种不相干任务类型频繁命中（可从 `taskToTopicRules` 和 matcher 词宽度判断）。
 
 ### 步骤 3b：`index.md` 融合与 `template/index.template.md`（必须执行）
+
+> **快速路径跳过**：若步骤 2c 判定为「快速路径」，**本步骤整段跳过**（包模板的「主题一览」节未变 → 现有 `index.md` 仍是对的）。仅在「完整流程」时执行。
 
 > **范围**：本条「融合」**仅在本技能内由 Agent 落盘 `.Knowledge/index.md`**；**不要求、也不假设**修改 Flow2Spec 包内 **`cli.js` / `lib/init.js`** 等 JS。`init` 行为仍以仓库现行为准（仅复制快照等）。
 
@@ -190,10 +239,11 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 - 执行命令（含 agent 与是否 reset）
 - 是否成功
-- 旧主题模板清理结论（删了哪些 / 哪些本就不存在）
-- `index/manifest` 引用修复结论
-- **index**：`index.template.md` 是否已生成；**`index.md` 融合**是否完成（锚点 **18–19「主题一览」节**保留、其余与包版一致）及 `topicPaths` / diff 结论（步骤 3b）
-- **SKILL 自更新**：`init` 后是否重读 `f2s-kb-upgrade/SKILL.md`；是否因文件变化 **整技能重跑**及轮次（见「init 与技能自更新」）
+- **`templateRevision` 判定**：`projectRev` X vs `pkgRev` Y → 快速路径 / 完整流程 / 字段缺失走兜底（步骤 2c）
+- 旧主题模板清理结论（删了哪些 / 哪些本就不存在；**快速路径下：未执行**）
+- `index/manifest` 引用修复结论（**快速路径下：未执行**）
+- **index**：`index.template.md` 是否已生成；**`index.md` 融合**是否完成（锚点 **18–19「主题一览」节**保留、其余与包版一致）及 `topicPaths` / diff 结论（步骤 3b；**快速路径下：未执行**）
+- **SKILL 自更新**：`init` 后是否重读 `f2s-kb-upgrade/SKILL.md`；是否因文件变化 **整技能重跑**及轮次（见「init 与技能自更新」；**快速路径下：跳过整技能重跑**）
 - manifest / matchers 对齐结论（随 init 输出）
 - 关键文件校验结论
 - `.Knowledge/update-check.json` 清理结论（已删除 / 不存在 / 删除失败）
@@ -207,13 +257,14 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 - 本技能内代跑命令：`<实际执行的 flow2spec init ...>`
 - init 模式：`增量` / `覆盖重置（--reset-knowledge）`
 - 执行结果：`成功` / `失败`
+- **主题层判定**：`projectRev=<X>` vs `pkgRev=<Y>` → `快速路径（已跳过 3/3a/3b）` / `完整流程` / `字段缺失走兜底`
 
 ### 核心校验
-- 旧主题文件：`已清理` / `无需清理`
-- 引用修复：`已更新` / `已一致`
-- **index（快照 + 融合）**：`快照已复制` / `index.md 已融合` / `待处理（见备注）`
-- **topicMetadata（存量审计）**：`已补齐` / `待用户确认`；列出新增 / 修正 / 删除的 topicId
-- **f2s-kb-upgrade SKILL**：`init 后无变化` / `已按新版重跑 N 轮` / `待确认`
+- 旧主题文件：`已清理` / `无需清理` / `快速路径下未执行`
+- 引用修复：`已更新` / `已一致` / `快速路径下未执行`
+- **index（快照 + 融合）**：`快照已复制` / `index.md 已融合` / `快速路径下未执行` / `待处理（见备注）`
+- **topicMetadata（存量审计）**：`已补齐` / `待用户确认` / `快速路径下未执行`；列出新增 / 修正 / 删除的 topicId
+- **f2s-kb-upgrade SKILL**：`init 后无变化` / `已按新版重跑 N 轮` / `快速路径下跳过整技能重跑` / `待确认`
 - manifest-routing / matchers 分片：`已与模板对齐` / `已是最新` / `reset 覆盖`
 - topics.path：`全部存在` / `存在缺失（见下）`
 - agent 产物：`通过` / `异常（见下）`
@@ -233,13 +284,15 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 ## 完成后自检
 
 1. 是否已做 **步骤 0**：V1 未跳过 migrate、**现行库（V2+）** 未误跑 migrate。
-2. 是否在 **步骤 2 的 `init` 之后**重读过 **`f2s-kb-upgrade/SKILL.md`**，并在有变化时 **整技能重跑**（见「init 与技能自更新」）。
-3. 是否已实际执行 shell 命令（而非只给建议）。
-4. 是否明确标注增量 or reset 模式。
-5. 是否已处理旧主题文件清理与 `index/manifest` 引用修复。
-6. 是否已执行 **步骤 3a**：审计 `topicMetadata`，确保无孤儿 key / 非法 primary / 非法 confidence；缺失旧主题已按证据补 `inferred` 或列为待确认。
-7. 是否已执行 **步骤 3b**：**融合** `index.md`（**主题一览**节起至命中与执行前为项目维护区，其余同包版），并核对 `topicPaths`。
-8. 是否输出了 manifest 与关键路径校验结果。
-9. 若失败，是否给出下一步具体命令建议。
-10. 步骤 3b 的 `index.md` 融合由主 agent 完成并落盘，无子 agent 越权写入。
-11. 成功升级后是否删除 `.Knowledge/update-check.json`，避免当天新会话继续提示旧升级信息。
+2. 是否在 **步骤 2 开始前** 记录了项目侧 `templateRevision`（`projectRev`），并在 **步骤 2 的 `init` 之后** 重读 `pkgRev`、执行 **步骤 2c** 判定。
+3. 是否在 **步骤 2 的 `init` 之后**重读过 **`f2s-kb-upgrade/SKILL.md`**：完整流程下有变化必须 **整技能重跑**；快速路径下可跳过该闭环（见「init 与技能自更新」「快速路径例外」）。
+4. 是否已实际执行 shell 命令（而非只给建议）。
+5. 是否明确标注增量 or reset 模式。
+6. **完整流程时**：是否已处理旧主题文件清理与 `index/manifest` 引用修复（步骤 3）。
+7. **完整流程时**：是否已执行 **步骤 3a**：审计 `topicMetadata`，确保无孤儿 key / 非法 primary / 非法 confidence；缺失旧主题已按证据补 `inferred` 或列为待确认。
+8. **完整流程时**：是否已执行 **步骤 3b**：**融合** `index.md`（**主题一览**节起至命中与执行前为项目维护区，其余同包版），并核对 `topicPaths`。
+9. **快速路径时**：步骤 3 / 3a / 3b 是否真的跳过（未做无关扫描），摘要中明确标注「快速路径下未执行」。
+10. 是否输出了 manifest 与关键路径校验结果。
+11. 若失败，是否给出下一步具体命令建议。
+12. 步骤 3b 的 `index.md` 融合由主 agent 完成并落盘，无子 agent 越权写入（仅在完整流程时适用）。
+13. 成功升级后是否删除 `.Knowledge/update-check.json`，避免当天新会话继续提示旧升级信息。
