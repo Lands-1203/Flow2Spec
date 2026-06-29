@@ -19,6 +19,13 @@ description: Knowledge-base template upgrade skill (this SKILL only): **V1 flow 
 
 **Field location**: root-level integer field `templateRevision` in `templates/{zh-CN,en-US}/knowledge/manifest-routing.json` (starts at `1`).
 
+**Field write semantics (read first)**:
+- **Package side**: maintainers manually bump per the rules below (the package template's own `templateRevision` is always the latest).
+- **Project side** (written into `.Knowledge/manifest-routing.json`):
+  - **First init**: project `.Knowledge/manifest-routing.json` does not exist -> `init` writes the template value, equivalent to baselined-on-arrival.
+  - **Subsequent init**: project `.Knowledge/manifest-routing.json` already exists -> `init` **no longer overwrites this field** (project value preserved); the field is only written by this skill's full flow tail (see step 3b "Write back `templateRevision`").
+  - This gives "project-side `templateRevision`" a clean meaning: **"the package-template revision this project has been baselined to"** — not "what the last init carried over".
+
 **Must bump (at least `+1` per release)** when any of the following changes:
 - Any body change / addition / deletion / rename of `templates/<locale>/knowledge/topics/<topic>.md`;
 - `includeAny` entries, `id` changes, or addition / deletion of any `templates/<locale>/knowledge/matchers/<id>.json`;
@@ -76,12 +83,12 @@ This skill executes **`flow2spec init`** in **step 2**. `init` syncs the current
 
 1. **Before `init`** (recommended): record the current configuration-root **`skills/f2s-kb-upgrade/SKILL.md`** identifier (for example `mtime`, file size, or body hash).
 2. **After `init` succeeds**: **re-read from disk** the full **`SKILL.md`** (Cursor: `.cursor/skills/f2s-kb-upgrade/SKILL.md`; Claude: `.claude/skills/...`; Codex: `.codex/skills/...`, matching the agent(s) written by this `init` run).
-3. **If it changed relative to step 1** (or Flow2Spec package was just upgraded and unchanged status cannot be confirmed): **use the latest SKILL as authoritative** and **execute this skill again from "step 0"** (including version branching, whether to run `init` again, verification, and summary, all according to the new literal text). Loop until two consecutive rounds read an unchanged SKILL, or the user explicitly asks to stop.
+3. **If it changed relative to step 1** (or Flow2Spec package was just upgraded and unchanged status cannot be confirmed): **use the latest SKILL as authoritative** and **rerun evaluation and write-back per the new literal text** — that is, **start from "step 2c"**: re-read `projectRev` / `pkgRev`, decide fast path or full flow per the new judgment table, and run steps 3 / 3a / 3b / 4 / 5 accordingly. **Do not re-execute `flow2spec init` during this rerun** — `init` already ran in step 2 this round; running it again brings no new information and would trap the SKILL self-update loop. Loop until two consecutive rounds read an unchanged SKILL, or the user explicitly asks to stop.
 4. **If unchanged**: continue with step 2c and later.
 
-> **Fast-path exception**: when step 2c judges as "fast path" (`projectRev == pkgRev`, no topic-layer change), even if SKILL.md content has changed, rerunning the whole skill is **not required** — a rerun will only judge fast path again, wasting cycles. The loop above applies only when running the full flow.
+> **Fast-path exception**: when step 2c judges as "fast path" (`projectRev == pkgRev`, no topic-layer change), even if SKILL.md content has changed, rerunning per the new SKILL is **not required** — a rerun will only judge fast path again, wasting cycles. The loop above applies only when running the full flow.
 
-> Wording: **after this skill's step 2 executes `init`** -> re-read latest `f2s-kb-upgrade/SKILL.md` -> if changed **and the run goes through the full flow**, **rerun the whole skill**. Do not rely on session memory to execute **this skill**.
+> Wording: **after this skill's step 2 executes `init`** -> re-read latest `f2s-kb-upgrade/SKILL.md` -> if changed **and the run goes through the full flow**, **rerun from step 2c per the new literal text** (**do not run `init` a second time**). Do not rely on session memory to execute **this skill**.
 
 ## Mandatory Flow
 
@@ -115,7 +122,7 @@ Both conditions are met:
 
 ### Step 2: Execute Command (Run Shell for User)
 
-**Before step 2 starts**: read the project-side **`.Knowledge/manifest-routing.json`** `templateRevision` field (**record as `null` if missing**), store it as **`projectRev`**. `projectRev` reflects "the topic-layer revision the package brought during the previous init" and will be compared in step 2c.
+**Before step 2 starts**: read the project-side **`.Knowledge/manifest-routing.json`** `templateRevision` field (**record as `null` if missing**), store it as **`projectRev`**. `projectRev` means **"the package-template revision this project has been baselined to"** (written by this skill's full-flow tail after steps 3 / 3a / 3b; on first init the `init` command writes the template value as the baseline). **`init` no longer overwrites this field when manifest already exists**, so `projectRev` reflects the version this project most recently completed full-flow alignment to — not "what the last init carried over". `projectRev` will be compared with `pkgRev` in step 2c.
 
 Run one of the following in the target project root:
 
@@ -130,15 +137,22 @@ Run one of the following in the target project root:
 
 > `<agents...>` example: `cursor claude codex`.
 
-**After step 2 completes**: immediately execute the above **"init and skill self-update"** loop: re-read **`skills/f2s-kb-upgrade/SKILL.md`**. If updated, **rerun the whole skill from step 0**, then return to step 2c (avoid using old SKILL for subsequent verification).
+**After step 2 completes**: immediately execute the above **"init and skill self-update"** loop: re-read **`skills/f2s-kb-upgrade/SKILL.md`**. If updated, **rerun from step 2c per the new literal text** (**do not run `init` a second time**; avoid using the old SKILL for subsequent verification).
 
 ### Step 2c: Topic-layer Change Judgment (Required, decides fast path vs full flow)
 
-**Goal**: when the package upgrade **does not bring topic-layer changes** (topic / matcher / index template body unchanged), skip steps 3 / 3a / 3b and the "rerun whole skill" loop, go directly to step 4 lightweight verification. Only when the package side explicitly bumped `templateRevision` should the full flow run.
+**Goal**: when the package upgrade **does not bring topic-layer changes** (topic / matcher / index template body unchanged), skip steps 3 / 3a / 3b and the "rerun per new SKILL" loop, go directly to step 4 lightweight verification. Only when the package side explicitly bumped `templateRevision` should the full flow run.
 
 **Procedure**:
 
-1. **After `init` finished**, re-read the **`.Knowledge/manifest-routing.json`** `templateRevision` field, record as **`pkgRev`** (record `null` if missing).
+1. **After `init` finished**, obtain `templateRevision` from the **package side**, record it as **`pkgRev`**. **Convention**: use Node `require` resolve against the package-side `manifest-routing.json` template (do NOT read the project side, do NOT use a fixed `node_modules` path — this avoids local-repo / npm cache / `npx --package` path differences). From the project root, run (pick locale per the project's `flow2spec.config.json.locale`; default to `zh-CN` if missing):
+
+   ```bash
+   node -e "try{console.log(JSON.stringify(require('@double-codeing/flow2spec/templates/zh-CN/knowledge/manifest-routing.json').templateRevision ?? null))}catch(e){console.log('null')}"
+   ```
+
+   - Output parseable as an integer -> `pkgRev = <integer>`;
+   - Output `null` / `undefined` / resolve failure (package not installed or old package without this field) -> `pkgRev = null`.
 2. Compare `projectRev` (recorded before step 2) with `pkgRev`:
 
 | `projectRev` | `pkgRev` | Judgment | Next |
@@ -220,6 +234,14 @@ After this skill's step 2 `flow2spec init` succeeds, first perform "old file cle
 5. **Relationship to `--reset-knowledge`**
    - If the user used `reset`, `.Knowledge/index.md` may have been overwritten by the template whole-file. Still, this step must restore the "Topic Overview" block from backup or version control before performing merge rule **3**. If the repository has no backup, rebuild the topic table from `topicPaths` + snapshot and ask the user to confirm.
 
+#### End of full flow: write back `templateRevision` (Required)
+
+After steps 3 / 3a / 3b above are completed in the **full flow** (**not executed on the fast path**), the main agent **rewrites** the project-side **`.Knowledge/manifest-routing.json`** `templateRevision` field to **`pkgRev`** (the integer obtained in step 2c; if `pkgRev` is `null`, **leave the field unchanged**):
+
+- This is the **only** write path for `projectRev` (besides the first-init template default-write);
+- The next `f2s-kb-upgrade` will then judge `projectRev == pkgRev` and take the fast path, avoiding repeated 3 / 3a / 3b runs;
+- This write shares the same main-agent write authority as the rest of `manifest-routing.json` (write-authority hard constraint).
+
 ### Step 4: Verify This Skill's Execution Result (Required)
 
 Verify at least:
@@ -243,7 +265,8 @@ Output:
 - Old topic-template cleanup conclusion (what was deleted / what did not exist; **not executed on fast path**)
 - `index/manifest` reference-fix conclusion (**not executed on fast path**)
 - **index**: whether `index.template.md` was generated; whether **`index.md` merge** completed (anchor **lines 18-19 "Topic Overview" section** preserved, rest matching package version) and `topicPaths` / diff conclusion (step 3b; **not executed on fast path**)
-- **SKILL self-update**: whether `f2s-kb-upgrade/SKILL.md` was re-read after `init`; whether file changes caused a **whole-skill rerun** and how many rounds (see "init and skill self-update"; **whole-skill rerun is skipped on fast path**)
+- **`templateRevision` write-back**: whether the project-side `templateRevision` was rewritten to `pkgRev` after the full flow finished (step 3b tail "Write back `templateRevision`"; **not executed on fast path**)
+- **SKILL self-update**: whether `f2s-kb-upgrade/SKILL.md` was re-read after `init`; whether file changes caused **a rerun from step 2c per the new literal text** and how many rounds (**no second `init`**; see "init and skill self-update"; **this loop is skipped on fast path**)
 - manifest / matchers alignment conclusion (from init output)
 - Key file verification conclusion
 - `.Knowledge/update-check.json` cleanup conclusion (deleted / absent / deletion failed)
@@ -264,7 +287,8 @@ Output:
 - Reference fixes: `updated` / `already consistent` / `not executed on fast path`
 - **index (snapshot + merge)**: `snapshot copied` / `index.md merged` / `not executed on fast path` / `pending (see notes)`
 - **topicMetadata (existing audit)**: `filled` / `pending user confirmation` / `not executed on fast path`; list added / fixed / deleted topicIds
-- **f2s-kb-upgrade SKILL**: `unchanged after init` / `rerun N rounds with newer version` / `whole-skill rerun skipped on fast path` / `pending confirmation`
+- **f2s-kb-upgrade SKILL**: `unchanged after init` / `reran N rounds from step 2c per new SKILL (no second init)` / `loop skipped on fast path` / `pending confirmation`
+- **`templateRevision` write-back**: `written to project manifest (value=pkgRev)` / `not executed on fast path` / `pkgRev=null, field untouched`
 - manifest-routing / matcher shards: `aligned with template` / `already latest` / `reset overwrite`
 - topics.path: `all exist` / `missing paths (see below)`
 - agent artifacts: `pass` / `issue (see below)`
@@ -285,12 +309,12 @@ Output:
 
 1. **Step 0** was performed: V1 did not skip migrate, and **current repositories (V2+)** did not incorrectly run migrate.
 2. **Before step 2** recorded the project-side `templateRevision` (`projectRev`), and **after step 2 `init`** re-read `pkgRev` and executed **step 2c** judgment.
-3. After **step 2 `init`**, **`f2s-kb-upgrade/SKILL.md`** was re-read: on full flow, a change must trigger a **whole-skill rerun**; on fast path, the loop can be skipped (see "init and skill self-update" / "fast-path exception").
+3. After **step 2 `init`**, **`f2s-kb-upgrade/SKILL.md`** was re-read: on full flow, a change must trigger **a rerun from step 2c per the new literal text** (**no second `init`**); on fast path, the loop can be skipped (see "init and skill self-update" / "fast-path exception").
 4. A shell command was actually executed, not only suggested.
 5. Incremental or reset mode was clearly labeled.
 6. **On full flow**: old topic-file cleanup and `index/manifest` reference fixes were handled (step 3).
 7. **On full flow**: **Step 3a** was executed: `topicMetadata` audited, with no orphan keys / illegal primary / illegal confidence; missing old topics were filled with `inferred` based on evidence or listed as pending confirmation.
-8. **On full flow**: **Step 3b** was executed: `index.md` was **merged** (from **`Topic Overview`** section through before "Match and Execute" is project-maintained; the rest matches the package version), and `topicPaths` were checked.
+8. **On full flow**: **Step 3b** was executed: `index.md` was **merged** (from **`Topic Overview`** section through before "Match and Execute" is project-maintained; the rest matches the package version), and `topicPaths` were checked; **at the end of full flow**, the project-side `templateRevision` was **written back** to `pkgRev` (if `pkgRev=null`, the field was left unchanged).
 9. **On fast path**: steps 3 / 3a / 3b were actually skipped (no unrelated scans), and the summary explicitly labels "not executed on fast path".
 10. Manifest and key-path verification results were output.
 11. If failed, a concrete next command suggestion was provided.
