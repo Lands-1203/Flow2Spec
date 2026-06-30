@@ -1,7 +1,6 @@
 ---
 description: Flow2Spec 主题创作准则：topic 命名 / 骨架 / topicMetadata / topicDependencies 判定 / rule 是否需建对应 topic / 写盘权属指针
 ---
-
 # Flow2Spec 主题创作准则（Topic Authoring）
 
 本条为 **创作侧** 单一事实源；凡 `f2s-*` 技能在新增或修改 `.Knowledge/topics/<topic>.md`、调整 `manifest-routing.topicMetadata` / `manifest-routing.topicDependencies`、删除 / 迁移 topic 时，**必须先 Read 本条全文**，再按对应 SKILL 的步骤继续。与 `f2s-flow2spec-unified-entry`（消费侧）**并存**；硬冲突时以统一入口为准。
