@@ -31,6 +31,35 @@ description: Extract reusable knowledge facts from Q&A and auto-commit to KB; de
 
 Abort and prompt user when no valid Q&A context exists.
 
+## Execution Tiers (Light / Strict, agent auto-judged)
+
+`f2s-kb-distill` has **only one** entry (no `--fast` parameter). The first thing on entering this flow is to **decide the tier**:
+
+### Tier judgment (4 dimensions; light tier only when all 4 are satisfied)
+
+| Dimension | How to measure | Condition for **light tier** |
+| --- | --- | --- |
+| Upstream `f2s-kb-feedback-closing` case | Look at the closing block at the end of this/last agent reply | **case 2 or case 3** (case 1 / no closing block → strict tier) |
+| Business source files Read this turn | Agent reviews its own tool calls this turn | **≤ 3 files** |
+| Function / class names cited in this turn's reply | Count backtick-wrapped `xxx()` / class names in the reply | **≤ 5** |
+| Did the user reject the upstream conclusion in a follow-up? | Look at the latest user input for "no / re-analyze / that's wrong" etc. | **No** |
+
+**All 4 satisfied** → **light tier**: skip step 2.1 (quantitative scoring) / 2.4 (existing topic description depth) / step 3 (decision matrix) / step 4.1's "read neighboring topics for style alignment"; adopt the upstream "this round will ingest: <summary>" directly to decide strategy and target topicId, then proceed to step 4 to generate content.
+
+**Any one fails** → **strict tier**: run the full 6 steps.
+
+> **Business source defined**: a Read whose path is **not** under `.claude/` / `.cursor/` / `.codex/` / `.Knowledge/` / `.task/` counts. Rule files / topics / config / task lists do not count.
+
+### Why these dimensions are enough (design intent)
+
+- **Case type** filters out the "new topic" scenario: creating a new topic must read neighboring topics for style, configure matcher `includeAny`, and update `taskToTopicRules` — none of these can be skipped;
+- **Read count + function-citation count** reflects whether this turn's knowledge is "light enough": only light supplements may skip judgments. Deep ingestion (many files + many functions) skipping them risks "description depth mismatch ≥ 2 levels" incidents;
+- **User rejection signal** backstops the "upstream case judged wrong" edge.
+
+### Steps 5 / 6 never skipped
+
+Regardless of tier, **step 5 routing / matcher / index sync** and **step 6 write + self-check** always run in full — these are hard correctness constraints.
+
 ## Mandatory Flow (cannot be reordered)
 
 ### Step 0: Read Config and Rules
@@ -50,6 +79,8 @@ Extract from previous conversation turn:
 5. **Referenced code**: Extract code snippets quoted in answer
 
 ### Step 2: Analyze Drill-Down Depth and Knowledge Nature
+
+> ****Light tier** skips**: sections 2.1 / 2.4 are skipped entirely; 2.2 (extract knowledge facts) must run; 2.3 (knowledge description depth) is reduced to **a brief annotation** (one line stating "summary-level / detailed-level / implementation-level", no multi-dimensional evaluation).
 
 #### 2.1 Calculate Drill-Down Depth Score
 
@@ -141,6 +172,11 @@ If matched an existing topic, need to evaluate its description depth (judged by 
 
 ### Step 3: Decide Ingestion Strategy
 
+> ****Light tier** skips the entire decision matrix**: adopt the upstream `f2s-kb-feedback-closing` "this round will ingest: <summary>" conclusion directly:
+> - Summary contains "append to / supplement / fill in `<topicId>` section X" → strategy = **append to existing topic**, target topicId = the topic named in the summary;
+> - Summary contains "first-time ingestion", "new `<capability>`", "new `<module>`" → strategy = **new topic** (default small topic; step 4.3 internally upgrades to "new independent module topic" when drill-down is deep and the module is standalone);
+> - Summary contains "fix `<topicId>` entry X" → strategy = **append to existing topic** (overwrite-style append; the original wording is rewritten during content generation).
+
 Decide based on following decision matrix:
 
 | Drill-Down Depth | Matched Topic | Existing Topic Depth | Extracted Knowledge Depth | Strategy |
@@ -178,7 +214,8 @@ Decide based on following decision matrix:
 If strategy is "append to existing topic":
 
 1. Read current content of target topic
-2. Read style samples from 2-3 neighboring topics (for style alignment)
+2. Read style samples from 2-3 neighboring topics (for style alignment)  
+   ****Light tier** skips this**: do not read neighboring topics; just match the list / paragraph form already used in the target topic itself.
 3. Generate content to append:
    - **Position**: Find most relevant paragraph, append after it
    - **Format**: Keep list/paragraph style consistent with existing topic
@@ -281,10 +318,12 @@ Self-check list:
 ```markdown
 ## Knowledge Extraction and Ingestion Result
 
+- Execution tier: `Strict tier (full flow)` / `Light tier (2.1 / 2.4 / 3 / 4.1 skipped)` / `Light tier → strict tier (downgrade reason: <reason>)`
+
 ### Q&A Analysis
 - User question: <question summary>
 - Matched topic: <topicId or "none">
-- Drill-down depth: <shallow/medium/deep> (<score>)
+- Drill-down depth: <shallow/medium/deep> (<score>)  ← **Light tier**: `not evaluated`
 - Knowledge description depth: <summary/detailed/implementation level>
 
 ### Extracted Knowledge Facts
@@ -319,10 +358,11 @@ Self-check list:
 
 ## Self-Check After Completion
 
-1. Correctly analyzed drill-down depth and knowledge description depth
+1. Correctly analyzed drill-down depth and knowledge description depth (**Light tier**: correctly parsed the strategy and target topicId from the upstream summary)
 2. Extracted all "reusable knowledge facts" (refer to `f2s-kb-feedback-closing` definition)
-3. Ingestion strategy conforms to decision matrix
+3. Ingestion strategy conforms to decision matrix (**Light tier**: matches the case named in the upstream summary)
 4. New or updated topic has entry in index.md
 5. manifest / matcher correctly configured routing rules
-6. Generated content maintains style of existing topic (if read neighboring topics)
-7. The reply does NOT append any of `f2s-kb-feedback-closing`'s case 1–4 closing blocks at the end (must be yes; this skill itself is a knowledge-base write, and by the reverse prohibition in `f2s-kb-feedback-closing`'s "Applicable Scope", pasting a distill hint here is forbidden).
+6. Generated content maintains style of existing topic (**Light tier**: at least matches the list/paragraph form of the target topic itself)
+7. **Light tier specific**: the summary header includes the "Execution tier" line; if downgraded mid-run, the downgrade reason is recorded
+8. The reply does NOT append any of `f2s-kb-feedback-closing`'s case 1–4 closing blocks at the end (must be yes; this skill itself is a knowledge-base write, and by the reverse prohibition in `f2s-kb-feedback-closing`'s "Applicable Scope", pasting a distill hint here is forbidden).

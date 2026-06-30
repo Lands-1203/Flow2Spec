@@ -400,6 +400,32 @@
 
 **How It Works**: After the Agent answers a user question by drilling into source code, this skill analyzes the current conversation for reusable knowledge facts (core mechanisms, state transitions, return-value contracts, config-switch effects, failure fallback strategies, module boundaries, etc.) and determines whether they are already covered in the knowledge base. Uncovered facts are written to a new or extended topic; covered facts that lack detail get supplemented. Distinction from `f2s-kb-sync`: `sync` is for batch syncing multiple capabilities; `distill` focuses on incremental knowledge extraction driven by a single Q&A.
 
+**Execution Tiers (agent auto-judges, no command parameter)**:
+
+| Tier | Skips | Applies when |
+| --- | --- | --- |
+| **Light tier** | Step 2.1 (quantitative drill-down scoring) / 2.4 (existing topic description-depth eval) / 3 (decision matrix) / 4.1 (reading neighboring topics for style alignment) | Upstream already gave a definite ingestion conclusion + this turn's knowledge is light + user did not reject the upstream conclusion |
+| **Strict tier** | Nothing — runs the full 6 steps | Any of the three conditions above is not met |
+
+**Tier judgment (all 4 dimensions must be satisfied for light tier)**:
+
+| Dimension | Condition |
+| --- | --- |
+| Upstream `f2s-kb-feedback-closing` case | **case 2 or case 3** (case 1 / no closing block → strict tier) |
+| Business source files Read this turn | **≤ 3 files** |
+| Function / class names cited in this turn's reply | **≤ 5** |
+| Did the user reject the upstream conclusion in a follow-up? | **No** |
+
+**Business source defined**: a Read whose path is **not** under `.claude/` / `.cursor/` / `.codex/` / `.Knowledge/` / `.task/` counts.
+
+**Why this design**:
+
+- "Upstream already gave a definite conclusion" → the decision matrix can be skipped; we just adopt the "this round will ingest" summary
+- "This turn's knowledge is light" → no risk of the "description-depth mismatch ≥ 2 levels" incident (light supplements are naturally at the same level as the existing topic)
+- "User did not reject" → the upstream conclusion itself is not invalidated
+
+**Steps 5 / 6 never skipped**: regardless of tier, **routing / matcher / index sync** and **write + self-check** always run in full — these are hard correctness constraints.
+
 **Use Cases**:
 - After a Q&A drills into source code and the topic doesn't cover it or lacks detail
 - Automatically suggested by the `f2s-kb-feedback-closing` rule
