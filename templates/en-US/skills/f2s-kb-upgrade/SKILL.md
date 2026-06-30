@@ -92,6 +92,27 @@ This skill executes **`flow2spec init`** in **step 2**. `init` syncs the current
 
 ## Mandatory Flow
 
+### Step -1: Upgrade Global flow2spec Package to Latest (Required, Before Everything, Run by Background Sub-agent)
+
+**Purpose**: keep the user's local global `flow2spec` command on npm latest. **Do not wait** for it — this upgrade is for the next session. The current session's `init` still uses the step 2 command list to fetch the latest template on its own.
+
+**Action**: before entering step 0, the main agent **dispatches an independent sub-agent** (fire-and-forget, **does not wait for completion**) to run:
+
+```bash
+npm i -g @double-codeing/flow2spec@latest
+```
+
+**Orchestration (required)**:
+
+- **Sub-agent is mandatory**: this step **forcibly** runs in a sub-agent, **not subject to** `flow2spec.config.json.subAgent`. (`subAgent=false` still dispatches; that field governs "may we split f2s business sub-tasks", and a one-off global npm install is not a business split.)
+- **Do not wait**: after dispatching, the main agent immediately proceeds to step 0 → 1 → 2 → …. **Do not** block the main flow waiting for `npm i -g` to finish; whether the sub-agent finishes or succeeds does not enter any subsequent step's decision.
+- **Result does not enter the SKILL summary**: because we don't wait, the main agent's step 5 summary **only writes** "step -1 dispatched a sub-agent to run `npm i -g ...@latest` (in background, not awaited)" and **does not** report success/failure. The user can retry next session if needed.
+- **Write permission**: the sub-agent only runs that shell command and **does not** touch any project file (`.Knowledge`, `manifest-routing.json`, `index.md`, etc.). Write-permission constraints remain unchanged.
+
+**Relation to cli.js**:
+
+- `maybeAutoUpdateGlobalInstall()` inside cli.js is the `init` tail fallback. **No conflict with this step**: this step dispatches asynchronously before the foreground init; cli's fallback runs once more at init's tail. If both succeed it's a no-op; if the first fails the second still has a chance to fix it.
+
 ### Step 0: Version Judgment and Branching (Required, Before init)
 
 > **Naming note**: **"V1"** and **"current repository (V2+)"** below are **flow-branch labels inside this skill**. If the **npm package is v3.x, v4.x, ...** and the repository is already in `.Knowledge` + `manifest-routing` shape, still use the **"current repository (V2+)"** branch (only `init` alignment). **Do not** interpret the npm major version number as the literal "V2" here.
@@ -124,12 +145,12 @@ Both conditions are met:
 
 **Before step 2 starts**: read the project-side **`.Knowledge/manifest-routing.json`** `projectRev` field (**record as `null` if missing**), store it as **`projectRev`**. `projectRev` means **"the package-template revision this project has been baselined to"** (written by this skill's full-flow tail after steps 3 / 3a / 3b; on first init the `init` command writes the template value as the baseline). **`init` no longer overwrites this field when manifest already exists**, so `projectRev` reflects the version this project most recently completed full-flow alignment to — not "what the last init carried over". `projectRev` will be compared with `pkgRev` in step 2c.
 
-Run one of the following in the target project root:
+Run one of the following in the target project root (**decoupled from step -1**: step -1's global upgrade runs in the background and is not awaited; **this step** uses the command list below to ensure the current init fetches the latest template, independent of whether step -1 has completed or succeeded):
 
-1. Preferred (upgrade to latest package):
+1. Fetch npm latest and run (**recommended, default**):
    - `npx @double-codeing/flow2spec@latest init <agents...>`
-2. If the project is pinned to a local install:
-   - `npx flow2spec init <agents...>`
+2. Use globally installed flow2spec (only when the user explicitly states "global is already latest" or restricted network blocks npx):
+   - `flow2spec init <agents...>`
 3. For overwrite reset:
    - Append `--reset-knowledge` to the above command.
 4. If the user explicitly requests a template-language switch:
@@ -257,6 +278,7 @@ Verify at least:
 
 Output:
 
+- **Step -1 global upgrade**: `Dispatched sub-agent to run npm i -g @double-codeing/flow2spec@latest (in background, not awaited)`
 - Executed command (including agents and whether reset was used)
 - Whether it succeeded
 - **`projectRev` judgment**: project `X` vs package `Y` -> fast path / full flow / field-missing fallback (step 2c)
@@ -275,6 +297,7 @@ Output:
 ```markdown
 ## f2s-kb-upgrade Execution Result
 
+- **Step -1 global upgrade**: `Dispatched sub-agent to run npm i -g @double-codeing/flow2spec@latest in background (not awaited)`
 - Command run inside this skill: `<actual flow2spec init ...>`
 - init mode: `incremental` / `overwrite reset (--reset-knowledge)`
 - Result: `success` / `failure`
@@ -305,16 +328,17 @@ Output:
 
 ## Completion Self-Check
 
-1. **Step 0** was performed: V1 did not skip migrate, and **current repositories (V2+)** did not incorrectly run migrate.
-2. **Before step 2** recorded the project-side `projectRev` (`projectRev`), and **after step 2 `init`** re-read `pkgRev` and executed **step 2c** judgment.
-3. After **step 2 `init`**, **`f2s-kb-upgrade/SKILL.md`** was re-read: on full flow, a change must trigger **a rerun from step 2c per the new literal text** (**no second `init`**); on fast path, the loop can be skipped (see "init and skill self-update" / "fast-path exception").
-4. A shell command was actually executed, not only suggested.
-5. Incremental or reset mode was clearly labeled.
-6. **On full flow**: old topic-file cleanup and `index/manifest` reference fixes were handled (step 3).
-7. **On full flow**: **Step 3a** was executed: `topicMetadata` audited, with no orphan keys / illegal primary / illegal confidence; missing old topics were filled with `inferred` based on evidence or listed as pending confirmation.
-8. **On full flow**: **Step 3b** was executed: `index.md` was **merged** (from **`Topic Overview`** section through before "Match and Execute" is project-maintained; the rest matches the package version), and `topicPaths` were checked; **at the end of full flow**, the project-side `projectRev` was **written back** to `pkgRev` (if `pkgRev=null`, the field was left unchanged).
-9. **On fast path**: steps 3 / 3a / 3b were actually skipped (no unrelated scans), and the summary explicitly labels "not executed on fast path".
-10. Manifest and key-path verification results were output.
-11. If failed, a concrete next command suggestion was provided.
-12. Step 3b `index.md` merge was completed and written by the main agent, with no unauthorized sub-agent write (applies only on full flow).
-13. After successful upgrade, `.Knowledge/update-check.json` was deleted to avoid stale upgrade hints in new sessions that day.
+1. **Step -1** was performed: before entering step 0, an **independent sub-agent** was dispatched to run `npm i -g @double-codeing/flow2spec@latest` and was **not awaited**; the summary says "dispatched sub-agent in background, not awaited" and does not report success/failure.
+2. **Step 0** was performed: V1 did not skip migrate, and **current repositories (V2+)** did not incorrectly run migrate.
+3. **Before step 2** recorded the project-side `projectRev` (`projectRev`), and **after step 2 `init`** re-read `pkgRev` and executed **step 2c** judgment.
+4. After **step 2 `init`**, **`f2s-kb-upgrade/SKILL.md`** was re-read: on full flow, a change must trigger **a rerun from step 2c per the new literal text** (**no second `init`**); on fast path, the loop can be skipped (see "init and skill self-update" / "fast-path exception").
+5. A shell command was actually executed, not only suggested.
+6. Incremental or reset mode was clearly labeled.
+7. **On full flow**: old topic-file cleanup and `index/manifest` reference fixes were handled (step 3).
+8. **On full flow**: **Step 3a** was executed: `topicMetadata` audited, with no orphan keys / illegal primary / illegal confidence; missing old topics were filled with `inferred` based on evidence or listed as pending confirmation.
+9. **On full flow**: **Step 3b** was executed: `index.md` was **merged** (from **`Topic Overview`** section through before "Match and Execute" is project-maintained; the rest matches the package version), and `topicPaths` were checked; **at the end of full flow**, the project-side `projectRev` was **written back** to `pkgRev` (if `pkgRev=null`, the field was left unchanged).
+10. **On fast path**: steps 3 / 3a / 3b were actually skipped (no unrelated scans), and the summary explicitly labels "not executed on fast path".
+11. Manifest and key-path verification results were output.
+12. If failed, a concrete next command suggestion was provided.
+13. Step 3b `index.md` merge was completed and written by the main agent, with no unauthorized sub-agent write (applies only on full flow).
+14. After successful upgrade, `.Knowledge/update-check.json` was deleted to avoid stale upgrade hints in new sessions that day.

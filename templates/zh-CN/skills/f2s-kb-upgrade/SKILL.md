@@ -92,6 +92,27 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 ## 强制流程
 
+### 步骤 -1：全局升级 flow2spec 包到最新（必须，先于一切，后台子 agent 执行）
+
+**目的**：保证用户本机的全局 flow2spec 命令保持在 npm latest 版，**不**等它跑完——升级是为下一次会话准备的，本次会话的 `init` 仍按步骤 2 的命令清单自行拿到最新模板。
+
+**动作**：主 agent 在进入步骤 0 **之前**，**派一个独立子 agent**（fire-and-forget，**不等待完成**）执行：
+
+```bash
+npm i -g @double-codeing/flow2spec@latest
+```
+
+**编排（必须）**：
+
+- **子 agent 必派**：本步骤**强制**通过子 agent 执行，**不受** `flow2spec.config.json.subAgent` 字段约束（`subAgent=false` 时也派；该字段约束的是「能否拆 f2s 业务子任务」，全局 npm 装包是一次性纯命令，不属于业务拆分范畴）。
+- **不等待返回**：主 agent 派出后立刻继续步骤 0 → 1 → 2 → …，**禁止**用「等 npm i -g 完成」阻塞主流程；子 agent 结束与否、成败与否，都不进入后续步骤的判断。
+- **结果不进入 SKILL 摘要**：因为不等待，主 agent 在步骤 5 摘要里**只写**「步骤 -1 已派子 agent 执行 `npm i -g ...@latest`（后台进行，未等待）」，**不**展示成败结论；用户下次开会话时若有失败可自行重试。
+- **写权**：子 agent 仅执行该 shell，**不**触碰 `.Knowledge` / `manifest-routing.json` / `index.md` 等任何项目文件；写权硬约束不变。
+
+**与 cli.js 的关系**：
+
+- cli.js 内 `maybeAutoUpdateGlobalInstall()` 是 `init` 收尾兜底逻辑，**与本步不冲突**：本步在前台 init 之前异步派工，cli 那段在 init 收尾时再兜一次；两次都成功就是 no-op，第一次失败第二次还能补救。
+
 ### 步骤 0：版本判定与分流（必须，先于 init）
 
 > **命名说明**：下文 **「V1」「现行库（V2+）」** 为本技能**流程分流代号**。**npm 包为 v3.x、v4.x…** 且仓库**已**是 `.Knowledge` + `manifest-routing` 形态时，仍走 **「现行库（V2+）」** 支（仅 `init` 对齐），**不要**把 npm 主版本数字当成这里的「V2」字面限制。
@@ -124,12 +145,12 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 **步骤 2 开始前**：读取项目侧 **`.Knowledge/manifest-routing.json`** 的 `projectRev` 字段（**字段不存在则记为 `null`**），将该值记为 **`projectRev`**。`projectRev` 表示**「本项目已基线对齐到的包模板修订号」**（由本技能完整流程跑完步骤 3 / 3a / 3b 后写入；首次 init 时 init 会以模板值落盘）；**`init` 在 manifest 已存在时不再覆盖该字段**，因此 `projectRev` 反映的是本项目最近一次完整流程对齐到的版本，而非"上次 init 时包带过来的"。`projectRev` 将用于步骤 2c 与 `pkgRev` 对比。
 
-在目标项目根目录执行以下其一：
+在目标项目根目录执行以下其一（**与步骤 -1 解耦**：步骤 -1 的全局升级是异步后台跑、不等待，**本步**仍按命令清单自行确保本次 init 拿到 latest 模板，不依赖步骤 -1 是否已完成或成功）：
 
-1. 优先（推荐升级到最新包）：
+1. 拉 npm latest 跑（**推荐、默认**）：
    - `npx @double-codeing/flow2spec@latest init <agents...>`
-2. 若项目已固定使用本地安装：
-   - `npx flow2spec init <agents...>`
+2. 用全局已装的 flow2spec 跑（仅在用户明确告知"全局已是 latest"或受限网络无法 npx 时使用）：
+   - `flow2spec init <agents...>`
 3. 覆盖重置时：
    - 在上述命令末尾追加 `--reset-knowledge`
 4. 用户显式要求切换模板语言时：
@@ -257,6 +278,7 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 输出以下信息：
 
+- **步骤 -1 全局升级**：`已派子 agent 执行 npm i -g @double-codeing/flow2spec@latest（后台进行，未等待）`
 - 执行命令（含 agent 与是否 reset）
 - 是否成功
 - **`projectRev` 判定**：`projectRev` X vs `pkgRev` Y → 快速路径 / 完整流程 / 字段缺失走兜底（步骤 2c）
@@ -275,6 +297,7 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 ```markdown
 ## f2s-kb-upgrade 执行结果
 
+- **步骤 -1 全局升级**：`已派子 agent 后台执行 npm i -g @double-codeing/flow2spec@latest（未等待）`
 - 本技能内代跑命令：`<实际执行的 flow2spec init ...>`
 - init 模式：`增量` / `覆盖重置（--reset-knowledge）`
 - 执行结果：`成功` / `失败`
@@ -305,16 +328,17 @@ description: 知识库模板升级技能（仅指本 SKILL）：**流程分流 V
 
 ## 完成后自检
 
-1. 是否已做 **步骤 0**：V1 未跳过 migrate、**现行库（V2+）** 未误跑 migrate。
-2. 是否在 **步骤 2 开始前** 记录了项目侧 `projectRev`（`projectRev`），并在 **步骤 2 的 `init` 之后** 重读 `pkgRev`、执行 **步骤 2c** 判定。
-3. 是否在 **步骤 2 的 `init` 之后**重读过 **`f2s-kb-upgrade/SKILL.md`**：完整流程下有变化必须**按新版字面从步骤 2c 起重跑**（**不再次 init**）；快速路径下可跳过该闭环（见「init 与技能自更新」「快速路径例外」）。
-4. 是否已实际执行 shell 命令（而非只给建议）。
-5. 是否明确标注增量 or reset 模式。
-6. **完整流程时**：是否已处理旧主题文件清理与 `index/manifest` 引用修复（步骤 3）。
-7. **完整流程时**：是否已执行 **步骤 3a**：审计 `topicMetadata`，确保无孤儿 key / 非法 primary / 非法 confidence；缺失旧主题已按证据补 `inferred` 或列为待确认。
-8. **完整流程时**：是否已执行 **步骤 3b**：**融合** `index.md`（**主题一览**节起至命中与执行前为项目维护区，其余同包版），并核对 `topicPaths`；**完整流程末尾**是否已**回写** 项目侧 `projectRev = pkgRev`（`pkgRev=null` 则保留原值）。
-9. **快速路径时**：步骤 3 / 3a / 3b 是否真的跳过（未做无关扫描），摘要中明确标注「快速路径下未执行」。
-10. 是否输出了 manifest 与关键路径校验结果。
-11. 若失败，是否给出下一步具体命令建议。
-12. 步骤 3b 的 `index.md` 融合由主 agent 完成并落盘，无子 agent 越权写入（仅在完整流程时适用）。
-13. 成功升级后是否删除 `.Knowledge/update-check.json`，避免当天新会话继续提示旧升级信息。
+1. 是否已做 **步骤 -1**：在进入步骤 0 前**已派出独立子 agent**执行 `npm i -g @double-codeing/flow2spec@latest`，**未等待**其完成；摘要中已写明「已派子 agent 后台执行，未等待」，未尝试展示成败结论。
+2. 是否已做 **步骤 0**：V1 未跳过 migrate、**现行库（V2+）** 未误跑 migrate。
+3. 是否在 **步骤 2 开始前** 记录了项目侧 `projectRev`（`projectRev`），并在 **步骤 2 的 `init` 之后** 重读 `pkgRev`、执行 **步骤 2c** 判定。
+4. 是否在 **步骤 2 的 `init` 之后**重读过 **`f2s-kb-upgrade/SKILL.md`**：完整流程下有变化必须**按新版字面从步骤 2c 起重跑**（**不再次 init**）；快速路径下可跳过该闭环（见「init 与技能自更新」「快速路径例外」）。
+5. 是否已实际执行 shell 命令（而非只给建议）。
+6. 是否明确标注增量 or reset 模式。
+7. **完整流程时**：是否已处理旧主题文件清理与 `index/manifest` 引用修复（步骤 3）。
+8. **完整流程时**：是否已执行 **步骤 3a**：审计 `topicMetadata`，确保无孤儿 key / 非法 primary / 非法 confidence；缺失旧主题已按证据补 `inferred` 或列为待确认。
+9. **完整流程时**：是否已执行 **步骤 3b**：**融合** `index.md`（**主题一览**节起至命中与执行前为项目维护区，其余同包版），并核对 `topicPaths`；**完整流程末尾**是否已**回写** 项目侧 `projectRev = pkgRev`（`pkgRev=null` 则保留原值）。
+10. **快速路径时**：步骤 3 / 3a / 3b 是否真的跳过（未做无关扫描），摘要中明确标注「快速路径下未执行」。
+11. 是否输出了 manifest 与关键路径校验结果。
+12. 若失败，是否给出下一步具体命令建议。
+13. 步骤 3b 的 `index.md` 融合由主 agent 完成并落盘，无子 agent 越权写入（仅在完整流程时适用）。
+14. 成功升级后是否删除 `.Knowledge/update-check.json`，避免当天新会话继续提示旧升级信息。

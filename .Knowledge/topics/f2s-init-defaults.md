@@ -61,6 +61,16 @@
 
 含义：升级 npm 包后新增的字段，会以「当前 `CONFIG_FIELDS` 默认值」补齐到老项目；如新版本默认值翻面（例如某字段由 `false` 改为 `true`），**只影响**升级时**仍缺该字段**的老项目，已写过该字段的项目不变。
 
+### 跑 `f2s-kb-upgrade` 时怎么让全局 flow2spec 保持最新
+
+`f2s-kb-upgrade` SKILL 在「步骤 -1」（先于一切）会让主 agent **派一个独立子 agent 后台执行** `npm i -g @double-codeing/flow2spec@latest`，**不等待**其完成，主流程立即继续。
+
+口径：
+
+- 该步骤强制派子 agent，**不受** `flow2spec.config.json.subAgent` 字段约束；
+- 因为不等待，结果不进入 SKILL 结论摘要——失败也只是"下次再升一次"，本次 `init` 仍按步骤 2 的 `npx @latest` 命令自取 latest 模板；
+- 与 `cli.js` 内 `maybeAutoUpdateGlobalInstall()` 不冲突：前者是 SKILL 入口后台异步派工，后者是 `init` 收尾兜底；两次都成功就是 no-op。
+
 ## init 不动哪些目录
 
 `flow2spec init` 仅对齐：
