@@ -3,12 +3,17 @@
 # Project Milestones
 
 > **Scope**: whole project  
-> **Updated**: 2026-06-15
+> **Updated**: 2026-06-30
 
 ## Overview
 
 | Stage | Time | Summary |
 | --- | --- | --- |
+| M23 · f2s-kb-distill auto tier judgment + f2s-kb-upgrade Step -1 | 2026-06-30 | Dropped --fast parameter; built-in "light tier / strict tier" 4-dimension auto judgment; f2s-kb-upgrade adds Step -1 background sub-agent upgrading global cli |
+| M22 · pkgRev top-level write + init auto-upgrade global cli | 2026-06-29 | manifest top-level pkgRev field overwritten on every init; init tail auto-upgrades global package when latest is higher |
+| M21 · f2s-kb-upgrade templateRevision fast path and self-update loop | 2026-06-29 | project vs package projectRev equal → skip steps 3/3a/3b; init-after SKILL changes rerun from step 2c without re-init; feedback-closing removed blanket KB-skill prohibition with summary requirement; inferred lands directly |
+| M20 · init defaults flipped | 2026-06-29 | subAgent / switchAgentVerification / intentRecognition default values flipped to true; new projects default to sub-agent orchestration, cross-verification, intent-recognition auto-routing |
+| M19 · .task/ adds acceptance.md acceptance checklist | 2026-06-24 | `.task/active/<task>/` adds acceptance.md (separation of duties from user-todos.md); after task.md fully [x], must write before archiving; archive directory naming unified to `<YYYYMMDD>-<task-name>` |
 | M18 · f2s-kb-distill and rule refactor | 2026-06-14 | Added f2s-kb-distill knowledge extraction skill; feedback-closing refactored to single entry; Codex AGENTS.md slimmed to "two steps" guide; SessionStart hooks landed; CLI cross-platform extension handling |
 | M17 · Locale-aware template initialization | 2026-06-08 | flow2spec init supports zh-CN/en-US single-choice initialization; public README defaults to English; Chinese moved to README.zh-CN.md |
 | M16 · Intent recognition routing | 2026-06-08 | Added intentRecognition config switch and f2s-intent-routing rules; high-confidence operation intent can route to f2s skills automatically |
@@ -27,6 +32,47 @@
 | M3 · .Knowledge machine-readable routing | 2026-05-08 | Introduced .Knowledge, manifest-routing.json, topics and matchers; match→expand→verify→act chain; config preflight and KB preflight rules |
 | M2 · OpenSpec removal and f2s skills | 2026-04-23 | Removed OpenSpec/opsx; converted to f2s skill workflow; requirements clarification and technical proposal generation established |
 | M1 · CLI bootstrap and OpenSpec workflow | 2026-02 ~ 2026-04 | Flow2Spec started as an installable CLI; early AI collaboration organized around OpenSpec/opsx change flows |
+
+## M23 · f2s-kb-distill Auto Tier Judgment + f2s-kb-upgrade Step -1
+
+- f2s-kb-distill removed the `--fast` parameter; built-in "light tier / strict tier" auto judgment based on 4 dimensions: upstream case, business source files Read, function/class references, user rejection signal
+- Light tier skips drill-down quantitative scoring, existing-topic description-depth evaluation, decision matrix, and style alignment; Step 5 routing / Step 6 write-to-disk are never skipped
+- f2s-kb-upgrade adds Step -1: before entering Step 0, dispatch an independent sub-agent in background to run `npm i -g <pkg>@latest`, not awaited, main flow continues immediately; not bound by subAgent config
+- Step -1 complements cli.js `maybeAutoUpdateGlobalInstall`: skill-side proactive trigger + init-tail fallback trigger
+- feedback-closing case 1/2/3 closing blocks reverted to single-command suggestion (no `--fast` hint)
+- Command docs and commands-reference added "Execution Tiers" section explaining light/strict trigger conditions
+
+## M22 · pkgRev Top-Level Write + Init Auto-Upgrade Global cli
+
+- `lib/init.js` added `finalizePkgRev`: writes package-template projectRev to project-side manifest top-level `pkgRev`, overwritten on every init
+- init also overwrites `manifest.version` to current package version, keeping project manifest in sync with the CLI version used
+- `cli.js` added `maybeAutoUpdateGlobalInstall`: at init tail, if globally installed and npm latest is higher, auto-runs `npm i -g <pkg>`; silently skipped for npx-only users
+- f2s-kb-upgrade Step 2c now reads `pkgRev` directly from manifest top-level, no fallback scanning
+- Terminology unified to `projectRev` (package-template side) / `pkgRev` (project-landed side)
+
+## M21 · f2s-kb-upgrade templateRevision Fast Path and Self-Update Loop
+
+- f2s-kb-upgrade introduced `templateRevision` (later renamed `projectRev`) fast path: when project revision equals package-template revision, skip steps 3, 3a, 3b
+- Self-update loop fix: after init, on re-reading SKILL.md with a version change, rerun from step 2c per the new literal text, no second `flow2spec init`
+- `f2s-kb-feedback-closing` refactored: removed the blanket "no closing block inside any KB skill" rule; replaced with distill self-prohibition + other KB skills still judge per the 4 cases
+- feedback-closing landed "summary requirement": cases 1~3 must state in one line what distill would actually ingest
+- topicMetadata guideline clarified: `inferred` writes directly without prior user consent, correcting the "must manually confirm" misread
+
+## M20 · Init Defaults Flipped
+
+- `flow2spec.config.json` three boolean fields' defaults flipped to `true`: `subAgent` / `switchAgentVerification` / `intentRecognition`
+- New projects running `flow2spec init` now have these enabled by default: sub-agent orchestration, cross-agent disk-write verification, intent-recognition auto-routing
+- Old projects that explicitly wrote these fields are unaffected; on upgrade, old projects still missing these fields are filled with the new `true` default
+- With defaults flipped, the `f2s-*` skill sub-agent prerequisite and cross-agent verification switch from "opt-in" to "opt-out"
+
+## M19 · .task/ Adds acceptance.md Acceptance Checklist
+
+- `.task/active/<task>/` adds `acceptance.md`, separated in duty from `user-todos.md`: the former manages "user acceptance", the latter manages "user todos"
+- New archive gate: after `task.md` is fully `[x]`, before moving the directory to `completed/`, `acceptance.md` must be written; if still a placeholder or missing, archiving is forbidden
+- Task-creation step 3.e also creates an `acceptance.md` placeholder; not written during execution; after task.md completes, the agent organizes it into a formal acceptance checklist
+- Archive directory naming unified to `<YYYYMMDD>-<task-name>` (local 8-digit date prefix), enabling chronological sorting
+- `f2s-task` rule, `f2s-req-plan` skill, and change-tracking steps inside `f2s-kb-*` skills updated accordingly
+- Version bumped to 3.2.1
 
 ## M18 · f2s-kb-distill and Rule Refactor
 
@@ -154,8 +200,7 @@
 - Early AI collaboration organized around OpenSpec/opsx change flows
 - Basic init command supports Cursor/Claude/Codex config root writing
 
-## Pending Confirmation
+## Pending
 
-- .Knowledge/req-docs/ currently has no Markdown files; milestone evidence relies primarily on git
-- .task/active/lazy_loading_rule_optimization/ remains in progress and has not formed a delivered stage
-- Early 2026-02 to 2026-04 OpenSpec details are supported mainly by git commit messages, without req-docs or .task closure
+- `.task/active/lazy_loading_rule_optimization/` in-flight task (created 2026-06-03, focused on rule slimming / lazy loading optimization) is not yet closed; steps incomplete; this round does not form a delivered milestone
+- No other gaps
