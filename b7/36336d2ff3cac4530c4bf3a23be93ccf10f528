@@ -1,0 +1,55 @@
+.codex/skills/f2s-req-clarify/SKILL.md
+  s_10c079905d38e7::t_7f70cd976999c2 22-27
+.claude/rules/f2s-flow2spec-unified-entry.md
+  s_10c079905d38e7::t_7f70cd976999c2 100-103
+.Knowledge/manifest-routing.json
+  s_10c079905d38e7::t_7f70cd976999c2 2
+.cursor/rules/f2s-implement-tech-design.mdc
+  s_10c079905d38e7::t_7f70cd976999c2 97,99-109,150
+.cursor/skills/f2s-kb-sync/SKILL.md
+  s_10c079905d38e7::t_7f70cd976999c2 53-101,151-152,156-158,160,162-173
+.cursor/skills/f2s-req-clarify/SKILL.md
+  s_10c079905d38e7::t_7f70cd976999c2 22-27
+.claude/skills/f2s-req-plan/SKILL.md
+  s_10c079905d38e7::t_7f70cd976999c2 27,68,70,72-78,80-86,90,148
+.codex/hooks/f2s-update-check.js
+  s_10c079905d38e7::t_7f70cd976999c2 12-13,96,98-101,105,107-111,113
+.codex/skills/f2s-kb-sync/SKILL.md
+  s_10c079905d38e7::t_7f70cd976999c2 53-101,151-152,156-158,160,162-173
+.cursor/skills/f2s-req-plan/SKILL.md
+  s_10c079905d38e7::t_7f70cd976999c2 27,68,70,72-78,80-86,90,148
+.claude/skills/f2s-req-clarify/SKILL.md
+  s_10c079905d38e7::t_7f70cd976999c2 22-27
+.claude/skills/f2s-kb-sync/SKILL.md
+  s_10c079905d38e7::t_7f70cd976999c2 53-101,151-152,156-158,160,162-173
+.claude/rules/f2s-implement-tech-design.md
+  s_10c079905d38e7::t_7f70cd976999c2 96,98-108,149
+.codex/topics/f2s-flow2spec-unified-entry.md
+  s_10c079905d38e7::t_7f70cd976999c2 96-99
+.codex/topics/f2s-implement-tech-design.md
+  s_10c079905d38e7::t_7f70cd976999c2 90,92-102,143
+.claude/hooks/f2s-update-check.js
+  s_10c079905d38e7::t_7f70cd976999c2 12-13,96,98-101,105,107-111,113
+.codex/skills/f2s-req-plan/SKILL.md
+  s_10c079905d38e7::t_7f70cd976999c2 27,68,70,72-78,80-86,90,148
+.cursor/hooks/f2s-update-check.js
+  s_10c079905d38e7::t_7f70cd976999c2 12-13,96,98-101,105,107-111,113
+.cursor/rules/f2s-flow2spec-unified-entry.mdc
+  s_10c079905d38e7::t_7f70cd976999c2 101-104
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.43-trip",
+  "base_commit_sha": "b736336d2ff3cac4530c4bf3a23be93ccf10f528",
+  "prompts": {},
+  "sessions": {
+    "s_10c079905d38e7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3b6cce20-2630-4d1e-a581-542a72f1e9a3",
+        "model": "arn:aws:bedrock:us-west-2:456197019624:application-inference-profile/bumrjndkqzw8"
+      },
+      "human_author": "兰涛 <550947002@qq.com>"
+    }
+  }
+}
