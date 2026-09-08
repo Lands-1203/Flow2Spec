@@ -1,0 +1,26 @@
+.github/workflows/deploy-pages.yml
+  s_aa841aa4897fb9::t_9fc0f9438a1cf2 47-57
+  s_aa841aa4897fb9::t_8b5e94dea33e54 11-12
+.Knowledge/stock-docs/Flow2Spec-对外介绍演示.md
+  s_aa841aa4897fb9::t_438f8e4afb02ab 46
+  s_aa841aa4897fb9::t_59f2c3b16f5fc5 31-36
+.Knowledge/topics/f2s-flow2spec-presentations.md
+  s_aa841aa4897fb9::t_3c9fa0bc022c78 32
+  s_aa841aa4897fb9::t_5da30433a9f86b 21-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.43-trip",
+  "base_commit_sha": "6cc288a19c26e61be46cde0fcd058b71c0737e45",
+  "prompts": {},
+  "sessions": {
+    "s_aa841aa4897fb9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "47ca1fd1-f937-4fa7-a165-cca1984c327e",
+        "model": "arn:aws:bedrock:us-west-2:456197019624:application-inference-profile/bumrjndkqzw8"
+      },
+      "human_author": "兰涛 <550947002@qq.com>"
+    }
+  }
+}
