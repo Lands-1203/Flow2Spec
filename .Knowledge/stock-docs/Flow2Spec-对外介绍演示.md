@@ -28,7 +28,12 @@ npm run dev
 
 ## 发布说明
 
-`scripts/sync-gh-pages.sh` 当前仍发布遗留演示稿。网站首版确认后，将该脚本或 GitHub Pages 工作流切换为发布 `website/dist/`。
+`.github/workflows/deploy-pages.yml` 在 Astro 构建后把 `presentations/flow2spec-intro-public/`、`presentations/flow2spec-intro-public-en/` 与 `.claude/skills/html-ppt/assets/` 拷贝进 `website/dist/`，统一走 GitHub Pages Artifact 发布，URL：
+
+- `https://double-coding-lab.github.io/Flow2Spec/presentations/flow2spec-intro-public/`
+- `https://double-coding-lab.github.io/Flow2Spec/presentations/flow2spec-intro-public-en/`
+
+演示稿源文件里的 `../../.claude/skills/html-ppt/assets/*` 相对路径同时兼容「仓内直接双击打开」与「Pages 部署」，无需维护两套路径。`scripts/sync-gh-pages.sh` 已退役，不再参与线上发布链路。
 
 ## 视觉与内容
 
@@ -38,7 +43,7 @@ npm run dev
 - 文档链接：顶部入口和 Markdown 内部链接均指向网站内部路由；构建阶段同步改写 `docs/images/` 图片资源。
 - 文档页面只保留文章正文与章节目录；参考计数和 Markdown 内的中英文切换由网站渲染层隐藏，语言切换统一位于右上角。
 - 章节目录只显示链接，并随滚动自动定位当前章节；首页目录从 Hero 结束后的正文区开始出现。
-- 遗留演示页继续通过相对路径引用 `.claude/skills/html-ppt/assets/`。
+- 遗留演示页继续通过相对路径引用 `.claude/skills/html-ppt/assets/`；部署时 workflow 会把该目录一并拷进 `website/dist/`。
 
 ## 维护说明
 

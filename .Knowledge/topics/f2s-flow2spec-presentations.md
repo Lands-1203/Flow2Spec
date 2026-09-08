@@ -18,8 +18,8 @@ confidence: inferred
 
 1. 网站源码位于 `website/`，使用 Astro 构建；中文入口为 `/`，英文入口为 `/en/`。
 2. 网站采用滚动式产品叙事：首页 Hero 独立占满顶部导航以下的首屏，正文区从下一屏开始并提供固定章节侧栏；移动端提供可展开导航；视觉方向为 `mailchimp-freddie` 暖人文风格。
-3. `presentations/flow2spec-intro-public/` 与 `presentations/flow2spec-intro-public-en/` 保留为旧演示稿和内容素材。
-4. 首版网站不接管 `scripts/sync-gh-pages.sh`；确认设计后再切换线上发布链路。
+3. `presentations/flow2spec-intro-public/` 与 `presentations/flow2spec-intro-public-en/` 是对外中英文演示稿源码；`.github/workflows/deploy-pages.yml` 在 Astro 构建后把这两目录与 `.claude/skills/html-ppt/assets/` 一并拷进 `website/dist/`，随 GitHub Pages Artifact 一次发布，最终 URL 为 `/presentations/flow2spec-intro-public/` 与 `/presentations/flow2spec-intro-public-en/`。
+4. 演示稿源文件里的 `../../.claude/skills/html-ppt/assets/*` 相对路径同时兼容「仓内直接双击打开」与「Pages 部署」，改动演示稿时须保留该目录结构；单独调整 assets 也会触发同一 workflow。`scripts/sync-gh-pages.sh` 已退役，不再参与线上发布。
 5. 需要架构级背景时，可再读 `f2s-flow2spec-architecture` 主题。
 
 ## 边界
@@ -29,7 +29,7 @@ confidence: inferred
 - 首页和文章页左侧目录由页面标题生成，并按滚动位置自动高亮当前章节；目录只保留章节链接，不显示标题、说明或分割线；移动端目录收进顶部可展开导航。
 - 首页 Hero 结束后才显示正文区和左侧目录；文章页不显示参考计数，Markdown 顶部的中英文切换段由构建阶段移除，语言入口统一位于右上角。
 - 桌面文档侧栏的间距按侧栏自身宽度计算，横向溢出隐藏；低高度视口内容实际溢出时才启用纵向滚动。
-- 遗留演示稿仍依赖 `.claude/skills/html-ppt/assets/`，移动或独立发布时须同步处理资源路径。
+- 遗留演示稿仍依赖 `.claude/skills/html-ppt/assets/`；GitHub Pages 发布通过 workflow 拷贝目录复用同一相对路径。移动或独立发布时须同步处理资源路径与 workflow 中的复制步骤。
 
 ## 下一步
 

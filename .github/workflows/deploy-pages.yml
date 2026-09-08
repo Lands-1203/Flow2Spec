@@ -8,6 +8,8 @@ on:
       - .github/workflows/deploy-pages.yml
       - docs/**
       - website/**
+      - presentations/**
+      - .claude/skills/html-ppt/assets/**
   workflow_dispatch:
 
 permissions:
@@ -41,6 +43,17 @@ jobs:
       - name: Build website
         working-directory: website
         run: npm run build
+
+      - name: Copy presentation decks into Pages artifact
+        # 把仓内演示稿及其共享资源原样拷进 website/dist,保留仓内相对路径 `../../.claude/skills/html-ppt/assets/*`,
+        # 使演示稿在 GitHub Pages 上和在仓内直接打开时表现一致,无需维护第二套路径。
+        run: |
+          set -euo pipefail
+          mkdir -p website/dist/presentations
+          cp -R presentations/flow2spec-intro-public website/dist/presentations/
+          cp -R presentations/flow2spec-intro-public-en website/dist/presentations/
+          mkdir -p website/dist/.claude/skills/html-ppt
+          cp -R .claude/skills/html-ppt/assets website/dist/.claude/skills/html-ppt/
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
