@@ -1,0 +1,31 @@
+README.zh-CN.md
+  s_aa841aa4897fb9::t_88399f745bd325 14
+README.md
+  s_aa841aa4897fb9::t_4c18ef4d3aee13 14
+docs/README.md
+  s_aa841aa4897fb9::t_337859cdf778c9 11
+docs/en/README.md
+  s_aa841aa4897fb9::t_ee08589e4a0f22 11
+docs/en/Flow2Spec-Introduction.md
+  s_aa841aa4897fb9::t_79ac8ae89bf022 3-4
+.Knowledge/stock-docs/Flow2Spec-对外介绍演示.md
+  s_aa841aa4897fb9::t_0e30bb416b78c3 38-45
+docs/Flow2Spec基础介绍.md
+  s_aa841aa4897fb9::t_dd2deab4b8421e 3-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.43-trip",
+  "base_commit_sha": "b4b257896dec8e3f840b91f053d5bcf566fef069",
+  "prompts": {},
+  "sessions": {
+    "s_aa841aa4897fb9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "47ca1fd1-f937-4fa7-a165-cca1984c327e",
+        "model": "arn:aws:bedrock:us-west-2:456197019624:application-inference-profile/bumrjndkqzw8"
+      },
+      "human_author": "兰涛 <550947002@qq.com>"
+    }
+  }
+}
