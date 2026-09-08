@@ -1,5 +1,7 @@
 [中文](../Flow2Spec基础介绍.md) | [English](./Flow2Spec-Introduction.md) · [项目首页](../../README.zh-CN.md) | [Project home](../../README.md)
 
+> Prefer a shorter version? Open the public intro deck: [Product deck (EN)](https://double-coding-lab.github.io/Flow2Spec/presentations/flow2spec-intro-public-en/) · [产品演示 PPT (中文)](https://double-coding-lab.github.io/Flow2Spec/presentations/flow2spec-intro-public/)
+
 # Flow2Spec: Let Projects Naturally Grow a Knowledge Graph During Development
 
 <p><img src="../images/flow2spec-intro-cover.jpg" alt="Flow2Spec cover" style="max-width:720px;width:100%;" /></p>

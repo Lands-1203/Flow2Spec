@@ -11,6 +11,7 @@
 <p align="center">
   <a href="./README.md">English</a> ·
   <a href="https://double-coding-lab.github.io/Flow2Spec">在线演示</a> ·
+  <a href="https://double-coding-lab.github.io/Flow2Spec/presentations/flow2spec-intro-public/">产品演示 PPT</a> ·
   <a href="./docs/Flow2Spec基础介绍.md">基础介绍</a> ·
   <a href="./docs/使用说明.md">使用说明</a> ·
   <a href="./docs/命令说明.md">命令说明</a> ·

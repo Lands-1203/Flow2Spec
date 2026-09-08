@@ -8,6 +8,7 @@
 | --- | --- |
 | [Flow2Spec Introduction](./Flow2Spec-Introduction.md) | **Recommended first read** — product narrative, diagrams, and flowcharts: why Flow2Spec, and how it differs from ordinary "project memory" |
 | [Online product tour](https://double-coding-lab.github.io/Flow2Spec/en/) | A website-style guide to Flow2Spec's core capabilities and workflow |
+| [Product intro deck](https://double-coding-lab.github.io/Flow2Spec/presentations/flow2spec-intro-public-en/) | 14-slide public deck covering the problem, the four-layer model, examples, and team collaboration |
 
 ## Guides and reference
 

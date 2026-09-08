@@ -35,6 +35,14 @@ npm run dev
 
 演示稿源文件里的 `../../.claude/skills/html-ppt/assets/*` 相对路径同时兼容「仓内直接双击打开」与「Pages 部署」，无需维护两套路径。`scripts/sync-gh-pages.sh` 已退役，不再参与线上发布链路。
 
+## 入口引用点
+
+下列文档已把两份 PPT 作为「产品演示 PPT / Product deck」入口引出，改标题或替换文件时须一并更新：
+
+- `README.md`（EN 顶部导航条）、`README.zh-CN.md`（中文顶部导航条）
+- `docs/README.md`「从这里开始」表格、`docs/en/README.md`「Start here」表格
+- `docs/Flow2Spec基础介绍.md`、`docs/en/Flow2Spec-Introduction.md`（顶部提示句）
+
 ## 视觉与内容
 
 - 视觉配方：`mailchimp-freddie`，以暖黄、深墨色、奶油色与少量珊瑚色构成主视觉。
